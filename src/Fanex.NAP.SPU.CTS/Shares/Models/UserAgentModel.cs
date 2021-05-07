@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Fanex.NAP.SPU.DCS.Shares.Models
+namespace Fanex.NAP.SPU.CTS.Shares.Models
 {
     public class UserAgentModel
     {

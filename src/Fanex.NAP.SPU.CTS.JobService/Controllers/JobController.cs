@@ -11,34 +11,23 @@ namespace Fanex.NAP.SPU.DCS.JobService.Controllers
     public class JobController : ControllerBase
     {
         private readonly ISentryClient sentryClient;
-        private readonly IUserAgentJobService userAgentJobService;
-        private readonly IDeviceJobService deviceJobService;
+        private readonly IAccountJobService accountJobService;       
 
-        public JobController(ISentryClient sentryClient, 
-            IUserAgentJobService userAgentJobService, 
-            IDeviceJobService deviceJobService)
+        public JobController(ISentryClient sentryClient,
+            IAccountJobService accountJobService)
         {
             this.sentryClient = sentryClient;
-            this.userAgentJobService = userAgentJobService;
-            this.deviceJobService = deviceJobService;
+            this.accountJobService = accountJobService;
+            
         }
 
-        [HttpPost("useragent")]
-        public async Task<bool> UserAgent(string jobName, int size)
+        [HttpPost("transformaccount")]
+        public async Task<bool> Account(string jobName, int size, int numberOfBatch)
         {
             sentryClient.CaptureMessage($"{jobName} is running at {DateTime.Now}");
 
-            return await this.userAgentJobService.Execute(size);
+            return await this.accountJobService.Execute(size, numberOfBatch);
 
-        }
-
-        [HttpPost("transformdevice")]
-        public async Task<bool> TransformDevice(string jobName, int size, int numberOfBatch)
-        {
-            sentryClient.CaptureMessage($"{jobName} is running at {DateTime.Now}");
-
-            return await this.deviceJobService.Execute(size, numberOfBatch);
-
-        }
+        }        
     }
 }
