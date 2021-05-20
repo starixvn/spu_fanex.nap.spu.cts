@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<Functions>
+	<Function Name="JobSerice">
+		<Setting Key="DCS_DC_TransformToCTS_Account_GetPackage" SpName="DCS_DC_TransformToCTS_Account_GetPackage" DbName="MySQL.DCS_DataCenter.ctsService"/>
+		<Setting Key="CTS_DC_TransformDCSAccountToCTSCustomer" SpName="CTS_DC_TransformDCSAccountToCTSCustomer" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"/>
+				
+	</Function>
+</Functions>

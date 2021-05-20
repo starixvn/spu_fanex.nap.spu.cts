@@ -1,5 +1,6 @@
 using Fanex.Data;
 using Fanex.Data.MySql;
+using Fanex.NAP.SPU.CTS.JobService;
 using Fanex.NAP.SPU.DCS.JobService.Services;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
@@ -26,6 +27,9 @@ namespace Fanex.NAP.SPU.DCS.JobService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var appSettings = new AppSettings(this.Configuration);
+
+            services.AddSingleton<IAppSettings>(appSettings);
 
             services.AddControllers();
             services
@@ -39,7 +43,7 @@ namespace Fanex.NAP.SPU.DCS.JobService
 
             services.RegisterService();            
 
-            FanexDataConfig();
+            FanexDataConfig(appSettings);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -69,7 +73,7 @@ namespace Fanex.NAP.SPU.DCS.JobService
             });
         }
 
-        private void FanexDataConfig()
+        private void FanexDataConfig(IAppSettings appSettings)
         {
             var connections = Configuration
                                   .GetSection("Connections")
@@ -84,7 +88,7 @@ namespace Fanex.NAP.SPU.DCS.JobService
               .StartNewSession()
               .Use(connections)
               .WithMySql()
-              .UseDefaultDbSettingProvider(resourcePath: "~/App_Data")
+              .UseDefaultDbSettingProvider(resourcePath: appSettings.SPName)
               .Run();
         }
     }
