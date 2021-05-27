@@ -24,13 +24,13 @@ namespace Fanex.NAP.SPU.CTS.JobService.Controllers
         }
 
         [HttpPost("existingcustomer")]
-        public async Task<bool> ExistingCustomer(string jobName, int rangeTime)
+        public async Task<bool> ExistingCustomer(string jobName)
         {
             sentryClient.CaptureMessage($"{jobName} is running at {DateTime.Now}");
 
             //var currentDate = DateTime.Now;
 
-            //var fromDate = currentDate.AddHours(-1 * rangeTime);
+            //var fromDate = currentDate.AddHours(-1 * 24);
 
             //var existingPlaceBetCustomers = existingCustomerJobService.GetPlaceBetCustomer(fromDate, currentDate);
 

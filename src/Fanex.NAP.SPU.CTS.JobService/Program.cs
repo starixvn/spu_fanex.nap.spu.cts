@@ -12,11 +12,18 @@ namespace Fanex.NAP.SPU.DCS.JobService
     {
         public static void Main(string[] args)
         {
-            var host = CreateHostBuilder(args).Build();
+            try
+            {
+                var host = CreateHostBuilder(args).Build();
 
-            SentrySdk.CaptureMessage(string.Format("{0} has been started at {1}", typeof(Program).FullName, DateTime.Now));
+                SentrySdk.CaptureMessage(string.Format("{0} has been started at {1}", typeof(Program).FullName, DateTime.Now));
 
-            host.Run();
+                host.Run();
+            }
+            catch (Exception ex)
+            {
+                SentrySdk.CaptureException(ex);
+            }
         }
 
         public static IWebHostBuilder CreateHostBuilder(string[] args)

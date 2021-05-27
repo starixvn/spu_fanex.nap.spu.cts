@@ -26,7 +26,9 @@ namespace Fanex.NAP.SPU.DCS.JobService.Controllers
         {
             sentryClient.CaptureMessage($"{jobName} is running at {DateTime.Now}");
 
-            return await this.accountJobService.Execute(size, numberOfBatch);
+            //return await this.accountJobService.Execute(size, numberOfBatch);
+
+            return await Task.FromResult(true);
 
         }        
     }
