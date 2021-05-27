@@ -1,4 +1,6 @@
 ﻿using Fanex.NAP.SPU.CTS.Features.Accounts;
+using Fanex.NAP.SPU.CTS.Features.ExistingCustomer;
+using Fanex.NAP.SPU.CTS.JobService.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Fanex.NAP.SPU.DCS.JobService.Services
@@ -7,7 +9,9 @@ namespace Fanex.NAP.SPU.DCS.JobService.Services
     {
         public static void RegisterService(this IServiceCollection services)
         {
-            RegisterTransformAccount(services);            
+            RegisterTransformAccount(services);
+
+            RegisterExistingCustomer(services);
         }
 
         private static void RegisterTransformAccount(this IServiceCollection services)
@@ -15,6 +19,13 @@ namespace Fanex.NAP.SPU.DCS.JobService.Services
             services.AddSingleton<IAccountDataAccess, AccountDataAccess>();
             services.AddSingleton<IAccountServices, AccountServices>();
             services.AddSingleton<IAccountJobService, AccountJobService>();
+        }
+
+        private static void RegisterExistingCustomer(this IServiceCollection services)
+        {
+            services.AddSingleton<IExistingCustomerDataAccess, ExistingCustomerDataAccess>();
+            services.AddSingleton<IExistingCustomerServices, ExistingCustomerServices>();
+            services.AddSingleton<IExistingCustomerJobService, ExistingCustomerJobService>();
         }
     }
 }

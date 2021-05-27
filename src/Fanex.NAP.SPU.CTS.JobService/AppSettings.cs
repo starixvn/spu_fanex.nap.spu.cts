@@ -8,7 +8,7 @@ namespace Fanex.NAP.SPU.CTS.JobService
     {
         int Environment { get; }                
 
-        string SPName { get; }
+        string SPName { get; }                
     }
     public class AppSettings : IAppSettings
     {
@@ -24,6 +24,7 @@ namespace Fanex.NAP.SPU.CTS.JobService
             environment = GetValue<string>(nameof(Environment));                       
 
             spName = GetValue<string>(nameof(SPName));
+
         }
 
         public int Environment
@@ -42,7 +43,7 @@ namespace Fanex.NAP.SPU.CTS.JobService
             }
         }                
 
-        public string SPName => spName;                
+        public string SPName => spName;
 
         public T GetValue<T>(string key)
         {

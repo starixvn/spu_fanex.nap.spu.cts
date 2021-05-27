@@ -50,7 +50,7 @@ namespace Fanex.NAP.SPU.DCS.JobService.Services
 
                 if (result.ErrorCode != 0)
                 {
-                    sentryClient.CaptureMessage(result.ErrorMessage, Sentry.Protocol.SentryLevel.Error);
+                    sentryClient.CaptureMessage(result.ErrorMessage, SentryLevel.Error);
                 }
             }
         }
