@@ -1,10 +1,10 @@
-﻿using Fanex.NAP.SPU.DCS.JobService.Services;
+﻿using Fanex.NAP.SPU.CTS.JobService.Services;
 using Microsoft.AspNetCore.Mvc;
 using Sentry;
 using System;
 using System.Threading.Tasks;
 
-namespace Fanex.NAP.SPU.DCS.JobService.Controllers
+namespace Fanex.NAP.SPU.CTS.JobService.Controllers
 {
     [ApiController]
     [Route("api/job")]
@@ -26,10 +26,7 @@ namespace Fanex.NAP.SPU.DCS.JobService.Controllers
         {
             sentryClient.CaptureMessage($"{jobName} is running at {DateTime.Now}");
 
-            //return await this.accountJobService.Execute(size, numberOfBatch);
-
-            return await Task.FromResult(true);
-
+            return await this.accountJobService.Execute(size, numberOfBatch);                        
         }        
     }
 }

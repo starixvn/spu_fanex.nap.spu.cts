@@ -1,8 +1,7 @@
 using Fanex.Data;
 using Fanex.Data.MySql;
 using Fanex.Data.SqlServer;
-using Fanex.NAP.SPU.CTS.JobService;
-using Fanex.NAP.SPU.DCS.JobService.Services;
+using Fanex.NAP.SPU.CTS.JobService.Services;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -11,10 +10,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using System.IO;
 using System.Linq;
 
-namespace Fanex.NAP.SPU.DCS.JobService
+namespace Fanex.NAP.SPU.CTS.JobService
 {
     public class Startup
     {

@@ -28,28 +28,28 @@ namespace Fanex.NAP.SPU.CTS.JobService.Controllers
         {
             sentryClient.CaptureMessage($"{jobName} is running at {DateTime.Now}");
 
-            //var currentDate = DateTime.Now;
+            var currentDate = DateTime.Now;
 
-            //var fromDate = currentDate.AddHours(-1 * 24);
+            var fromDate = currentDate.AddHours(-1 * 24);
 
-            //var existingPlaceBetCustomers = existingCustomerJobService.GetPlaceBetCustomer(fromDate, currentDate);
+            var existingPlaceBetCustomers = existingCustomerJobService.GetPlaceBetCustomer(fromDate, currentDate);
 
-            //if (existingPlaceBetCustomers.Any())
-            //{
-            //    sentryClient.CaptureMessage(string.Join(",", existingPlaceBetCustomers));
+            if (existingPlaceBetCustomers.Any())
+            {
+                sentryClient.CaptureMessage(string.Join(",", existingPlaceBetCustomers));
 
-            //    var foundCustomerNoTrans = existingCustomerJobService.FoundCustomerNoTransInCTS(existingPlaceBetCustomers, fromDate, currentDate);
+                var foundCustomerNoTrans = existingCustomerJobService.FoundCustomerNoTransInCTS(existingPlaceBetCustomers, fromDate, currentDate);
 
-            //    if (foundCustomerNoTrans.Any())
-            //    {                    
-            //        var customerNoTrans = foundCustomerNoTrans.ToDictionary(x => x.CustId, x => x.UserName);
+                if (foundCustomerNoTrans.Any())
+                {
+                    var customerNoTrans = foundCustomerNoTrans.ToDictionary(x => x.CustId, x => x.UserName);
 
-            //        var logMessage = new LogMessage("Missing Customer Transaction.")
-            //        .AddSection("Data Info", (IDictionary<string, object>)customerNoTrans);
+                    var logMessage = new LogMessage("Missing Customer Transaction.")
+                    .AddSection("Data Info", (IDictionary<string, object>)customerNoTrans);
 
-            //        sentryClient.CaptureMessage(logMessage.ToString());
-            //    }
-            //}
+                    sentryClient.CaptureMessage(logMessage.ToString());
+                }
+            }
 
             return await Task.FromResult(true);
         }

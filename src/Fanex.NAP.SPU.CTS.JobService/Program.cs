@@ -6,7 +6,7 @@ using Sentry;
 using System;
 using System.IO;
 
-namespace Fanex.NAP.SPU.DCS.JobService
+namespace Fanex.NAP.SPU.CTS.JobService
 {
     public static class Program
     {

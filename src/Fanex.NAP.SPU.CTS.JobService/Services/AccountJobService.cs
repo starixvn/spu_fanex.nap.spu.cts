@@ -1,9 +1,10 @@
 ﻿using Fanex.NAP.SPU.CTS.Features.Accounts;
 using Sentry;
+using Sentry.Protocol;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Fanex.NAP.SPU.DCS.JobService.Services
+namespace Fanex.NAP.SPU.CTS.JobService.Services
 {
     public interface IAccountJobService
     {

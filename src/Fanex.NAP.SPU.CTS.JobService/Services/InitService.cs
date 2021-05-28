@@ -1,9 +1,8 @@
 ﻿using Fanex.NAP.SPU.CTS.Features.Accounts;
 using Fanex.NAP.SPU.CTS.Features.ExistingCustomer;
-using Fanex.NAP.SPU.CTS.JobService.Services;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Fanex.NAP.SPU.DCS.JobService.Services
+namespace Fanex.NAP.SPU.CTS.JobService.Services
 {
     public static class InitService
     {
