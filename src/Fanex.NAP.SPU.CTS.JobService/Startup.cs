@@ -82,14 +82,14 @@ namespace Fanex.NAP.SPU.CTS.JobService
                                            x => x.GetValue<string>("Name"),
                                            y => new ConnectionConfiguration(y.GetValue<string>("Name"), y.GetValue<string>("ConnectionString"), y.GetValue<string>("ProviderName"))
                                    );
-
+                        
             DbSettingProviderManager
               .StartNewSession()
               .Use(connections)
               .WithSqlServer()
               .WithMySql()
               .UseDefaultDbSettingProvider(resourcePath: appSettings.SPName)
-              .Run();
+              .Run();                       
         }
     }
 }

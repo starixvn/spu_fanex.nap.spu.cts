@@ -36,18 +36,15 @@ namespace Fanex.NAP.SPU.CTS.JobService.Controllers
 
             if (existingPlaceBetCustomers.Any())
             {
-                sentryClient.CaptureMessage(string.Join(",", existingPlaceBetCustomers));
+                sentryClient.CaptureMessage($"{existingPlaceBetCustomers.Count()}:" + string.Join(",", existingPlaceBetCustomers.Select(x => x.CustId)));
 
                 var foundCustomerNoTrans = existingCustomerJobService.FoundCustomerNoTransInCTS(existingPlaceBetCustomers, fromDate, currentDate);
 
                 if (foundCustomerNoTrans.Any())
                 {
-                    var customerNoTrans = foundCustomerNoTrans.ToDictionary(x => x.CustId, x => x.UserName);
+                    var customerNoTrans = string.Join(",", foundCustomerNoTrans.Select(x => x.UserName + ":" + x.SubscriberName));
 
-                    var logMessage = new LogMessage("Missing Customer Transaction.")
-                    .AddSection("Data Info", (IDictionary<string, object>)customerNoTrans);
-
-                    sentryClient.CaptureMessage(logMessage.ToString());
+                    sentryClient.CaptureMessage($"The missiing customer transaction. List customer: {customerNoTrans}");
                 }
             }
 
