@@ -1,9 +1,7 @@
-﻿using Fanex.Logging.Extensions;
-using Fanex.NAP.SPU.CTS.JobService.Services;
+﻿using Fanex.NAP.SPU.CTS.JobService.Services;
 using Microsoft.AspNetCore.Mvc;
 using Sentry;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -35,9 +33,7 @@ namespace Fanex.NAP.SPU.CTS.JobService.Controllers
             var existingPlaceBetCustomers = existingCustomerJobService.GetPlaceBetCustomer(fromDate, currentDate);
 
             if (existingPlaceBetCustomers.Any())
-            {
-                ///sentryClient.CaptureMessage($"{existingPlaceBetCustomers.Count()}:" + string.Join(",", existingPlaceBetCustomers.Select(x => x.CustId)));
-
+            {               
                 var foundCustomerNoTrans = existingCustomerJobService.FoundCustomerNoTransInCTS(existingPlaceBetCustomers, fromDate, currentDate);
 
                 if (foundCustomerNoTrans.Any())

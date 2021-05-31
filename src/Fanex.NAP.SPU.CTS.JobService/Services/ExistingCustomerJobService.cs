@@ -53,9 +53,7 @@ namespace Fanex.NAP.SPU.CTS.JobService.Services
 
                     foreach(var customerChunk in chunkCustomers)
                     {
-                        var custIds = customerChunk.Select(x => x.CustId).Distinct();
-
-                        sentryClient.CaptureMessage("Chunked custid: " + string.Join(",", custIds));
+                        var custIds = customerChunk.Select(x => x.CustId).Distinct();                                                
 
                         CheckingExistedCustomerInCTS(fromDate, toDate, foundCustomerNotTrans, custIds);
                     }                    
