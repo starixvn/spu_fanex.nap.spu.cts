@@ -49,16 +49,13 @@ namespace Fanex.NAP.SPU.CTS.JobService.Services
             {
                 if (customers != null && customers.Any())
                 {
-                    var chunkCustomers = customers.Chunk(100);
+                    var chunkCustomers = customers.Chunk(50);
 
                     foreach(var customerChunk in chunkCustomers)
                     {
                         var custIds = customers.Select(x => x.CustId).Distinct();
 
-                        if (custIds.Any())
-                        {
-                            CheckingExistedCustomerInCTS(fromDate, toDate, foundCustomerNotTrans, custIds);
-                        }
+                        CheckingExistedCustomerInCTS(fromDate, toDate, foundCustomerNotTrans, custIds);
                     }                    
                 }
             }
