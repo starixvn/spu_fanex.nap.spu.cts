@@ -36,7 +36,7 @@ namespace Fanex.NAP.SPU.CTS.JobService.Controllers
 
             if (existingPlaceBetCustomers.Any())
             {
-                sentryClient.CaptureMessage($"{existingPlaceBetCustomers.Count()}:" + string.Join(",", existingPlaceBetCustomers.Select(x => x.CustId)));
+                ///sentryClient.CaptureMessage($"{existingPlaceBetCustomers.Count()}:" + string.Join(",", existingPlaceBetCustomers.Select(x => x.CustId)));
 
                 var foundCustomerNoTrans = existingCustomerJobService.FoundCustomerNoTransInCTS(existingPlaceBetCustomers, fromDate, currentDate);
 
