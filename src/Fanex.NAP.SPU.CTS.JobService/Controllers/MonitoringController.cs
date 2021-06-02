@@ -38,9 +38,9 @@ namespace Fanex.NAP.SPU.CTS.JobService.Controllers
 
                 if (foundCustomerNoTrans.Any())
                 {
-                    var customerNoTrans = string.Join(",", foundCustomerNoTrans.Select(x => x.UserName + ":" + x.SubscriberName));
+                    var customerNoTrans = string.Join(", ", foundCustomerNoTrans.Select(x => x.UserName + ":" + x.SubscriberName));
 
-                    sentryClient.CaptureMessage($"The missiing customer transaction. List customer: {customerNoTrans}");
+                    sentryClient.CaptureMessage($"The missing customer transaction at {currentDate} (GMT-4). List customers: {customerNoTrans}");
                 }
             }
 
