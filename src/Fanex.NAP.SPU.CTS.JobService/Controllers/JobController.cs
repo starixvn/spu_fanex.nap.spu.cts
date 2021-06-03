@@ -32,11 +32,11 @@
         }
 
         [HttpPost("matchmonitor")]
-        public async Task<bool> MatchMonitor(int batchSize)
+        public async Task<bool> MatchMonitor(int size)
         {
             sentryClient.CaptureMessage($"Match Monitor Service is running at {DateTime.Now}");
 
-            return await this.matchMonitorJobService.Execute(batchSize);
+            return await this.matchMonitorJobService.Execute(size);
         }
     }
 }
