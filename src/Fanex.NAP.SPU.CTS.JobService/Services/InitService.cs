@@ -1,5 +1,6 @@
 ﻿using Fanex.NAP.SPU.CTS.Features.Accounts;
 using Fanex.NAP.SPU.CTS.Features.ExistingCustomer;
+using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Fanex.NAP.SPU.CTS.JobService.Services
@@ -11,6 +12,8 @@ namespace Fanex.NAP.SPU.CTS.JobService.Services
             RegisterTransformAccount(services);
 
             RegisterExistingCustomer(services);
+
+            RegisterMatchMonitor(services);
         }
 
         private static void RegisterTransformAccount(this IServiceCollection services)
@@ -25,6 +28,12 @@ namespace Fanex.NAP.SPU.CTS.JobService.Services
             services.AddSingleton<IExistingCustomerDataAccess, ExistingCustomerDataAccess>();
             services.AddSingleton<IExistingCustomerServices, ExistingCustomerServices>();
             services.AddSingleton<IExistingCustomerJobService, ExistingCustomerJobService>();
+        }
+        private static void RegisterMatchMonitor(this IServiceCollection services)
+        {
+            services.AddSingleton<IMatchMonitorDataAccess, MatchMonitorDataAccess>();
+            services.AddSingleton<IMatchMonitorServices, MatchMonitorServices>();
+            services.AddSingleton<IMatchMonitorJobService, MatchMonitorJobService>();
         }
     }
 }
