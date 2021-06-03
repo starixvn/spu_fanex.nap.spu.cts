@@ -9,7 +9,7 @@
         public int TempGroupID { get; set; }
 
         public override string GetSettingKey()
-                => "CTS_DC_MatchMonitor_Rules";
+                => "CTS_DC_MatchMonitor_Rule";
 
         public override bool IsValid()
             => true;

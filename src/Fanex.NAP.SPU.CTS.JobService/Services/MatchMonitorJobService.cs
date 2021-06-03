@@ -10,27 +10,29 @@
 
     public interface IMatchMonitorJobService
     {
-        Task<bool> Execute(int numberOfThread, int batchSize);
+        Task<bool> Execute(int batchSize);
 
     }
     public class MatchMonitorJobService : IMatchMonitorJobService
     {
         private readonly ISentryClient sentryClient;
         private readonly IMatchMonitorServices matchMonitorServices;
+        private readonly IAppSettings appSettings;
 
-        public MatchMonitorJobService(ISentryClient sentryClient, IMatchMonitorServices matchMonitorServices)
+        public MatchMonitorJobService(ISentryClient sentryClient, IMatchMonitorServices matchMonitorServices, IAppSettings appSettings)
         {
             this.sentryClient = sentryClient;
             this.matchMonitorServices = matchMonitorServices;
+            this.appSettings = appSettings;
         }
 
-        public Task<bool> Execute(int numberOfThread, int batchSize)
+        public Task<bool> Execute(int batchSize)
         {
             try
             {
-                if (numberOfThread > 0 && batchSize > 0)
+                if (appSettings.NumberOfThread > 0 && batchSize > 0)
                 {
-                    JobRun(numberOfThread, batchSize);
+                    JobRun(batchSize);
                 }
             }
             catch (Exception ex)
@@ -43,7 +45,7 @@
             return Task.FromResult(true);
         }
 
-        private void JobRun(int numberOfThread, int batchSize)
+        private void JobRun(int batchSize)
         {
             var systemParameter = matchMonitorServices.GetLastScannedTransID((int)Shares.Constants.SYSTEMPARAMETERS.MATCHMONITOR_LASTSCANNEDTRANS);
 
@@ -57,7 +59,7 @@
 
                     if (temGroupIDs != null && temGroupIDs.Any())
                     {
-                        InsertMatchMonitorRule(temGroupIDs, numberOfThread);
+                        InsertMatchMonitorRule(temGroupIDs);
                     }
 
                     matchMonitorServices.UpdateMatchTransComplete();
@@ -65,7 +67,7 @@
             }
         }
 
-        private async void InsertMatchMonitorRule(IEnumerable<int> tempGroupIDs, int numberOfThread)
+        private async void InsertMatchMonitorRule(IEnumerable<int> tempGroupIDs)
         {
             if (tempGroupIDs != null && tempGroupIDs.Any())
             {
@@ -74,7 +76,7 @@
 
                 while (index < tempGroupIDs.Count())
                 {
-                    while (tasks.Count < numberOfThread)
+                    while (tasks.Count < appSettings.NumberOfThread)
                     {
                         var task = Task.Run(() =>
                         {

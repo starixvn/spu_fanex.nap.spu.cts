@@ -8,14 +8,18 @@ namespace Fanex.NAP.SPU.CTS.JobService
     {
         int Environment { get; }                
 
-        string SPName { get; }                
+        string SPName { get; }           
+        
+        int NumberOfThread { get; }
     }
+
     public class AppSettings : IAppSettings
     {
         private readonly IConfiguration configuration;
 
         private readonly string environment;        
         private readonly string spName;
+        private readonly int numberOfThread;
 
         public AppSettings(IConfiguration configuration)
         {
@@ -25,6 +29,7 @@ namespace Fanex.NAP.SPU.CTS.JobService
 
             spName = GetValue<string>(nameof(SPName));
 
+            numberOfThread = GetValue<int>(nameof(NumberOfThread));
         }
 
         public int Environment
@@ -44,6 +49,8 @@ namespace Fanex.NAP.SPU.CTS.JobService
         }                
 
         public string SPName => spName;
+
+        public int NumberOfThread => numberOfThread;
 
         public T GetValue<T>(string key)
         {
