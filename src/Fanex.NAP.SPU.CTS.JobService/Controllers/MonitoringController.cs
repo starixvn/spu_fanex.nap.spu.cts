@@ -33,14 +33,17 @@ namespace Fanex.NAP.SPU.CTS.JobService.Controllers
             var existingPlaceBetCustomers = existingCustomerJobService.GetPlaceBetCustomer(fromDate, currentDate);
 
             if (existingPlaceBetCustomers.Any())
-            {               
+            {
                 var foundCustomerNoTrans = existingCustomerJobService.FoundCustomerNoTransInCTS(existingPlaceBetCustomers, fromDate, currentDate);
 
                 if (foundCustomerNoTrans.Any())
-                {
-                    var customerNoTrans = string.Join(", ", foundCustomerNoTrans.Select(x => x.UserName + ":" + x.SubscriberName));
+                {                    
+                    var groupBySubscriber = foundCustomerNoTrans.GroupBy(x => x.SubscriberId).ToList();
 
-                    sentryClient.CaptureMessage($"The missing customer transaction at {currentDate} (GMT-4). List customers: {customerNoTrans}");
+                    groupBySubscriber.ForEach(x =>
+                    {
+                        sentryClient.CaptureMessage($"{x.Key}: {string.Join(", ", x.Select(a => a.CustId + ":" + a.UserName))}");
+                    });
                 }
             }
 
