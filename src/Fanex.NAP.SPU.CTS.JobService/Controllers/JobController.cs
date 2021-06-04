@@ -24,15 +24,15 @@
         }
 
         [HttpPost("transformaccount")]
-        public async Task<bool> Account(string jobName, int size, int numberOfBatch)
+        public async Task<bool> Account(string jobName, [FromForm] int size, [FromForm] int numberOfBatch)
         {
             sentryClient.CaptureMessage($"{jobName} is running at {DateTime.Now}");
 
-            return await this.accountJobService.Execute(size, numberOfBatch);                        
+            return await this.accountJobService.Execute(size, numberOfBatch);
         }
 
         [HttpPost("matchmonitor")]
-        public async Task<bool> MatchMonitor(int size)
+        public async Task<bool> MatchMonitor([FromForm] int size)
         {
             sentryClient.CaptureMessage($"Match Monitor Service is running at {DateTime.Now}");
 
