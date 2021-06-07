@@ -148,7 +148,7 @@
 
                     if (numberOfTimes == 0)
                     {
-                        sentryClient.CaptureException(e);
+                        commonJobServices.LogSentryEror("Match-Monitor", "Insert Rule fail", tempGroupIDs, e);
                         throw new Exception(e.Message, e);
                     }
                 }

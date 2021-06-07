@@ -1,5 +1,7 @@
 ﻿namespace Fanex.NAP.SPU.CTS.JobService.Services
 {
+    using Fanex.Logging.Extensions;
+    using Fanex.Logging.Extensions.Database;
     using Newtonsoft.Json;
     using Sentry;
     using System;
@@ -10,6 +12,8 @@
         Task<bool> UpdateWriteLogSetting(string serviceName, bool isWriteLog);
 
         void LogSentryInfo<T>(string serviceName, string message, T data);
+
+        void LogSentryEror<T>(string serviceName, string message, T data, Exception ex);
     }
 
     public class CommonJobServices : ICommonJobServices
@@ -42,10 +46,21 @@
         {
             if(appSettings.MatchMonitorIsWriteLog)
             {
-                var messInfo = $"{serviceName} - {message} {(data != null ? " - Data:" + JsonConvert.SerializeObject(data) : "")} - {DateTime.Now}";
+                var logMessage = $"{serviceName} - {message} {(data != null ? " - Data:" + JsonConvert.SerializeObject(data) : "")} - {DateTime.Now}";
 
-                sentryClient.CaptureMessage(messInfo);
+                sentryClient.CaptureMessage(logMessage);
             }
+        }
+
+        public void LogSentryEror<T>(string serviceName, string message, T data, Exception ex)
+        {
+            var logMessage = new LogMessage(ex.Message)
+                .AddMessage($"{serviceName}")
+                .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex))
+                .AddMessage($"{message} - Data {JsonConvert.SerializeObject(data)} - { DateTime.Now}").ToString();
+
+            sentryClient.CaptureMessage(logMessage, Sentry.Protocol.SentryLevel.Error);
         }
     }
 }
