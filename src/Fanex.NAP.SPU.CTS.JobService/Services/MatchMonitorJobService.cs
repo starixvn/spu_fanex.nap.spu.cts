@@ -62,7 +62,46 @@
             var matchTrans = GetMatchTrans(GetMilestone(), batchSize);
             InsertMatchMonitor(matchTrans);
         }
-        
+
+        private SystemParameterEntity GetMilestone()
+        {
+            var milestone = matchMonitorServices.GetLastScannedTransID((int)Shares.Constants.SYSTEMPARAMETERS.MATCHMONITOR_LASTSCANNEDTRANS);
+            commonJobServices.LogSentryInfo("Match-Monitor", "Get Milestone", milestone);
+
+            return milestone;
+        }
+
+        private IEnumerable<TicketDetailEntity> GetMatchTrans(SystemParameterEntity milestone, int batchSize)
+        {
+            var matchTrans = new List<TicketDetailEntity>();
+
+            if (!string.IsNullOrEmpty(milestone.ParameterValue))
+            {
+                matchTrans = matchMonitorServices.GetMatchTrans(Int64.Parse(milestone.ParameterValue), batchSize).ToList();
+            }
+
+            commonJobServices.LogSentryInfo("Match-Monitor", "Get transaction", matchTrans);
+            return matchTrans;
+        }
+
+        private void InsertMatchMonitor(IEnumerable<TicketDetailEntity> matchTrans)
+        {
+            if (matchTrans != null && matchTrans.Any())
+            {
+                var temGroupIDs = matchMonitorServices.InsertMatchMonitorStaging(JsonConvert.SerializeObject(matchTrans));
+                commonJobServices.LogSentryInfo("Match-Monitor", "Get transaction", matchTrans);
+
+                if (temGroupIDs != null && temGroupIDs.Any())
+                {
+                    InsertMatchMonitorRule(temGroupIDs);
+                    commonJobServices.LogSentryInfo("Match-Monitor", "Insert Rule done", temGroupIDs);
+                }
+
+                matchMonitorServices.UpdateMatchTransComplete();
+                commonJobServices.LogSentryInfo("Match-Monitor", "Update milestone done", matchTrans.Select(c=>c.TransId).Max());
+            }
+        }
+
         private async void InsertMatchMonitorRule(IEnumerable<int> tempGroupIDs)
         {
             if (tempGroupIDs != null && tempGroupIDs.Any())
@@ -133,45 +172,6 @@
             {
                 tasks.Remove(i);
             });
-        }
-
-        private SystemParameterEntity GetMilestone()
-        {
-            var milestone = matchMonitorServices.GetLastScannedTransID((int)Shares.Constants.SYSTEMPARAMETERS.MATCHMONITOR_LASTSCANNEDTRANS);
-            commonJobServices.LogSentryInfo("Match-Monitor", "Get Milestone", milestone);
-
-            return milestone;
-        }
-
-        private IEnumerable<TicketDetailEntity> GetMatchTrans(SystemParameterEntity milestone, int batchSize)
-        {
-            var matchTrans = new List<TicketDetailEntity>();
-
-            if (!string.IsNullOrEmpty(milestone.ParameterValue))
-            {
-                matchTrans = matchMonitorServices.GetMatchTrans(Int64.Parse(milestone.ParameterValue), batchSize).ToList();
-            }
-
-            commonJobServices.LogSentryInfo("Match-Monitor", "Get transaction", matchTrans);
-            return matchTrans;
-        }
-
-        private void InsertMatchMonitor(IEnumerable<TicketDetailEntity> matchTrans)
-        {
-            if (matchTrans != null && matchTrans.Any())
-            {
-                var temGroupIDs = matchMonitorServices.InsertMatchMonitorStaging(JsonConvert.SerializeObject(matchTrans));
-                commonJobServices.LogSentryInfo("Match-Monitor", "Get transaction", matchTrans);
-
-                if (temGroupIDs != null && temGroupIDs.Any())
-                {
-                    InsertMatchMonitorRule(temGroupIDs);
-                    commonJobServices.LogSentryInfo("Match-Monitor", "Insert Rule done", temGroupIDs);
-                }
-
-                matchMonitorServices.UpdateMatchTransComplete();
-                commonJobServices.LogSentryInfo("Match-Monitor", "Update milestone done", temGroupIDs);
-            }
         }
 
         #endregion
