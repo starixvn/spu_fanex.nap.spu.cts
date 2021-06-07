@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.SPU.CTS.JobService.Services
 {
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
     using Newtonsoft.Json;
     using Sentry;
     using System;
@@ -11,28 +12,38 @@
     public interface IMatchMonitorJobService
     {
         Task<bool> Execute(int batchSize);
-
     }
+
     public class MatchMonitorJobService : IMatchMonitorJobService
     {
         private readonly ISentryClient sentryClient;
         private readonly IMatchMonitorServices matchMonitorServices;
+        private readonly ICommonJobServices commonJobServices;
         private readonly IAppSettings appSettings;
 
-        public MatchMonitorJobService(ISentryClient sentryClient, IMatchMonitorServices matchMonitorServices, IAppSettings appSettings)
+        public MatchMonitorJobService(
+            ISentryClient sentryClient, 
+            IMatchMonitorServices matchMonitorServices, 
+            IAppSettings appSettings,
+            ICommonJobServices commonJobServices)
         {
             this.sentryClient = sentryClient;
             this.matchMonitorServices = matchMonitorServices;
             this.appSettings = appSettings;
+            this.commonJobServices = commonJobServices;
         }
 
         public Task<bool> Execute(int batchSize)
         {
             try
             {
-                if (appSettings.NumberOfThread > 0 && batchSize > 0)
+                if (appSettings.MatchMonitorNumberOfThread > 0 && batchSize > 0)
                 {
                     JobRun(batchSize);
+                }
+                else
+                {
+                    commonJobServices.LogSentryInfo("Match-Monitor", "Invalid NumberOfThread/BatchSize", new { appSettings.MatchMonitorNumberOfThread, batchSize });
                 }
             }
             catch (Exception ex)
@@ -45,28 +56,13 @@
             return Task.FromResult(true);
         }
 
+        #region Private Methods
         private void JobRun(int batchSize)
         {
-            var systemParameter = matchMonitorServices.GetLastScannedTransID((int)Shares.Constants.SYSTEMPARAMETERS.MATCHMONITOR_LASTSCANNEDTRANS);
-
-            if (!string.IsNullOrEmpty(systemParameter.ParameterValue))
-            {
-                var matchTrans = matchMonitorServices.GetMatchTrans(Int64.Parse(systemParameter.ParameterValue), batchSize);
-
-                if (matchTrans != null && matchTrans.Any())
-                {
-                    var temGroupIDs = matchMonitorServices.InsertMatchMonitorStaging(JsonConvert.SerializeObject(matchTrans));
-
-                    if (temGroupIDs != null && temGroupIDs.Any())
-                    {
-                        InsertMatchMonitorRule(temGroupIDs);
-                    }
-
-                    matchMonitorServices.UpdateMatchTransComplete();
-                }
-            }
+            var matchTrans = GetMatchTrans(GetMilestone(), batchSize);
+            InsertMatchMonitor(matchTrans);
         }
-
+        
         private async void InsertMatchMonitorRule(IEnumerable<int> tempGroupIDs)
         {
             if (tempGroupIDs != null && tempGroupIDs.Any())
@@ -76,14 +72,17 @@
 
                 while (index < tempGroupIDs.Count())
                 {
-                    while (tasks.Count < appSettings.NumberOfThread)
+                    while (tasks.Count < appSettings.MatchMonitorNumberOfThread)
                     {
-                        var task = Task.Run(() =>
+                        if (index < tempGroupIDs.Count())
                         {
-                            RetryInsertMatchMonitorRule(tempGroupIDs.ToArray()[index++]);
-                        });
+                            var task = Task.Run(() =>
+                            {
+                                RetryInsertMatchMonitorRule(tempGroupIDs.ToArray()[index++]);
+                            });
 
-                        tasks.Add(task);
+                            tasks.Add(task);
+                        }
                     }
 
                     DisposeCompleteTask(tasks);
@@ -110,6 +109,7 @@
 
                     if (numberOfTimes == 0)
                     {
+                        sentryClient.CaptureException(e);
                         throw new Exception(e.Message, e);
                     }
                 }
@@ -134,5 +134,46 @@
                 tasks.Remove(i);
             });
         }
+
+        private SystemParameterEntity GetMilestone()
+        {
+            var milestone = matchMonitorServices.GetLastScannedTransID((int)Shares.Constants.SYSTEMPARAMETERS.MATCHMONITOR_LASTSCANNEDTRANS);
+            commonJobServices.LogSentryInfo("Match-Monitor", "Get Milestone", milestone);
+
+            return milestone;
+        }
+
+        private IEnumerable<TicketDetailEntity> GetMatchTrans(SystemParameterEntity milestone, int batchSize)
+        {
+            var matchTrans = new List<TicketDetailEntity>();
+
+            if (!string.IsNullOrEmpty(milestone.ParameterValue))
+            {
+                matchTrans = matchMonitorServices.GetMatchTrans(Int64.Parse(milestone.ParameterValue), batchSize).ToList();
+            }
+
+            commonJobServices.LogSentryInfo("Match-Monitor", "Get transaction", matchTrans);
+            return matchTrans;
+        }
+
+        private void InsertMatchMonitor(IEnumerable<TicketDetailEntity> matchTrans)
+        {
+            if (matchTrans != null && matchTrans.Any())
+            {
+                var temGroupIDs = matchMonitorServices.InsertMatchMonitorStaging(JsonConvert.SerializeObject(matchTrans));
+                commonJobServices.LogSentryInfo("Match-Monitor", "Get transaction", matchTrans);
+
+                if (temGroupIDs != null && temGroupIDs.Any())
+                {
+                    InsertMatchMonitorRule(temGroupIDs);
+                    commonJobServices.LogSentryInfo("Match-Monitor", "Insert Rule done", temGroupIDs);
+                }
+
+                matchMonitorServices.UpdateMatchTransComplete();
+                commonJobServices.LogSentryInfo("Match-Monitor", "Update milestone done", temGroupIDs);
+            }
+        }
+
+        #endregion
     }
 }

@@ -1,37 +1,41 @@
-﻿using Microsoft.Extensions.Configuration;
-using System;
-using System.ComponentModel;
-
-namespace Fanex.NAP.SPU.CTS.JobService
+﻿namespace Fanex.NAP.SPU.CTS.JobService
 {
+    using Microsoft.Extensions.Configuration;
+    using System;
+    using System.ComponentModel;
+
     public interface IAppSettings
     {
         int Environment { get; }                
 
-        string SPName { get; }           
-        
-        int NumberOfThread { get; }
+        string SPName { get; }
+
+        int MatchMonitorNumberOfThread { get; }
+
+        bool MatchMonitorIsWriteLog { get; }
+
+        bool UpdateIsWriteLogSetting(string serviceName, bool isWriteLog);
     }
 
     public class AppSettings : IAppSettings
     {
         private readonly IConfiguration configuration;
 
-        private readonly string environment;        
+        private readonly string environment;
         private readonly string spName;
-        private readonly int numberOfThread;
+        private readonly int matchMonitorNumberOfThread;
 
         public AppSettings(IConfiguration configuration)
         {
             this.configuration = configuration;
 
-            environment = GetValue<string>(nameof(Environment));                       
-
+            environment = GetValue<string>(nameof(Environment));
             spName = GetValue<string>(nameof(SPName));
 
-            numberOfThread = GetValue<int>(nameof(NumberOfThread));
+            matchMonitorNumberOfThread = GetValue<int>("MatchMonitor:NumberOfThread");
         }
 
+        #region Variables
         public int Environment
         {
             get
@@ -46,12 +50,17 @@ namespace Fanex.NAP.SPU.CTS.JobService
                         return 3;
                 }
             }
-        }                
+        }
 
         public string SPName => spName;
 
-        public int NumberOfThread => numberOfThread;
+        public int MatchMonitorNumberOfThread => matchMonitorNumberOfThread;
 
+        public bool MatchMonitorIsWriteLog => GetValue<bool>("MatchMonitor:IsWriteLog");
+      
+        #endregion
+
+        #region Methods
         public T GetValue<T>(string key)
         {
             try
@@ -70,9 +79,43 @@ namespace Fanex.NAP.SPU.CTS.JobService
 
         public T GetSection<T>(string key)
         {
-            var schedulerSection = configuration.GetSection(key);
+            var section = configuration.GetSection(key);
 
-            return schedulerSection.Get<T>();
+            return section.Get<T>();
         }
+
+        public void SetValue<T>(string key, T value)
+        {
+            try
+            {
+                var typeConverter = TypeDescriptor.GetConverter(typeof(T));
+
+                configuration[key] = typeConverter.ConvertToString(value);
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidCastException($"Key: {key}", ex);
+            }
+        }
+
+        public bool UpdateIsWriteLogSetting(string serviceName, bool isWriteLog)
+        {
+            var key = serviceName + ":isWriteLog";
+
+            if (configuration[key] == null)  return false;
+
+            try
+            {
+                SetValue<bool>(serviceName + ":isWriteLog", isWriteLog);
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        #endregion
     }
 }
