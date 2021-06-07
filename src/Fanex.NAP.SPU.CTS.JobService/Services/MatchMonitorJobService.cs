@@ -117,21 +117,21 @@
                         {
                             var task = Task.Run(() =>
                             {
-                                RetryInsertMatchMonitorRule(tempGroupIDs.ToArray()[index++]);
+                                RetryInsertMatchRule(tempGroupIDs.ToArray()[index++]);
                             });
 
                             tasks.Add(task);
                         }
                     }
 
-                    DisposeCompleteTask(tasks);
+                    DisposeTask(tasks);
                 }
 
                 await Task.WhenAll(tasks.ToArray());
             }
         }
 
-        private void RetryInsertMatchMonitorRule(int tempGroupIDs)
+        private void RetryInsertMatchRule(int tempGroupIDs)
         {
             int numberOfTimes = 3;
 
@@ -155,7 +155,7 @@
             }
         }
 
-        private void DisposeCompleteTask(List<Task> tasks)
+        private void DisposeTask(List<Task> tasks)
         {
             List<Task> completedTasks = new List<Task>();
 

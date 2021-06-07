@@ -54,8 +54,8 @@
 
         public void LogSentryEror<T>(string serviceName, string message, T data, Exception ex)
         {
-            var logMessage = new LogMessage(ex.Message)
-                .AddMessage($"{serviceName}")
+            var logMessage = new LogMessage($"{serviceName}")
+                .AddMessage(ex.Message)
                 .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
                 .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex))
                 .AddMessage($"{message} - Data {JsonConvert.SerializeObject(data)} - { DateTime.Now}").ToString();
