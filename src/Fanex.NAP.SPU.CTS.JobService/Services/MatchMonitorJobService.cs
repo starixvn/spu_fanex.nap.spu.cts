@@ -5,6 +5,7 @@
     using Newtonsoft.Json;
     using Sentry;
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -102,33 +103,35 @@
             }
         }
 
-        private async void InsertMatchMonitorRule(IEnumerable<int> tempGroupIDs)
+        private void InsertMatchMonitorRule(IEnumerable<int> tempGroupIDs)
         {
-            if (tempGroupIDs != null && tempGroupIDs.Any())
+            if (tempGroupIDs == null && !tempGroupIDs.Any())
             {
-                var tasks = new List<Task>();
-                var index = 0;
+                return;
+            }
 
-                while (index < tempGroupIDs.Count())
+            var tasks = new List<Task>();
+            var index = 0;
+
+            while (index < tempGroupIDs.Count())
+            {
+                while (tasks.Count < appSettings.MatchMonitorNumberOfThread)
                 {
-                    while (tasks.Count < appSettings.MatchMonitorNumberOfThread)
+                    if (index < tempGroupIDs.Count())
                     {
-                        if (index < tempGroupIDs.Count())
+                        var task = Task.Run(() =>
                         {
-                            var task = Task.Run(() =>
-                            {
-                                RetryInsertMatchRule(tempGroupIDs.ToArray()[index++]);
-                            });
+                            RetryInsertMatchRule(tempGroupIDs.ToArray()[index++]);
+                        });
 
-                            tasks.Add(task);
-                        }
+                        tasks.Add(task);
                     }
-
-                    DisposeTask(tasks);
                 }
 
-                await Task.WhenAll(tasks.ToArray());
+                DisposeTask(tasks);
             }
+
+            Task.WaitAll(tasks.ToArray());
         }
 
         private void RetryInsertMatchRule(int tempGroupIDs)
@@ -149,7 +152,6 @@
                     if (numberOfTimes == 0)
                     {
                         commonJobServices.LogSentryEror("Match-Monitor", "Insert Rule fail", tempGroupIDs, e);
-                        throw new Exception(e.Message, e);
                     }
                 }
             }
