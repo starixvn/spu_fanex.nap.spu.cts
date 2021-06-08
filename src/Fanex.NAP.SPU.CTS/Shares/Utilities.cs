@@ -1,14 +1,17 @@
-﻿using System;
+﻿using Fanex.Logging.Extensions;
+using Fanex.Logging.Extensions.Database;
+using Newtonsoft.Json;
+using Sentry;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Fanex.NAP.SPU.CTS.Shares
 {
-   public static class Utilities
+    public static class Utilities
     {
         public static IEnumerable<IEnumerable<TValue>> Chunk2<TValue>(
             this IEnumerable<TValue> values,
@@ -69,6 +72,27 @@ namespace Fanex.NAP.SPU.CTS.Shares
 
                 return await response.Content.ReadFromJsonAsync<TResult>().ConfigureAwait(false);
             }
+        }
+
+        public static void LogSentryInfo<T>(string serviceName, string message, T data, bool isWriteLog, ISentryClient sentryClient)
+        {
+            if (isWriteLog)
+            {
+                var logMessage = $"{serviceName} - {message} {(data != null ? " - Data:" + JsonConvert.SerializeObject(data) : "")} - {DateTime.Now}";
+
+                sentryClient.CaptureMessage(logMessage);
+            }
+        }
+
+        public static void LogSentryEror<T>(string serviceName, string message, T data, Exception ex, ISentryClient sentryClient)
+        {
+            var logMessage = new LogMessage($"{serviceName}")
+                .AddMessage(ex.Message)
+                .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex))
+                .AddMessage($"{message} - Data {JsonConvert.SerializeObject(data)} - { DateTime.Now}").ToString();
+
+            sentryClient.CaptureMessage(logMessage, Sentry.Protocol.SentryLevel.Error);
         }
     }
 }

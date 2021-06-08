@@ -100,13 +100,13 @@
 
         public bool UpdateIsWriteLogSetting(string serviceName, bool isWriteLog)
         {
-            var key = serviceName + ":isWriteLog";
+            var key = serviceName + ":IsWriteLog";
 
             if (configuration[key] == null)  return false;
 
             try
             {
-                SetValue<bool>(serviceName + ":isWriteLog", isWriteLog);
+                SetValue<bool>(serviceName + ":IsWriteLog", isWriteLog);
             }
             catch
             {

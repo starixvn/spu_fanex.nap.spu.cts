@@ -13,17 +13,14 @@
         private readonly ISentryClient sentryClient;
         private readonly IAccountJobService accountJobService;
         private readonly IMatchMonitorJobService matchMonitorJobService;
-        private readonly ICommonJobServices commonServices;
 
         public JobController(ISentryClient sentryClient,
             IAccountJobService accountJobService,
-            IMatchMonitorJobService matchMonitorJobService,
-            ICommonJobServices commonServices)
+            IMatchMonitorJobService matchMonitorJobService)
         {
             this.sentryClient = sentryClient;
             this.accountJobService = accountJobService;
             this.matchMonitorJobService = matchMonitorJobService;
-            this.commonServices = commonServices;
         }
 
         [HttpPost("transformaccount")]
@@ -43,9 +40,9 @@
         }
 
         [HttpPost("updatewritelog")]
-        public async Task<bool> UpdateWriteLogSetting(string serviceName, [FromForm] bool isWriteLog)
+        public async Task<bool> UpdateMatchMonitorWriteLog([FromForm] bool isWriteLog)
         {
-            return await this.commonServices.UpdateWriteLogSetting(serviceName, isWriteLog);
+            return await this.matchMonitorJobService.UpdateWriteLogSetting(isWriteLog);
         }
     }
 }

@@ -14,8 +14,6 @@ namespace Fanex.NAP.SPU.CTS.JobService.Services
             RegisterExistingCustomer(services);
 
             RegisterMatchMonitor(services);
-
-            RegisterCommon(services);
         }
 
         private static void RegisterTransformAccount(this IServiceCollection services)
@@ -37,11 +35,6 @@ namespace Fanex.NAP.SPU.CTS.JobService.Services
             services.AddSingleton<IMatchMonitorDataAccess, MatchMonitorDataAccess>();
             services.AddSingleton<IMatchMonitorServices, MatchMonitorServices>();
             services.AddSingleton<IMatchMonitorJobService, MatchMonitorJobService>();
-        }
-
-        private static void RegisterCommon(this IServiceCollection services)
-        {
-            services.AddSingleton<ICommonJobServices, CommonJobServices>();
         }
     }
 }

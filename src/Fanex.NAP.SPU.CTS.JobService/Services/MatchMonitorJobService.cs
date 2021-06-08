@@ -2,10 +2,10 @@
 {
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
+    using Fanex.NAP.SPU.CTS.Shares;
     using Newtonsoft.Json;
     using Sentry;
     using System;
-    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -13,25 +13,26 @@
     public interface IMatchMonitorJobService
     {
         Task<bool> Execute(int batchSize);
+
+        Task<bool> UpdateWriteLogSetting(bool isWriteLog);
     }
 
     public class MatchMonitorJobService : IMatchMonitorJobService
     {
+        private readonly string serviceName;
         private readonly ISentryClient sentryClient;
         private readonly IMatchMonitorServices matchMonitorServices;
-        private readonly ICommonJobServices commonJobServices;
         private readonly IAppSettings appSettings;
 
         public MatchMonitorJobService(
             ISentryClient sentryClient, 
             IMatchMonitorServices matchMonitorServices, 
-            IAppSettings appSettings,
-            ICommonJobServices commonJobServices)
+            IAppSettings appSettings)
         {
             this.sentryClient = sentryClient;
             this.matchMonitorServices = matchMonitorServices;
             this.appSettings = appSettings;
-            this.commonJobServices = commonJobServices;
+            this.serviceName = "MatchMonitor";
         }
 
         public Task<bool> Execute(int batchSize)
@@ -44,7 +45,7 @@
                 }
                 else
                 {
-                    commonJobServices.LogSentryInfo("Match-Monitor", "Invalid NumberOfThread/BatchSize", new { appSettings.MatchMonitorNumberOfThread, batchSize });
+                    Utilities.LogSentryInfo(serviceName, "Invalid NumberOfThread, BatchSize", new { appSettings.MatchMonitorNumberOfThread, batchSize }, appSettings.MatchMonitorIsWriteLog, sentryClient);
                 }
             }
             catch (Exception ex)
@@ -57,31 +58,53 @@
             return Task.FromResult(true);
         }
 
+        public Task<bool> UpdateWriteLogSetting(bool isWriteLog)
+        {
+            try
+            {
+                bool result = appSettings.UpdateIsWriteLogSetting(serviceName, isWriteLog);
+
+                return Task.FromResult(result);
+            }
+            catch (Exception e)
+            {
+                sentryClient.CaptureException(e);
+                return Task.FromResult(false);
+            }
+        }
+
         #region Private Methods
         private void JobRun(int batchSize)
         {
-            var matchTrans = GetMatchTrans(GetMilestone(), batchSize);
-            InsertMatchMonitor(matchTrans);
+            Int64 lastScannedTransId = GetLastScannedTransId();
+
+            var matchTrans = GetMatchTrans(lastScannedTransId, batchSize);
+
+            if(matchTrans!=null && matchTrans.Any())
+            {
+                InsertMatchMonitor(matchTrans);
+            }
         }
 
-        private SystemParameterEntity GetMilestone()
+        private Int64 GetLastScannedTransId()
         {
-            var milestone = matchMonitorServices.GetLastScannedTransID((int)Shares.Constants.SYSTEMPARAMETERS.MATCHMONITOR_LASTSCANNEDTRANS);
-            commonJobServices.LogSentryInfo("Match-Monitor", "Get Milestone", milestone);
+            var milestone = matchMonitorServices.GetLastScannedTransID();
 
-            return milestone;
+            Utilities.LogSentryInfo(serviceName, "Get LastScannedTransId", milestone, appSettings.MatchMonitorIsWriteLog, sentryClient);
+
+            return milestone.LastScannedTransId;
         }
 
-        private IEnumerable<TicketDetailEntity> GetMatchTrans(SystemParameterEntity milestone, int batchSize)
+        private IEnumerable<TicketDetailEntity> GetMatchTrans(Int64 lastScannedTransId, int batchSize)
         {
             var matchTrans = new List<TicketDetailEntity>();
 
-            if (!string.IsNullOrEmpty(milestone.ParameterValue))
+            if (batchSize > 0)
             {
-                matchTrans = matchMonitorServices.GetMatchTrans(Int64.Parse(milestone.ParameterValue), batchSize).ToList();
+                matchTrans = matchMonitorServices.GetMatchTrans(lastScannedTransId, batchSize).ToList();
             }
 
-            commonJobServices.LogSentryInfo("Match-Monitor", "Get transaction", matchTrans);
+            Utilities.LogSentryInfo(serviceName, "Get MatchTrans", matchTrans, appSettings.MatchMonitorIsWriteLog, sentryClient);       
             return matchTrans;
         }
 
@@ -90,16 +113,16 @@
             if (matchTrans != null && matchTrans.Any())
             {
                 var temGroupIDs = matchMonitorServices.InsertMatchMonitorStaging(JsonConvert.SerializeObject(matchTrans));
-                commonJobServices.LogSentryInfo("Match-Monitor", "Get transaction", matchTrans);
+                Utilities.LogSentryInfo(serviceName, "Get transaction", matchTrans, appSettings.MatchMonitorIsWriteLog, sentryClient);
 
                 if (temGroupIDs != null && temGroupIDs.Any())
                 {
                     InsertMatchMonitorRule(temGroupIDs);
-                    commonJobServices.LogSentryInfo("Match-Monitor", "Insert Rule done", temGroupIDs);
+                    Utilities.LogSentryInfo(serviceName, "Insert Rule done", temGroupIDs, appSettings.MatchMonitorIsWriteLog, sentryClient);
                 }
 
                 matchMonitorServices.UpdateMatchTransComplete();
-                commonJobServices.LogSentryInfo("Match-Monitor", "Update milestone done", matchTrans.Select(c=>c.TransId).Max());
+                Utilities.LogSentryInfo(serviceName, "Update milestone done", matchTrans.Select(c=>c.TransId).Max(), appSettings.MatchMonitorIsWriteLog, sentryClient);
             }
         }
 
@@ -151,7 +174,7 @@
 
                     if (numberOfTimes == 0)
                     {
-                        commonJobServices.LogSentryEror("Match-Monitor", "Insert Rule fail", tempGroupIDs, e);
+                        Utilities.LogSentryEror(serviceName, "Insert Rule fail", tempGroupIDs, e, sentryClient);
                     }
                 }
             }
