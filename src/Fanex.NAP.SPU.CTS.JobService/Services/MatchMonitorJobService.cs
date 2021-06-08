@@ -8,6 +8,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
 
     public interface IMatchMonitorJobService
@@ -25,8 +26,8 @@
         private readonly IAppSettings appSettings;
 
         public MatchMonitorJobService(
-            ISentryClient sentryClient, 
-            IMatchMonitorServices matchMonitorServices, 
+            ISentryClient sentryClient,
+            IMatchMonitorServices matchMonitorServices,
             IAppSettings appSettings)
         {
             this.sentryClient = sentryClient;
@@ -80,7 +81,7 @@
 
             var matchTrans = GetMatchTrans(lastScannedTransId, batchSize);
 
-            if(matchTrans!=null && matchTrans.Any())
+            if (matchTrans != null && matchTrans.Any())
             {
                 InsertMatchMonitor(matchTrans);
             }
@@ -104,7 +105,7 @@
                 matchTrans = matchMonitorServices.GetMatchTrans(lastScannedTransId, batchSize).ToList();
             }
 
-            Utilities.LogSentryInfo(serviceName, "Get MatchTrans", matchTrans, appSettings.MatchMonitorIsWriteLog, sentryClient);       
+            Utilities.LogSentryInfo(serviceName, "Get MatchTrans", matchTrans, appSettings.MatchMonitorIsWriteLog, sentryClient);
             return matchTrans;
         }
 
@@ -112,91 +113,48 @@
         {
             if (matchTrans != null && matchTrans.Any())
             {
-                var temGroupIDs = matchMonitorServices.InsertMatchMonitorStaging(JsonConvert.SerializeObject(matchTrans));
-                Utilities.LogSentryInfo(serviceName, "Get transaction", matchTrans, appSettings.MatchMonitorIsWriteLog, sentryClient);
+                var groupIds = matchMonitorServices.InsertMatchMonitorStaging(JsonConvert.SerializeObject(matchTrans));
 
-                if (temGroupIDs != null && temGroupIDs.Any())
+                Utilities.LogSentryInfo(serviceName, "Get GroupIds", groupIds, appSettings.MatchMonitorIsWriteLog, sentryClient);
+
+                if (groupIds != null && groupIds.Any())
                 {
-                    InsertMatchMonitorRule(temGroupIDs);
-                    Utilities.LogSentryInfo(serviceName, "Insert Rule done", temGroupIDs, appSettings.MatchMonitorIsWriteLog, sentryClient);
+                    InsertParallelMatchRule(groupIds.ToList());
+                    Utilities.LogSentryInfo(serviceName, "Insert Rule done", string.Empty, appSettings.MatchMonitorIsWriteLog, sentryClient);
                 }
 
                 matchMonitorServices.UpdateMatchTransComplete();
-                Utilities.LogSentryInfo(serviceName, "Update milestone done", matchTrans.Select(c=>c.TransId).Max(), appSettings.MatchMonitorIsWriteLog, sentryClient);
+                Utilities.LogSentryInfo(serviceName, "Update milestone done", matchTrans.Select(c => c.TransId).Max(), appSettings.MatchMonitorIsWriteLog, sentryClient);
             }
         }
 
-        private void InsertMatchMonitorRule(IEnumerable<int> tempGroupIDs)
+        private void InsertParallelMatchRule(List<int> groupIds)
         {
-            if (tempGroupIDs == null && !tempGroupIDs.Any())
+            var options = new ParallelOptions()
             {
-                return;
-            }
+                MaxDegreeOfParallelism = appSettings.MatchMonitorNumberOfThread
+            };
 
-            var tasks = new List<Task>();
-            var index = 0;
-
-            while (index < tempGroupIDs.Count())
+            try
             {
-                while (tasks.Count < appSettings.MatchMonitorNumberOfThread)
+                Parallel.For(0, groupIds.Count, options, i =>
                 {
-                    if (index < tempGroupIDs.Count())
+                    try
                     {
-                        var task = Task.Run(() =>
-                        {
-                            RetryInsertMatchRule(tempGroupIDs.ToArray()[index++]);
-                        });
-
-                        tasks.Add(task);
+                        matchMonitorServices.InsertMatchMonitorRule(groupIds[i]);
+                        Thread.Sleep(5);
                     }
-                }
-
-                DisposeTask(tasks);
-            }
-
-            Task.WaitAll(tasks.ToArray());
-        }
-
-        private void RetryInsertMatchRule(int tempGroupIDs)
-        {
-            int numberOfTimes = 3;
-
-            while (numberOfTimes > 0)
-            {
-                try
-                {
-                    matchMonitorServices.InsertMatchMonitorRule(tempGroupIDs);
-                    numberOfTimes = 0;
-                }
-                catch (Exception e)
-                {
-                    numberOfTimes--;
-
-                    if (numberOfTimes == 0)
+                    catch(Exception ex)
                     {
-                        Utilities.LogSentryEror(serviceName, "Insert Rule fail", tempGroupIDs, e, sentryClient);
+                        Utilities.LogSentryEror(serviceName, "InsertMatchMonitorRule fail", groupIds[i], ex, sentryClient);
+                        throw new Exception($"{serviceName} - InsertMatchMonitorRule fail - Data {JsonConvert.SerializeObject(groupIds)}", ex);
                     }
-                }
+                });
             }
-        }
-
-        private void DisposeTask(List<Task> tasks)
-        {
-            List<Task> completedTasks = new List<Task>();
-
-            tasks.ForEach(task =>
+            catch (AggregateException ex)
             {
-                if (task.IsCompleted)
-                {
-                    task.Dispose();
-                    completedTasks.Add(task);
-                }
-            });
-
-            completedTasks.ForEach(i =>
-            {
-                tasks.Remove(i);
-            });
+                throw new AggregateException($"{serviceName} - InsertMatchMonitorRule fail - Data {JsonConvert.SerializeObject(groupIds)}", ex);
+            }
         }
 
         #endregion

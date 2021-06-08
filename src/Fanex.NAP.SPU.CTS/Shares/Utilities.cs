@@ -86,8 +86,8 @@ namespace Fanex.NAP.SPU.CTS.Shares
 
         public static void LogSentryEror<T>(string serviceName, string message, T data, Exception ex, ISentryClient sentryClient)
         {
-            var logMessage = new LogMessage($"{serviceName}")
-                .AddMessage(ex.Message)
+            var logMessage = new LogMessage(ex.Message)
+                .AddMessage($"{serviceName}")
                 .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
                 .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex))
                 .AddMessage($"{message} - Data {JsonConvert.SerializeObject(data)} - { DateTime.Now}").ToString();
