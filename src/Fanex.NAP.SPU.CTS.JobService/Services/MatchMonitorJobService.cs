@@ -6,6 +6,7 @@
     using Newtonsoft.Json;
     using Sentry;
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
@@ -130,6 +131,8 @@
 
         private void InsertParallelMatchRule(List<int> groupIds)
         {
+            var log = new ConcurrentQueue<int>();
+
             var options = new ParallelOptions()
             {
                 MaxDegreeOfParallelism = appSettings.MatchMonitorNumberOfThread
@@ -141,18 +144,22 @@
                 {
                     try
                     {
+                        log.Enqueue(groupIds[i]);
+
                         matchMonitorServices.InsertMatchMonitorRule(groupIds[i]);
+
                         Thread.Sleep(5);
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
-                        Utilities.LogSentryEror(serviceName, "InsertMatchMonitorRule fail", groupIds[i], ex, sentryClient);
+                        Utilities.LogSentryEror(serviceName, $"InsertMatchMonitorRule fail", groupIds[i], ex, sentryClient);
                         throw new Exception($"{serviceName} - InsertMatchMonitorRule fail - Data {JsonConvert.SerializeObject(groupIds)}", ex);
                     }
                 });
             }
             catch (AggregateException ex)
             {
+                Utilities.LogSentryInfo(serviceName, "Check duplicate  ", log, true, sentryClient);
                 throw new AggregateException($"{serviceName} - InsertMatchMonitorRule fail - Data {JsonConvert.SerializeObject(groupIds)}", ex);
             }
         }
