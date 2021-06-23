@@ -47,7 +47,7 @@
                 }
                 else
                 {
-                    Utilities.LogSentryInfo(serviceName, "Invalid NumberOfThread, BatchSize", new { appSettings.MatchMonitorNumberOfThread, batchSize }, appSettings.MatchMonitorIsWriteLog, sentryClient);
+                    Utilities.LogSentryError(serviceName, "Invalid NumberOfThread, BatchSize", (appSettings.MatchMonitorNumberOfThread, batchSize), new NullReferenceException(), sentryClient);
                 }
             }
             catch (Exception ex)
@@ -152,7 +152,7 @@
                     }
                     catch (Exception ex)
                     {
-                        Utilities.LogSentryEror(serviceName, $"InsertMatchMonitorRule fail", groupIds[i], ex, sentryClient);
+                        Utilities.LogSentryError(serviceName, $"InsertMatchMonitorRule fail", groupIds[i], ex, sentryClient);
                         throw new Exception($"{serviceName} - InsertMatchMonitorRule fail - Data {JsonConvert.SerializeObject(groupIds)}", ex);
                     }
                 });
