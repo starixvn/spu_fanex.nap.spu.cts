@@ -1,15 +1,11 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor
 {
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
-    using Fanex.NAP.SPU.CTS.Shares;
     using System;
     using System.Collections.Generic;
-    using System.Linq;
 
     public interface IMatchMonitorServices
     {
-        SystemParameterEntity GetLastScannedTransID();
-
         IEnumerable<TicketDetailEntity> GetMatchTrans(Int64 LastScannedTransID, int batchSize);
 
         IEnumerable<int> InsertMatchMonitorStaging(string matchTransJson);
@@ -26,11 +22,6 @@
         public MatchMonitorServices(IMatchMonitorDataAccess matchDataAccess)
         {
             this.matchDataAccess = matchDataAccess;
-        }
-
-        public SystemParameterEntity GetLastScannedTransID()
-        {
-            return matchDataAccess.GetPreviousTimingExecution((int)Constants.SYSTEMPARAMETERS.MATCHMONITOR_LASTSCANNEDTRANS)?.SingleOrDefault();
         }
 
         public IEnumerable<TicketDetailEntity> GetMatchTrans(Int64 LastScannedTransID, int batchSize)

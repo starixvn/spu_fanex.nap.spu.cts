@@ -11,8 +11,6 @@
 
     public interface IMatchMonitorDataAccess
     {
-        IEnumerable<SystemParameterEntity> GetPreviousTimingExecution(int paramID);
-
         IEnumerable<TicketDetailEntity> GetMatchTrans(Int64 LastScannedTransID, int batchSize);
 
         IEnumerable<int> InsertMatchMonitorStaging(string matchTransJson);
@@ -29,19 +27,6 @@
         public MatchMonitorDataAccess()
         {
             repository = new DynamicRepository();
-        }
-
-        public IEnumerable<SystemParameterEntity> GetPreviousTimingExecution(int paramID)
-        {
-            var criteria = new PreviousTimingExecutionGetCriteria
-            {
-                ParamID = paramID
-            };
-
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<SystemParameterEntity>(criteria).ToList();
-            }
         }
 
         public IEnumerable<TicketDetailEntity> GetMatchTrans(Int64 LastScannedTransID, int batchSize)

@@ -2,6 +2,7 @@
 {
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
+    using Fanex.NAP.SPU.CTS.Features.SystemParameter;
     using Fanex.NAP.SPU.CTS.Shares;
     using Newtonsoft.Json;
     using Sentry;
@@ -11,6 +12,7 @@
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
+    using static Fanex.NAP.SPU.CTS.Shares.Constants;
 
     public interface IMatchMonitorJobService
     {
@@ -24,15 +26,18 @@
         private readonly string serviceName;
         private readonly ISentryClient sentryClient;
         private readonly IMatchMonitorServices matchMonitorServices;
+        private readonly ICommonServices commonServices;
         private readonly IAppSettings appSettings;
 
         public MatchMonitorJobService(
             ISentryClient sentryClient,
             IMatchMonitorServices matchMonitorServices,
+            ICommonServices commonServices,
             IAppSettings appSettings)
         {
             this.sentryClient = sentryClient;
             this.matchMonitorServices = matchMonitorServices;
+            this.commonServices = commonServices;
             this.appSettings = appSettings;
             this.serviceName = "MatchMonitor";
         }
@@ -90,11 +95,11 @@
 
         private Int64 GetLastScannedTransId()
         {
-            var milestone = matchMonitorServices.GetLastScannedTransID();
+            var lastScannedTransId = commonServices.GetLastScannedTransID(SYSTEMPARAMETERS.MATCHMONITOR_LASTSCANNEDTRANS);
 
-            Utilities.LogSentryInfo(serviceName, "Get LastScannedTransId", milestone, appSettings.MatchMonitorIsWriteLog, sentryClient);
+            Utilities.LogSentryInfo(serviceName, "Get LastScannedTransId", lastScannedTransId, appSettings.MatchMonitorIsWriteLog, sentryClient);
 
-            return milestone.LastScannedTransId;
+            return lastScannedTransId;
         }
 
         private IEnumerable<TicketDetailEntity> GetMatchTrans(Int64 lastScannedTransId, int batchSize)
