@@ -13,14 +13,17 @@
         private readonly ISentryClient sentryClient;
         private readonly IAccountJobService accountJobService;
         private readonly IMatchMonitorJobService matchMonitorJobService;
+        private readonly IUserPermissionJobService userPermissionJobService;
 
         public JobController(ISentryClient sentryClient,
             IAccountJobService accountJobService,
-            IMatchMonitorJobService matchMonitorJobService)
+            IMatchMonitorJobService matchMonitorJobService,
+            IUserPermissionJobService userPermissionJobService)
         {
             this.sentryClient = sentryClient;
             this.accountJobService = accountJobService;
             this.matchMonitorJobService = matchMonitorJobService;
+            this.userPermissionJobService = userPermissionJobService;
         }
 
         [HttpPost("transformaccount")]
@@ -44,5 +47,11 @@
         {
             return await this.matchMonitorJobService.UpdateWriteLogSetting(isWriteLog);
         }
+
+        //[HttpPost("user-permission")]
+        //public async Task<bool> UserPermission([FromForm] bool isWriteLog)
+        //{
+        //    return await userPermissionJobService.UpdateWriteLogSetting(isWriteLog);
+        //}
     }
 }
