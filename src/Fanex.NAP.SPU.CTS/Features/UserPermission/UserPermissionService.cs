@@ -17,6 +17,7 @@
     {
         private List<UserPermissionModel> userPermissions;
         private readonly IUserPermissionDataAccess dataAccess;
+        private readonly UserService userService;
 
         public UserPermissionService Start()
         {
@@ -35,25 +36,25 @@
             return this;
         }
 
-        //public UserPermissionService SyncUserPermission(string functionName, int functionKey)
-        //{
-        //    var userPolicy = userService.GetUserPolicies(functionName, Int32.Parse(AppSettings.SiteId));
+        public UserPermissionService SyncUserPermission(string functionName, int functionKey)
+        {
+            var userPolicy = userService.GetUserPolicies(functionName, Int32.Parse(AppSettings.SiteId));
 
-        //    if (AppSettings.IsWriteLogInfo)
-        //        LogService.Info($"Get User Permission - {functionName} - {JsonConvert.SerializeObject(userPolicy?.Select(c => c.User.Id))} - {DateTime.Now}");
+            if (AppSettings.IsWriteLogInfo)
+                LogService.Info($"Get User Permission - {functionName} - {JsonConvert.SerializeObject(userPolicy?.Select(c => c.User.Id))} - {DateTime.Now}");
 
-        //    if (userPolicy != null && userPolicy.Any())
-        //    {
-        //        var userPermission = userPolicy.Select(x => TransformUserPermission(x, functionKey));
+            if (userPolicy != null && userPolicy.Any())
+            {
+                var userPermission = userPolicy.Select(x => TransformUserPermission(x, functionKey));
 
-        //        if (userPermission != null && userPermission.Any())
-        //        {
-        //            userPermissions.AddRange(userPermission);
-        //        }
-        //    }
+                if (userPermission != null && userPermission.Any())
+                {
+                    userPermissions.AddRange(userPermission);
+                }
+            }
 
-        //    return this;
-        //}
+            return this;
+        }
 
         //private UserPermissionModel TransformUserPermission(UserPolicy userPolicy, int functionKey)
         //{
