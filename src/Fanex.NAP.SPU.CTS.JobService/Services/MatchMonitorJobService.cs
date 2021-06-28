@@ -26,18 +26,18 @@
         private readonly string serviceName;
         private readonly ISentryClient sentryClient;
         private readonly IMatchMonitorServices matchMonitorServices;
-        private readonly ICommonServices commonServices;
+        private readonly ISystemParameterServices systemParameterServices;
         private readonly IAppSettings appSettings;
 
         public MatchMonitorJobService(
             ISentryClient sentryClient,
             IMatchMonitorServices matchMonitorServices,
-            ICommonServices commonServices,
+            ISystemParameterServices commonServices,
             IAppSettings appSettings)
         {
             this.sentryClient = sentryClient;
             this.matchMonitorServices = matchMonitorServices;
-            this.commonServices = commonServices;
+            this.systemParameterServices = commonServices;
             this.appSettings = appSettings;
             this.serviceName = "MatchMonitor";
         }
@@ -95,7 +95,7 @@
 
         private Int64 GetLastScannedTransId()
         {
-            var lastScannedTransId = commonServices.GetLastScannedTransID(SYSTEMPARAMETERS.MATCHMONITOR_LASTSCANNEDTRANS);
+            var lastScannedTransId = systemParameterServices.GetLastScannedId(SystemParameters.MatchMonitorLastScannedTrans);
 
             Utilities.LogSentryInfo(serviceName, "Get LastScannedTransId", lastScannedTransId, appSettings.MatchMonitorIsWriteLog, sentryClient);
 

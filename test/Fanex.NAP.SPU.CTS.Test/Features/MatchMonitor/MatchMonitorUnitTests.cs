@@ -11,21 +11,21 @@
     {
         private readonly IMatchMonitorDataAccess matchMonitorDataAccess;
         private readonly IMatchMonitorServices matchMonitorServices;
-        private readonly ICommonServices commonServices;
-        private readonly ICommonDataAccess commonDataAccess;
+        private readonly ISystemParameterServices commonServices;
+        private readonly IPreviousParameterDataAccess commonDataAccess;
 
         public MatchMonitorUnitTests()
         {
             matchMonitorDataAccess = Substitute.For<IMatchMonitorDataAccess>();
             matchMonitorServices = new MatchMonitorServices(matchMonitorDataAccess);
-            commonDataAccess = Substitute.For<ICommonDataAccess>();
+            commonDataAccess = Substitute.For<IPreviousParameterDataAccess>();
             commonServices = new SystemParameterServices(commonDataAccess);
         }
 
         [Fact]
         public void GetLastScannedTransID_WhenSuccess_ReturnTransID()
         {
-            var result = commonServices.GetLastScannedTransID(SYSTEMPARAMETERS.MATCHMONITOR_LASTSCANNEDTRANS);
+            var result = commonServices.GetLastScannedId(SystemParameters.MatchMonitorLastScannedTrans);
 
             result.Should().NotBe(null);
         }
