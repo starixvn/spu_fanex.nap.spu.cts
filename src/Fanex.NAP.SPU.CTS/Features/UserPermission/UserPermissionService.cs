@@ -1,5 +1,7 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.UserPermission
 {
+    using Fanex.NAP.Client.Models.ValueObject;
+    using Fanex.NAP.Client.Services;
     using Fanex.NAP.SPU.CTS.Features.UserPermission.Entities;
     using Newtonsoft.Json;
     using System;
@@ -11,6 +13,10 @@
     public interface IUserPermissionService
     {
         UserPermissionService InsertUserPermission();
+
+        UserPermissionService Start();
+
+        UserPermissionService SyncUserPermission(string functionName, int functionKey, int siteId, bool isWriteLogInfo);
     }
 
     public class UserPermissionService : IUserPermissionService
@@ -36,12 +42,12 @@
             return this;
         }
 
-        public UserPermissionService SyncUserPermission(string functionName, int functionKey)
+        public UserPermissionService SyncUserPermission(string functionName, int functionKey, int siteId, bool isWriteLogInfo)
         {
-            var userPolicy = userService.GetUserPolicies(functionName, Int32.Parse(AppSettings.SiteId));
+            var userPolicy = userService.GetUserPolicies(functionName, siteId);
 
-            if (AppSettings.IsWriteLogInfo)
-                LogService.Info($"Get User Permission - {functionName} - {JsonConvert.SerializeObject(userPolicy?.Select(c => c.User.Id))} - {DateTime.Now}");
+            if (isWriteLogInfo)
+                //LogService.Info($"Get User Permission - {functionName} - {JsonConvert.SerializeObject(userPolicy?.Select(c => c.User.Id))} - {DateTime.Now}");
 
             if (userPolicy != null && userPolicy.Any())
             {
@@ -56,14 +62,14 @@
             return this;
         }
 
-        //private UserPermissionModel TransformUserPermission(UserPolicy userPolicy, int functionKey)
-        //{
-        //    return new UserPermissionModel
-        //    {
+        private UserPermissionModel TransformUserPermission(UserPolicy userPolicy, int functionKey)
+        {
+            return new UserPermissionModel
+            {
 
-        //        UserID = userPolicy.User.Id,
-        //        FuncID = functionKey
-        //    };
-        //}
+                UserID = userPolicy.User.Id,
+                FuncID = functionKey
+            };
+        }
     }
 }

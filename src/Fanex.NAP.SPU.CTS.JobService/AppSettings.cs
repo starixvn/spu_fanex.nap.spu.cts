@@ -20,6 +20,10 @@
 
         string Soon88FeedData_URL { get; }
 
+        int SiteId { get; }
+
+        bool UserPermissionIsWriteLog { get; }
+
         bool UpdateIsWriteLogSetting(string serviceName, bool isWriteLog);
     }
 
@@ -69,6 +73,10 @@
         public bool ProblemAccountIsWriteLog => GetValue<bool>("ProblemAccountInsert:IsWriteLog");
 
         public string Soon88FeedData_URL => GetValue<string>("ProblemAccountInsert:Soon88FeedDataAPI");
+
+        public int SiteId => GetValue<int>("UserPermission:SiteId");
+
+        public bool UserPermissionIsWriteLog => GetValue<bool>("ProblemAccountInsert:IsWriteLog");
 
         #endregion
 
