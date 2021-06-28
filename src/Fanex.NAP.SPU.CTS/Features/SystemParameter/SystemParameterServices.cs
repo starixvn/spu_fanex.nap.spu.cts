@@ -1,28 +1,44 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.SystemParameter
 {
     using System;
-    using System.Linq;
     using static Fanex.NAP.SPU.CTS.Shares.Constants;
 
-    public interface ICommonServices
+    public interface ISystemParameterServices
     {
-        Int64 GetLastScannedTransID(SYSTEMPARAMETERS paraID);
+        Int64 GetLastScannedId(SystemParameters paraID);
+
+        DateTime? GetLastScannedDateTime(SystemParameters paraID);
+
+        void UpdateTimingExecution(string paraValue, int paramId);
     }
 
-    public class SystemParameterServices : ICommonServices
+    public class SystemParameterServices : ISystemParameterServices
     {
-        private readonly ICommonDataAccess commonDataAccess;
+        private readonly IPreviousParameterDataAccess systemParameterDataAccess;
 
-        public SystemParameterServices(ICommonDataAccess commonDataAccess)
+        public SystemParameterServices(IPreviousParameterDataAccess systemParameterDataAccess)
         {
-            this.commonDataAccess = commonDataAccess;
+            this.systemParameterDataAccess = systemParameterDataAccess;
         }
 
-        public Int64 GetLastScannedTransID(SYSTEMPARAMETERS paraID)
+        public Int64 GetLastScannedId(SystemParameters paraID)
         {
-            var lastScannedTransID = commonDataAccess.GetPreviousTimingExecution(paraID)?.SingleOrDefault();
+            var lastScannedTransID = systemParameterDataAccess.GetPreviousTimingExecution(paraID);
 
-            return Int64.Parse(lastScannedTransID?.ParameterValue);
+            return lastScannedTransID != null ? Int64.Parse(lastScannedTransID?.ParameterValue) : 0;
+        }
+
+        public DateTime? GetLastScannedDateTime(SystemParameters paraID)
+        {
+            var lastScannedTransID = systemParameterDataAccess.GetPreviousTimingExecution(paraID);
+
+            return lastScannedTransID != null ? DateTime.Parse(lastScannedTransID?.ParameterValue) : null;
+        }
+
+
+        public void UpdateTimingExecution(string paraValue, int paramId)
+        {
+            systemParameterDataAccess.UpdateTimingExecution(paraValue, paramId);
         }
     }
 }

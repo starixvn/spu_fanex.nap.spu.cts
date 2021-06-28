@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.SPU.CTS.JobService.Services
 {
     using Fanex.NAP.SPU.CTS.Features.Accounts;
+    using Fanex.NAP.SPU.CTS.Features.CustomerClassification.ProblemAccountInsert;
     using Fanex.NAP.SPU.CTS.Features.ExistingCustomer;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
     using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +15,8 @@
             RegisterExistingCustomer(services);
 
             RegisterMatchMonitor(services);
+
+            RegisterProblemAccount(services);
         }
 
         private static void RegisterTransformAccount(this IServiceCollection services)
@@ -35,6 +38,13 @@
             services.AddSingleton<IMatchMonitorDataAccess, MatchMonitorDataAccess>();
             services.AddSingleton<IMatchMonitorServices, MatchMonitorServices>();
             services.AddSingleton<IMatchMonitorJobService, MatchMonitorJobService>();
+        }
+
+        private static void RegisterProblemAccount(this IServiceCollection services)
+        {
+            services.AddSingleton<IProblemAccountDataAccess, ProblemAccountDataAccess>();
+            services.AddSingleton<IProblemAccountServices, ProblemAccountServices>();
+            services.AddSingleton<IProblemAccountJobService, ProblemAccountJobService>();
         }
     }
 }

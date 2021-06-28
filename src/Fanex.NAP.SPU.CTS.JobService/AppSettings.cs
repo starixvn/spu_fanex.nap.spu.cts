@@ -14,6 +14,12 @@
 
         bool MatchMonitorIsWriteLog { get; }
 
+        int ProblemAccountRetryTimes { get; }
+
+        bool ProblemAccountIsWriteLog { get; }
+
+        string Soon88FeedData_URL { get; }
+
         bool UpdateIsWriteLogSetting(string serviceName, bool isWriteLog);
     }
 
@@ -57,7 +63,13 @@
         public int MatchMonitorNumberOfThread => matchMonitorNumberOfThread;
 
         public bool MatchMonitorIsWriteLog => GetValue<bool>("MatchMonitor:IsWriteLog");
-      
+
+        public int ProblemAccountRetryTimes => GetValue<int>("ProblemAccountInsert:RetryTimes");
+
+        public bool ProblemAccountIsWriteLog => GetValue<bool>("ProblemAccountInsert:IsWriteLog");
+
+        public string Soon88FeedData_URL => GetValue<string>("ProblemAccountInsert:Soon88FeedDataAPI");
+
         #endregion
 
         #region Methods
@@ -102,7 +114,10 @@
         {
             var key = serviceName + ":IsWriteLog";
 
-            if (configuration[key] == null)  return false;
+            if (configuration[key] == null)
+            {
+                return false;
+            }
 
             try
             {

@@ -3,7 +3,7 @@
     using Fanex.Data;
     using Fanex.Data.Repository;
 
-    public class PreviousTimingExecutionGetCriteria : NonQueryCommand
+    public class PreviousTimingExecutionGetCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "ip_ParamID")]
         public int ParamID { get; set; }

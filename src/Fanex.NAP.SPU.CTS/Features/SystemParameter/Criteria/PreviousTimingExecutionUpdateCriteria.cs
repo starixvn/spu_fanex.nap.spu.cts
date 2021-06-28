@@ -6,7 +6,7 @@
     public class PreviousTimingExecutionUpdateCriteria : NonQueryCommand
     {
         [SpParam(SqlParamName = "ip_ParamID")]
-        public int ParamID { get; set; }
+        public int ParamId { get; set; }
 
         [SpParam(SqlParamName = "ip_ParamValue")]
         public string ParamValue { get; set; }

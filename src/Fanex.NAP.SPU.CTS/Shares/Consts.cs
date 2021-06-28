@@ -2,15 +2,24 @@
 {
     public static class Constants
     {
-        public enum MATCHMONITOR_QUERYTYPE : int
+        public const string InitialProblemAccounts = "0";
+
+        public const string ProblemAccountByDateTime = "";
+
+        public const string FeedSoon88_Salt = "!%HGDwweHqw#";
+
+        public const string CONVERT_TO_SQL_DATETIME = "yyyy-MM-dd HH:mm:ss";
+
+        public enum MatchMonitorQueryTypes
         {
-            SERVICE = 1,
-            REPORT = 2,
+            Service = 1,
+            Report = 2,
         };
 
-        public enum SYSTEMPARAMETERS : int
+        public enum SystemParameters
         {
-            MATCHMONITOR_LASTSCANNEDTRANS = 20
+            ProblemAccountLastScannedTime = 2,
+            MatchMonitorLastScannedTrans = 20
         };
     }
 }
