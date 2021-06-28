@@ -22,27 +22,28 @@
     public class ProblemAccountJobService : IProblemAccountJobService
     {
         private readonly string serviceName;
-        private readonly ISentryClient sentryClient;
-        private readonly IProblemAccountServices problemAccountServices;
-        private readonly ISystemParameterServices systemParameterServices;
-        private readonly IPushDataToExternalService pushDataToExternalService;
-        private readonly IFeedSoon88Services feedSoon88Services;
-        private readonly IAppSettings appSettings;
+        private readonly ISentryClient _sentryClient;
+        private readonly IProblemAccountServices _problemAccountServices;
+        private readonly ISystemParameterServices _systemParameterServices;
+        private readonly IPushDataToExternalService _pushDataToExternalService;
+        private readonly IFeedSoon88Services _feedSoon88Services;
+        private readonly IAppSettings _appSettings;
+        private IEnumerable<ProblemAccountsEntity> logData;
 
         public ProblemAccountJobService(
-            ISentryClient sentryClient,
-            IProblemAccountServices problemAccountServices,
-            ISystemParameterServices systemParameterServices,
-            IPushDataToExternalService pushDataToExternalService,
-            IFeedSoon88Services feedSoon88Services,
-            IAppSettings appSettings)
+            ISentryClient _sentryClient,
+            IProblemAccountServices _problemAccountServices,
+            ISystemParameterServices _systemParameterServices,
+            IPushDataToExternalService _pushDataToExternalService,
+            IFeedSoon88Services _feedSoon88Services,
+            IAppSettings _appSettings)
         {
-            this.sentryClient = sentryClient;
-            this.problemAccountServices = problemAccountServices;
-            this.systemParameterServices = systemParameterServices;
-            this.pushDataToExternalService = pushDataToExternalService;
-            this.feedSoon88Services = feedSoon88Services;
-            this.appSettings = appSettings;
+            this._sentryClient = _sentryClient;
+            this._problemAccountServices = _problemAccountServices;
+            this._systemParameterServices = _systemParameterServices;
+            this._pushDataToExternalService = _pushDataToExternalService;
+            this._feedSoon88Services = _feedSoon88Services;
+            this._appSettings = _appSettings;
             this.serviceName = "ProblemAccountInsert";
         }
 
@@ -56,12 +57,12 @@
                 }
                 else
                 {
-                    Utilities.LogSentryError(serviceName, "InValid Batch size", (batchExternalSize, batchInternalSize), new NullReferenceException(), sentryClient);
+                    Utilities.LogSentryError(serviceName, "InValid Batch size", (batchExternalSize, batchInternalSize), new NullReferenceException(), _sentryClient);
                 }
             }
             catch (Exception ex)
             {
-                sentryClient.CaptureException(ex);
+                Utilities.LogSentryError(serviceName, ex.Message, logData, ex, _sentryClient);
 
                 return Task.FromResult(false);
             }
@@ -73,13 +74,13 @@
         {
             try
             {
-                bool result = appSettings.UpdateIsWriteLogSetting(serviceName, isWriteLog);
+                bool result = _appSettings.UpdateIsWriteLogSetting(serviceName, isWriteLog);
 
                 return Task.FromResult(result);
             }
             catch (Exception e)
             {
-                sentryClient.CaptureException(e);
+                _sentryClient.CaptureException(e);
                 return Task.FromResult(false);
             }
         }
@@ -87,13 +88,14 @@
         #region Private Methods
         private void JobRun(int batchExternalSize, int batchInternalSize)
         {
-            var lastScannedTime = systemParameterServices.GetLastScannedDateTime(SystemParameters.ProblemAccountLastScannedTime);
-            Utilities.LogSentryInfo(serviceName, "Get LastScannedTransId", lastScannedTime, appSettings.ProblemAccountIsWriteLog, sentryClient);
+            var lastScannedTime = _systemParameterServices.GetLastScannedDateTime(SystemParameters.ProblemAccountLastScannedTime);
+            Utilities.LogSentryInfo(serviceName, "Get LastScannedTransId", lastScannedTime, _appSettings.ProblemAccountIsWriteLog, _sentryClient);
 
             var savedDataTime = DateTime.Now;
 
-            var problemAccounts = problemAccountServices.GetProblemAccounts(lastScannedTime);
-            Utilities.LogSentryInfo(serviceName, "Get ProblemAccount", lastScannedTime, appSettings.ProblemAccountIsWriteLog, sentryClient);
+            var problemAccounts = _problemAccountServices.GetProblemAccounts(lastScannedTime).ToList();
+            logData = problemAccounts;
+            Utilities.LogSentryInfo(serviceName, "Get ProblemAccount", problemAccounts, _appSettings.ProblemAccountIsWriteLog, _sentryClient);
 
             if (problemAccounts != null && problemAccounts.Any())
             {
@@ -110,8 +112,8 @@
                 }
             }
 
-            systemParameterServices.UpdateTimingExecution(savedDataTime.ToString(Constants.CONVERT_TO_SQL_DATETIME), (int)SystemParameters.ProblemAccountLastScannedTime);
-            Utilities.LogSentryInfo(serviceName, "Update TimingExecution", savedDataTime.ToString(Constants.CONVERT_TO_SQL_DATETIME), appSettings.ProblemAccountIsWriteLog, sentryClient);
+            _systemParameterServices.UpdateTimingExecution(savedDataTime.ToString(Constants.CONVERT_TO_SQL_DATETIME), (int)SystemParameters.ProblemAccountLastScannedTime);
+            Utilities.LogSentryInfo(serviceName, "Update TimingExecution", savedDataTime.ToString(Constants.CONVERT_TO_SQL_DATETIME), _appSettings.ProblemAccountIsWriteLog, _sentryClient);
         }
 
         private void PushDataToExternal(IEnumerable<int> custIds, int batchExternalSize)
@@ -120,8 +122,8 @@
 
             foreach (var items in custIdsChunk)
             {
-                var lastestClassifications = pushDataToExternalService.GetLatestClassification(string.Join(",", items));
-                Utilities.LogSentryInfo(serviceName, "Get lastestCC", lastestClassifications, appSettings.ProblemAccountIsWriteLog, sentryClient);
+                var lastestClassifications = _pushDataToExternalService.GetLatestClassification(string.Join(",", items));
+                Utilities.LogSentryInfo(serviceName, "Get lastestCC", lastestClassifications, _appSettings.ProblemAccountIsWriteLog, _sentryClient);
 
                 if (lastestClassifications != null && lastestClassifications.Any())
                 {
@@ -132,21 +134,20 @@
                         UpdateAppliedCC(lastestClassifications);
                     }
 
-                    feedSoon88Services.FeedCCToSoon88(lastestClassifications, appSettings.Soon88FeedData_URL);
-                    Utilities.LogSentryInfo(serviceName, "FeedSoon88 done", lastestClassifications, appSettings.ProblemAccountIsWriteLog, sentryClient);
-
+                    _feedSoon88Services.FeedCCToSoon88(lastestClassifications, _appSettings.Soon88FeedData_URL);
+                    Utilities.LogSentryInfo(serviceName, "FeedSoon88 done", lastestClassifications, _appSettings.ProblemAccountIsWriteLog, _sentryClient);
                 }
             }
         }
 
         private IEnumerable<int> InsertProblemAccountToCTS(IEnumerable<ProblemAccountsEntity> problemAccounts)
         {
-            var result = problemAccountServices.InsertProblemAccountToCTS(problemAccounts, false);
-            Utilities.LogSentryInfo(serviceName, "Insert ProblemAccount", problemAccounts, appSettings.ProblemAccountIsWriteLog, sentryClient);
+            var result = _problemAccountServices.InsertProblemAccountToCTS(problemAccounts, false);
+            Utilities.LogSentryInfo(serviceName, "Insert ProblemAccount", result, _appSettings.ProblemAccountIsWriteLog, _sentryClient);
 
             if (!string.IsNullOrEmpty(result.ErrorMessage))
             {
-                Utilities.LogSentryError(serviceName, "InsertProblemAccount throws Exception", problemAccounts, new Exception(result.ErrorMessage), sentryClient);
+                Utilities.LogSentryError(serviceName, "InsertProblemAccount throws Exception", problemAccounts, new Exception(result.ErrorMessage), _sentryClient);
 
             }
 
@@ -156,23 +157,23 @@
 
         private void UpdateAppliedCC(IEnumerable<LatestClassificationEntity> lastestClassifications)
         {
-            var rs = pushDataToExternalService.UpdateAppliedCustomerClassification(lastestClassifications);
-            Utilities.LogSentryInfo(serviceName, "Update Apllied CC", lastestClassifications, appSettings.ProblemAccountIsWriteLog, sentryClient);
+            var rs = _pushDataToExternalService.UpdateAppliedCustomerClassification(lastestClassifications);
+            Utilities.LogSentryInfo(serviceName, "Update Apllied CC", lastestClassifications, _appSettings.ProblemAccountIsWriteLog, _sentryClient);
 
             if (rs.ErrorCode == -1)
             {
-                Utilities.LogSentryError(serviceName, "Update Apllied CC throw exception", lastestClassifications, new Exception(rs.ErrorMsg), sentryClient);
+                Utilities.LogSentryError(serviceName, "Update Apllied CC throw exception", lastestClassifications, new Exception(rs.ErrorMsg), _sentryClient);
             }
         }
 
         private bool PushCustomerClassificationToMain(IEnumerable<LatestClassificationEntity> lastestClassifications)
         {
-            var result = pushDataToExternalService.PushCustomerClassificationToMainDB(lastestClassifications, appSettings.ProblemAccountRetryTimes);
-            Utilities.LogSentryInfo(serviceName, "PushCustomerClassificationToMain", lastestClassifications, appSettings.ProblemAccountIsWriteLog, sentryClient);
+            var result = _pushDataToExternalService.PushCustomerClassificationToMainDB(lastestClassifications, _appSettings.ProblemAccountRetryTimes);
+            Utilities.LogSentryInfo(serviceName, "PushCustomerClassificationToMain", lastestClassifications, _appSettings.ProblemAccountIsWriteLog, _sentryClient);
 
             if (result.ErrorCode == -1)
             {
-                Utilities.LogSentryError(serviceName, "PushCustomerClassificationToMain throws Exception", lastestClassifications, new Exception(result.ErrorMsg), sentryClient);
+                Utilities.LogSentryError(serviceName, "PushCustomerClassificationToMain throws Exception", lastestClassifications, new Exception(result.ErrorMsg), _sentryClient);
             }
 
             return result.ErrorCode == 0;
