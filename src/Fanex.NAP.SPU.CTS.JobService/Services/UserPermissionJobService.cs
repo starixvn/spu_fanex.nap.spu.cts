@@ -11,6 +11,7 @@ namespace Fanex.NAP.SPU.CTS.JobService.Services
 {
     public interface IUserPermissionJobService
     {
+        Task<bool> SyncUserPermissionFromNAP();
     }
 
     public class UserPermissionJobService : IUserPermissionJobService
@@ -24,11 +25,10 @@ namespace Fanex.NAP.SPU.CTS.JobService.Services
             this.sentryClient = sentryClient;
             this.permissionService = permissionService;
             this.appSettings = appSettings;
-
         }
 
 
-        public Task<bool> SyncUserPermission()
+        public Task<bool> SyncUserPermissionFromNAP()
         {
             try
             {
@@ -42,12 +42,7 @@ namespace Fanex.NAP.SPU.CTS.JobService.Services
             }
             catch (Exception ex)
             {
-                //var logMessage = new LogMessage(ex.Message)
-                //    .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                //    .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                //LogService.Error(logMessage);
-
+                sentryClient.CaptureException(ex);
                 return Task.FromResult(false);
             }
         }

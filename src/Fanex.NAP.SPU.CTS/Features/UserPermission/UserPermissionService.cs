@@ -3,7 +3,9 @@
     using Fanex.NAP.Client.Models.ValueObject;
     using Fanex.NAP.Client.Services;
     using Fanex.NAP.SPU.CTS.Features.UserPermission.Entities;
+    using Fanex.NAP.SPU.CTS.Shares;
     using Newtonsoft.Json;
+    using Sentry;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -24,6 +26,12 @@
         private List<UserPermissionModel> userPermissions;
         private readonly IUserPermissionDataAccess dataAccess;
         private readonly UserService userService;
+        private readonly ISentryClient sentryClient;
+
+        public UserPermissionService(IUserPermissionDataAccess dataAccess)
+        {
+            this.dataAccess = dataAccess;
+        }
 
         public UserPermissionService Start()
         {
@@ -45,9 +53,7 @@
         public UserPermissionService SyncUserPermission(string functionName, int functionKey, int siteId, bool isWriteLogInfo)
         {
             var userPolicy = userService.GetUserPolicies(functionName, siteId);
-
-            if (isWriteLogInfo)
-                //LogService.Info($"Get User Permission - {functionName} - {JsonConvert.SerializeObject(userPolicy?.Select(c => c.User.Id))} - {DateTime.Now}");
+            Utilities.LogSentryInfo("UserPermisison", "Get User Permission", userPolicy, isWriteLogInfo, sentryClient);
 
             if (userPolicy != null && userPolicy.Any())
             {
@@ -66,9 +72,8 @@
         {
             return new UserPermissionModel
             {
-
-                UserID = userPolicy.User.Id,
-                FuncID = functionKey
+                UserId = userPolicy.User.Id,
+                FuncId = functionKey
             };
         }
     }

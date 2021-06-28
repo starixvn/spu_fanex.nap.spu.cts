@@ -23,10 +23,10 @@
             IProblemAccountJobService problemAccountInsertJobService)
         {
             this.sentryClient = sentryClient;
-            this.accountJobService = accountJobService;
-            this.matchMonitorJobService = matchMonitorJobService;
+            //this.accountJobService = accountJobService;
+            //this.matchMonitorJobService = matchMonitorJobService;
             this.userPermissionJobService = userPermissionJobService;
-            this.problemAccountInsertJobService = problemAccountInsertJobService;
+            //this.problemAccountInsertJobService = problemAccountInsertJobService;
         }
 
         [HttpPost("transformaccount")]
@@ -51,11 +51,11 @@
             return await this.matchMonitorJobService.UpdateWriteLogSetting(isWriteLog);
         }
 
-        //[HttpPost("user-permission")]
-        //public async Task<bool> UserPermission([FromForm] bool isWriteLog)
-        //{
-        //    return await userPermissionJobService.UpdateWriteLogSetting(isWriteLog);
-        //}
+        [HttpGet("sync-user-permission")]
+        public async Task<bool> UserPermission()
+        {
+            return await userPermissionJobService.SyncUserPermissionFromNAP();
+        }
 
 
         [HttpPost("problemAccountInsert")]

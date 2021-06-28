@@ -4,6 +4,7 @@
     using Fanex.NAP.SPU.CTS.Features.CustomerClassification.ProblemAccountInsert;
     using Fanex.NAP.SPU.CTS.Features.ExistingCustomer;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
+    using Fanex.NAP.SPU.CTS.Features.UserPermission;
     using Microsoft.Extensions.DependencyInjection;
 
     public static class InitService
@@ -17,6 +18,8 @@
             RegisterMatchMonitor(services);
 
             RegisterProblemAccount(services);
+
+            RegisterUserPermission(services);
         }
 
         private static void RegisterTransformAccount(this IServiceCollection services)
@@ -45,6 +48,13 @@
             services.AddSingleton<IProblemAccountDataAccess, ProblemAccountDataAccess>();
             services.AddSingleton<IProblemAccountServices, ProblemAccountServices>();
             services.AddSingleton<IProblemAccountJobService, ProblemAccountJobService>();
+        }
+
+        private static void RegisterUserPermission(this IServiceCollection services)
+        {
+            services.AddSingleton<IUserPermissionService, UserPermissionService>();
+            services.AddSingleton<IUserPermissionJobService, UserPermissionJobService>();
+            services.AddSingleton<IUserPermissionDataAccess, UserPermissionDataAccess>();
         }
     }
 }
