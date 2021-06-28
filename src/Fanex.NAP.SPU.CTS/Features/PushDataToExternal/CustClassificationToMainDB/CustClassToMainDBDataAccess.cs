@@ -4,7 +4,7 @@
     using Fanex.NAP.SPU.CTS.Shares;
     using System.Collections.Generic;
 
-    public interface IPushDataExternalDataAccess
+    public interface ICustClassToMainDBDataAccess
     {
         IEnumerable<LatestClassificationEntity> GetLatestClassification(string custIds);
 
@@ -13,7 +13,7 @@
         DBResult UpdateAppliedCustomerClassification(string problemCustomerJson);
     }
 
-    public class CustClassToMainDBDataAccess : IPushDataExternalDataAccess
+    public class CustClassToMainDBDataAccess : ICustClassToMainDBDataAccess
     {
         private readonly IDynamicRepository repository;
 

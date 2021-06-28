@@ -25,7 +25,7 @@
         private readonly ISentryClient _sentryClient;
         private readonly IProblemAccountServices _problemAccountServices;
         private readonly ISystemParameterServices _systemParameterServices;
-        private readonly IPushDataToExternalService _pushDataToExternalService;
+        private readonly ICustClassToMainDBService _custClassToMainDBService;
         private readonly IFeedSoon88Services _feedSoon88Services;
         private readonly IAppSettings _appSettings;
         private IEnumerable<ProblemAccountsEntity> logData;
@@ -34,14 +34,14 @@
             ISentryClient _sentryClient,
             IProblemAccountServices _problemAccountServices,
             ISystemParameterServices _systemParameterServices,
-            IPushDataToExternalService _pushDataToExternalService,
+            ICustClassToMainDBService _pushDataToExternalService,
             IFeedSoon88Services _feedSoon88Services,
             IAppSettings _appSettings)
         {
             this._sentryClient = _sentryClient;
             this._problemAccountServices = _problemAccountServices;
             this._systemParameterServices = _systemParameterServices;
-            this._pushDataToExternalService = _pushDataToExternalService;
+            this._custClassToMainDBService = _pushDataToExternalService;
             this._feedSoon88Services = _feedSoon88Services;
             this._appSettings = _appSettings;
             this.serviceName = "ProblemAccountInsert";
@@ -122,7 +122,7 @@
 
             foreach (var items in custIdsChunk)
             {
-                var lastestClassifications = _pushDataToExternalService.GetLatestClassification(string.Join(",", items));
+                var lastestClassifications = _custClassToMainDBService.GetLatestClassification(string.Join(",", items));
                 Utilities.LogSentryInfo(serviceName, "Get lastestCC", lastestClassifications, _appSettings.ProblemAccountIsWriteLog, _sentryClient);
 
                 if (lastestClassifications != null && lastestClassifications.Any())
@@ -157,7 +157,7 @@
 
         private void UpdateAppliedCC(IEnumerable<LatestClassificationEntity> lastestClassifications)
         {
-            var rs = _pushDataToExternalService.UpdateAppliedCustomerClassification(lastestClassifications);
+            var rs = _custClassToMainDBService.UpdateAppliedCustomerClassification(lastestClassifications);
             Utilities.LogSentryInfo(serviceName, "Update Apllied CC", lastestClassifications, _appSettings.ProblemAccountIsWriteLog, _sentryClient);
 
             if (rs.ErrorCode == -1)
@@ -168,7 +168,7 @@
 
         private bool PushCustomerClassificationToMain(IEnumerable<LatestClassificationEntity> lastestClassifications)
         {
-            var result = _pushDataToExternalService.PushCustomerClassificationToMainDB(lastestClassifications, _appSettings.ProblemAccountRetryTimes);
+            var result = _custClassToMainDBService.PushCustomerClassificationToMainDB(lastestClassifications, _appSettings.ProblemAccountRetryTimes);
             Utilities.LogSentryInfo(serviceName, "PushCustomerClassificationToMain", lastestClassifications, _appSettings.ProblemAccountIsWriteLog, _sentryClient);
 
             if (result.ErrorCode == -1)

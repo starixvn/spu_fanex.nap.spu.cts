@@ -7,7 +7,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    public interface IPushDataToExternalService
+    public interface ICustClassToMainDBService
     {
         IEnumerable<LatestClassificationEntity> GetLatestClassification(string custIds);
 
@@ -16,20 +16,20 @@
         DBResult UpdateAppliedCustomerClassification(IEnumerable<LatestClassificationEntity> customerClassifications);
     }
 
-    public class CustClassToMainDBService : IPushDataToExternalService
+    public class CustClassToMainDBService : ICustClassToMainDBService
     {
-        private readonly IPushDataExternalDataAccess pushDataToExternalDataAccess;
+        private readonly ICustClassToMainDBDataAccess custClassToMainDBDataAccess;
 
-        public CustClassToMainDBService(IPushDataExternalDataAccess pushDataToExternalDataAccess)
+        public CustClassToMainDBService(ICustClassToMainDBDataAccess custClassToMainDBDataAccess)
         {
-            this.pushDataToExternalDataAccess = pushDataToExternalDataAccess;
+            this.custClassToMainDBDataAccess = custClassToMainDBDataAccess;
         }
 
         public IEnumerable<LatestClassificationEntity> GetLatestClassification(string custIds)
         {
             if(!string.IsNullOrEmpty(custIds))
             {
-                return pushDataToExternalDataAccess.GetLatestClassification(custIds);
+                return custClassToMainDBDataAccess.GetLatestClassification(custIds);
             }
 
             return new List<LatestClassificationEntity>();
@@ -52,7 +52,7 @@
             {
                 try
                 {
-                    var result = pushDataToExternalDataAccess.UpdateCustomerGeneralClassificationtoMainDB(customerClassifications);
+                    var result = custClassToMainDBDataAccess.UpdateCustomerGeneralClassificationtoMainDB(customerClassifications);
 
                     if (result.ErrorCode != 0 && retryTime == 0)
                     {
@@ -94,7 +94,7 @@
             {
                 var jsonData = JsonConvert.SerializeObject(customerClassifications);
 
-                return pushDataToExternalDataAccess.UpdateAppliedCustomerClassification(jsonData);
+                return custClassToMainDBDataAccess.UpdateAppliedCustomerClassification(jsonData);
             }
 
             return new DBResult

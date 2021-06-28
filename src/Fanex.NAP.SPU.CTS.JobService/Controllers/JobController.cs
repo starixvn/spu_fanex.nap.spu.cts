@@ -23,10 +23,10 @@
             IProblemAccountJobService problemAccountInsertJobService)
         {
             this.sentryClient = sentryClient;
-            //this.accountJobService = accountJobService;
-            //this.matchMonitorJobService = matchMonitorJobService;
+            this.accountJobService = accountJobService;
+            this.matchMonitorJobService = matchMonitorJobService;
             this.userPermissionJobService = userPermissionJobService;
-            //this.problemAccountInsertJobService = problemAccountInsertJobService;
+            this.problemAccountInsertJobService = problemAccountInsertJobService;
         }
 
         [HttpPost("transformaccount")]

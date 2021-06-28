@@ -4,6 +4,9 @@
     using Fanex.NAP.SPU.CTS.Features.CustomerClassification.ProblemAccountInsert;
     using Fanex.NAP.SPU.CTS.Features.ExistingCustomer;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
+    using Fanex.NAP.SPU.CTS.Features.PushDataToExternal.CustClassificationToMainDB;
+    using Fanex.NAP.SPU.CTS.Features.PushDataToExternal.FeedCCToSoon88;
+    using Fanex.NAP.SPU.CTS.Features.SystemParameter;
     using Fanex.NAP.SPU.CTS.Features.UserPermission;
     using Microsoft.Extensions.DependencyInjection;
 
@@ -20,6 +23,8 @@
             RegisterProblemAccount(services);
 
             RegisterUserPermission(services);
+
+            RegisterDataAccesLayer(services);
         }
 
         private static void RegisterTransformAccount(this IServiceCollection services)
@@ -55,6 +60,18 @@
             services.AddSingleton<IUserPermissionService, UserPermissionService>();
             services.AddSingleton<IUserPermissionJobService, UserPermissionJobService>();
             services.AddSingleton<IUserPermissionDataAccess, UserPermissionDataAccess>();
+        }
+
+        private static void RegisterDataAccesLayer(this IServiceCollection services)
+        {
+            services.AddSingleton<ISystemParameterServices, SystemParameterServices>();
+            services.AddSingleton<IPreviousParameterDataAccess, PreviousParameterDataAccess>();
+
+            services.AddSingleton<ICustClassToMainDBDataAccess, CustClassToMainDBDataAccess>();
+            services.AddSingleton<ICustClassToMainDBService, CustClassToMainDBService>();
+
+            services.AddSingleton<IFeedSoon88DataAccess, FeedSoon88DataAccess>();
+            services.AddSingleton<IFeedSoon88Services, FeedSoon88Services>();
         }
     }
 }

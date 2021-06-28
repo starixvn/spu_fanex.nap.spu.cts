@@ -61,16 +61,13 @@
                 IsRescan = isRescan
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                var custIds = repository.Fetch<int>(criteria);
+            var custIds = repository.Fetch<int>(criteria);
 
-                return new InsertCategoryResultEntity
-                {
-                    ErrorMessage = criteria.ErrorMessage,
-                    CustIds = custIds ?? new List<int>()
-                };
-            }
+            return new InsertCategoryResultEntity
+            {
+                ErrorMessage = criteria.ErrorMessage,
+                CustIds = custIds ?? new List<int>()
+            };
         }
     }
 }
