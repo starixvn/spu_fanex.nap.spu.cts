@@ -15,11 +15,13 @@
         private readonly IMatchMonitorJobService matchMonitorJobService;
         private readonly IUserPermissionJobService userPermissionJobService;
         private readonly IProblemAccountJobService problemAccountInsertJobService;
+        private readonly IUpdateLastLoginJobService updateLastLoginJobService;
 
         public JobController(ISentryClient sentryClient,
             IAccountJobService accountJobService,
             IMatchMonitorJobService matchMonitorJobService,
             IUserPermissionJobService userPermissionJobService,
+            IUpdateLastLoginJobService updateLastLoginJobService,
             IProblemAccountJobService problemAccountInsertJobService)
         {
             this.sentryClient = sentryClient;
@@ -27,6 +29,7 @@
             this.matchMonitorJobService = matchMonitorJobService;
             this.userPermissionJobService = userPermissionJobService;
             this.problemAccountInsertJobService = problemAccountInsertJobService;
+            this.updateLastLoginJobService = updateLastLoginJobService;
         }
 
         [HttpPost("transformaccount")]
@@ -54,10 +57,14 @@
         [HttpPost("sync-user-permission")]
         public async Task<bool> UserPermission()
         {
-            sentryClient.CaptureMessage("log sentry ne``");
             return await userPermissionJobService.SyncUserPermissionFromNAP();
         }
 
+        [HttpPost("update-last-login")]
+        public async Task<bool> UpdateLastLoginTime()
+        {
+            return await updateLastLoginJobService.UpdateLastLoginTime();
+        }
 
         [HttpPost("problemAccountInsert")]
         public async Task<bool> InsertProblemAccount([FromForm] int batchExternalSize, [FromForm] int batchInternalSize)

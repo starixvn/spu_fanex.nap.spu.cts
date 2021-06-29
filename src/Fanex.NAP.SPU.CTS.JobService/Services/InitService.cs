@@ -10,6 +10,7 @@
     using Fanex.NAP.SPU.CTS.Features.PushDataToExternal.CustClassificationToMainDB;
     using Fanex.NAP.SPU.CTS.Features.PushDataToExternal.FeedCCToSoon88;
     using Fanex.NAP.SPU.CTS.Features.SystemParameter;
+    using Fanex.NAP.SPU.CTS.Features.UpdateLastLogin;
     using Fanex.NAP.SPU.CTS.Features.UserPermission;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.DependencyInjection;
@@ -29,6 +30,8 @@
             RegisterProblemAccount(services);
 
             RegisterUserPermission(services);
+
+            RegisterUpdateLastLogin(services);
 
             RegisterDataAccesLayer(services);
         }
@@ -73,6 +76,13 @@
             services.AddSingleton<IUserPermissionService, UserPermissionService>();
             services.AddSingleton<IUserPermissionJobService, UserPermissionJobService>();
             services.AddSingleton<IUserPermissionDataAccess, UserPermissionDataAccess>();
+        }
+
+        private static void RegisterUpdateLastLogin(this IServiceCollection services)
+        {
+            services.AddSingleton<IUpdateLastLoginJobService, UpdateLastLoginJobService>();
+            services.AddSingleton<IUpdateLastLoginService, UpdateLastLoginService>();
+            services.AddSingleton<IUpdateLastLoginDataAccess, UpdateLastLoginDataAccess>();
         }
 
         private static void RegisterDataAccesLayer(this IServiceCollection services)

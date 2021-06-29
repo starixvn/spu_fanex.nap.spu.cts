@@ -1,12 +1,7 @@
-﻿using Fanex.Data.Repository;
-using Fanex.NAP.SPU.CTS.Features.UserPermission.Criteria;
-namespace Fanex.NAP.SPU.CTS.Features.UserPermission
+﻿namespace Fanex.NAP.SPU.CTS.Features.UserPermission
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
+    using Fanex.Data.Repository;
+    using Fanex.NAP.SPU.CTS.Features.UserPermission.Criteria;
 
     public interface IUserPermissionDataAccess
     {

@@ -24,6 +24,8 @@
 
         bool UserPermissionIsWriteLog { get; }
 
+        int UpdateLastLoginBatchSize { get; }
+
         bool UpdateIsWriteLogSetting(string serviceName, bool isWriteLog);
     }
 
@@ -75,6 +77,8 @@
         public string Soon88FeedData_URL => GetValue<string>("ProblemAccountInsert:Soon88FeedDataAPI");
 
         public int SiteId => GetValue<int>("UserPermission:SiteId");
+
+        public int UpdateLastLoginBatchSize => GetValue<int>("UpdateLastLoginTime:BatchSize");
 
         public bool UserPermissionIsWriteLog => GetValue<bool>("ProblemAccountInsert:IsWriteLog");
 
