@@ -51,9 +51,10 @@
             return await this.matchMonitorJobService.UpdateWriteLogSetting(isWriteLog);
         }
 
-        [HttpGet("sync-user-permission")]
+        [HttpPost("sync-user-permission")]
         public async Task<bool> UserPermission()
         {
+            sentryClient.CaptureMessage("log sentry ne``");
             return await userPermissionJobService.SyncUserPermissionFromNAP();
         }
 

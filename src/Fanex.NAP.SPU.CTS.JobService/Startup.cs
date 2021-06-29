@@ -1,19 +1,25 @@
-using Fanex.Data;
-using Fanex.Data.MySql;
-using Fanex.Data.SqlServer;
-using Fanex.NAP.SPU.CTS.JobService.Services;
-using HealthChecks.UI.Client;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
-using System.Linq;
-
 namespace Fanex.NAP.SPU.CTS.JobService
 {
+    using Fanex.Data;
+    using Fanex.Data.MySql;
+    using Fanex.Data.SqlServer;
+    using Fanex.NAP.Client;
+    using Fanex.NAP.Client.AspNetCore.Configuration;
+    using Fanex.NAP.Client.AspNetCore.Session;
+    using Fanex.NAP.Client.Configuration;
+    using Fanex.NAP.Client.Helpers.Web;
+    using Fanex.NAP.Client.Services;
+    using Fanex.NAP.SPU.CTS.JobService.Services;
+    using HealthChecks.UI.Client;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
+    using Microsoft.OpenApi.Models;
+    using System.Linq;
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -26,9 +32,10 @@ namespace Fanex.NAP.SPU.CTS.JobService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var appSettings = new AppSettings(this.Configuration);
+            var appSettings = new AppSettings(Configuration);
 
             services.AddSingleton<IAppSettings>(appSettings);
+            services.AddSingleton<INapSettings>(new NapSettings(Configuration));
 
             services.AddControllers();
             services
@@ -55,7 +62,6 @@ namespace Fanex.NAP.SPU.CTS.JobService
 
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Fanex.NAP.SPU.CTS.JobService v1"));
-
             app.UseRouting();
 
             app.UseHealthChecks("/healthz", new HealthCheckOptions
@@ -70,6 +76,10 @@ namespace Fanex.NAP.SPU.CTS.JobService
             {
                 endpoints.MapControllers();
             });
+
+            NapClientManager
+                .UseConfig(app.ApplicationServices.GetService<INapSettings>())
+                .UseSession(app.ApplicationServices.GetService<INapSession>());
         }
 
         private void FanexDataConfig(IAppSettings appSettings)

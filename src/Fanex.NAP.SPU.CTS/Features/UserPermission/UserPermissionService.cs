@@ -25,18 +25,19 @@
     {
         private List<UserPermissionModel> userPermissions;
         private readonly IUserPermissionDataAccess dataAccess;
-        private readonly UserService userService;
         private readonly ISentryClient sentryClient;
+        private readonly UserService userService;
 
-        public UserPermissionService(IUserPermissionDataAccess dataAccess)
+        public UserPermissionService(IUserPermissionDataAccess dataAccess, ISentryClient sentryClient)
         {
             this.dataAccess = dataAccess;
+            this.sentryClient = sentryClient;
+            userService = new UserService();
         }
 
         public UserPermissionService Start()
         {
-            userPermissions = new List<UserPermissionModel>();
-
+            userPermissions = new List<UserPermissionModel>();            
             return this;
         }
 

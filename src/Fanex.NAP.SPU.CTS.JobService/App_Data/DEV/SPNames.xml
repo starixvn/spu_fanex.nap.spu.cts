@@ -27,4 +27,7 @@
 		<Setting Key="CTS_DC_CustClassification_UpdateIsAppliedCC" SpName="CTS_DC_CustClassification_UpdateIsAppliedCC" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
 		<Setting Key="CTS_DC_Association_GetWithCategory" SpName="CTS_DC_Association_GetWithCategory" DbName="MySQL.CTS_DataCenter.ctsService" />
 	</Function>
+  <Function Name="SyncUserPermisison">
+    <Setting Key="CTS_DC_InsertUserPermission" SpName="CTS_DC_InsertUserPermission" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"/>
+  </Function>
 </Functions>

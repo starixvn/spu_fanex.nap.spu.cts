@@ -1,5 +1,8 @@
 ﻿namespace Fanex.NAP.SPU.CTS.JobService.Services
 {
+    using Fanex.NAP.Client.AspNetCore.Session;
+    using Fanex.NAP.Client.Helpers.Web;
+    using Fanex.NAP.Client.Services;
     using Fanex.NAP.SPU.CTS.Features.Accounts;
     using Fanex.NAP.SPU.CTS.Features.CustomerClassification.ProblemAccountInsert;
     using Fanex.NAP.SPU.CTS.Features.ExistingCustomer;
@@ -8,12 +11,15 @@
     using Fanex.NAP.SPU.CTS.Features.PushDataToExternal.FeedCCToSoon88;
     using Fanex.NAP.SPU.CTS.Features.SystemParameter;
     using Fanex.NAP.SPU.CTS.Features.UserPermission;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.DependencyInjection;
 
     public static class InitService
     {
         public static void RegisterService(this IServiceCollection services)
         {
+            RegisterNAPService(services);
+
             RegisterTransformAccount(services);
 
             RegisterExistingCustomer(services);
@@ -27,6 +33,13 @@
             RegisterDataAccesLayer(services);
         }
 
+        private static void RegisterNAPService(this IServiceCollection services)
+        {
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<INapSession, NapSession>();
+            services.AddSingleton<ISecurityService, SecurityService>();
+        }
+        
         private static void RegisterTransformAccount(this IServiceCollection services)
         {
             services.AddSingleton<IAccountDataAccess, AccountDataAccess>();
