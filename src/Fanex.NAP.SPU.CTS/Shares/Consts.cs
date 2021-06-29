@@ -2,6 +2,8 @@
 {
     public static class Constants
     {
+        public const int RetryPushCCToExternal = 3;
+
         public const string InitialProblemAccounts = "0";
 
         public const string ProblemAccountByDateTime = "";

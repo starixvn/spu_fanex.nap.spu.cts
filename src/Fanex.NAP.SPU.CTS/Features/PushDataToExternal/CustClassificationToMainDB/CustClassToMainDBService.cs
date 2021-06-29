@@ -1,51 +1,70 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.PushDataToExternal.CustClassificationToMainDB
 {
-    using Fanex.Logging.Extensions;
-    using Fanex.Logging.Extensions.Database;
+    using Fanex.NAP.SPU.CTS.Shares;
     using Newtonsoft.Json;
+    using Sentry;
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
     public interface ICustClassToMainDBService
     {
-        IEnumerable<LatestClassificationEntity> GetLatestClassification(string custIds);
+        IEnumerable<LatestClassificationEntity> GetLatestClassification(string custIds, string serviceName, bool isWriteLog);
 
-        DBResult PushCustomerClassificationToMainDB(IEnumerable<LatestClassificationEntity> customerClassifications, int retryTime);
+        bool RetryPushCCToMainDB(IEnumerable<LatestClassificationEntity> customerClassifications, int retryTime, string serviceName);
 
-        DBResult UpdateAppliedCustomerClassification(IEnumerable<LatestClassificationEntity> customerClassifications);
+        void UpdateAppliedCustClassification(IEnumerable<LatestClassificationEntity> customerClassifications, string serviceName);
+
+        bool PushCustClassificationToMainDB(IEnumerable<LatestClassificationEntity> lastestClassification, string serviceName, bool isWriteLog);
     }
 
     public class CustClassToMainDBService : ICustClassToMainDBService
     {
         private readonly ICustClassToMainDBDataAccess custClassToMainDBDataAccess;
+        private readonly ISentryClient sentryClient;
 
-        public CustClassToMainDBService(ICustClassToMainDBDataAccess custClassToMainDBDataAccess)
+        public CustClassToMainDBService(ICustClassToMainDBDataAccess custClassToMainDBDataAccess, ISentryClient sentryClient)
         {
             this.custClassToMainDBDataAccess = custClassToMainDBDataAccess;
+            this.sentryClient = sentryClient;
         }
 
-        public IEnumerable<LatestClassificationEntity> GetLatestClassification(string custIds)
+        public bool PushCustClassificationToMainDB(IEnumerable<LatestClassificationEntity> lastestClassification, string serviceName, bool isWriteLog)
         {
-            if(!string.IsNullOrEmpty(custIds))
+            bool isSuccess = false;
+
+            if (lastestClassification != null && !lastestClassification.Any())
             {
-                return custClassToMainDBDataAccess.GetLatestClassification(custIds);
+                isSuccess = RetryPushCCToMainDB(lastestClassification, Constants.RetryPushCCToExternal, serviceName);
+
+                if (isSuccess)
+                {
+                    UpdateAppliedCustClassification(lastestClassification, serviceName);
+                }
             }
 
-            return new List<LatestClassificationEntity>();
+            Utilities.LogSentryInfo(serviceName, "PushCCToMainDB done", (isSuccess, lastestClassification), isWriteLog, sentryClient);
+            return isSuccess;
         }
 
-        public DBResult PushCustomerClassificationToMainDB(IEnumerable<LatestClassificationEntity> customerClassifications, int retryTime)
+        public IEnumerable<LatestClassificationEntity> GetLatestClassification(string custIds, string serviceName, bool isWriteLog)
         {
-            var rs = new DBResult
-            {
-                ErrorCode = 0,
-                ErrorMsg = string.Empty
-            };
+            var lastestClassification = new List<LatestClassificationEntity>();
 
+            if (!string.IsNullOrEmpty(custIds))
+            {
+                lastestClassification = custClassToMainDBDataAccess.GetLatestClassification(custIds)?.ToList();
+            }
+
+            Utilities.LogSentryInfo(serviceName, "Get lastestCC", lastestClassification, isWriteLog, sentryClient);
+            return lastestClassification;
+        }
+
+        public bool RetryPushCCToMainDB(IEnumerable<LatestClassificationEntity> customerClassifications, int retryTime, string serviceName)
+        {
             if (customerClassifications == null || !customerClassifications.Any())
             {
-                return rs;
+                return true;
             }
 
             while (retryTime >= 0)
@@ -56,9 +75,8 @@
 
                     if (result.ErrorCode != 0 && retryTime == 0)
                     {
-                        rs.ErrorCode = -1;
-                        rs.ErrorMsg = $"PushCustomerClassificationToMain fail with listCust: {JsonConvert.SerializeObject(customerClassifications)}";
-                        return rs;
+                        Utilities.LogSentryError(serviceName, "PushCustomerClassificationToMain fail", customerClassifications, new Exception(result.ErrorMsg), sentryClient);
+                        return false;
                     }
                     else if (result.ErrorCode != 0)
                     {
@@ -73,35 +91,30 @@
                 {
                     if (retryTime == 0)
                     {
-                        rs.ErrorCode = -1;
-                        rs.ErrorMsg = new LogMessage(ex.Message)
-                                        .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                                        .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex))
-                                        .AddMessage($"Data input: {JsonConvert.SerializeObject(customerClassifications)} - { DateTime.Now}").ToString();
-                        return rs;
+                        Utilities.LogSentryError(serviceName, "PushCustomerClassificationToMain throw exception", customerClassifications, ex, sentryClient);
+                        return false;
                     }
 
                     retryTime--;
                 }
             }
 
-            return rs;
+            return true;
         }
 
-        public DBResult UpdateAppliedCustomerClassification(IEnumerable<LatestClassificationEntity> customerClassifications)
+        public void UpdateAppliedCustClassification(IEnumerable<LatestClassificationEntity> customerClassifications, string serviceName)
         {
             if (customerClassifications != null && customerClassifications.Any())
             {
                 var jsonData = JsonConvert.SerializeObject(customerClassifications);
 
-                return custClassToMainDBDataAccess.UpdateAppliedCustomerClassification(jsonData);
-            }
+                var result = custClassToMainDBDataAccess.UpdateAppliedCustomerClassification(jsonData);
 
-            return new DBResult
-            {
-                ErrorCode = 0,
-                ErrorMsg = string.Empty
-            };
+                if (result.ErrorCode == -1)
+                {
+                    Utilities.LogSentryError(serviceName, "Update Apllied CC throw exception", customerClassifications, new Exception(result.ErrorMsg), sentryClient);
+                }
+            }
         }
     }
 }

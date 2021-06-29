@@ -3,6 +3,7 @@
     using Fanex.NAP.SPU.CTS.Features.PushDataToExternal.CustClassificationToMainDB;
     using Fanex.NAP.SPU.CTS.Shares;
     using Newtonsoft.Json;
+    using Sentry;
     using System.Collections.Generic;
     using System.Linq;
     using System.Security.Cryptography;
@@ -11,32 +12,34 @@
 
     public interface IFeedSoon88Services
     {
-        void FeedCCToSoon88(IEnumerable<LatestClassificationEntity> custsToMainDB, string url);
+        void FeedCCToSoon88(IEnumerable<LatestClassificationEntity> custsToMainDB, string url, string serviceName, bool isWriteLog);
     }
 
     public class FeedSoon88Services: IFeedSoon88Services
     {
         private readonly IFeedSoon88DataAccess feedSoon88DataAccess;
+        private readonly ISentryClient sentryClient;
 
-        public FeedSoon88Services(IFeedSoon88DataAccess feedSoon88DataAccess)
+        public FeedSoon88Services(IFeedSoon88DataAccess feedSoon88DataAccess, ISentryClient sentryClient)
         {
             this.feedSoon88DataAccess = feedSoon88DataAccess;
+            this.sentryClient = sentryClient;
         }
 
-        public void FeedCCToSoon88(IEnumerable<LatestClassificationEntity> custsToMainDB, string url)
+        public void FeedCCToSoon88(IEnumerable<LatestClassificationEntity> custsToMainDB, string url, string serviceName, bool isWriteLog)
         {
-            if (custsToMainDB == null || !custsToMainDB.Any())
+            if (custsToMainDB != null && custsToMainDB.Any())
             {
-                return;
+                var custClassList = custsToMainDB.Select(c => new CustomerClassEntity
+                {
+                    CustID = c.CustId,
+                    CustomerClass = c.CustomerClass
+                });
+
+                FeedDataToSoon88(custClassList, url);
             }
 
-            var custClassList = custsToMainDB.Select(c => new CustomerClassEntity
-            {
-                CustID = c.CustId,
-                CustomerClass = c.CustomerClass
-            });
-
-            FeedDataToSoon88(custClassList, url);    
+            Utilities.LogSentryInfo(serviceName, "FeedSoon88 done", custsToMainDB, isWriteLog, sentryClient);
         }
 
         public void FeedDataToSoon88(IEnumerable<CustomerClassEntity> custClasses, string url)
