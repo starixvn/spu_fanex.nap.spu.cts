@@ -53,7 +53,14 @@
         {
             try
             {
-                JobRun(batchExternalSize, batchInternalSize);
+                if (batchExternalSize > 0 && batchInternalSize > 0)
+                {
+                    JobRun(batchExternalSize, batchInternalSize);
+                }
+                else
+                {
+                    Utilities.LogSentryError(serviceName, "InValid Batch size", (batchExternalSize, batchInternalSize), new NullReferenceException(), sentryClient);
+                }
             }
             catch (Exception ex)
             {
@@ -81,6 +88,7 @@
         }
 
         #region Private Methods
+
         private void JobRun(int batchExternalSize, int batchInternalSize)
         {
             var lastScannedTime = systemParameterServices.GetLastScannedDateTime(SystemParameters.ProblemAccountLastScannedTime);
@@ -88,15 +96,15 @@
             var savedDataTime = DateTime.Now;
 
             var problemAccounts = problemAccountServices.GetProblemAccounts(lastScannedTime, serviceName, isWriteLog);
-            logData = problemAccounts;
 
             if (problemAccounts != null && problemAccounts.Any())
             {
-                var problemAccountsChunk = problemAccounts.Distinct().Chunk(batchInternalSize); 
+                logData = problemAccounts;
+                var problemAccountsChunk = problemAccounts.Distinct().Chunk(batchInternalSize);
 
                 foreach (var items in problemAccountsChunk)
                 {
-                    var custIds = problemAccountServices.InsertProblemAccountToCTS(items, serviceName, isWriteLog);              
+                    var custIds = problemAccountServices.InsertProblemAccountToCTS(items, serviceName, isWriteLog);
 
                     if (custIds != null && custIds.Any())
                     {
@@ -120,11 +128,11 @@
                 {
                     custClassToMainDBService.PushCustClassificationToMainDB(lastestClassifications, serviceName, isWriteLog);
 
-                    feedSoon88Services.FeedCCToSoon88(lastestClassifications, appSettings.Soon88FeedData_URL, serviceName, isWriteLog);   
+                    feedSoon88Services.FeedCCToSoon88(lastestClassifications, appSettings.Soon88FeedData_URL, serviceName, isWriteLog);
                 }
             }
         }
-        #endregion
+
+        #endregion Private Methods
     }
 }
-

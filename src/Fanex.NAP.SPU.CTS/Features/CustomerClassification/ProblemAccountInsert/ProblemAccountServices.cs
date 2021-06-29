@@ -5,14 +5,14 @@
     using Sentry;
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     public interface IProblemAccountServices
     {
         IEnumerable<ProblemAccountsEntity> GetProblemAccounts(DateTime? dateTime, string serviceName, bool IsWriteLog);
 
-        IEnumerable<int> InsertProblemAccountToCTS(IEnumerable<ProblemAccountsEntity> problemAccounts, string serviceName,bool IsWriteLog);
+        IEnumerable<int> InsertProblemAccountToCTS(IEnumerable<ProblemAccountsEntity> problemAccounts, string serviceName, bool isWriteLog);
     }
-
 
     public class ProblemAccountServices : IProblemAccountServices
     {
@@ -29,37 +29,34 @@
         {
             var problemAccounts = new List<ProblemAccountsEntity>();
 
-            if (dateTime == null)
-            {
-                problemAccounts.AddRange(problemAccountDataAccess.GetProblemAccounts_IBC(Constants.InitialProblemAccounts, null));
+            string custIDs = (dateTime == null) ? Constants.InitialProblemAccounts : Constants.ProblemAccountByDateTime;
 
-                problemAccounts.AddRange(problemAccountDataAccess.GetProblemAccounts_CN88(Constants.InitialProblemAccounts, null));
-            }
-            else
-            {
-                problemAccounts.AddRange(problemAccountDataAccess.GetProblemAccounts_IBC(Constants.ProblemAccountByDateTime, dateTime));
+            problemAccounts.AddRange(problemAccountDataAccess.GetProblemAccounts_IBC(custIDs, dateTime));
 
-                problemAccounts.AddRange(problemAccountDataAccess.GetProblemAccounts_CN88(Constants.ProblemAccountByDateTime, dateTime));
-            }
+            problemAccounts.AddRange(problemAccountDataAccess.GetProblemAccounts_CN88(custIDs, dateTime));
 
             Utilities.LogSentryInfo(serviceName, "Get ProblemAccount", problemAccounts, IsWriteLog, sentryClient);
             return problemAccounts;
         }
 
-
         public IEnumerable<int> InsertProblemAccountToCTS(IEnumerable<ProblemAccountsEntity> problemAccounts, string serviceName, bool isWriteLog)
         {
-            var prproblemAccountJson = JsonConvert.SerializeObject(problemAccounts);
-
-            var result = problemAccountDataAccess.InsertProblemAccount(prproblemAccountJson, false);
-            Utilities.LogSentryInfo(serviceName, "Insert ProblemAccount", result.CustIds, isWriteLog, sentryClient);
-
-            if (!string.IsNullOrEmpty(result.ErrorMessage))
+            if (problemAccounts != null && problemAccounts.Any())
             {
-                Utilities.LogSentryError(serviceName, "InsertProblemAccount throws Exception", problemAccounts, new Exception(result.ErrorMessage), sentryClient);
+                var prproblemAccountJson = JsonConvert.SerializeObject(problemAccounts);
+
+                var result = problemAccountDataAccess.InsertProblemAccount(prproblemAccountJson, false);
+                Utilities.LogSentryInfo(serviceName, "Insert ProblemAccount", result.CustIds, isWriteLog, sentryClient);
+
+                if (!string.IsNullOrEmpty(result.ErrorMessage))
+                {
+                    Utilities.LogSentryError(serviceName, "InsertProblemAccount throws Exception", problemAccounts, new Exception(result.ErrorMessage), sentryClient);
+                }
+
+                return result.CustIds;
             }
 
-            return result.CustIds;
+            return new List<int>();
         }
     }
 }
