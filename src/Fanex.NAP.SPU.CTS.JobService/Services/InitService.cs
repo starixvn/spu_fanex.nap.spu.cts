@@ -4,6 +4,7 @@
     using Fanex.NAP.Client.Helpers.Web;
     using Fanex.NAP.Client.Services;
     using Fanex.NAP.SPU.CTS.Features.Accounts;
+    using Fanex.NAP.SPU.CTS.Features.CustomerClassification.NormalAccountInsert;
     using Fanex.NAP.SPU.CTS.Features.CustomerClassification.ProblemAccountInsert;
     using Fanex.NAP.SPU.CTS.Features.ExistingCustomer;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
@@ -34,6 +35,8 @@
             RegisterUpdateLastLogin(services);
 
             RegisterDataAccesLayer(services);
+
+            RegisterNormalAccount(services);
         }
 
         private static void RegisterNAPService(this IServiceCollection services)
@@ -42,7 +45,7 @@
             services.AddSingleton<INapSession, NapSession>();
             services.AddSingleton<ISecurityService, SecurityService>();
         }
-        
+
         private static void RegisterTransformAccount(this IServiceCollection services)
         {
             services.AddSingleton<IAccountDataAccess, AccountDataAccess>();
@@ -83,6 +86,13 @@
             services.AddSingleton<IUpdateLastLoginJobService, UpdateLastLoginJobService>();
             services.AddSingleton<IUpdateLastLoginService, UpdateLastLoginService>();
             services.AddSingleton<IUpdateLastLoginDataAccess, UpdateLastLoginDataAccess>();
+        }
+        
+        private static void RegisterNormalAccount(this IServiceCollection services)
+        {
+            services.AddSingleton<INormalAccountDataAccess, NormalAccountDataAccess>();
+            services.AddSingleton<INormalAccountServices, NormalAccountServices>();
+            services.AddSingleton<INormalAccountJobService, NormalAccountJobService>();
         }
 
         private static void RegisterDataAccesLayer(this IServiceCollection services)

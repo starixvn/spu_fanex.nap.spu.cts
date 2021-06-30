@@ -23,5 +23,12 @@
             ProblemAccountLastScannedTime = 2,
             MatchMonitorLastScannedTrans = 20
         };
+
+        public enum DangerLevel
+        {
+            ORIGINAL = 1,
+            ABI = 2,
+            OTHER = 3
+        }
     }
 }

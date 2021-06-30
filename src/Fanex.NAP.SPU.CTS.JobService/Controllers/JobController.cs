@@ -16,13 +16,16 @@
         private readonly IUserPermissionJobService userPermissionJobService;
         private readonly IProblemAccountJobService problemAccountInsertJobService;
         private readonly IUpdateLastLoginJobService updateLastLoginJobService;
+        private readonly INormalAccountJobService normalAccountInsertJobService;
+
 
         public JobController(ISentryClient sentryClient,
             IAccountJobService accountJobService,
             IMatchMonitorJobService matchMonitorJobService,
             IUserPermissionJobService userPermissionJobService,
             IUpdateLastLoginJobService updateLastLoginJobService,
-            IProblemAccountJobService problemAccountInsertJobService)
+            IProblemAccountJobService problemAccountInsertJobService,
+            INormalAccountJobService normalAccountInsertJobService)
         {
             this.sentryClient = sentryClient;
             this.accountJobService = accountJobService;
@@ -30,6 +33,7 @@
             this.userPermissionJobService = userPermissionJobService;
             this.problemAccountInsertJobService = problemAccountInsertJobService;
             this.updateLastLoginJobService = updateLastLoginJobService;
+            this.normalAccountInsertJobService = normalAccountInsertJobService;
         }
 
         [HttpPost("transformaccount")]
@@ -70,6 +74,12 @@
         public async Task<bool> InsertProblemAccount([FromForm] int batchExternalSize, [FromForm] int batchInternalSize)
         {
             return await this.problemAccountInsertJobService.Execute(batchExternalSize, batchInternalSize);
+        }
+
+        [HttpPost("normalAccountInsert")]
+        public async Task<bool> InsertNormalAccount([FromForm] int batchExternalSize, [FromForm] int batchInternalSize)
+        {
+            return await this.normalAccountInsertJobService.Execute(batchExternalSize, batchInternalSize);
         }
     }
 }

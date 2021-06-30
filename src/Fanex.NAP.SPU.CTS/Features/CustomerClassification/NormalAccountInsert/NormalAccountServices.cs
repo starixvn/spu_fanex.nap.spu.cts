@@ -1,34 +1,50 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.CustomerClassification.NormalAccountInsert
 {
+    using Fanex.NAP.SPU.CTS.Features.CustomerClassification.NormalAccountInsert.Entities;
     using Fanex.NAP.SPU.CTS.Shares;
     using Newtonsoft.Json;
+    using Sentry;
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
     public interface INormalAccountServices
     {
-        IEnumerable<CustomerClassificationEntity> GetNewClassification();
+        GeneralCustomerClassificationEnity GetNewClassification(string serviceName, bool IsWriteLog);
+
+        IEnumerable<CustAssociationProblemAccountEntity> GetCustomerAssociationProblemAccount(IEnumerable<CustomerClassificationEntity> listClassification);
+
+        IEnumerable<int> InsertMainCustomerClassification(IEnumerable<CustomerClassificationEntity> custClassifications
+                                                        , IEnumerable<CustAssociationProblemAccountEntity> custAssociationPA
+                                                        , string serviceName, bool isWriteLog);
     }
 
     public class NormalAccountServices : INormalAccountServices
     {
         private readonly INormalAccountDataAccess normalAccountDataAccess;
+        private readonly ISentryClient sentryClient;
 
-        public NormalAccountServices(INormalAccountDataAccess normalAccountDataAccess)
+        public NormalAccountServices(INormalAccountDataAccess normalAccountDataAccess, ISentryClient sentryClient)
         {
             this.normalAccountDataAccess = normalAccountDataAccess;
+            this.sentryClient = sentryClient;
         }
 
-        public IEnumerable<CustomerClassificationEntity> GetNewClassification()
+        public GeneralCustomerClassificationEnity GetNewClassification(string serviceName, bool IsWriteLog)
         {
-            var newClassifications = normalAccountDataAccess.GetNewClassification();
-
-            if(newClassifications!=null && newClassifications.Any())
+            var newClassifications = new GeneralCustomerClassificationEnity
             {
-                return newClassifications.Where(c => c.IsGeneralCategory);
+                GeneralCustClassifications = normalAccountDataAccess.GetNewClassification(),
+                IsContinute = false
+            };
+
+            if (newClassifications.GeneralCustClassifications != null && newClassifications.GeneralCustClassifications.Any())
+            {
+                newClassifications.IsContinute = true;
+                newClassifications.GeneralCustClassifications = newClassifications.GeneralCustClassifications.Where(c => c.IsGeneralCategory);
             }
 
+            Utilities.LogSentryInfo(serviceName, "Get ProblemAccount", newClassifications.GeneralCustClassifications, IsWriteLog, sentryClient);
             return newClassifications;
         }
 
@@ -42,6 +58,42 @@
             }
 
             return new List<CustAssociationProblemAccountEntity>();
+        }
+
+        public IEnumerable<int> InsertMainCustomerClassification(IEnumerable<CustomerClassificationEntity> custClassifications
+                                                                , IEnumerable<CustAssociationProblemAccountEntity> custAssociationPA
+                                                                , string serviceName
+                                                                , bool isWriteLog)
+        {
+            string jsonClassification = MergeCustomerClassificationInfo(custClassifications, custAssociationPA);
+
+            if (!string.IsNullOrEmpty(jsonClassification))
+            {
+                var result = normalAccountDataAccess.InsertMainCustomerClassification(jsonClassification);
+                Utilities.LogSentryInfo(serviceName, "InsertMainCustomerClassification done", jsonClassification, isWriteLog, sentryClient);
+
+                if (string.IsNullOrEmpty(result.ErrorMessage))
+                {
+                    UpdateAppliedStatusClassification(custClassifications);
+                    return result?.CustIds;
+                }
+                else
+                {
+                    Utilities.LogSentryError(serviceName, "InsertProblemAccount throws Exception", jsonClassification, new Exception(result.ErrorMessage), sentryClient);
+                }
+            }
+
+            return new List<int>();
+        }
+
+        public void UpdateAppliedStatusClassification(IEnumerable<CustomerClassificationEntity> custClassifications)
+        {
+            if (custClassifications != null && custClassifications.Any())
+            {
+                var custIds = custClassifications.Select(x => x.CustId).Distinct();
+
+                normalAccountDataAccess.UpdateAppliedStatusClassification(string.Join(",", custIds), true);
+            }
         }
 
         public string MergeCustomerClassificationInfo(IEnumerable<CustomerClassificationEntity> custClassification, IEnumerable<CustAssociationProblemAccountEntity> custAssociationPA)
@@ -76,16 +128,6 @@
                                     });
 
             return JsonConvert.SerializeObject(result);
-        }
-
-        public InsertCategoryResultEntity InsertMainCustomerClassification(string newClassification)
-        {
-            if(!string.IsNullOrEmpty(newClassification))
-            {
-               return normalAccountDataAccess.InsertMainCustomerClassification(newClassification);
-            }
-
-            return new InsertCategoryResultEntity();
         }
     }
 }

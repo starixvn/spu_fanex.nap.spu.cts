@@ -25,7 +25,7 @@
             this.sentryClient = sentryClient;
         }
 
-        public IEnumerable<ProblemAccountsEntity> GetProblemAccounts(DateTime? dateTime, string serviceName, bool IsWriteLog)
+        public IEnumerable<ProblemAccountsEntity> GetProblemAccounts(DateTime? dateTime, string serviceName, bool isWriteLog)
         {
             var problemAccounts = new List<ProblemAccountsEntity>();
 
@@ -35,7 +35,7 @@
 
             problemAccounts.AddRange(problemAccountDataAccess.GetProblemAccounts_CN88(custIDs, dateTime));
 
-            Utilities.LogSentryInfo(serviceName, "Get ProblemAccount", problemAccounts, IsWriteLog, sentryClient);
+            Utilities.LogSentryInfo(serviceName, "Get ProblemAccount", problemAccounts, isWriteLog, sentryClient);
             return problemAccounts;
         }
 

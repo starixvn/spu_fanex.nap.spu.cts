@@ -10,15 +10,15 @@
 
         string SPName { get; }
 
+        string Soon88FeedDataAPI { get; }
+
         int MatchMonitorNumberOfThread { get; }
 
         bool MatchMonitorIsWriteLog { get; }
 
-        int ProblemAccountRetryTimes { get; }
-
         bool ProblemAccountIsWriteLog { get; }
 
-        string Soon88FeedData_URL { get; }
+        bool NormalAccountIsWriteLog { get; }
 
         int SiteId { get; }
 
@@ -36,6 +36,7 @@
         private readonly string environment;
         private readonly string spName;
         private readonly int matchMonitorNumberOfThread;
+        private readonly string soon88FeedDataAPI;
 
         public AppSettings(IConfiguration configuration)
         {
@@ -43,7 +44,7 @@
 
             environment = GetValue<string>(nameof(Environment));
             spName = GetValue<string>(nameof(SPName));
-
+            soon88FeedDataAPI = GetValue<string>(nameof(Soon88FeedDataAPI));
             matchMonitorNumberOfThread = GetValue<int>("MatchMonitor:NumberOfThread");
         }
 
@@ -66,21 +67,21 @@
 
         public string SPName => spName;
 
+        public string Soon88FeedDataAPI => soon88FeedDataAPI;
+
         public int MatchMonitorNumberOfThread => matchMonitorNumberOfThread;
 
         public bool MatchMonitorIsWriteLog => GetValue<bool>("MatchMonitor:IsWriteLog");
 
-        public int ProblemAccountRetryTimes => GetValue<int>("ProblemAccountInsert:RetryTimes");
-
         public bool ProblemAccountIsWriteLog => GetValue<bool>("ProblemAccountInsert:IsWriteLog");
-
-        public string Soon88FeedData_URL => GetValue<string>("ProblemAccountInsert:Soon88FeedDataAPI");
 
         public int SiteId => GetValue<int>("UserPermission:SiteId");
 
         public int UpdateLastLoginBatchSize => GetValue<int>("UpdateLastLoginTime:BatchSize");
 
-        public bool UserPermissionIsWriteLog => GetValue<bool>("ProblemAccountInsert:IsWriteLog");
+        public bool UserPermissionIsWriteLog => GetValue<bool>("UserPermission:IsWriteLog");
+
+        public bool NormalAccountIsWriteLog => GetValue<bool>("NormalAccountInsert:IsWriteLog");
 
         #endregion
 

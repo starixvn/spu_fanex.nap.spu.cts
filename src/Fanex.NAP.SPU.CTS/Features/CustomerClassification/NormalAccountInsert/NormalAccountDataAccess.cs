@@ -1,10 +1,7 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.CustomerClassification.NormalAccountInsert
 {
-    using Fanex.Data;
     using Fanex.Data.Repository;
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
 
     public interface INormalAccountDataAccess
     {
@@ -13,8 +10,9 @@
         IEnumerable<CustAssociationProblemAccountEntity> GetCustsAssociationProblemAccount(string custIds);
 
         InsertCategoryResultEntity InsertMainCustomerClassification(string newClassification);
-    }
 
+        void UpdateAppliedStatusClassification(string custIdList, bool isGeneralCategory);
+    }
 
     public class NormalAccountDataAccess : INormalAccountDataAccess
     {
@@ -49,7 +47,7 @@
                 NewClassification = newClassification
             };
 
-            var custIds = repository.Fetch<int>(criteria).ToList();
+            var custIds = repository.Fetch<int>(criteria);
 
             return new InsertCategoryResultEntity { ErrorMessage = criteria.ErrorMessage, CustIds = custIds };
         }

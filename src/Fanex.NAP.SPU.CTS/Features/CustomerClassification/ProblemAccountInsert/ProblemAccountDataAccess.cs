@@ -1,6 +1,5 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.CustomerClassification.ProblemAccountInsert
 {
-    using Fanex.Data;
     using Fanex.Data.Repository;
     using System;
     using System.Collections.Generic;
@@ -31,10 +30,7 @@
                 Datetime = dateTime
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<ProblemAccountsEntity>(criteria);
-            }
+            return repository.Fetch<ProblemAccountsEntity>(criteria);
         }
 
         public IEnumerable<ProblemAccountsEntity> GetProblemAccounts_CN88(string custIDs, DateTime? dateTime)
@@ -45,10 +41,7 @@
                 Datetime = dateTime
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<ProblemAccountsEntity>(criteria);
-            }
+            return repository.Fetch<ProblemAccountsEntity>(criteria);
         }
 
         public InsertCategoryResultEntity InsertProblemAccount(string problemAccountJson, bool isRescan)

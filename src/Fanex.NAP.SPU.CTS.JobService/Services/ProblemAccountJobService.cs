@@ -128,7 +128,7 @@
                 {
                     custClassToMainDBService.PushCustClassificationToMainDB(lastestClassifications, serviceName, isWriteLog);
 
-                    feedSoon88Services.FeedCCToSoon88(lastestClassifications, appSettings.Soon88FeedData_URL, serviceName, isWriteLog);
+                    feedSoon88Services.FeedCCToSoon88(lastestClassifications, appSettings.Soon88FeedDataAPI, serviceName, isWriteLog);
                 }
             }
         }
