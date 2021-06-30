@@ -9,7 +9,7 @@
         IEnumerable<AssociationWithCategoryEntity> GetAssociationWithCategory(IEnumerable<CustomerClassEntity> custClasses, bool isDelete);
     }
 
-    public class FeedSoon88DataAccess: IFeedSoon88DataAccess
+    public class FeedSoon88DataAccess : IFeedSoon88DataAccess
     {
         private readonly IDynamicRepository repository;
 

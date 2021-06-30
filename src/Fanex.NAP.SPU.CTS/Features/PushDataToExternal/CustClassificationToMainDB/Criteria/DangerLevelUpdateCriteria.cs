@@ -5,7 +5,6 @@
 
     public class DangerLevelUpdateCriteria : NonQueryCommand
     {
-
         [SpParam(SqlParamName = "CustList")]
         public string CustList { get; set; }
 
