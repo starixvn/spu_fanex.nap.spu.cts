@@ -29,4 +29,10 @@
 		<Setting Key="CTS_NormalAccountsClassification_UpdateAppliedStatus" SpName="CTS_NormalAccountsClassification_UpdateAppliedStatus" DbName="SQL.bodbVR2Model.bodbSPUNet"/>
 		<Setting Key="CTS_CustomerUpdDanger" SpName="CTS_CustomerUpdDanger_xtest" DbName="SQL.CustDB.bodbAdminNet" TimeOut="300" />
 	</Function>
+	<Function Name="SyncUserPermisison">
+		<Setting Key="CTS_DC_InsertUserPermission" SpName="CTS_DC_InsertUserPermission" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"/>
+	</Function>
+  <Function Name="UpdateLastLogin">
+    <Setting Key="CTS_DC_TransformUpdateLastLoginTime" SpName="CTS_DC_TransformUpdateLastLoginTime" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"/>
+  </Function>
 </Functions>
