@@ -17,6 +17,8 @@
         private readonly IProblemAccountJobService problemAccountInsertJobService;
         private readonly IUpdateLastLoginJobService updateLastLoginJobService;
         private readonly INormalAccountJobService normalAccountInsertJobService;
+        private readonly IAssociationByDeviceJobService associationByDeviceJobService;
+        private readonly IAffectedEvidenceJobService affectedEvidenceJobService;
 
 
         public JobController(ISentryClient sentryClient,
@@ -25,7 +27,9 @@
             IUserPermissionJobService userPermissionJobService,
             IUpdateLastLoginJobService updateLastLoginJobService,
             IProblemAccountJobService problemAccountInsertJobService,
-            INormalAccountJobService normalAccountInsertJobService)
+            INormalAccountJobService normalAccountInsertJobService,
+            IAssociationByDeviceJobService associationByDeviceJobService,
+            IAffectedEvidenceJobService affectedEvidenceJobService)
         {
             this.sentryClient = sentryClient;
             this.accountJobService = accountJobService;
@@ -34,6 +38,8 @@
             this.problemAccountInsertJobService = problemAccountInsertJobService;
             this.updateLastLoginJobService = updateLastLoginJobService;
             this.normalAccountInsertJobService = normalAccountInsertJobService;
+            this.associationByDeviceJobService = associationByDeviceJobService;
+            this.affectedEvidenceJobService = affectedEvidenceJobService;
         }
 
         [HttpPost("transformaccount")]
@@ -80,6 +86,18 @@
         public async Task<bool> InsertNormalAccount([FromForm] int batchExternalSize, [FromForm] int batchInternalSize)
         {
             return await this.normalAccountInsertJobService.Execute(batchExternalSize, batchInternalSize);
+        }
+
+        [HttpPost("transform-ass-by-device")]
+        public async Task<bool> TransformAssociationByDevice([FromForm] int batchSize, [FromForm] int numberOfBatch)
+        {
+            return await associationByDeviceJobService.TransformAssociationByDevice(batchSize, numberOfBatch);
+        }
+
+        [HttpPost("affected-evidence")]
+        public async Task<bool> TransformAffectedEvidence([FromForm] int batchSize)
+        {
+            return await affectedEvidenceJobService.Execute(batchSize);
         }
     }
 }

@@ -11,6 +11,7 @@
     using Fanex.NAP.SPU.CTS.Features.PushDataToExternal.CustClassificationToMainDB;
     using Fanex.NAP.SPU.CTS.Features.PushDataToExternal.FeedCCToSoon88;
     using Fanex.NAP.SPU.CTS.Features.SystemParameter;
+    using Fanex.NAP.SPU.CTS.Features.Transform.AssociationByDevice;
     using Fanex.NAP.SPU.CTS.Features.UpdateLastLogin;
     using Fanex.NAP.SPU.CTS.Features.UserPermission;
     using Microsoft.AspNetCore.Http;
@@ -31,6 +32,10 @@
             RegisterProblemAccount(services);
 
             RegisterUserPermission(services);
+
+            RegisterAssociationByDevice(services);
+
+            RegisterAffectedEvidence(services);
 
             RegisterUpdateLastLogin(services);
 
@@ -79,6 +84,20 @@
             services.AddSingleton<IUserPermissionService, UserPermissionService>();
             services.AddSingleton<IUserPermissionJobService, UserPermissionJobService>();
             services.AddSingleton<IUserPermissionDataAccess, UserPermissionDataAccess>();
+        }
+
+        private static void RegisterAssociationByDevice(this IServiceCollection services)
+        {
+            services.AddSingleton<IAssociationByDeviceJobService, AssociationByDeviceJobService>();
+            services.AddSingleton<IAssociationByDeviceService, AssociationByDeviceService>();
+            services.AddSingleton<IAssociationByDeviceDataAccess, AssociationByDeviceDataAccess>();
+        }
+        
+        private static void RegisterAffectedEvidence(this IServiceCollection services)
+        {
+            services.AddSingleton<IAffectedEvidenceJobService, AffectedEvidenceJobService>();
+            services.AddSingleton<IAffectedEvidenceService, AffectedEvidenceService>();
+            services.AddSingleton<IAffectedEvidenceDataAccess, AffectedEvidenceDataAccess>();
         }
 
         private static void RegisterUpdateLastLogin(this IServiceCollection services)

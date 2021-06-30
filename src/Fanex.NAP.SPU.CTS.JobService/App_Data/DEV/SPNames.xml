@@ -44,7 +44,15 @@
 	<Function Name="SyncUserPermisison">
 		<Setting Key="CTS_DC_InsertUserPermission" SpName="CTS_DC_InsertUserPermission" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"/>
 	</Function>
-	  <Function Name="UpdateLastLogin">
+  <Function Name="UpdateLastLogin">
     <Setting Key="CTS_DC_TransformUpdateLastLoginTime" SpName="CTS_DC_TransformUpdateLastLoginTime" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"/>
+  </Function>
+  <Function Name="AssociationByDevice">
+    <Setting Key="DCS_DC_TransformToCTS_Association_GetPackage" SpName="DCS_DC_TransformToCTS_Association_GetPackage" DbName="MySQL.DCS_DataCenter.ctsService"/>
+    <Setting Key="CTS_DC_TransformAssociationByDevice" SpName="CTS_DC_TransformAssociationByDevice" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"/>
+  </Function>
+  <Function name="AffectedEvidence">
+    <Setting Key="NAP_BLControl_EvidenceFlagged" SpName="NAP_BLControl_EvidenceFlagged_UAT1" DbName="DBCust.CustDB.bodbAdminNet"/>
+    <Setting Key="CTS_DC_TransformAssociation_AffectedEvidence" SpName="CTS_DC_TransformAssociation_AffectedEvidence" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"/>
   </Function>
 </Functions>

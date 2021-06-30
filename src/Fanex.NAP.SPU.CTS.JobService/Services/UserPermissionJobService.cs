@@ -1,12 +1,9 @@
 ﻿namespace Fanex.NAP.SPU.CTS.JobService.Services
 {
     using Fanex.NAP.SPU.CTS.Features.UserPermission;
-    using Fanex.NAP.SPU.CTS.Features.UserPermission.Entities;
     using Fanex.NAP.SPU.CTS.Shares;
     using Sentry;
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
 
     public interface IUserPermissionJobService
