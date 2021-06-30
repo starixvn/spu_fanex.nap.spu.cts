@@ -6,7 +6,7 @@
 
     public interface IAppSettings
     {
-        int Environment { get; }                
+        int Environment { get; }
 
         string SPName { get; }
 
@@ -26,7 +26,11 @@
 
         int UpdateLastLoginBatchSize { get; }
 
+        bool IsDailyScanningInterrupt { get; }
+
         bool UpdateIsWriteLogSetting(string serviceName, bool isWriteLog);
+
+        bool InterruptDailyScanningJob(bool isInterrupted);
     }
 
     public class AppSettings : IAppSettings
@@ -37,6 +41,7 @@
         private readonly string spName;
         private readonly int matchMonitorNumberOfThread;
         private readonly string soon88FeedDataAPI;
+        private readonly bool isDailyScanningInterrupt;
 
         public AppSettings(IConfiguration configuration)
         {
@@ -46,9 +51,11 @@
             spName = GetValue<string>(nameof(SPName));
             soon88FeedDataAPI = GetValue<string>(nameof(Soon88FeedDataAPI));
             matchMonitorNumberOfThread = GetValue<int>("MatchMonitor:NumberOfThread");
+            isDailyScanningInterrupt = GetValue<bool>("DailyClassification:IsInterruptJob");
         }
 
         #region Variables
+
         public int Environment
         {
             get
@@ -57,8 +64,10 @@
                 {
                     case "LOCAL":
                         return 1;
+
                     case "UAT":
                         return 2;
+
                     default:
                         return 3;
                 }
@@ -70,6 +79,8 @@
         public string Soon88FeedDataAPI => soon88FeedDataAPI;
 
         public int MatchMonitorNumberOfThread => matchMonitorNumberOfThread;
+
+        public bool IsDailyScanningInterrupt => isDailyScanningInterrupt;
 
         public bool MatchMonitorIsWriteLog => GetValue<bool>("MatchMonitor:IsWriteLog");
 
@@ -83,9 +94,10 @@
 
         public bool NormalAccountIsWriteLog => GetValue<bool>("NormalAccountInsert:IsWriteLog");
 
-        #endregion
+        #endregion Variables
 
         #region Methods
+
         public T GetValue<T>(string key)
         {
             try
@@ -144,6 +156,27 @@
             return true;
         }
 
-        #endregion
+        public bool InterruptDailyScanningJob(bool isInterrupted)
+        {
+            var key = "DailyClassification:IsInterruptJob";
+
+            if (configuration[key] == null)
+            {
+                return false;
+            }
+
+            try
+            {
+                SetValue<bool>(key, isInterrupted);
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        #endregion Methods
     }
 }

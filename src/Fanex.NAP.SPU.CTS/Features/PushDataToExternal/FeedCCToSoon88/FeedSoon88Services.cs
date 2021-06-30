@@ -15,7 +15,7 @@
         void FeedCCToSoon88(IEnumerable<LatestClassificationEntity> custsToMainDB, string url, string serviceName, bool isWriteLog);
     }
 
-    public class FeedSoon88Services: IFeedSoon88Services
+    public class FeedSoon88Services : IFeedSoon88Services
     {
         private readonly IFeedSoon88DataAccess feedSoon88DataAccess;
         private readonly ISentryClient sentryClient;
@@ -56,10 +56,9 @@
             {
                 DeleteDataInSoon88(deleteList, url);
             }
-
         }
 
-        private  void UpdateDataToSoon88(IEnumerable<CustomerClassEntity> updateList, string url)
+        private void UpdateDataToSoon88(IEnumerable<CustomerClassEntity> updateList, string url)
         {
             var result = feedSoon88DataAccess.GetAssociationWithCategory(updateList, false);
 
@@ -93,7 +92,7 @@
             }
         }
 
-        private   void DeleteDataInSoon88(IEnumerable<CustomerClassEntity> deleteList, string url)
+        private void DeleteDataInSoon88(IEnumerable<CustomerClassEntity> deleteList, string url)
         {
             var result = feedSoon88DataAccess.GetAssociationWithCategory(deleteList, true);
 

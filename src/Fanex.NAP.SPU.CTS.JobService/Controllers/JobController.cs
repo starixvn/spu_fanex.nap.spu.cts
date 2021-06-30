@@ -20,6 +20,7 @@
         private readonly IAssociationByDeviceJobService associationByDeviceJobService;
         private readonly IAffectedEvidenceJobService affectedEvidenceJobService;
 
+        private readonly IDailyClassificationJobService dailyClassificationJobService;
 
         public JobController(ISentryClient sentryClient,
             IAccountJobService accountJobService,
@@ -29,7 +30,8 @@
             IProblemAccountJobService problemAccountInsertJobService,
             INormalAccountJobService normalAccountInsertJobService,
             IAssociationByDeviceJobService associationByDeviceJobService,
-            IAffectedEvidenceJobService affectedEvidenceJobService)
+            IAffectedEvidenceJobService affectedEvidenceJobService,
+            IDailyClassificationJobService dailyClassificationJobService)
         {
             this.sentryClient = sentryClient;
             this.accountJobService = accountJobService;
@@ -40,6 +42,7 @@
             this.normalAccountInsertJobService = normalAccountInsertJobService;
             this.associationByDeviceJobService = associationByDeviceJobService;
             this.affectedEvidenceJobService = affectedEvidenceJobService;
+            this.dailyClassificationJobService = dailyClassificationJobService;
         }
 
         [HttpPost("transformaccount")]
@@ -82,7 +85,7 @@
             return await this.problemAccountInsertJobService.Execute(batchExternalSize, batchInternalSize);
         }
 
-        [HttpPost("normalAccountInsert")]
+        [HttpPost("insertnormalaccount")]
         public async Task<bool> InsertNormalAccount([FromForm] int batchExternalSize, [FromForm] int batchInternalSize)
         {
             return await this.normalAccountInsertJobService.Execute(batchExternalSize, batchInternalSize);
@@ -98,6 +101,18 @@
         public async Task<bool> TransformAffectedEvidence([FromForm] int batchSize)
         {
             return await affectedEvidenceJobService.Execute(batchSize);
+        }
+
+        [HttpPost("scanningdailyclassification")]
+        public async Task<bool> DailyScanningClassification([FromForm] int batchSize)
+        {
+            return await this.dailyClassificationJobService.Execute(batchSize);
+        }
+
+        [HttpPost("interruptdailyClassification")]
+        public async Task<bool> DailyScanningClassification([FromForm] bool isInterruptDailyClassificationJob)
+        {
+            return await this.dailyClassificationJobService.InterruptDailyScanningJob(isInterruptDailyClassificationJob);
         }
     }
 }

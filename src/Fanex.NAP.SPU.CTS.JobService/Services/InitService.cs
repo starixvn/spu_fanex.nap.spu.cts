@@ -4,6 +4,7 @@
     using Fanex.NAP.Client.Helpers.Web;
     using Fanex.NAP.Client.Services;
     using Fanex.NAP.SPU.CTS.Features.Accounts;
+    using Fanex.NAP.SPU.CTS.Features.CustomerClassification.DailyClassification;
     using Fanex.NAP.SPU.CTS.Features.CustomerClassification.NormalAccountInsert;
     using Fanex.NAP.SPU.CTS.Features.CustomerClassification.ProblemAccountInsert;
     using Fanex.NAP.SPU.CTS.Features.ExistingCustomer;
@@ -42,6 +43,8 @@
             RegisterDataAccesLayer(services);
 
             RegisterNormalAccount(services);
+
+            RegisterDailyClassification(services);
         }
 
         private static void RegisterNAPService(this IServiceCollection services)
@@ -92,7 +95,7 @@
             services.AddSingleton<IAssociationByDeviceService, AssociationByDeviceService>();
             services.AddSingleton<IAssociationByDeviceDataAccess, AssociationByDeviceDataAccess>();
         }
-        
+
         private static void RegisterAffectedEvidence(this IServiceCollection services)
         {
             services.AddSingleton<IAffectedEvidenceJobService, AffectedEvidenceJobService>();
@@ -106,12 +109,19 @@
             services.AddSingleton<IUpdateLastLoginService, UpdateLastLoginService>();
             services.AddSingleton<IUpdateLastLoginDataAccess, UpdateLastLoginDataAccess>();
         }
-        
+
         private static void RegisterNormalAccount(this IServiceCollection services)
         {
             services.AddSingleton<INormalAccountDataAccess, NormalAccountDataAccess>();
             services.AddSingleton<INormalAccountServices, NormalAccountServices>();
             services.AddSingleton<INormalAccountJobService, NormalAccountJobService>();
+        }
+
+        private static void RegisterDailyClassification(this IServiceCollection services)
+        {
+            services.AddSingleton<IDailyClassificationDataAccess, DailyClassificationDataAccess>();
+            services.AddSingleton<IDailyClassificationServices, DailyClassificationServices>();
+            services.AddSingleton<IDailyClassificationJobService, DailyClassificationJobService>();
         }
 
         private static void RegisterDataAccesLayer(this IServiceCollection services)
