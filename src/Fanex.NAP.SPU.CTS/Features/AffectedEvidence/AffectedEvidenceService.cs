@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.SPU.CTS.Features.UserPermission
+﻿namespace Fanex.NAP.SPU.CTS.Features.AffectedEvidence
 {
     using Sentry;
     using System.Collections.Generic;

@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.SPU.CTS.Features.UserPermission
+﻿namespace Fanex.NAP.SPU.CTS.Features.AffectedEvidence
 {
     using Fanex.Data.Repository;
     using Fanex.NAP.SPU.CTS.Features.AffectedEvidence.Criteria;

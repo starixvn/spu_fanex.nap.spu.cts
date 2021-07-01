@@ -1,13 +1,15 @@
-﻿using Fanex.Data.Repository;
-using Fanex.NAP.SPU.CTS.Features.UpdateLastLogin.Criterias;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace Fanex.NAP.SPU.CTS.Features.UpdateLastLogin
 {
+    using Fanex.Data.Repository;
+    using Fanex.NAP.SPU.CTS.Features.UpdateLastLogin.Criterias;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+
+
     public interface IUpdateLastLoginDataAccess
     {
         void TransformUpdatingLastLoginTime(int batchSize);

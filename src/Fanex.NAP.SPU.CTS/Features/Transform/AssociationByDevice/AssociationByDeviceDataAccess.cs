@@ -1,14 +1,14 @@
-﻿using Fanex.Data.Repository;
-using Fanex.NAP.SPU.CTS.Features.Transform.AssociationByDevice.Criteria;
-using Fanex.NAP.SPU.CTS.Features.Transform.AssociationByDevice.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Fanex.NAP.SPU.CTS.Features.Transform.AssociationByDevice
+﻿namespace Fanex.NAP.SPU.CTS.Features.Transform.AssociationByDevice
 {
+    using Fanex.Data.Repository;
+    using Fanex.NAP.SPU.CTS.Features.Transform.AssociationByDevice.Criteria;
+    using Fanex.NAP.SPU.CTS.Features.Transform.AssociationByDevice.Entities;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+
     public interface IAssociationByDeviceDataAccess
     {
         IEnumerable<RawAssociationModel> GetRawAssociation(int quantityPerBatch, int numOfBatch);
