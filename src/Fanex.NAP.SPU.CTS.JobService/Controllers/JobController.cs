@@ -15,24 +15,18 @@
         private readonly IMatchMonitorJobService matchMonitorJobService;
         private readonly IUserPermissionJobService userPermissionJobService;
         private readonly IUpdateLastLoginJobService updateLastLoginJobService;
-        private readonly IAssociationByDeviceJobService associationByDeviceJobService;
-        private readonly IAffectedEvidenceJobService affectedEvidenceJobService;
 
         public JobController(ISentryClient sentryClient,
             IAccountJobService accountJobService,
             IMatchMonitorJobService matchMonitorJobService,
             IUserPermissionJobService userPermissionJobService,
-            IUpdateLastLoginJobService updateLastLoginJobService,
-            IAssociationByDeviceJobService associationByDeviceJobService,
-            IAffectedEvidenceJobService affectedEvidenceJobService)
+            IUpdateLastLoginJobService updateLastLoginJobService)
         {
             this.sentryClient = sentryClient;
             this.accountJobService = accountJobService;
             this.matchMonitorJobService = matchMonitorJobService;
             this.userPermissionJobService = userPermissionJobService;
             this.updateLastLoginJobService = updateLastLoginJobService;
-            this.associationByDeviceJobService = associationByDeviceJobService;
-            this.affectedEvidenceJobService = affectedEvidenceJobService;
         }
 
         [HttpPost("transformaccount")]
@@ -67,18 +61,6 @@
         public async Task<bool> UpdateLastLoginTime()
         {
             return await updateLastLoginJobService.UpdateLastLoginTime();
-        }
-
-        [HttpPost("transform-ass-by-device")]
-        public async Task<bool> TransformAssociationByDevice([FromForm] int batchSize, [FromForm] int numberOfBatch)
-        {
-            return await associationByDeviceJobService.TransformAssociationByDevice(batchSize, numberOfBatch);
-        }
-
-        [HttpPost("affected-evidence")]
-        public async Task<bool> TransformAffectedEvidence([FromForm] int batchSize)
-        {
-            return await affectedEvidenceJobService.Execute(batchSize);
         }
     }
 }

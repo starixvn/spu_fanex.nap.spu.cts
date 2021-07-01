@@ -17,6 +17,10 @@
         List<CustomerMainDBModel> GetCustSubFromMainDB(int quantityPerBatch, Int64 lastScannedCustID);
 
         IEnumerable<InsertCustomerModel> TransformCustomerFromMainDB(string customerJson);
+
+        void UpdateCustInfoComplete(string customers, DateTime? lastUpdateTime, Int64? lastUpdateCustID);
+
+        void UpdateCustomerComplete(string customers, DateTime? lastUpdateTime, Int64? lastUpdateCustID);
     }
 
     public class CTSCustomerDataAccess : ICTSCustomerDataAccess
@@ -96,6 +100,34 @@
             };
 
             return repository.Fetch<InsertCustomerModel>(criteria);
+        }
+
+        public void UpdateCustomerComplete(string customers, DateTime? lastUpdateTime, Int64? lastUpdateCustID)
+        {
+            var repository = new DynamicRepository();
+
+            var criteria = new UpdateCustomerCompleteCriteria
+            {
+                CustomerInfo = customers,
+                LastUpdateCustID = lastUpdateCustID,
+                LastUpdateTime = lastUpdateTime
+            };
+
+            repository.Execute(criteria);
+        }
+
+        public void UpdateCustInfoComplete(string customers, DateTime? lastUpdateTime, Int64? lastUpdateCustID)
+        {
+            var repository = new DynamicRepository();
+
+            var criteria = new UpdateCustInfoCompleteCriteria
+            {
+                CustInfo = customers,
+                LastUpdateCustID = lastUpdateCustID,
+                LastUpdateTime = lastUpdateTime
+            };
+
+            repository.Execute(criteria);
         }
     }
 }

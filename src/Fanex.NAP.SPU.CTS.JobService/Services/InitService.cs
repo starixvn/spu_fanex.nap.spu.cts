@@ -4,6 +4,7 @@
     using Fanex.NAP.Client.Helpers.Web;
     using Fanex.NAP.Client.Services;
     using Fanex.NAP.SPU.CTS.Features.Accounts;
+    using Fanex.NAP.SPU.CTS.Features.AffectedEvidence;
     using Fanex.NAP.SPU.CTS.Features.CustomerClassification.DailyClassification;
     using Fanex.NAP.SPU.CTS.Features.CustomerClassification.NormalAccountInsert;
     using Fanex.NAP.SPU.CTS.Features.CustomerClassification.ProbationClassification;

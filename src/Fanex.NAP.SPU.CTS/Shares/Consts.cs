@@ -14,6 +14,12 @@
 
         public const int Realtime_SleepTimes = 3000;
 
+        public enum UPDATECUSTOMER : int
+        {
+            FROM_CUSTOMER = 1,
+            FROM_CUSTINFO = 2
+        };
+
         public enum MatchMonitorQueryTypes
         {
             Service = 1,

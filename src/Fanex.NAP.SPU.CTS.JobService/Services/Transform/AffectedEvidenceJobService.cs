@@ -1,6 +1,6 @@
 ﻿namespace Fanex.NAP.SPU.CTS.JobService.Services
 {
-    using Fanex.NAP.SPU.CTS.Features.UserPermission;
+    using Fanex.NAP.SPU.CTS.Features.AffectedEvidence;
     using Sentry;
     using System;
     using System.Linq;
