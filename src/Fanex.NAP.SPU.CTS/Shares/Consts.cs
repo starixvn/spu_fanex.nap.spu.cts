@@ -12,6 +12,8 @@
 
         public const string CONVERT_TO_SQL_DATETIME = "yyyy-MM-dd HH:mm:ss";
 
+        public const int Realtime_SleepTimes = 3000;
+
         public enum MatchMonitorQueryTypes
         {
             Service = 1,

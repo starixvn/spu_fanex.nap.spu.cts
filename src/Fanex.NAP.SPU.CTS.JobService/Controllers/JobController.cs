@@ -14,35 +14,25 @@
         private readonly IAccountJobService accountJobService;
         private readonly IMatchMonitorJobService matchMonitorJobService;
         private readonly IUserPermissionJobService userPermissionJobService;
-        private readonly IProblemAccountJobService problemAccountInsertJobService;
         private readonly IUpdateLastLoginJobService updateLastLoginJobService;
-        private readonly INormalAccountJobService normalAccountInsertJobService;
         private readonly IAssociationByDeviceJobService associationByDeviceJobService;
         private readonly IAffectedEvidenceJobService affectedEvidenceJobService;
-
-        private readonly IDailyClassificationJobService dailyClassificationJobService;
 
         public JobController(ISentryClient sentryClient,
             IAccountJobService accountJobService,
             IMatchMonitorJobService matchMonitorJobService,
             IUserPermissionJobService userPermissionJobService,
             IUpdateLastLoginJobService updateLastLoginJobService,
-            IProblemAccountJobService problemAccountInsertJobService,
-            INormalAccountJobService normalAccountInsertJobService,
             IAssociationByDeviceJobService associationByDeviceJobService,
-            IAffectedEvidenceJobService affectedEvidenceJobService,
-            IDailyClassificationJobService dailyClassificationJobService)
+            IAffectedEvidenceJobService affectedEvidenceJobService)
         {
             this.sentryClient = sentryClient;
             this.accountJobService = accountJobService;
             this.matchMonitorJobService = matchMonitorJobService;
             this.userPermissionJobService = userPermissionJobService;
-            this.problemAccountInsertJobService = problemAccountInsertJobService;
             this.updateLastLoginJobService = updateLastLoginJobService;
-            this.normalAccountInsertJobService = normalAccountInsertJobService;
             this.associationByDeviceJobService = associationByDeviceJobService;
             this.affectedEvidenceJobService = affectedEvidenceJobService;
-            this.dailyClassificationJobService = dailyClassificationJobService;
         }
 
         [HttpPost("transformaccount")]
@@ -79,18 +69,6 @@
             return await updateLastLoginJobService.UpdateLastLoginTime();
         }
 
-        [HttpPost("problemAccountInsert")]
-        public async Task<bool> InsertProblemAccount([FromForm] int batchExternalSize, [FromForm] int batchInternalSize)
-        {
-            return await this.problemAccountInsertJobService.Execute(batchExternalSize, batchInternalSize);
-        }
-
-        [HttpPost("insertnormalaccount")]
-        public async Task<bool> InsertNormalAccount([FromForm] int batchExternalSize, [FromForm] int batchInternalSize)
-        {
-            return await this.normalAccountInsertJobService.Execute(batchExternalSize, batchInternalSize);
-        }
-
         [HttpPost("transform-ass-by-device")]
         public async Task<bool> TransformAssociationByDevice([FromForm] int batchSize, [FromForm] int numberOfBatch)
         {
@@ -101,18 +79,6 @@
         public async Task<bool> TransformAffectedEvidence([FromForm] int batchSize)
         {
             return await affectedEvidenceJobService.Execute(batchSize);
-        }
-
-        [HttpPost("scanningdailyclassification")]
-        public async Task<bool> DailyScanningClassification([FromForm] int batchSize)
-        {
-            return await this.dailyClassificationJobService.Execute(batchSize);
-        }
-
-        [HttpPost("interruptdailyClassification")]
-        public async Task<bool> DailyScanningClassification([FromForm] bool isInterruptDailyClassificationJob)
-        {
-            return await this.dailyClassificationJobService.InterruptDailyScanningJob(isInterruptDailyClassificationJob);
         }
     }
 }
