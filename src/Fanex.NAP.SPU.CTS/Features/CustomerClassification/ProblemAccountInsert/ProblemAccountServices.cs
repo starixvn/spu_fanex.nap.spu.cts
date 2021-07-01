@@ -9,9 +9,9 @@
 
     public interface IProblemAccountServices
     {
-        IEnumerable<ProblemAccountsEntity> GetProblemAccounts(DateTime? dateTime, string serviceName, bool IsWriteLog);
+        IEnumerable<ProblemAccountsEntity> GetProblemAccounts(DateTime? dateTime, string serviceName, bool isWriteLog);
 
-        IEnumerable<int> InsertProblemAccountToCTS(IEnumerable<ProblemAccountsEntity> problemAccounts, string serviceName, bool isWriteLog);
+        IEnumerable<int> InsertProblemAccountToCTS(IEnumerable<ProblemAccountsEntity> problemAccounts, bool isRescan, string serviceName, bool isWriteLog);
     }
 
     public class ProblemAccountServices : IProblemAccountServices
@@ -39,13 +39,13 @@
             return problemAccounts;
         }
 
-        public IEnumerable<int> InsertProblemAccountToCTS(IEnumerable<ProblemAccountsEntity> problemAccounts, string serviceName, bool isWriteLog)
+        public IEnumerable<int> InsertProblemAccountToCTS(IEnumerable<ProblemAccountsEntity> problemAccounts, bool isRescan, string serviceName, bool isWriteLog)
         {
             if (problemAccounts != null && problemAccounts.Any())
             {
-                var prproblemAccountJson = JsonConvert.SerializeObject(problemAccounts);
+                var problemAccountJson = JsonConvert.SerializeObject(problemAccounts);
 
-                var result = problemAccountDataAccess.InsertProblemAccount(prproblemAccountJson, false);
+                var result = problemAccountDataAccess.InsertProblemAccount(problemAccountJson, isRescan);
                 Utilities.LogSentryInfo(serviceName, "Insert ProblemAccount", result.CustIds, isWriteLog, sentryClient);
 
                 if (!string.IsNullOrEmpty(result.ErrorMessage))

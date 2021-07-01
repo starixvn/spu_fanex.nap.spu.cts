@@ -119,7 +119,7 @@
 
             foreach (var items in custIdsChunk)
             {
-                var lastestClassifications = custClassToMainDBService.GetLatestClassification(string.Join(",", items), serviceName, isWriteLog);
+                var lastestClassifications = custClassToMainDBService.GetLatestClassification(items, serviceName, isWriteLog);
 
                 if (lastestClassifications != null && lastestClassifications.Any())
                 {

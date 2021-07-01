@@ -23,6 +23,7 @@
         public enum SystemParameters
         {
             ProblemAccountLastScannedTime = 2,
+            RobotAccountLastScannedTime = 3,
             MatchMonitorLastScannedTrans = 20
         };
 
@@ -32,5 +33,17 @@
             ABI = 2,
             OTHER = 3
         }
+
+        public enum Category
+        {
+            NEWMEMBER = 201,
+            NORMALMEMBER = 202,
+            SMARTPUNTER = 203,
+            HIGHRISKPUNTER = 204,
+            VIP = 205,
+            PROBATION = 206,
+            VVIP = 213,
+            ROBOT = 61
+        };
     }
 }

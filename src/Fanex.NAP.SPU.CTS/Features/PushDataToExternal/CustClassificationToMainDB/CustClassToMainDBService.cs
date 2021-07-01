@@ -10,7 +10,7 @@
 
     public interface ICustClassToMainDBService
     {
-        IEnumerable<LatestClassificationEntity> GetLatestClassification(string custIds, string serviceName, bool isWriteLog);
+        IEnumerable<LatestClassificationEntity> GetLatestClassification(IEnumerable<int> custIds, string serviceName, bool isWriteLog);
 
         bool PushCustClassificationToMainDB(IEnumerable<LatestClassificationEntity> lastestClassifications, string serviceName, bool isWriteLog);
 
@@ -52,13 +52,15 @@
             return isSuccess;
         }
 
-        public IEnumerable<LatestClassificationEntity> GetLatestClassification(string custIds, string serviceName, bool isWriteLog)
+        public IEnumerable<LatestClassificationEntity> GetLatestClassification(IEnumerable<int> custIds, string serviceName, bool isWriteLog)
         {
             var lastestClassification = new List<LatestClassificationEntity>();
 
-            if (!string.IsNullOrEmpty(custIds))
+            if (custIds != null && custIds.Any())
             {
-                lastestClassification = custClassToMainDBDataAccess.GetLatestClassification(custIds)?.ToList();
+                string custIdsToString = string.Join(",", custIds);
+
+                lastestClassification = custClassToMainDBDataAccess.GetLatestClassification(custIdsToString)?.ToList();
             }
 
             Utilities.LogSentryInfo(serviceName, "Get lastestClassifications", lastestClassification, isWriteLog, sentryClient);

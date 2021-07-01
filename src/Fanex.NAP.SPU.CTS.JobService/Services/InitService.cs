@@ -9,6 +9,7 @@
     using Fanex.NAP.SPU.CTS.Features.CustomerClassification.ProbationClassification;
     using Fanex.NAP.SPU.CTS.Features.CustomerClassification.ProblemAccountInsert;
     using Fanex.NAP.SPU.CTS.Features.CustomerClassification.RealtimeClassification;
+    using Fanex.NAP.SPU.CTS.Features.CustomerClassification.RobotAccountInsert;
     using Fanex.NAP.SPU.CTS.Features.ExistingCustomer;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
     using Fanex.NAP.SPU.CTS.Features.PushDataToExternal.CustClassificationToMainDB;
@@ -51,6 +52,8 @@
             RegisterRealtimeClassification(services);
 
             RegisterProbationClassification(services);
+
+            RegisteRobotAccountInsert(services);
         }
 
         private static void RegisterNAPService(this IServiceCollection services)
@@ -142,6 +145,13 @@
             services.AddSingleton<IProbationClassificationDataAccess, ProbationClassificationDataAccess>();
             services.AddSingleton<IProbationClassificationServices, ProbationClassificationServices>();
             services.AddSingleton<IProbationClassificationJobService, ProbationClassificationJobService>();
+        }
+
+        private static void RegisteRobotAccountInsert(this IServiceCollection services)
+        {
+            services.AddSingleton<IRobotAccountInsertDataAccess, RobotAccountInsertDataAccess>();
+            services.AddSingleton<IRobotAccountInsertServices, RobotAccountInsertServices>();
+            services.AddSingleton<IRobotAccountInsertJobService, RobotAccountInsertJobService>();
         }
 
         private static void RegisterDataAccesLayer(this IServiceCollection services)

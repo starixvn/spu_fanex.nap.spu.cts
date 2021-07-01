@@ -9,7 +9,7 @@
 
         DateTime? GetLastScannedDateTime(SystemParameters paraID);
 
-        void UpdateTimingExecution(string paraValue, int paramId);
+        void UpdateTimingExecution(string paraValue, SystemParameters paramId);
     }
 
     public class SystemParameterServices : ISystemParameterServices
@@ -35,10 +35,12 @@
             return lastScannedTransID != null ? DateTime.Parse(lastScannedTransID?.ParameterValue) : null;
         }
 
-
-        public void UpdateTimingExecution(string paraValue, int paramId)
+        public void UpdateTimingExecution(string paraValue, SystemParameters paramId)
         {
-            systemParameterDataAccess.UpdateTimingExecution(paraValue, paramId);
+            if (!string.IsNullOrEmpty(paraValue))
+            {
+                systemParameterDataAccess.UpdateTimingExecution(paraValue, (int)paramId);
+            }
         }
     }
 }

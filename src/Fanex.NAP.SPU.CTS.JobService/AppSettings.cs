@@ -28,6 +28,10 @@
 
         bool IsDailyScanningInterrupt { get; }
 
+        bool RobotAccountIsWriteLog { get; }
+
+        string RobotAccountCreditSites { get; }
+
         bool UpdateIsWriteLogSetting(string serviceName, bool isWriteLog);
 
         bool InterruptDailyScanningJob(bool isInterrupted);
@@ -93,6 +97,10 @@
         public bool UserPermissionIsWriteLog => GetValue<bool>("UserPermission:IsWriteLog");
 
         public bool NormalAccountIsWriteLog => GetValue<bool>("NormalAccountInsert:IsWriteLog");
+
+        public bool RobotAccountIsWriteLog => GetValue<bool>("RobotAccountInsert:IsWriteLog");
+
+        public string RobotAccountCreditSites => GetValue<string>("RobotAccountInsert:Credit-Sites");
 
         #endregion Variables
 

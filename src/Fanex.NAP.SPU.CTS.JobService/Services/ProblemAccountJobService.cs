@@ -104,7 +104,7 @@
 
                 foreach (var items in problemAccountsChunk)
                 {
-                    var custIds = problemAccountServices.InsertProblemAccountToCTS(items, serviceName, isWriteLog);
+                    var custIds = problemAccountServices.InsertProblemAccountToCTS(items, false, serviceName, isWriteLog);
 
                     if (custIds != null && custIds.Any())
                     {
@@ -113,7 +113,7 @@
                 }
             }
 
-            systemParameterServices.UpdateTimingExecution(savedDataTime.ToString(Constants.CONVERT_TO_SQL_DATETIME), (int)SystemParameters.ProblemAccountLastScannedTime);
+            systemParameterServices.UpdateTimingExecution(savedDataTime.ToString(Constants.CONVERT_TO_SQL_DATETIME), SystemParameters.ProblemAccountLastScannedTime);
         }
 
         private void PushDataToExternal(IEnumerable<int> custIds, int batchExternalSize)
@@ -122,7 +122,7 @@
 
             foreach (var items in custIdsChunk)
             {
-                var lastestClassifications = custClassToMainDBService.GetLatestClassification(string.Join(",", items), serviceName, isWriteLog);
+                var lastestClassifications = custClassToMainDBService.GetLatestClassification(items, serviceName, isWriteLog);
 
                 if (lastestClassifications != null && lastestClassifications.Any())
                 {
