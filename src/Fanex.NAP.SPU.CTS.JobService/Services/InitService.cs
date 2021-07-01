@@ -6,6 +6,7 @@
     using Fanex.NAP.SPU.CTS.Features.Accounts;
     using Fanex.NAP.SPU.CTS.Features.CustomerClassification.DailyClassification;
     using Fanex.NAP.SPU.CTS.Features.CustomerClassification.NormalAccountInsert;
+    using Fanex.NAP.SPU.CTS.Features.CustomerClassification.ProbationClassification;
     using Fanex.NAP.SPU.CTS.Features.CustomerClassification.ProblemAccountInsert;
     using Fanex.NAP.SPU.CTS.Features.CustomerClassification.RealtimeClassification;
     using Fanex.NAP.SPU.CTS.Features.ExistingCustomer;
@@ -48,6 +49,8 @@
             RegisterDailyClassification(services);
 
             RegisterRealtimeClassification(services);
+
+            RegisterProbationClassification(services);
         }
 
         private static void RegisterNAPService(this IServiceCollection services)
@@ -132,6 +135,13 @@
             services.AddSingleton<IRealtimeClassificationDataAccess, RealtimeClassificationDataAccess>();
             services.AddSingleton<IRealtimeClassificationServices, RealtimeClassificationServices>();
             services.AddSingleton<IRealtimeClassificationJobService, RealtimeClassificationJobService>();
+        }
+
+        private static void RegisterProbationClassification(this IServiceCollection services)
+        {
+            services.AddSingleton<IProbationClassificationDataAccess, ProbationClassificationDataAccess>();
+            services.AddSingleton<IProbationClassificationServices, ProbationClassificationServices>();
+            services.AddSingleton<IProbationClassificationJobService, ProbationClassificationJobService>();
         }
 
         private static void RegisterDataAccesLayer(this IServiceCollection services)
