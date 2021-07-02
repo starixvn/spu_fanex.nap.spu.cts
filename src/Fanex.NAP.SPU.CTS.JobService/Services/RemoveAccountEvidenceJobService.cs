@@ -40,7 +40,7 @@
         {
             try
             {
-                if (internalBatchSize > 0 && externalBatchSize>0)
+                if (internalBatchSize > 0 && externalBatchSize > 0)
                 {
                     JobRun(internalBatchSize, externalBatchSize);
                 }
@@ -63,7 +63,6 @@
 
         private void JobRun(int internalBatchSize, int externalBatchSize)
         {
-
             IEnumerable<CustomerEvidenceQueueEntity> customerEvidenceFromQueue;
 
             do
@@ -77,7 +76,7 @@
                                     .UpdateCustomerEvidence(customerEvidenceFromQueue, serviceName)
                                     .PrepareCustRescanClassification();
 
-                    if(custIds!= null && custIds.Any())
+                    if (custIds != null && custIds.Any())
                     {
                         var paras = new RescanParametersEntity
                         {
@@ -95,7 +94,6 @@
                         rescanCustClassificationService.RescanCustomerClassify(paras);
                     }
                 }
-
             } while (customerEvidenceFromQueue != null && customerEvidenceFromQueue.Any());
         }
 

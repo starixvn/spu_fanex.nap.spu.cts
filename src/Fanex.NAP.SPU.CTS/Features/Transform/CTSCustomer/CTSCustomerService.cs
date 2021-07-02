@@ -69,9 +69,9 @@
             return custInfos;
         }
 
-        public void UpdateCustomerComplete(string customers, DateTime? lastUpdateTime, Int64? lastUpdateCustID, UPDATECUSTOMER sourceType)
+        public void UpdateCustomerComplete(string customers, DateTime? lastUpdateTime, Int64? lastUpdateCustID, UpdateCustomer sourceType)
         {
-            if (sourceType == UPDATECUSTOMER.FROM_CUSTOMER)
+            if (sourceType == UpdateCustomer.FromCustomer)
             {
                 dataAccess.UpdateCustomerComplete(customers, lastUpdateTime, lastUpdateCustID);
             }

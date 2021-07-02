@@ -10,7 +10,6 @@
     {
         private readonly IRemoveAccountEvidenceJobService removeAccountEvidenceJobService;
 
-
         public EvidencesJobController(
             IRemoveAccountEvidenceJobService removeAccountEvidenceJobService)
         {

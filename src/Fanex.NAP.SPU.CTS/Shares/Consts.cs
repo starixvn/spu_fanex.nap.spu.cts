@@ -15,7 +15,7 @@
         public const int Realtime_SleepTimes = 3000;
 
         public const int RemoveEvidences_ClearActionId = 3;
-        
+
         public enum MatchMonitorQueryTypes
         {
             Service = 1,
@@ -62,11 +62,11 @@
             RemoveMultipleEvidence,
             Other
         };
-        
-        public enum UPDATECUSTOMER : int
+
+        public enum UpdateCustomer
         {
-            FROM_CUSTOMER = 1,
-            FROM_CUSTINFO = 2
+            FromCustomer = 1,
+            FromCustInfo = 2
         };
     }
 }

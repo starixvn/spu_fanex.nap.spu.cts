@@ -2,12 +2,9 @@
 {
     using Fanex.Data.Repository;
     using Fanex.NAP.SPU.CTS.Shares.Models;
-    using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
     public interface IRescanCustClassificationDataAccess
     {
@@ -67,9 +64,9 @@
             }
 
             return new DBResult
-            { 
+            {
                 ErrorCode = string.IsNullOrEmpty(criteria.ErrorMessage) ? 0 : -1,
-                ErrorMsg = criteria.ErrorMessage, 
+                ErrorMsg = criteria.ErrorMessage,
                 OutParam = new Hashtable {
                     { "custIds", custIds }
                 }

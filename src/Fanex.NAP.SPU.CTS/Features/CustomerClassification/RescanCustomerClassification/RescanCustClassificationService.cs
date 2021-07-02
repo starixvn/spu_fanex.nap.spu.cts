@@ -64,10 +64,10 @@
 
         public void RescanCustomerClassify(RescanParametersEntity paras)
         {
-            if(paras.CustIds == null || paras.CustIds.Any())
+            if (paras.CustIds == null || paras.CustIds.Any())
             {
                 return;
-            }    
+            }
 
             var custIdList = new List<int>();
 
@@ -95,7 +95,7 @@
                 PushCustClassificationToMainDB(custIdsToSyncCC, paras);
             }
 
-            // Rescan Normal 
+            // Rescan Normal
             paras.CustIds.ToList().RemoveAll(x => custIdsToSyncCC.Contains(x));
 
             if (paras.CustIds != null && paras.CustIds.Any())
