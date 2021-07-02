@@ -41,7 +41,7 @@
                 custCategory = robotUsers.Select(c => new ProblemAccountsEntity
                 {
                     CustID = c.CustId,
-                    ReasonID = (int)Category.ROBOT
+                    ReasonID = (int)Category.Robot
                 }).ToList();
             }
 

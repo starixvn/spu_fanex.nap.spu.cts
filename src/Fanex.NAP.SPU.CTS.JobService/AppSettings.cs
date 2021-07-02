@@ -32,6 +32,8 @@
 
         string RobotAccountCreditSites { get; }
 
+        bool RemoveAccountEvidenceIsWriteLog { get; }
+
         bool UpdateIsWriteLogSetting(string serviceName, bool isWriteLog);
 
         bool InterruptDailyScanningJob(bool isInterrupted);
@@ -101,6 +103,8 @@
         public bool RobotAccountIsWriteLog => GetValue<bool>("RobotAccountInsert:IsWriteLog");
 
         public string RobotAccountCreditSites => GetValue<string>("RobotAccountInsert:Credit-Sites");
+
+        public bool RemoveAccountEvidenceIsWriteLog => GetValue<bool>("RemoveAccountEvidence:IsWriteLog");
 
         #endregion Variables
 

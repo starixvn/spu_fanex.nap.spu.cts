@@ -2,6 +2,7 @@
 {
     using Fanex.Data.Repository;
     using Fanex.NAP.SPU.CTS.Shares;
+    using Fanex.NAP.SPU.CTS.Shares.Models;
     using System.Collections.Generic;
     using System.Linq;
     using static Fanex.NAP.SPU.CTS.Shares.Constants;

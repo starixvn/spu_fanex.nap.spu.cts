@@ -12,6 +12,10 @@
         IEnumerable<ProblemAccountsEntity> GetProblemAccounts(DateTime? dateTime, string serviceName, bool isWriteLog);
 
         IEnumerable<int> InsertProblemAccountToCTS(IEnumerable<ProblemAccountsEntity> problemAccounts, bool isRescan, string serviceName, bool isWriteLog);
+        
+        IEnumerable<ProblemAccountsEntity> GetProblemAccounts_IBC(string custIDs, DateTime? dateTime);
+
+        IEnumerable<ProblemAccountsEntity> GetProblemAccounts_CN88(string custIDs, DateTime? dateTime);
     }
 
     public class ProblemAccountServices : IProblemAccountServices
@@ -31,9 +35,9 @@
 
             string custIDs = (dateTime == null) ? Constants.InitialProblemAccounts : Constants.ProblemAccountByDateTime;
 
-            problemAccounts.AddRange(problemAccountDataAccess.GetProblemAccounts_IBC(custIDs, dateTime));
+            problemAccounts.AddRange(GetProblemAccounts_IBC(custIDs, dateTime));
 
-            problemAccounts.AddRange(problemAccountDataAccess.GetProblemAccounts_CN88(custIDs, dateTime));
+            problemAccounts.AddRange(GetProblemAccounts_CN88(custIDs, dateTime));
 
             Utilities.LogSentryInfo(serviceName, "Get ProblemAccount", problemAccounts, isWriteLog, sentryClient);
             return problemAccounts;
@@ -57,6 +61,16 @@
             }
 
             return new List<int>();
+        }
+
+        public IEnumerable<ProblemAccountsEntity> GetProblemAccounts_IBC (string custIDs, DateTime? dateTime)
+        {
+           return problemAccountDataAccess.GetProblemAccounts_IBC(custIDs, dateTime);
+        }
+
+        public IEnumerable<ProblemAccountsEntity> GetProblemAccounts_CN88(string custIDs, DateTime? dateTime)
+        {
+            return problemAccountDataAccess.GetProblemAccounts_CN88(custIDs, dateTime);
         }
     }
 }

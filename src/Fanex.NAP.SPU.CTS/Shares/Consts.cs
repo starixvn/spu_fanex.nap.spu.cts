@@ -14,12 +14,8 @@
 
         public const int Realtime_SleepTimes = 3000;
 
-        public enum UPDATECUSTOMER : int
-        {
-            FROM_CUSTOMER = 1,
-            FROM_CUSTINFO = 2
-        };
-
+        public const int RemoveEvidences_ClearActionId = 3;
+        
         public enum MatchMonitorQueryTypes
         {
             Service = 1,
@@ -35,21 +31,42 @@
 
         public enum DangerLevel
         {
-            ORIGINAL = 1,
+            Original = 1,
             ABI = 2,
-            OTHER = 3
+            Other = 3
         }
 
         public enum Category
         {
-            NEWMEMBER = 201,
-            NORMALMEMBER = 202,
-            SMARTPUNTER = 203,
-            HIGHRISKPUNTER = 204,
+            Newmember = 201,
+            NormalMember = 202,
+            SmartPunter = 203,
+            HighRishPunter = 204,
             VIP = 205,
-            PROBATION = 206,
+            Probation = 206,
             VVIP = 213,
-            ROBOT = 61
+            Robot = 61
+        };
+
+        public enum CustomerRole
+        {
+            Member = 1,
+            Agent = 2,
+            Master = 3,
+            Super = 4
+        };
+
+        public enum FlowTypeRescanCC
+        {
+            NewMember,
+            RemoveMultipleEvidence,
+            Other
+        };
+        
+        public enum UPDATECUSTOMER : int
+        {
+            FROM_CUSTOMER = 1,
+            FROM_CUSTINFO = 2
         };
     }
 }

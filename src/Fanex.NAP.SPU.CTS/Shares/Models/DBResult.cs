@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.SPU.CTS.Features.PushDataToExternal.CustClassificationToMainDB
+﻿namespace Fanex.NAP.SPU.CTS.Shares.Models
 {
     using Newtonsoft.Json;
     using System.Collections;

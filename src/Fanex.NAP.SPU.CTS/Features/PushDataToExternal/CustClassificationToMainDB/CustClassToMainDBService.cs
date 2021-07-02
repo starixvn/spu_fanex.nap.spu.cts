@@ -89,18 +89,18 @@
                 return;
             }
 
-            var dangerLevels = custClassToMainDBDataAccess.GetDangerLevel(string.Join(",", lastestClassifications.Select(c => c.CustId)), DangerLevel.ORIGINAL);
+            var dangerLevels = custClassToMainDBDataAccess.GetDangerLevel(string.Join(",", lastestClassifications.Select(c => c.CustId)), DangerLevel.Original);
             Utilities.LogSentryInfo(serviceName, "Get GetDangerLevel", dangerLevels, isWriteLog, sentryClient);
 
             if (dangerLevels != null && dangerLevels.Any())
             {
-                var isUpdateSuccessful = RetryUpdateDangerLevelToMainDB(dangerLevels, DangerLevel.ORIGINAL, Constants.RetryPushCCToExternal, serviceName);
+                var isUpdateSuccessful = RetryUpdateDangerLevelToMainDB(dangerLevels, DangerLevel.Original, Constants.RetryPushCCToExternal, serviceName);
 
                 if (isUpdateSuccessful)
                 {
                     var jsonUpdateApplyCCs = JsonConvert.SerializeObject(dangerLevels);
 
-                    custClassToMainDBDataAccess.UpdateAppliedDangerLevel(jsonUpdateApplyCCs, DangerLevel.ORIGINAL);
+                    custClassToMainDBDataAccess.UpdateAppliedDangerLevel(jsonUpdateApplyCCs, DangerLevel.Original);
                 }
 
                 Utilities.LogSentryInfo(serviceName, "UpdateDangerLevelToMainDB done", (isUpdateSuccessful, lastestClassifications), isWriteLog, sentryClient);

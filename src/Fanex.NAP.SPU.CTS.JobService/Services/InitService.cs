@@ -10,7 +10,9 @@
     using Fanex.NAP.SPU.CTS.Features.CustomerClassification.ProbationClassification;
     using Fanex.NAP.SPU.CTS.Features.CustomerClassification.ProblemAccountInsert;
     using Fanex.NAP.SPU.CTS.Features.CustomerClassification.RealtimeClassification;
+    using Fanex.NAP.SPU.CTS.Features.CustomerClassification.RescanCustomerClassification;
     using Fanex.NAP.SPU.CTS.Features.CustomerClassification.RobotAccountInsert;
+    using Fanex.NAP.SPU.CTS.Features.Evidence.MultipleAccountRemoveEvidence;
     using Fanex.NAP.SPU.CTS.Features.ExistingCustomer;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
     using Fanex.NAP.SPU.CTS.Features.PushDataToExternal.CustClassificationToMainDB;
@@ -55,6 +57,8 @@
             RegisterProbationClassification(services);
 
             RegisteRobotAccountInsert(services);
+
+            RegisteRemoveAccountEvidences(services);
         }
 
         private static void RegisterNAPService(this IServiceCollection services)
@@ -155,6 +159,13 @@
             services.AddSingleton<IRobotAccountInsertJobService, RobotAccountInsertJobService>();
         }
 
+        private static void RegisteRemoveAccountEvidences(this IServiceCollection services)
+        {
+            services.AddSingleton<IRemoveAccountEvidenceDataAccess, RemoveAccountEvidenceDataAccess>();
+            services.AddSingleton<IRemoveAccountEvidenceServices, RemoveAccountEvidenceServices>();
+            services.AddSingleton<IRemoveAccountEvidenceJobService, RemoveAccountEvidenceJobService>();
+        }
+
         private static void RegisterDataAccesLayer(this IServiceCollection services)
         {
             services.AddSingleton<ISystemParameterServices, SystemParameterServices>();
@@ -165,6 +176,9 @@
 
             services.AddSingleton<IFeedSoon88DataAccess, FeedSoon88DataAccess>();
             services.AddSingleton<IFeedSoon88Services, FeedSoon88Services>();
+
+            services.AddSingleton<IRescanCustClassificationDataAccess, RescanCustClassificationDataAccess>();
+            services.AddSingleton<IRescanCustClassificationService, RescanCustClassificationService>();
         }
     }
 }

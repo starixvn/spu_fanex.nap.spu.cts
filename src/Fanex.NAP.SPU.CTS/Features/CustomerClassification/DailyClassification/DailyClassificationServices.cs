@@ -10,6 +10,10 @@
         IEnumerable<CustClassificationDailyEntity> GetCustClassificationForDailyScanning(int batchQuantity, int rowQuantityPerBatch);
 
         void ScanningDailyClassification(IEnumerable<CustClassificationDailyEntity> customers, bool isCheckLast14Days);
+
+        void ClassifyCustomerGeneralCategoryDaily(IEnumerable<CustClassificationDailyEntity> customers, bool isCheckLast14Days);
+
+        void ClassifyCustomerGeneralCategoryDaily(IEnumerable<int> customers, bool isCheckLast14Days);
     }
 
     public class DailyClassificationServices : IDailyClassificationServices
@@ -49,6 +53,16 @@
                 var custIds = string.Join(",", customers.Select(c => c.CustId));
 
                 dailyClassificationDataAccess.ClassifyCustomerGeneralCategoryDaily(custIds, isCheckLast14Days);
+            }
+        }
+
+        public void ClassifyCustomerGeneralCategoryDaily(IEnumerable<int> customers, bool isCheckLast14Days)
+        {
+            if (customers != null && customers.Any())
+            {
+                var custIdToString = string.Join(",", customers);
+
+                dailyClassificationDataAccess.ClassifyCustomerGeneralCategoryDaily(custIdToString, isCheckLast14Days);
             }
         }
 
