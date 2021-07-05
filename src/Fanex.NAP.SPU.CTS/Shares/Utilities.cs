@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using Sentry;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -93,6 +94,14 @@ namespace Fanex.NAP.SPU.CTS.Shares
                 .AddMessage($"{message} - Data {JsonConvert.SerializeObject(data)} - { DateTime.Now}").ToString();
 
             sentryClient.CaptureMessage(logMessage, Sentry.Protocol.SentryLevel.Error);
+        }
+
+        public static string ReadTextFile(string filePath)
+        {
+            using (var sr = new StreamReader(filePath))
+            {
+                return sr.ReadToEnd();
+            }
         }
     }
 }

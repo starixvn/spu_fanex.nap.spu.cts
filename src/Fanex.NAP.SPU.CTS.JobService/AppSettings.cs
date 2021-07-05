@@ -8,6 +8,8 @@
     {
         int Environment { get; }
 
+        string EvironmentName { get; }
+
         string SPName { get; }
 
         string Soon88FeedDataAPI { get; }
@@ -34,6 +36,10 @@
 
         bool RemoveAccountEvidenceIsWriteLog { get; }
 
+        bool CustomerEvidenceIsSendMailToSPU { get; }
+
+        int CustomerEvidenceMailingToSPU { get; }
+
         bool UpdateIsWriteLogSetting(string serviceName, bool isWriteLog);
 
         bool InterruptDailyScanningJob(bool isInterrupted);
@@ -44,6 +50,7 @@
         private readonly IConfiguration configuration;
 
         private readonly string environment;
+        private readonly string evironmentName;
         private readonly string spName;
         private readonly int matchMonitorNumberOfThread;
         private readonly string soon88FeedDataAPI;
@@ -54,6 +61,7 @@
             this.configuration = configuration;
 
             environment = GetValue<string>(nameof(Environment));
+            evironmentName = GetValue<string>(nameof(Environment));
             spName = GetValue<string>(nameof(SPName));
             soon88FeedDataAPI = GetValue<string>(nameof(Soon88FeedDataAPI));
             matchMonitorNumberOfThread = GetValue<int>("MatchMonitor:NumberOfThread");
@@ -80,6 +88,8 @@
             }
         }
 
+        public string EvironmentName => evironmentName;
+
         public string SPName => spName;
 
         public string Soon88FeedDataAPI => soon88FeedDataAPI;
@@ -105,6 +115,10 @@
         public string RobotAccountCreditSites => GetValue<string>("RobotAccountInsert:Credit-Sites");
 
         public bool RemoveAccountEvidenceIsWriteLog => GetValue<bool>("RemoveAccountEvidence:IsWriteLog");
+
+        public bool CustomerEvidenceIsSendMailToSPU => GetValue<bool>("CustomerEvidenceInsert:IsSendMailToSPU");
+
+        public int CustomerEvidenceMailingToSPU => GetValue<int>("CustomerEvidenceInsert:MailingIdToSPU");
 
         #endregion Variables
 
