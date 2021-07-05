@@ -10,7 +10,7 @@
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_TransformUpdateLastLoginTime";
+            return "CTS_DC_CustInfo_UpdateLastLoginTime";
         }
 
         public override bool IsValid()

@@ -10,7 +10,7 @@
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_TransformAssociation_AffectedEvidence";
+            return "CTS_DC_CustEvidence_InsertFromAssociation";
         }
 
         public override bool IsValid()

@@ -10,7 +10,7 @@
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_InsertUserPermission";
+            return "CTS_DC_Common_InsertUserPermission";
         }
 
         public override bool IsValid()

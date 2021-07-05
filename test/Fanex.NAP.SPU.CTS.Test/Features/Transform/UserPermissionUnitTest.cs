@@ -12,13 +12,13 @@
     using System.Threading.Tasks;
     using Xunit;
 
-    public class UserPermission
+    public class UserPermissionUnitTest
     {
         private readonly IUserPermissionService permissionService;
         private readonly IUserPermissionDataAccess dataAccess;
         private readonly ISentryClient sentryClient;
 
-        public UserPermission()
+        public UserPermissionUnitTest()
         {
             dataAccess = Substitute.For<IUserPermissionDataAccess>();
             sentryClient = Substitute.For<ISentryClient>();

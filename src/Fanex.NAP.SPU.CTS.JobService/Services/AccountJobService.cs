@@ -44,15 +44,19 @@ namespace Fanex.NAP.SPU.CTS.JobService.Services
         private void JobRun(int size, int numberOfBatch)
         {
             var rawAccounts = accountServices.GetRawAccount(size, numberOfBatch);
-
-            if (rawAccounts != null && rawAccounts.Any())
+            if (rawAccounts.Any())
             {
-                var result = accountServices.TransformAccount(rawAccounts);
+                var groupAccounts = rawAccounts.GroupBy(x => x.BatchId);
 
-                if (result.ErrorCode != 0)
+                Parallel.ForEach(groupAccounts, accounts =>
                 {
-                    sentryClient.CaptureMessage(result.ErrorMessage, SentryLevel.Error);
-                }
+                    var result = accountServices.TransformAccount(accounts);
+
+                    if (result.ErrorCode != 0)
+                    {
+                        sentryClient.CaptureMessage(result.ErrorMessage, SentryLevel.Error);
+                    }
+                });
             }
         }
     }

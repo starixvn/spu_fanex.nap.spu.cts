@@ -10,7 +10,7 @@
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_TransformAssociationByDevice";
+            return "CTS_DC_Association_InsertAssociationByDevice";
         }
 
         public override bool IsValid()

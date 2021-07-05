@@ -31,10 +31,7 @@ namespace Fanex.NAP.SPU.CTS.Features.Accounts
                 NumberOfBatch = numOfBatch
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<AccountEntity>(criteria);
-            }
+            return repository.Fetch<AccountEntity>(criteria);
         }
 
         public DataResult TransformDCSAccount(string accountJson)
