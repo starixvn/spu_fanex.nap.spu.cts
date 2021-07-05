@@ -12,6 +12,7 @@
     using Fanex.NAP.SPU.CTS.Features.CustomerClassification.RealtimeClassification;
     using Fanex.NAP.SPU.CTS.Features.CustomerClassification.RescanCustomerClassification;
     using Fanex.NAP.SPU.CTS.Features.CustomerClassification.RobotAccountInsert;
+    using Fanex.NAP.SPU.CTS.Features.Evidence.CustomerEvidenceInsert;
     using Fanex.NAP.SPU.CTS.Features.Evidence.MultipleAccountRemoveEvidence;
     using Fanex.NAP.SPU.CTS.Features.ExistingCustomer;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
@@ -57,6 +58,8 @@
             RegisterProbationClassification(services);
 
             RegisteRobotAccountInsert(services);
+
+            RegisteCustomerEvidencesInsert(services);
 
             RegisteRemoveAccountEvidences(services);
         }
@@ -164,6 +167,14 @@
             services.AddSingleton<IRemoveAccountEvidenceDataAccess, RemoveAccountEvidenceDataAccess>();
             services.AddSingleton<IRemoveAccountEvidenceServices, RemoveAccountEvidenceServices>();
             services.AddSingleton<IRemoveAccountEvidenceJobService, RemoveAccountEvidenceJobService>();
+        }
+
+        private static void RegisteCustomerEvidencesInsert(this IServiceCollection services)
+        {
+            services.AddSingleton<ICustomerEvidenceInsertDataAccess, CustomerEvidenceInsertDataAccess>();
+            services.AddSingleton<ICustomerEvidenceInsertServices, CustomerEvidenceInsertServices>();
+            services.AddSingleton<ICustomerEvidenceSendMailServices, CustomerEvidenceSendMailServices>();
+            services.AddSingleton<ICustomerEvidenceInsertJobService, CustomerEvidenceInsertJobService>();
         }
 
         private static void RegisterDataAccesLayer(this IServiceCollection services)

@@ -5,7 +5,7 @@
     using System.Threading.Tasks;
 
     [ApiController]
-    [Route("api/evidencesjob")]
+    [Route("api/evidenceJobs")]
     public class EvidencesJobController : ControllerBase
     {
         private readonly IRemoveAccountEvidenceJobService removeAccountEvidenceJobService;
@@ -25,7 +25,7 @@
             return await this.removeAccountEvidenceJobService.Execute(batchExternalSize, batchInternalSize);
         }
 
-        [HttpPost("customerAccountEvidence")]
+        [HttpPost("insertAccountEvidence")]
         public async Task<bool> CustomerAccountEvidences([FromForm] int batchExternalSize, [FromForm] int batchInternalSize)
         {
             return await this.customerEvidenceInsertJobService.Execute(batchExternalSize, batchInternalSize);
