@@ -11,16 +11,15 @@
 
     public interface IUserPermissionService
     {
-        UserPermissionService InsertUserPermission();
+        void InsertUserPermission(IEnumerable<UserPermissionModel> userPermissions);
 
-        UserPermissionService Start();
+        List<UserPermissionModel> GetUserPermissionFromNAP(string functionName, int functionKey, int siteId, bool isWriteLogInfo);
 
-        UserPermissionService SyncUserPermission(string functionName, int functionKey, int siteId, bool isWriteLogInfo);
+        UserPermissionModel TransformUserPermission(UserPolicy userPolicy, int functionKey);
     }
 
     public class UserPermissionService : IUserPermissionService
     {
-        private List<UserPermissionModel> userPermissions;
         private readonly IUserPermissionDataAccess dataAccess;
         private readonly ISentryClient sentryClient;
         private readonly UserService userService;
@@ -32,23 +31,15 @@
             userService = new UserService();
         }
 
-        public UserPermissionService Start()
-        {
-            userPermissions = new List<UserPermissionModel>();            
-            return this;
-        }
-
-        public UserPermissionService InsertUserPermission()
+        public void InsertUserPermission(IEnumerable<UserPermissionModel> userPermissions)
         {
             if (userPermissions != null && userPermissions.Any())
             {
                 dataAccess.InsertUserPermission(JsonConvert.SerializeObject(userPermissions));
             }
-
-            return this;
         }
 
-        public UserPermissionService SyncUserPermission(string functionName, int functionKey, int siteId, bool isWriteLogInfo)
+        public List<UserPermissionModel> GetUserPermissionFromNAP(string functionName, int functionKey, int siteId, bool isWriteLogInfo)
         {
             var userPolicy = userService.GetUserPolicies(functionName, siteId);
             Utilities.LogSentryInfo("UserPermisison", "Get User Permission", userPolicy, isWriteLogInfo, sentryClient);
@@ -56,17 +47,13 @@
             if (userPolicy != null && userPolicy.Any())
             {
                 var userPermission = userPolicy.Select(x => TransformUserPermission(x, functionKey));
-
-                if (userPermission != null && userPermission.Any())
-                {
-                    userPermissions.AddRange(userPermission);
-                }
+                return userPermission.ToList();
             }
 
-            return this;
+            return new List<UserPermissionModel>();
         }
 
-        private UserPermissionModel TransformUserPermission(UserPolicy userPolicy, int functionKey)
+        public UserPermissionModel TransformUserPermission(UserPolicy userPolicy, int functionKey)
         {
             return new UserPermissionModel
             {

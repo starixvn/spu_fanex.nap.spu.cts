@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.SPU.DCS.Tests.Features.Monitor
+﻿namespace Fanex.NAP.SPU.CTS.Tests.Features.Monitor
 {
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
     using Fanex.NAP.SPU.CTS.Features.SystemParameter;

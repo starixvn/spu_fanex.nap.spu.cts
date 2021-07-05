@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
-namespace Fanex.NAP.SPU.DCS.Tests.Features.Accounts
+namespace Fanex.NAP.SPU.CTS.Tests.Features.Accounts
 {
     public class AccountTests
     {
@@ -79,7 +79,7 @@ namespace Fanex.NAP.SPU.DCS.Tests.Features.Accounts
             };
 
             accountDataAccess.GetRawAccount(100, 2).Returns(accountEntity);
-
+            
             var result = accountServices.GetRawAccount(100, 2);
 
             result.Should().BeEquivalentTo(accountEntity);
