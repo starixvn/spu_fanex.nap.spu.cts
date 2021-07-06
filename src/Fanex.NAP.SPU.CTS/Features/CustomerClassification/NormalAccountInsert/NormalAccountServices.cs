@@ -14,9 +14,13 @@
 
         IEnumerable<CustAssociationProblemAccountEntity> GetCustomerAssociationProblemAccount(IEnumerable<CustomerClassificationEntity> listClassification);
 
+        bool UpdateAppliedStatusClassification(IEnumerable<CustomerClassificationEntity> custClassifications);
+
         IEnumerable<int> InsertMainCustomerClassification(IEnumerable<CustomerClassificationEntity> custClassifications
                                                         , IEnumerable<CustAssociationProblemAccountEntity> custAssociationPA
                                                         , string serviceName, bool isWriteLog);
+
+        string MergeCustomerClassificationInfo(IEnumerable<CustomerClassificationEntity> custClassification, IEnumerable<CustAssociationProblemAccountEntity> custAssociationPA);
     }
 
     public class NormalAccountServices : INormalAccountServices
@@ -86,7 +90,7 @@
             return new List<int>();
         }
 
-        public void UpdateAppliedStatusClassification(IEnumerable<CustomerClassificationEntity> custClassifications)
+        public bool UpdateAppliedStatusClassification(IEnumerable<CustomerClassificationEntity> custClassifications)
         {
             if (custClassifications != null && custClassifications.Any())
             {
@@ -94,6 +98,8 @@
 
                 normalAccountDataAccess.UpdateAppliedStatusClassification(string.Join(",", custIds), true);
             }
+
+            return true;
         }
 
         public string MergeCustomerClassificationInfo(IEnumerable<CustomerClassificationEntity> custClassification, IEnumerable<CustAssociationProblemAccountEntity> custAssociationPA)

@@ -6,7 +6,7 @@
 
     public class CTSCustomerUnitTest
     {
-        private readonly i permissionService;
+        private readonly UserPermissionService permissionService;
         private readonly IUserPermissionDataAccess dataAccess;
         private readonly ISentryClient sentryClient;
 
