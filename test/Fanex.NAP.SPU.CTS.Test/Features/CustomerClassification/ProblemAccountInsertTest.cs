@@ -80,24 +80,6 @@
         [Fact]
         public void GetProblemAccounts_WhenSuccess_ReturnProblemAccountList()
         {
-            var problemAccounts = new List<ProblemAccountsEntity> {
-                new ProblemAccountsEntity
-                {
-                  CustID = 1,
-                  ReasonID=1
-                },
-                 new ProblemAccountsEntity
-                {
-                      CustID = 2,
-                  ReasonID=2
-                },
-                  new ProblemAccountsEntity
-                {
-                     CustID = 3,
-                  ReasonID=3
-                },
-            };
-
             var result = problemAccountServices.GetProblemAccounts(DateTime.Now, "ProblemAccountInsert", false);
 
             result.Should().NotBeNull();

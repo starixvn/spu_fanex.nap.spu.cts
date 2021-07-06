@@ -4,11 +4,7 @@
     using Fanex.NAP.SPU.CTS.Features.Transform.AssociationByDevice.Entities;
     using NSubstitute;
     using Sentry;
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using Xunit;
 
     public class AssociationByDeviceUnitTest
