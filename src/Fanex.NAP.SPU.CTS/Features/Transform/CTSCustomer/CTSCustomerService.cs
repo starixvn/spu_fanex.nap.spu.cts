@@ -23,6 +23,8 @@
         List<CustomerMainDBModel> GetCustSubFromMainDB(int numOfAccount, Int64 lastScannedCustID);
 
         UpdateCustomerModel PrepareData(UpdateCustomerModel customers, List<CustomerMainDBModel> custSubs);
+
+        bool InsertNewCustomer(UpdateCustomerModel data, bool isWriteLogInfo, int internalBatchSize);
     }
 
     public class CTSCustomerService : ICTSCustomerService
@@ -96,8 +98,11 @@
             return custsToCTS;
         }
 
-        private bool InsertNewCustomer(List<CustomerMainDBModel> customers, long? lastCustID, bool isWriteLogInfo, int internalBatchSize)
+        public bool InsertNewCustomer(UpdateCustomerModel data, bool isWriteLogInfo, int internalBatchSize)
         {
+            var customers = data.CustomerInfos;
+            var lastCustID = data.LastInsertCustID;
+
             try
             {
                 Utilities.LogSentryInfo(serviceName, "InsertNewCustomer start", customers, isWriteLogInfo, sentryClient);

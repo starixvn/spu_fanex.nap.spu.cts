@@ -10,6 +10,7 @@
 
     public interface ICTSCustomerJobService
     {
+        Task<bool> Execute(int batchSize, int numOfBatch);
     }
 
     public class CTSCustomerJobService : ICTSCustomerJobService
@@ -30,14 +31,12 @@
             try
             {
                 var lastScanned = ctscustomerService.GetLastInsertCust();
-
                 var customers = ctscustomerService.GetCustomerFromMainDB(batchSize, lastScanned.LastCustID);
-
                 var custSubs = ctscustomerService.GetCustSubFromMainDB(batchSize, lastScanned.LastCustSubID).ToList();
-
                 var custsToCTS = ctscustomerService.PrepareData(customers, custSubs);
 
-                return Task.FromResult(true);
+                var result = ctscustomerService.InsertNewCustomer(custsToCTS, true, 100);
+                return Task.FromResult(result);
             }
             catch (Exception ex)
             {
