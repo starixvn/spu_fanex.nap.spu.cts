@@ -13,7 +13,7 @@
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_UpdateSystemParameterById";
+            return "CTS_DC_SystemParameter_Update";
         }
 
         public override bool IsValid()

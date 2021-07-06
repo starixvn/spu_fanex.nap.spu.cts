@@ -4,18 +4,18 @@
     using Fanex.Data.Repository;
     using static Fanex.NAP.SPU.CTS.Shares.Constants;
 
-    public interface IPreviousParameterDataAccess
+    public interface ISystemParameterDataAccess
     {
         SystemParameterEntity GetPreviousTimingExecution(SystemParameters paramID);
 
-        void UpdateTimingExecution(string paraValue, int paramId);
+        void UpdateTimingExecution(string paraValue, SystemParameters paramId);
     }
 
-    public class PreviousParameterDataAccess : IPreviousParameterDataAccess
+    public class SystemParameterDataAccess : ISystemParameterDataAccess
     {
         private readonly IDynamicRepository repository;
 
-        public PreviousParameterDataAccess()
+        public SystemParameterDataAccess()
         {
             repository = new DynamicRepository();
         }
@@ -33,11 +33,11 @@
             }
         }
 
-        public void UpdateTimingExecution(string paraValue, int paramId)
+        public void UpdateTimingExecution(string paraValue, SystemParameters paramId)
         {
             var criteria = new PreviousTimingExecutionUpdateCriteria
             {
-                ParamId = paramId,
+                ParamId = (int)paramId,
                 ParamValue = paraValue
             };
 

@@ -1,11 +1,9 @@
 ﻿using Fanex.NAP.SPU.CTS.Features.Accounts;
 using Fanex.NAP.SPU.CTS.Features.Accounts.Entities;
 using FluentAssertions;
-using Newtonsoft.Json;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 
 namespace Fanex.NAP.SPU.CTS.Tests.Features.Accounts
@@ -21,8 +19,6 @@ namespace Fanex.NAP.SPU.CTS.Tests.Features.Accounts
 
             accountServices = new AccountServices(accountDataAccess);
         }
-
-
 
         [Fact]
         public void GetRawAccount_WhenSuccess_ReturnAccountList()
@@ -79,7 +75,7 @@ namespace Fanex.NAP.SPU.CTS.Tests.Features.Accounts
             };
 
             accountDataAccess.GetRawAccount(100, 2).Returns(accountEntity);
-            
+
             var result = accountServices.GetRawAccount(100, 2);
 
             result.Should().BeEquivalentTo(accountEntity);

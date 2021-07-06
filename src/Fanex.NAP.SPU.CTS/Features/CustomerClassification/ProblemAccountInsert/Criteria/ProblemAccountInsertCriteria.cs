@@ -16,7 +16,7 @@
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_InsertCategorizedProblemAccounts";
+            return "CTS_DC_CustClassification_InsertProblemAccount";
         }
 
         public override bool IsValid()

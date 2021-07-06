@@ -180,7 +180,7 @@
         private static void RegisterDataAccesLayer(this IServiceCollection services)
         {
             services.AddSingleton<ISystemParameterServices, SystemParameterServices>();
-            services.AddSingleton<IPreviousParameterDataAccess, PreviousParameterDataAccess>();
+            services.AddSingleton<ISystemParameterDataAccess, SystemParameterDataAccess>();
 
             services.AddSingleton<ICustClassToMainDBDataAccess, CustClassToMainDBDataAccess>();
             services.AddSingleton<ICustClassToMainDBService, CustClassToMainDBService>();
