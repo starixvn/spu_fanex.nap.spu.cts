@@ -92,7 +92,7 @@
             {
                 newClassification = normalAccountServices.GetNewClassification(serviceName, isWriteLog);
 
-                if (newClassification.GeneralCustClassifications == null || !newClassification.GeneralCustClassifications.Any())
+                if (newClassification.GeneralCustClassifications != null && newClassification.GeneralCustClassifications.Any())
                 {
                     var generalClassificationChunk = newClassification.GeneralCustClassifications.Chunk(batchInternalSize).ToList();
 

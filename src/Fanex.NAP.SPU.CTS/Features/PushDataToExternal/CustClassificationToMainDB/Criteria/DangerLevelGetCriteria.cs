@@ -12,7 +12,7 @@
         public int TypeID { get; set; }
 
         public override string GetSettingKey()
-            => "CTS_DC_CustClassification_DangerLevel_Get";
+            => "CTS_DC_CustClassification_GetDangerLevel";
 
         public override bool IsValid()
             => true;

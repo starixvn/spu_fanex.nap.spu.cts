@@ -13,7 +13,7 @@
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_GetCustomerClassificationIntervalScan";
+            return "CTS_DC_CustClassification_DailyScan_Get";
         }
 
         public override bool IsValid()

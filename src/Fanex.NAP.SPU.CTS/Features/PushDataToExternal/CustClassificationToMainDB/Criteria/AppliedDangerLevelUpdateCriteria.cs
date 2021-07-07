@@ -13,7 +13,7 @@
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_CustClassification_DangerLevel_UpdateFlag";
+            return "CTS_DC_CustClassification_UpdateDangerLevel";
         }
 
         public override bool IsValid()

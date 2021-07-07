@@ -13,7 +13,7 @@
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_InsertMainCustomerClassification";
+            return "CTS_DC_CustClassification_InsertNormalAccount";
         }
 
         public override bool IsValid()
