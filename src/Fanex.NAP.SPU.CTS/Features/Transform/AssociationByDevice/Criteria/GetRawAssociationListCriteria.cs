@@ -13,7 +13,7 @@
 
         public override string GetSettingKey()
         {
-            return "DCS_DC_TransformToCTS_Association_GetPackage";
+            return "DCS_DC_Transform_Association_GetPackage";
         }
 
         public override bool IsValid()

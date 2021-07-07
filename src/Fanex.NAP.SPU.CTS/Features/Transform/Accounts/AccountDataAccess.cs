@@ -11,6 +11,8 @@ namespace Fanex.NAP.SPU.CTS.Features.Transform.Accounts
         DataResult TransformDCSAccount(string accountJson);
 
         IEnumerable<AccountEntity> GetRawAccount(int numOfAccount, int numOfBatch);
+
+        void ReTranformAccount(string jsonData, long? lastCustID);
     }
 
     public class AccountDataAccess : IAccountDataAccess
@@ -46,6 +48,24 @@ namespace Fanex.NAP.SPU.CTS.Features.Transform.Accounts
             {
                 ErrorCode = errorCode
             };
+        }
+
+        public void ReTranformAccount(string jsonData, long? lastCustID)
+        {
+            if (string.IsNullOrEmpty(jsonData))
+            {
+                return;
+            }
+
+            var repository = new DynamicRepository();
+
+            var criteria = new ReTransformAccountCriteria
+            {
+                CustomerInfo = jsonData,
+                LastInsertCustID = lastCustID
+            };
+
+            repository.Execute(criteria);
         }
     }
 }

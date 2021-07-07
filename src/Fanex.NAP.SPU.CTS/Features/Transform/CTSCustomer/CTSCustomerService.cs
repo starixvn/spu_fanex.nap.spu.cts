@@ -2,6 +2,8 @@
 {
     using Fanex.NAP.Client.Models.ValueObject;
     using Fanex.NAP.Client.Services;
+    using Fanex.NAP.SPU.CTS.Features.CustomerClassification.RescanCustomerClassification;
+    using Fanex.NAP.SPU.CTS.Features.Transform.Accounts;
     using Fanex.NAP.SPU.CTS.Features.Transform.CTSCustomer;
     using Fanex.NAP.SPU.CTS.Features.Transform.CTSCustomer.Entities;
     using Fanex.NAP.SPU.CTS.Features.UserPermission.Entities;
@@ -24,18 +26,25 @@
 
         UpdateCustomerModel PrepareData(UpdateCustomerModel customers, List<CustomerMainDBModel> custSubs);
 
-        bool InsertNewCustomer(UpdateCustomerModel data, bool isWriteLogInfo, int internalBatchSize);
+        bool InsertNewCustomer(UpdateCustomerModel data, bool isWriteLogInfo, int internalBatchSize, string soon88Url);
     }
 
     public class CTSCustomerService : ICTSCustomerService
     {
         private readonly ICTSCustomerDataAccess dataAccess;
         private readonly ISentryClient sentryClient;
+        private readonly IRescanCustClassificationService rescanClassificationService;
+        private readonly IAccountServices accountService;
         private readonly string serviceName = "CTSCustomerService";
 
-        public CTSCustomerService(ICTSCustomerDataAccess dataAccess, ISentryClient sentryClient)
+        public CTSCustomerService(ICTSCustomerDataAccess dataAccess, 
+            ISentryClient sentryClient,
+            IRescanCustClassificationService rescanClassificationService,
+            IAccountServices accountService)
         {
             this.dataAccess = dataAccess;
+            this.rescanClassificationService = rescanClassificationService;
+            this.accountService = accountService;
             this.sentryClient = sentryClient;
         }
 
@@ -98,7 +107,7 @@
             return custsToCTS;
         }
 
-        public bool InsertNewCustomer(UpdateCustomerModel data, bool isWriteLogInfo, int internalBatchSize)
+        public bool InsertNewCustomer(UpdateCustomerModel data, bool isWriteLogInfo, int internalBatchSize, string soon88Url)
         {
             var customers = data.CustomerInfos;
             var lastCustID = data.LastInsertCustID;
@@ -124,8 +133,20 @@
                             {
                                 try
                                 {
-                                    var custToRescan = custIdList.Where(c => !c.IsExisting).Select(c => c.CustID).Distinct().ToList();
-                                    //_customerClassificationService.RescanCustomerClassify(custToRescan, true, true, Constants.FLOWTYPERESCANCC.NEWMEMBER);
+                                    var custToRescan = custIdList.Where(c => !c.IsExisting).Select(c => c.CustID).Distinct();
+                                    var rescanParam = new RescanParametersEntity
+                                    {
+                                        CustIds = custToRescan,
+                                        FlowTypeRescanCC = FlowTypeRescanCC.NewMember,
+                                        IsCheckPAFromNAP = true,
+                                        IsPushCCToSoon88 = true,
+                                        ServiceName = serviceName,
+                                        FeedSoon88API = soon88Url,
+                                        IsWriteLog = isWriteLogInfo,
+                                        InternalBatchSize = internalBatchSize,
+                                        ExternalBatchSize = internalBatchSize
+                                    };
+                                    rescanClassificationService.RescanCustomerClassify(rescanParam);
 
                                     Utilities.LogSentryInfo(serviceName, "InsertNewCustomer - RescanCustomerClassify done", custToRescan, isWriteLogInfo, sentryClient);
                                 }
@@ -139,7 +160,7 @@
                             {
                                 try
                                 {
-                                    //_dataCenterService.ReTransformAccount(JsonConvert.SerializeObject(custIdList), lastCustID);
+                                    accountService.ReTransformAccount(JsonConvert.SerializeObject(custIdList), lastCustID);
 
                                     Utilities.LogSentryInfo(serviceName, "InsertNewCustomer - Insert complete", custIdList, isWriteLogInfo, sentryClient);
                                 }

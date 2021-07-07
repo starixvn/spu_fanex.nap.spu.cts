@@ -10,7 +10,7 @@
 
     public interface ICTSCustomerJobService
     {
-        Task<bool> Execute(int batchSize, int numOfBatch);
+        Task<bool> InsertNewCustomer();
     }
 
     public class CTSCustomerJobService : ICTSCustomerJobService
@@ -26,16 +26,20 @@
             this.appSettings = appSettings;
         }
 
-        public Task<bool> Execute(int batchSize, int numOfBatch)
+        public Task<bool> InsertNewCustomer()
         {
             try
             {
+                var isWriteLog = appSettings.TransformCTSCustomerIsWriteLog;
+                var soon88Url = appSettings.Soon88FeedDataAPI;
+                var batchSize = appSettings.TransformCTSCustomerBatchSize;
+
                 var lastScanned = ctscustomerService.GetLastInsertCust();
                 var customers = ctscustomerService.GetCustomerFromMainDB(batchSize, lastScanned.LastCustID);
                 var custSubs = ctscustomerService.GetCustSubFromMainDB(batchSize, lastScanned.LastCustSubID).ToList();
                 var custsToCTS = ctscustomerService.PrepareData(customers, custSubs);
 
-                var result = ctscustomerService.InsertNewCustomer(custsToCTS, true, 100);
+                var result = ctscustomerService.InsertNewCustomer(custsToCTS, isWriteLog, batchSize, soon88Url);
                 return Task.FromResult(result);
             }
             catch (Exception ex)

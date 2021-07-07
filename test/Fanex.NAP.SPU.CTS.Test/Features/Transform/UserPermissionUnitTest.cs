@@ -4,13 +4,13 @@
     using NSubstitute;
     using Sentry;
 
-    public class CTSCustomerUnitTest
+    public class UserPermissionUnitTest
     {
         private readonly UserPermissionService permissionService;
         private readonly IUserPermissionDataAccess dataAccess;
         private readonly ISentryClient sentryClient;
 
-        public CTSCustomerUnitTest()
+        public UserPermissionUnitTest()
         {
             dataAccess = Substitute.For<IUserPermissionDataAccess>();
             sentryClient = Substitute.For<ISentryClient>();

@@ -40,6 +40,9 @@
 
         int CustomerEvidenceMailingToSPU { get; }
 
+        bool TransformCTSCustomerIsWriteLog { get; }
+        int TransformCTSCustomerBatchSize { get; }
+
         bool UpdateIsWriteLogSetting(string serviceName, bool isWriteLog);
 
         bool InterruptDailyScanningJob(bool isInterrupted);
@@ -119,6 +122,9 @@
         public bool CustomerEvidenceIsSendMailToSPU => GetValue<bool>("CustomerEvidenceInsert:IsSendMailToSPU");
 
         public int CustomerEvidenceMailingToSPU => GetValue<int>("CustomerEvidenceInsert:MailingIdToSPU");
+
+        public bool TransformCTSCustomerIsWriteLog => GetValue<bool>("TransformCTSCustomer:IsWriteLog");
+        public int TransformCTSCustomerBatchSize => GetValue<int>("TransformCTSCustomer:BatchSize");
 
         #endregion Variables
 

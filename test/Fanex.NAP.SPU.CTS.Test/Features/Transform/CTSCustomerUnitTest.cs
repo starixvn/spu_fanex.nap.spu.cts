@@ -1,28 +1,33 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Tests.Features.Transform
 {
-    using Fanex.NAP.Client.Models.ValueObject;
-    using Fanex.NAP.SPU.CTS.Features.UserPermission;
-    using Fanex.NAP.SPU.CTS.Shares;
+    using Fanex.NAP.SPU.CTS.Features.CTSCustomer;
+    using Fanex.NAP.SPU.CTS.Features.CustomerClassification.RescanCustomerClassification;
+    using Fanex.NAP.SPU.CTS.Features.Transform.Accounts;
+    using Fanex.NAP.SPU.CTS.Features.Transform.CTSCustomer;
+    using Fanex.NAP.SPU.CTS.JobService.Services.Transform;
     using NSubstitute;
     using Sentry;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-    using Xunit;
 
-    public class UserPermissionUnitTest
+    public class CTSCustomerUnitTest
     {
-        private readonly IUserPermissionService permissionService;
-        private readonly IUserPermissionDataAccess dataAccess;
+        private readonly ICTSCustomerService ctsCustomerService;
+        private readonly ICTSCustomerDataAccess dataAccess;
+        private readonly ICTSCustomerJobService ctsCustomerJobService;
+        private readonly IRescanCustClassificationService rescanClassificationService;
+        private readonly IAccountServices accountService;
         private readonly ISentryClient sentryClient;
 
-        public UserPermissionUnitTest()
+        public CTSCustomerUnitTest()
         {
-            dataAccess = Substitute.For<IUserPermissionDataAccess>();
+            dataAccess = Substitute.For<ICTSCustomerDataAccess>();
             sentryClient = Substitute.For<ISentryClient>();
-            permissionService = new UserPermissionService(dataAccess, sentryClient);
+            ctsCustomerService = new CTSCustomerService(dataAccess, sentryClient, rescanClassificationService, accountService);
+            //ctsCustomerJobService = new CTSCustomerJobService(sentryClient,ctsCustomerService)
+        }
+
+        public void Test()
+        {
+
         }
     }
 }
