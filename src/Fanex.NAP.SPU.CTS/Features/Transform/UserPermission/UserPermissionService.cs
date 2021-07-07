@@ -57,8 +57,8 @@
         {
             return new UserPermissionModel
             {
-                UserId = userPolicy.User.Id,
-                FuncId = functionKey
+                UserID = userPolicy.User.Id,
+                FuncID = functionKey
             };
         }
     }

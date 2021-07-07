@@ -2,8 +2,8 @@
 {
     public class UserPermissionModel
     {
-        public long UserId { get; set; }
+        public long UserID { get; set; }
 
-        public int FuncId { get; set; }
+        public int FuncID { get; set; }
     }
 }
