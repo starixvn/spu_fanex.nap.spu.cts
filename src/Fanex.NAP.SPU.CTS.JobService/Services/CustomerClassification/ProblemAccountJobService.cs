@@ -2,7 +2,6 @@
 {
     using Fanex.NAP.SPU.CTS.Features.CustomerClassification.ProblemAccountInsert;
     using Fanex.NAP.SPU.CTS.Features.PushDataToExternal.CustClassificationToMainDB;
-    using Fanex.NAP.SPU.CTS.Features.PushDataToExternal.FeedCCToSoon88;
     using Fanex.NAP.SPU.CTS.Features.SystemParameter;
     using Fanex.NAP.SPU.CTS.Shares;
     using Sentry;
@@ -26,7 +25,6 @@
         private readonly IProblemAccountServices problemAccountServices;
         private readonly ISystemParameterServices systemParameterServices;
         private readonly ICustClassToMainDBService custClassToMainDBService;
-        private readonly IFeedSoon88Services feedSoon88Services;
         private readonly IAppSettings appSettings;
         private IEnumerable<ProblemAccountsEntity> logData;
         private readonly bool isWriteLog;
@@ -36,14 +34,12 @@
             IProblemAccountServices problemAccountServices,
             ISystemParameterServices systemParameterServices,
             ICustClassToMainDBService pushDataToExternalService,
-            IFeedSoon88Services feedSoon88Services,
             IAppSettings appSettings)
         {
             this.sentryClient = sentryClient;
             this.problemAccountServices = problemAccountServices;
             this.systemParameterServices = systemParameterServices;
             this.custClassToMainDBService = pushDataToExternalService;
-            this.feedSoon88Services = feedSoon88Services;
             this.appSettings = appSettings;
             this.isWriteLog = appSettings.ProblemAccountIsWriteLog;
             this.serviceName = "ProblemAccountInsert";
@@ -108,29 +104,20 @@
 
                     if (custIds != null && custIds.Any())
                     {
-                        PushDataToExternal(custIds, batchExternalSize);
+                        custClassToMainDBService.PushDataToExternal(custIds, new PushDataToExternalEntity
+                        {
+                            ExternalBatchSize = batchExternalSize,
+                            FeedSoon88API = appSettings.Soon88FeedDataAPI,
+                            IsUpdateDangerToMainDB = false,
+                            IsPushCCToSoon88 = true,
+                            IsWriteLog = isWriteLog,
+                            ServiceName = serviceName
+                        });
                     }
                 }
             }
 
             systemParameterServices.UpdateTimingExecution(savedDataTime.ToString(Constants.CONVERT_TO_SQL_DATETIME), SystemParameters.ProblemAccountLastScannedTime);
-        }
-
-        private void PushDataToExternal(IEnumerable<int> custIds, int batchExternalSize)
-        {
-            var custIdsChunk = custIds.Chunk(batchExternalSize);
-
-            foreach (var items in custIdsChunk)
-            {
-                var lastestClassifications = custClassToMainDBService.GetLatestClassification(items, serviceName, isWriteLog);
-
-                if (lastestClassifications != null && lastestClassifications.Any())
-                {
-                    custClassToMainDBService.PushCustClassificationToMainDB(lastestClassifications, serviceName, isWriteLog);
-
-                    feedSoon88Services.FeedCCToSoon88(lastestClassifications, appSettings.Soon88FeedDataAPI, serviceName, isWriteLog);
-                }
-            }
         }
 
         #endregion Private Methods

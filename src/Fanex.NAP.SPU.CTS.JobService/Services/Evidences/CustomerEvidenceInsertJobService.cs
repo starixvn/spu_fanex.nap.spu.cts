@@ -129,25 +129,17 @@
 
             if (custEvidenceProcesseds.Any())
             {
-                PushDataToExternal(custEvidenceProcesseds.Select(x => x.CustID).Distinct(), externalBatchSize, false);
-                customerEvidenceInsertServices.UpdateBetLimitOfFlaggedCustomer(custEvidenceProcesseds);
-            }
-        }
+                var custIds = custEvidenceProcesseds.Select(x => x.CustID).Distinct();
 
-        private void PushDataToExternal(IEnumerable<int> custIds, int batchExternalSize, bool isWriteLog)
-        {
-            var custIdsChunk = custIds.Chunk(batchExternalSize);
-
-            foreach (var items in custIdsChunk)
-            {
-                var lastestClassifications = custClassToMainDBService.GetLatestClassification(items, serviceName, isWriteLog);
-
-                if (lastestClassifications != null && lastestClassifications.Any())
+                custClassToMainDBService.PushDataToExternal(custIds, new PushDataToExternalEntity
                 {
-                    custClassToMainDBService.PushCustClassificationToMainDB(lastestClassifications, serviceName, isWriteLog);
-
-                    feedSoon88Services.FeedCCToSoon88(lastestClassifications, appSettings.Soon88FeedDataAPI, serviceName, isWriteLog);
-                }
+                    ExternalBatchSize = externalBatchSize,
+                    FeedSoon88API = appSettings.Soon88FeedDataAPI,
+                    IsPushCCToSoon88 = true,
+                    IsUpdateDangerToMainDB = false,
+                    IsWriteLog = false,
+                    ServiceName = serviceName
+                });
             }
         }
 

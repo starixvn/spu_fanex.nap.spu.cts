@@ -1,7 +1,6 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.CustomerClassification.DailyClassification
 {
     using Newtonsoft.Json;
-    using Sentry;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -14,17 +13,17 @@
         void ClassifyCustomerGeneralCategoryDaily(IEnumerable<CustClassificationDailyEntity> customers, bool isCheckLast14Days);
 
         void ClassifyCustomerGeneralCategoryDaily(IEnumerable<int> customers, bool isCheckLast14Days);
+
+        void UpdateDailyClassificationStatus(IEnumerable<CustClassificationDailyEntity> customers);
     }
 
     public class DailyClassificationServices : IDailyClassificationServices
     {
         private readonly IDailyClassificationDataAccess dailyClassificationDataAccess;
-        private readonly ISentryClient sentryClient;
 
-        public DailyClassificationServices(IDailyClassificationDataAccess dailyClassificationDataAccess, ISentryClient sentryClient)
+        public DailyClassificationServices(IDailyClassificationDataAccess dailyClassificationDataAccess)
         {
             this.dailyClassificationDataAccess = dailyClassificationDataAccess;
-            this.sentryClient = sentryClient;
         }
 
         public IEnumerable<CustClassificationDailyEntity> GetCustClassificationForDailyScanning(int batchQuantity, int rowQuantityPerBatch)

@@ -3,20 +3,17 @@
     using Fanex.NAP.SPU.CTS.Features.CustomerClassification.ProblemAccountInsert;
     using Fanex.NAP.SPU.CTS.Features.CustomerClassification.RobotAccountInsert;
     using Fanex.NAP.SPU.CTS.Features.PushDataToExternal.CustClassificationToMainDB;
-    using Fanex.NAP.SPU.CTS.Features.PushDataToExternal.FeedCCToSoon88;
     using Fanex.NAP.SPU.CTS.Features.SystemParameter;
     using Fanex.NAP.SPU.CTS.Shares;
     using Sentry;
     using System;
-    using System.Collections.Generic;
     using System.Linq;
-    using System.Threading;
     using System.Threading.Tasks;
     using static Fanex.NAP.SPU.CTS.Shares.Constants;
 
     public interface IRobotAccountInsertJobService
     {
-        Task<bool> Execute(int batchSize);
+        Task<bool> Execute(int batchExternalSize, int batchInternalSize);
     }
 
     public class RobotAccountInsertJobService : IRobotAccountInsertJobService
@@ -27,7 +24,6 @@
         private readonly ISystemParameterServices systemParameterServices;
         private readonly ICustClassToMainDBService custClassToMainDBService;
         private readonly IProblemAccountServices problemAccountServices;
-        private readonly IFeedSoon88Services feedSoon88Services;
         private readonly IAppSettings appSettings;
         private readonly bool isWriteLog;
 
@@ -37,7 +33,6 @@
             ISystemParameterServices systemParameterServices,
             ICustClassToMainDBService custClassToMainDBService,
             IProblemAccountServices problemAccountServices,
-            IFeedSoon88Services feedSoon88Services,
             IAppSettings appSettings)
         {
             this.sentryClient = sentryClient;
@@ -45,23 +40,22 @@
             this.systemParameterServices = systemParameterServices;
             this.custClassToMainDBService = custClassToMainDBService;
             this.problemAccountServices = problemAccountServices;
-            this.feedSoon88Services = feedSoon88Services;
             this.appSettings = appSettings;
             this.isWriteLog = appSettings.RobotAccountIsWriteLog;
             this.serviceName = "RobotAccountInsert";
         }
 
-        public Task<bool> Execute(int batchSize)
+        public Task<bool> Execute(int batchExternalSize, int batchInternalSize)
         {
             try
             {
-                if (batchSize > 0)
+                if (batchExternalSize > 0 && batchInternalSize > 0)
                 {
-                    JobRun(batchSize);
+                    JobRun(batchExternalSize, batchInternalSize);
                 }
                 else
                 {
-                    Utilities.LogSentryError(serviceName, "InValid Batch size", (batchSize), new NullReferenceException(), sentryClient);
+                    Utilities.LogSentryError(serviceName, "InValid Batch size", (batchExternalSize, batchInternalSize), new NullReferenceException(), sentryClient);
                 }
             }
             catch (Exception ex)
@@ -76,7 +70,7 @@
 
         #region Private Methods
 
-        private void JobRun(int batchSize)
+        private void JobRun(int externalBatchSize, int internalBatchSize)
         {
             var savedExecutionTime = DateTime.Now.ToString(Constants.CONVERT_TO_SQL_DATETIME);
 
@@ -86,7 +80,7 @@
 
             if (robotUsers != null && robotUsers.Any())
             {
-                var robotUsersChunks = robotUsers.Chunk(batchSize).ToList();
+                var robotUsersChunks = robotUsers.Chunk(internalBatchSize).ToList();
 
                 foreach (var robot in robotUsersChunks)
                 {
@@ -96,40 +90,20 @@
 
                     if (custIds != null && custIds.Any())
                     {
-                        PushDataToExternalAsync(custIds);
+                        custClassToMainDBService.PushDataToExternal(custIds, new PushDataToExternalEntity
+                        {
+                            ExternalBatchSize = externalBatchSize,
+                            FeedSoon88API = appSettings.Soon88FeedDataAPI,
+                            IsPushCCToSoon88 = true,
+                            IsUpdateDangerToMainDB = false,
+                            IsWriteLog = isWriteLog,
+                            ServiceName = serviceName
+                        });
                     }
                 }
             }
 
             systemParameterServices.UpdateTimingExecution(savedExecutionTime, SystemParameters.RobotAccountLastScannedTime);
-        }
-
-        private void PushDataToExternalAsync(IEnumerable<int> custIds)
-        {
-            if (custIds != null && custIds.Any())
-            {
-                var lastestClassification = custClassToMainDBService.GetLatestClassification(custIds, serviceName, isWriteLog);
-
-                if (lastestClassification != null && lastestClassification.Any())
-                {
-                    var tasks = new List<Task>
-                        {
-                            Task.Run(() =>
-                            {
-                                custClassToMainDBService.PushCustClassificationToMainDB(lastestClassification, serviceName, isWriteLog);
-                            }),
-
-                            Task.Run(() =>
-                            {
-                                feedSoon88Services.FeedCCToSoon88(lastestClassification, appSettings.Soon88FeedDataAPI, serviceName, isWriteLog);
-                            })
-                        };
-
-                    Task.WhenAll(tasks.ToArray()).Wait();
-
-                    Thread.Sleep(300);
-                }
-            }
         }
     }
 

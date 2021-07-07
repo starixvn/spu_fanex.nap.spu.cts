@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Tests.Features.PushDataToExternal
 {
     using Fanex.NAP.SPU.CTS.Features.PushDataToExternal.CustClassificationToMainDB;
+    using Fanex.NAP.SPU.CTS.Features.PushDataToExternal.FeedCCToSoon88;
     using Fanex.NAP.SPU.CTS.Shares.Models;
     using FluentAssertions;
     using Newtonsoft.Json;
@@ -15,12 +16,16 @@
     {
         private readonly ICustClassToMainDBDataAccess custClassToMainDBDataAccess;
         private readonly ICustClassToMainDBService custClassToMainDBService;
+        private readonly IFeedSoon88DataAccess feedSoon88DataAccess;
+        private readonly IFeedSoon88Services feedSoon88Services;
 
         public CustClassificationToMainDBTests()
         {
-            custClassToMainDBDataAccess = Substitute.For<ICustClassToMainDBDataAccess>();
+            feedSoon88DataAccess = Substitute.For<IFeedSoon88DataAccess>();
+            feedSoon88Services = new FeedSoon88Services(feedSoon88DataAccess, null);
 
-            custClassToMainDBService = new CustClassToMainDBService(custClassToMainDBDataAccess, null);
+            custClassToMainDBDataAccess = Substitute.For<ICustClassToMainDBDataAccess>();
+            custClassToMainDBService = new CustClassToMainDBService(custClassToMainDBDataAccess, null, feedSoon88Services);
         }
 
         [Fact]

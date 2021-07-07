@@ -70,9 +70,9 @@
         }
 
         [HttpPost("robotClassification")]
-        public async Task<bool> RobotScanningClassification([FromForm] int batchSize)
+        public async Task<bool> RobotScanningClassification([FromForm] int batchExternalSize, [FromForm] int batchInternalSize)
         {
-            return await this.robotAccountInsertJobService.Execute(batchSize);
+            return await this.robotAccountInsertJobService.Execute(batchExternalSize, batchInternalSize);
         }
 
         [HttpPost("MatchMonitor")]

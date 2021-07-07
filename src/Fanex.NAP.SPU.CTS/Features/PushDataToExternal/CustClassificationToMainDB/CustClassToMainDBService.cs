@@ -1,5 +1,7 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.PushDataToExternal.CustClassificationToMainDB
 {
+    using Fanex.NAP.SPU.CTS.Features.CustomerClassification.RescanCustomerClassification;
+    using Fanex.NAP.SPU.CTS.Features.PushDataToExternal.FeedCCToSoon88;
     using Fanex.NAP.SPU.CTS.Shares;
     using Newtonsoft.Json;
     using Sentry;
@@ -21,17 +23,55 @@
         bool UpdateDangerLevelToMainDB(IEnumerable<LatestClassificationEntity> lastestClassifications, string serviceName, bool isWriteLog);
 
         bool RetryUpdateDangerLevelToMainDB(IEnumerable<DangerLevelEntity> dangerLevels, DangerLevel typeId, int retryTime, string serviceName);
+
+        void PushDataToExternal(IEnumerable<int> custIds, PushDataToExternalEntity paras);
     }
 
     public class CustClassToMainDBService : ICustClassToMainDBService
     {
         private readonly ICustClassToMainDBDataAccess custClassToMainDBDataAccess;
+        private readonly IFeedSoon88Services feedSoon88Services;
         private readonly ISentryClient sentryClient;
 
-        public CustClassToMainDBService(ICustClassToMainDBDataAccess custClassToMainDBDataAccess, ISentryClient sentryClient)
+        public CustClassToMainDBService(
+            ICustClassToMainDBDataAccess custClassToMainDBDataAccess, 
+            ISentryClient sentryClient, 
+            IFeedSoon88Services feedSoon88Services)
         {
             this.custClassToMainDBDataAccess = custClassToMainDBDataAccess;
+            this.feedSoon88Services = feedSoon88Services;
             this.sentryClient = sentryClient;
+        }
+
+
+        public void PushDataToExternal(IEnumerable<int> custIds, PushDataToExternalEntity paras)
+        {
+            if (custIds == null || !custIds.Any())
+            {
+                return;
+            }
+
+            var custIdsChunk = custIds.Distinct().Chunk(paras.ExternalBatchSize);
+
+            foreach (var custids in custIdsChunk)
+            {
+                var lastestClassifications = GetLatestClassification(custids, paras.ServiceName, paras.IsWriteLog);
+
+                if (lastestClassifications != null && lastestClassifications.Any())
+                {
+                    bool isSuccess = PushCustClassificationToMainDB(lastestClassifications, paras.ServiceName, paras.IsWriteLog);
+
+                    if (paras.IsPushCCToSoon88)
+                    {
+                        feedSoon88Services.FeedCCToSoon88(lastestClassifications, paras.FeedSoon88API, paras.ServiceName, paras.IsWriteLog);
+                    }
+
+                    if (paras.IsUpdateDangerToMainDB && isSuccess)
+                    {
+                        UpdateDangerLevelToMainDB(lastestClassifications, paras.ServiceName, paras.IsWriteLog);
+                    }
+                }
+            }
         }
 
         public bool PushCustClassificationToMainDB(IEnumerable<LatestClassificationEntity> lastestClassifications, string serviceName, bool isWriteLog)

@@ -7,7 +7,6 @@
     using Fanex.NAP.SPU.CTS.Shares;
     using Sentry;
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -102,37 +101,18 @@
 
                         var custIds = normalAccountServices.InsertMainCustomerClassification(listClassification, custAssociationPA, serviceName, isWriteLog);
 
-                        PushDataToExternal(custIds, batchExternalSize);
+                        custClassToMainDBService.PushDataToExternal(custIds, new PushDataToExternalEntity
+                        {
+                            ExternalBatchSize = batchExternalSize,
+                            FeedSoon88API = appSettings.Soon88FeedDataAPI,
+                            IsPushCCToSoon88 = true,
+                            IsUpdateDangerToMainDB = true,
+                            IsWriteLog = isWriteLog,
+                            ServiceName = serviceName
+                        });
                     }
                 }
             } while (newClassification.IsContinute);
-        }
-
-        private void PushDataToExternal(IEnumerable<int> custIds, int batchExternalSize)
-        {
-            if (custIds == null || !custIds.Any())
-            {
-                return;
-            }
-
-            var custIdsChunk = custIds.Chunk(batchExternalSize);
-
-            foreach (var items in custIdsChunk)
-            {
-                var lastestClassifications = custClassToMainDBService.GetLatestClassification(items, serviceName, isWriteLog);
-
-                if (lastestClassifications != null && lastestClassifications.Any())
-                {
-                    bool isSuccess = custClassToMainDBService.PushCustClassificationToMainDB(lastestClassifications, serviceName, isWriteLog);
-
-                    if (isSuccess)
-                    {
-                        custClassToMainDBService.UpdateDangerLevelToMainDB(lastestClassifications, serviceName, isWriteLog);
-                    }
-
-                    feedSoon88Services.FeedCCToSoon88(lastestClassifications, appSettings.Soon88FeedDataAPI, serviceName, isWriteLog);
-                }
-            }
         }
     }
 
