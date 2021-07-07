@@ -1,11 +1,10 @@
-﻿using Fanex.Data;
-using Fanex.Data.Repository;
-using Fanex.NAP.SPU.CTS.Features.Accounts.Criteria;
-using Fanex.NAP.SPU.CTS.Features.Accounts.Entities;
+﻿using Fanex.Data.Repository;
+using Fanex.NAP.SPU.CTS.Features.Transform.Accounts.Criteria;
+using Fanex.NAP.SPU.CTS.Features.Transform.Accounts.Entities;
 using Fanex.NAP.SPU.CTS.Shares;
 using System.Collections.Generic;
 
-namespace Fanex.NAP.SPU.CTS.Features.Accounts
+namespace Fanex.NAP.SPU.CTS.Features.Transform.Accounts
 {
     public interface IAccountDataAccess
     {

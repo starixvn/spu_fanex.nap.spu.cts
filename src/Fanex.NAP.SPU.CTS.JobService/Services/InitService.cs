@@ -3,7 +3,6 @@
     using Fanex.NAP.Client.AspNetCore.Session;
     using Fanex.NAP.Client.Helpers.Web;
     using Fanex.NAP.Client.Services;
-    using Fanex.NAP.SPU.CTS.Features.Accounts;
     using Fanex.NAP.SPU.CTS.Features.AffectedEvidence;
     using Fanex.NAP.SPU.CTS.Features.CustomerClassification.DailyClassification;
     using Fanex.NAP.SPU.CTS.Features.CustomerClassification.NormalAccountInsert;
@@ -19,6 +18,7 @@
     using Fanex.NAP.SPU.CTS.Features.PushDataToExternal.CustClassificationToMainDB;
     using Fanex.NAP.SPU.CTS.Features.PushDataToExternal.FeedCCToSoon88;
     using Fanex.NAP.SPU.CTS.Features.SystemParameter;
+    using Fanex.NAP.SPU.CTS.Features.Transform.Accounts;
     using Fanex.NAP.SPU.CTS.Features.Transform.AssociationByDevice;
     using Fanex.NAP.SPU.CTS.Features.UpdateLastLogin;
     using Fanex.NAP.SPU.CTS.Features.UserPermission;

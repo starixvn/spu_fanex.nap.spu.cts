@@ -1,5 +1,5 @@
-﻿using Fanex.NAP.SPU.CTS.Features.Accounts;
-using Fanex.NAP.SPU.CTS.Features.Accounts.Entities;
+﻿using Fanex.NAP.SPU.CTS.Features.Transform.Accounts;
+using Fanex.NAP.SPU.CTS.Features.Transform.Accounts.Entities;
 using FluentAssertions;
 using NSubstitute;
 using System;
@@ -79,75 +79,6 @@ namespace Fanex.NAP.SPU.CTS.Tests.Features.Accounts
             var result = accountServices.GetRawAccount(100, 2);
 
             result.Should().BeEquivalentTo(accountEntity);
-        }
-
-        //[Theory]
-        //[InlineData(-1, 1)]
-        //[InlineData(1, -1)]
-        //[InlineData(-1, -1)]
-        //[InlineData(0, 0)]
-        //[InlineData(0, -1)]
-        //[InlineData(-1, 0)]
-        //public void GetStagingTransIdForDevice_WhenFailed_ReturnTransIdList(int size, int batchSize)
-        //{
-        //    var expectedResult = new List<StagingTransIdEntity>();
-
-        //    deviceDataAccess.GetStagingTransIdForDevice(size, batchSize).Returns(expectedResult);
-
-        //    var result = deviceServices.GetStagingTransIdForDevice(size, batchSize);
-
-        //    result.Should().BeEmpty();
-        //    result.Should().BeEquivalentTo(expectedResult);
-        //    result.Count().Should().Be(0);
-        //}
-
-        //[Fact]
-        //public void UpdateDevice_WhenSucess_ReturnDataResult()
-        //{
-        //    var stagingTransIdEntity = new List<StagingTransIdEntity> {
-        //        new StagingTransIdEntity
-        //        {
-        //            BatchId = 1,
-        //            TransId = 100
-        //        },
-        //        new StagingTransIdEntity
-        //        {
-        //            BatchId = 1,
-        //            TransId = 200
-        //        },
-        //        new StagingTransIdEntity
-        //        {
-        //            BatchId = 1,
-        //            TransId = 300
-        //        }
-        //    };
-        //    var dataResult = new DataResult {
-        //        ErrorCode = 0,
-        //        ErrorMessage = string.Empty
-        //    };
-        //    var jsonResult = JsonConvert.SerializeObject(stagingTransIdEntity);
-
-        //    deviceDataAccess.UpdateDevice(jsonResult).Returns(dataResult);
-
-        //    var result = deviceServices.UpdateDevices(stagingTransIdEntity);
-
-        //    result.Should().Be(dataResult);
-        //    result.ErrorCode.Should().Be(0);
-        //}
-
-        //[Fact]
-        //public void UpdateDevice_WhenFailed_ReturnDataResult()
-        //{
-        //    var dataResult = new DataResult
-        //    {
-        //        ErrorCode = -1,
-        //        ErrorMessage = "Parameter is empty."
-        //    };
-
-        //    deviceDataAccess.UpdateDevice(null).Returns(dataResult);
-        //    var result = deviceServices.UpdateDevices(null);
-
-        //    result.ErrorCode.Should().Be(-1);
-        //}
+        }       
     }
 }

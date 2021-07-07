@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.Json.Serialization;
 
-namespace Fanex.NAP.SPU.CTS.Features.Accounts.Entities
+namespace Fanex.NAP.SPU.CTS.Features.Transform.Accounts.Entities
 {
     public class AccountEntity
     {

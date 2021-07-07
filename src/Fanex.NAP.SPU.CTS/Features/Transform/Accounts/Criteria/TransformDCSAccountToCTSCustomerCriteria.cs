@@ -1,7 +1,7 @@
 ﻿using Fanex.Data;
 using Fanex.Data.Repository;
 
-namespace Fanex.NAP.SPU.CTS.Features.Accounts.Criteria
+namespace Fanex.NAP.SPU.CTS.Features.Transform.Accounts.Criteria
 {
     public class TransformDCSAccountToCTSCustomerCriteria: NonQueryCommand
     {
