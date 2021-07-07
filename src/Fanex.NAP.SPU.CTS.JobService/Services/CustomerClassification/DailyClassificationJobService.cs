@@ -82,6 +82,7 @@
                 try
                 {
                     customers = dailyClassificationServices.GetCustClassificationForDailyScanning(1, batchSize);
+                    Utilities.LogSentryInfo(serviceName, "Get New Classification", customers, true, sentryClient);
 
                     if (customers != null && customers.Any())
                     {
