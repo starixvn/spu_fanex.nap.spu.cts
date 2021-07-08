@@ -53,11 +53,9 @@
 
         private void JobRun(int batchSize)
         {
-            const string categoryIds = "201, 202, 205, 231, 232, 233, 222, 221, 223, 212, 211, 213"; // Hard code for 'New member' & 'Main Normal Account' & 'Main VIP'  & special categories
-
             realtimeClassificationServices
                 .GetCustomerGeneralCategoryHasChangeForRunRealtime()
-                .ScanningRealtimeClassification(batchSize, categoryIds)
+                .ScanningRealtimeClassification(batchSize)
                 .RealtimeUpdateLastScanTime(true);
         }
     }

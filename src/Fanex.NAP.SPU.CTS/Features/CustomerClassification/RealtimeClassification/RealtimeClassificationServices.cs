@@ -10,9 +10,9 @@
     {
         public RealtimeClassificationServices GetCustomerGeneralCategoryHasChangeForRunRealtime();
 
-        RealtimeClassificationServices ScanningRealtimeClassification(int batchSize, string categoryIds);
+        RealtimeClassificationServices ScanningRealtimeClassification(int batchSize);
 
-        IEnumerable<CustClassificationRealtimeEntity> GetCustomerGeneralCategoryForRunRealtime(IEnumerable<CustClassificationRealtimeEntity> customerHasChanges, string categoryIds);
+        IEnumerable<CustClassificationRealtimeEntity> GetCustomerGeneralCategoryForRunRealtime(IEnumerable<CustClassificationRealtimeEntity> customerHasChanges);
 
         void ClassifyCustomerGeneralCategoryRealtime(IEnumerable<CustClassificationRealtimeEntity> custClassification);
 
@@ -37,7 +37,7 @@
             return this;
         }
 
-        public RealtimeClassificationServices ScanningRealtimeClassification(int batchSize, string categoryIds)
+        public RealtimeClassificationServices ScanningRealtimeClassification(int batchSize)
         {
             if (customerClassification != null && customerClassification.Any())
             {
@@ -45,7 +45,7 @@
 
                 foreach (var item in custChunks)
                 {
-                    var custClassification = GetCustomerGeneralCategoryForRunRealtime(item, categoryIds);
+                    var custClassification = GetCustomerGeneralCategoryForRunRealtime(item);
 
                     ClassifyCustomerGeneralCategoryRealtime(custClassification);
 
@@ -56,13 +56,13 @@
             return this;
         }
 
-        public IEnumerable<CustClassificationRealtimeEntity> GetCustomerGeneralCategoryForRunRealtime(IEnumerable<CustClassificationRealtimeEntity> customerHasChanges, string categoryIds)
+        public IEnumerable<CustClassificationRealtimeEntity> GetCustomerGeneralCategoryForRunRealtime(IEnumerable<CustClassificationRealtimeEntity> customerHasChanges)
         {
             if (customerHasChanges != null && customerHasChanges.Any())
             {
                 var custSportJson = JsonConvert.SerializeObject(customerHasChanges);
 
-                return realtimeClassificationDataAccess.GetCustomerGeneralCategoryForRunRealtime(custSportJson, categoryIds);
+                return realtimeClassificationDataAccess.GetCustomerGeneralCategoryForRunRealtime(custSportJson);
             }
 
             return new List<CustClassificationRealtimeEntity>();

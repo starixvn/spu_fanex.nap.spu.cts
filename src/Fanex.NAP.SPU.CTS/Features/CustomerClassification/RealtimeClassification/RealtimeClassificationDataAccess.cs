@@ -8,7 +8,7 @@
     {
         IEnumerable<CustClassificationRealtimeEntity> GetCustomerGeneralCategoryHasChangeForRunRealtime();
 
-        IEnumerable<CustClassificationRealtimeEntity> GetCustomerGeneralCategoryForRunRealtime(string custSportJson, string categoryIds);
+        IEnumerable<CustClassificationRealtimeEntity> GetCustomerGeneralCategoryForRunRealtime(string custSportJson);
 
         void ClassifyCustomerGeneralCategoryRealtime(IEnumerable<CustClassificationRealtimeEntity> customers);
 
@@ -31,11 +31,10 @@
             return repository.Fetch<CustClassificationRealtimeEntity>(criteria);
         }
 
-        public IEnumerable<CustClassificationRealtimeEntity> GetCustomerGeneralCategoryForRunRealtime(string custSportJson, string categoryIds)
+        public IEnumerable<CustClassificationRealtimeEntity> GetCustomerGeneralCategoryForRunRealtime(string custSportJson)
         {
             var criteria = new CustClassificationByCategoryForRealtimeScanningGetCriteria
             {
-                CategoryIdList = categoryIds,
                 CustSportsJson = custSportJson
             };
 
