@@ -7,12 +7,13 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using static Fanex.NAP.SPU.CTS.Shares.Constants;
 
     public interface ICTSCustomerDataAccess
     {
         LastScannedCustModel GetLastInsertCust();
 
-        UpdateCustomerModel GetCustomerFromMainDB(int quantityPerBatch, Int64 lastScannedCustID);
+        UpdateCustomerModel GetCustomerFromMainDBForInsertNew(int quantityPerBatch, Int64 lastScannedCustID);
 
         List<CustomerMainDBModel> GetCustSubFromMainDB(int quantityPerBatch, Int64 lastScannedCustID);
 
@@ -21,6 +22,12 @@
         void UpdateCustInfoComplete(string customers, DateTime? lastUpdateTime, Int64? lastUpdateCustID);
 
         void UpdateCustomerComplete(string customers, DateTime? lastUpdateTime, Int64? lastUpdateCustID);
+
+        LastUpdateValueModel GetLastUpdatedTime();
+        TranformCustModel GetUpdatedCustFromCustInfoHistory(DateTime lastUpdatedTime, Int64 lastUpdatedCustId, int numOfAccount);
+        TranformCustModel GetUpdatedCustFromCustomerHistory(DateTime lastUpdatedTime, Int64 lastUpdatedCustId, int numOfAccount);
+        IEnumerable<CustomerMainDBModel> GetCustomerFromMainDBForUpdate(string custIds, UpdateCustomer sourceType);
+        IEnumerable<CustomerMainDBModel> GetCustomerFromCTSForUpdate(string custIds, UpdateCustomer sourceType);
     }
 
     public class CTSCustomerDataAccess : ICTSCustomerDataAccess
@@ -30,6 +37,74 @@
         public CTSCustomerDataAccess()
         {
             repository = new DynamicRepository();
+        }
+
+
+        public LastUpdateValueModel GetLastUpdatedTime()
+        {
+            var criteria = new GetLastUpdatedTimeCriteria();
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                using (var result = db.QueryMultiple(criteria))
+                {
+                    var LastUpdateTimeCustInfo = result.Read<DateTime>().FirstOrDefault();
+                    var LastUpdateCustIDCustInfo = result.Read<Int64>().FirstOrDefault();
+                    var LastUpdateTimeCustomer = result.Read<DateTime>().FirstOrDefault();
+                    var LastUpdateCustIDCustomer = result.Read<Int64>().FirstOrDefault();
+
+                    return new LastUpdateValueModel()
+                    {
+                        LastUpdateCustIDCustInfo = LastUpdateCustIDCustInfo,
+                        LastUpdateTimeCustInfo = LastUpdateTimeCustInfo,
+                        LastUpdateCustIDCustomer = LastUpdateCustIDCustomer,
+                        LastUpdateTimeCustomer = LastUpdateTimeCustomer
+                    };
+                }
+            }
+
+        }
+
+        public TranformCustModel GetUpdatedCustFromCustInfoHistory(DateTime lastUpdatedTime, Int64 lastUpdatedCustId, int numOfAccount)
+        {
+            var criteria = new GetUpdatedCustFromCustInfoHistoryCriteria
+            {
+                LastUpdateTime = lastUpdatedTime,
+                LastCustId = lastUpdatedCustId,
+                RowSize = numOfAccount,
+            };
+
+            var repository = new DynamicRepository();
+
+            var output = repository.FetchMultiple<TranformCustModel, string>(criteria);
+
+            return new TranformCustModel()
+            {
+                LastUpdatedTime = output.firstResultSet.SingleOrDefault().LastUpdatedTime,
+                LastCustId = output.firstResultSet.SingleOrDefault().LastCustId,
+                CustIdList = output.secondResultSet.SingleOrDefault()
+            };
+        }
+
+        public TranformCustModel GetUpdatedCustFromCustomerHistory(DateTime lastUpdatedTime, Int64 lastUpdatedCustId, int numOfAccount)
+        {
+            var criteria = new GetUpdatedCustFromCustomerHistoryCriteria
+            {
+                LastUpdateTime = lastUpdatedTime,
+                LastCustId = lastUpdatedCustId,
+                RowSize = numOfAccount,
+            };
+
+            var repository = new DynamicRepository();
+
+            var output = repository.FetchMultiple<TranformCustModel, string>(criteria);
+
+            return new TranformCustModel()
+            {
+                LastUpdatedTime = output.firstResultSet.SingleOrDefault().LastUpdatedTime,
+                LastCustId = output.firstResultSet.SingleOrDefault().LastCustId,
+                CustIdList = output.secondResultSet.SingleOrDefault()
+            };
         }
 
         public LastScannedCustModel GetLastInsertCust()
@@ -52,7 +127,7 @@
             }
         }
 
-        public UpdateCustomerModel GetCustomerFromMainDB(int quantityPerBatch, Int64 lastScannedCustID)
+        public UpdateCustomerModel GetCustomerFromMainDBForInsertNew(int quantityPerBatch, Int64 lastScannedCustID)
         {
             var criteria = new GetCustomersFromMainDbCriteria
             {
@@ -128,6 +203,32 @@
             };
 
             repository.Execute(criteria);
+        }
+
+        public IEnumerable<CustomerMainDBModel> GetCustomerFromMainDBForUpdate(string custIds, UpdateCustomer sourceType)
+        {
+            var criteria = new GetCustomerInfoFromMainDBCriteria
+            {
+                CustIds = custIds,
+                SourceType = (int)sourceType
+            };
+
+            var custInfos = repository.Fetch<CustomerMainDBModel>(criteria);
+
+            return custInfos;
+        }
+
+        public IEnumerable<CustomerMainDBModel> GetCustomerFromCTSForUpdate(string custIds, UpdateCustomer sourceType)
+        {
+            var criteria = new GetCustomerInfoFromCTSCriteria
+            {
+                CustIds = custIds,
+                SourceType = (int)sourceType
+            };
+
+            var custInfos = repository.Fetch<CustomerMainDBModel>(criteria);
+
+            return custInfos;
         }
     }
 }

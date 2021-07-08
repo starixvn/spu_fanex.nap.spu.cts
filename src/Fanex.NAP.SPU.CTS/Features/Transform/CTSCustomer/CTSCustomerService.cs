@@ -20,13 +20,27 @@
     {
         LastScannedCustModel GetLastInsertCust();
 
-        UpdateCustomerModel GetCustomerFromMainDB(int numOfAccount, Int64 lastScannedCustID);
+        UpdateCustomerModel GetCustomerFromMainDBForInsertNew(int numOfAccount, Int64 lastScannedCustID);
 
         List<CustomerMainDBModel> GetCustSubFromMainDB(int numOfAccount, Int64 lastScannedCustID);
 
         UpdateCustomerModel PrepareData(UpdateCustomerModel customers, List<CustomerMainDBModel> custSubs);
 
         bool InsertNewCustomer(UpdateCustomerModel data, bool isWriteLogInfo, int internalBatchSize, string soon88Url);
+
+        LastUpdateValueModel GetLastUpdatedTime();
+
+        TranformCustModel GetUpdatedCustFromCustInfoHistory(DateTime lastUpdatedTime, Int64 lastUpdatedCustId, int numOfAccount);
+
+        TranformCustModel GetUpdatedCustFromCustomerHistory(DateTime lastUpdatedTime, Int64 lastUpdatedCustId, int numOfAccount);
+
+        bool IsValidData(TranformCustModel custFromCustInfo, TranformCustModel custFromCustomer);
+
+        void UpdateCustomer(TranformCustModel custs, int sourceType, bool isWriteLog);
+
+        IEnumerable<CustomerMainDBModel> GetCustomerFromMainDBForUpdate(string custIds, UpdateCustomer sourceType);
+        IEnumerable<CustomerMainDBModel> GetCustomerFromCTSForUpdate(string custIds, UpdateCustomer sourceType);
+
     }
 
     public class CTSCustomerService : ICTSCustomerService
@@ -37,7 +51,7 @@
         private readonly IAccountServices accountService;
         private readonly string serviceName = "CTSCustomerService";
 
-        public CTSCustomerService(ICTSCustomerDataAccess dataAccess, 
+        public CTSCustomerService(ICTSCustomerDataAccess dataAccess,
             ISentryClient sentryClient,
             IRescanCustClassificationService rescanClassificationService,
             IAccountServices accountService)
@@ -48,14 +62,91 @@
             this.sentryClient = sentryClient;
         }
 
+        public LastUpdateValueModel GetLastUpdatedTime()
+        {
+            return dataAccess.GetLastUpdatedTime();
+        }
+
+        public void UpdateCustomer(TranformCustModel custs, int sourceType, bool isWriteLog)
+        {
+            //try
+            //{
+            //    if (custs == null || custs.LastCustId == null || custs.LastUpdatedTime == null)
+            //    {
+            //        return;
+            //    }
+
+            //    var updateCustomerType = (UpdateCustomer)sourceType;
+
+            //    var custInfoToUpdate = GetCustInfoToUpdate(custs, updateCustomerType);
+
+            //    UpdateCustomerComplete(custInfoToUpdate, custs.LastUpdatedTime, custs.LastCustId, updateCustomerType);
+
+            //    if (isWriteLog)
+            //        sentryClient.CaptureMessage($"Healing - done");
+
+            //}
+            //catch (Exception ex)
+            //{
+            //    Utilities.LogSentryError(serviceName, "UpdateCustomer has an error", custs, ex, sentryClient);
+            //}
+        }
+
+        public string GetCustInfoToUpdate(TranformCustModel custs, UpdateCustomer sourceType)
+        {
+            var custInfoToUpdate = JsonConvert.SerializeObject(string.Empty);
+
+            if (!string.IsNullOrWhiteSpace(custs.CustIdList))
+            {
+                var custInfoFromMainDB = GetCustomerFromMainDBForUpdate(custs.CustIdList, sourceType);
+                var custInfoFromCTS = GetCustomerFromCTSForUpdate(custs.CustIdList, sourceType);
+
+                //    if (AppSettings.IsWriteLogInfo)
+                //    {
+                //        LogService.Info($"Healing - Get {((sourceType == UpdateCustomer.FROM_CUSTOMER) ? "Customer History" : "CustInfo")} from MainDB: {JsonConvert.SerializeObject(custInfoFromMainDB)}");
+                //        LogService.Info($"Healing - Get {((sourceType == UpdateCustomer.FROM_CUSTOMER) ? "Customer History" : "CustInfo")} from CTS: {JsonConvert.SerializeObject(custInfoFromCTS)}");
+                //    }
+
+                //    if (custInfoFromMainDB != null && custInfoFromCTS != null)
+                //    {
+                //        custInfoToUpdate = CompareCustomerInfo(custInfoFromMainDB, custInfoFromCTS, sourceType);
+                //    }
+            }
+
+            //if (AppSettings.IsWriteLogInfo)
+            //    LogService.Info($"Healing - Cust to update data: {custInfoToUpdate}");
+
+            return custInfoToUpdate;
+        }
+
+        public IEnumerable<CustomerMainDBModel> GetCustomerFromMainDBForUpdate(string custIds, UpdateCustomer sourceType)
+        {
+            return dataAccess.GetCustomerFromMainDBForUpdate(custIds, sourceType);
+        }
+
+        public IEnumerable<CustomerMainDBModel> GetCustomerFromCTSForUpdate(string custIds, UpdateCustomer sourceType)
+        {
+            return dataAccess.GetCustomerFromCTSForUpdate(custIds, sourceType);
+        }
+
+        public TranformCustModel GetUpdatedCustFromCustInfoHistory(DateTime lastUpdatedTime, Int64 lastUpdatedCustId, int numOfAccount)
+        {
+            return dataAccess.GetUpdatedCustFromCustInfoHistory(lastUpdatedTime, lastUpdatedCustId, numOfAccount);
+        }
+
+        public TranformCustModel GetUpdatedCustFromCustomerHistory(DateTime lastUpdatedTime, Int64 lastUpdatedCustId, int numOfAccount)
+        {
+            return dataAccess.GetUpdatedCustFromCustomerHistory(lastUpdatedTime, lastUpdatedCustId, numOfAccount);
+        }
+
         public LastScannedCustModel GetLastInsertCust()
         {
             return dataAccess.GetLastInsertCust();
         }
 
-        public UpdateCustomerModel GetCustomerFromMainDB(int numOfAccount, Int64 lastScannedCustID)
+        public UpdateCustomerModel GetCustomerFromMainDBForInsertNew(int numOfAccount, Int64 lastScannedCustID)
         {
-            return dataAccess.GetCustomerFromMainDB(numOfAccount, lastScannedCustID);
+            return dataAccess.GetCustomerFromMainDBForInsertNew(numOfAccount, lastScannedCustID);
         }
 
         public List<CustomerMainDBModel> GetCustSubFromMainDB(int numOfAccount, Int64 lastScannedCustID)
@@ -82,14 +173,14 @@
 
         public void UpdateCustomerComplete(string customers, DateTime? lastUpdateTime, Int64? lastUpdateCustID, UpdateCustomer sourceType)
         {
-            if (sourceType == UpdateCustomer.FromCustomer)
-            {
-                dataAccess.UpdateCustomerComplete(customers, lastUpdateTime, lastUpdateCustID);
-            }
-            else
-            {
-                dataAccess.UpdateCustInfoComplete(customers, lastUpdateTime, lastUpdateCustID);
-            }
+            //if (sourceType == UpdateCustomer.FromCustomer)
+            //{
+            //    dataAccess.UpdateCustomerComplete(customers, lastUpdateTime, lastUpdateCustID);
+            //}
+            //else
+            //{
+            //    dataAccess.UpdateCustInfoComplete(customers, lastUpdateTime, lastUpdateCustID);
+            //}
         }
 
         public UpdateCustomerModel PrepareData(UpdateCustomerModel customers, List<CustomerMainDBModel> custSubs)
@@ -182,7 +273,18 @@
             }
             catch (Exception ex)
             {
-                Utilities.LogSentryError(serviceName, "InsertNewCustomer throws exception", customers, ex, sentryClient);                
+                Utilities.LogSentryError(serviceName, "InsertNewCustomer throws exception", customers, ex, sentryClient);
+            }
+
+            return false;
+        }
+
+        public bool IsValidData(TranformCustModel custFromCustInfo, TranformCustModel custFromCustomer)
+        {
+            if ((custFromCustInfo != null && custFromCustInfo.LastCustId != null && custFromCustInfo.LastUpdatedTime != null)
+                || (custFromCustomer != null && custFromCustomer.LastCustId != null && custFromCustomer.LastUpdatedTime != null))
+            {
+                return true;
             }
 
             return false;

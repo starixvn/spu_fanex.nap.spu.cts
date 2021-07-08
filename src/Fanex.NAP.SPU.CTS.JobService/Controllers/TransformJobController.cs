@@ -32,13 +32,13 @@
             this.updateLastLoginJobService = updateLastLoginJobService;
         }
 
-        [HttpPost("transform-ass-by-device")]
+        [HttpPost("TransformAssByDevice")]
         public async Task<bool> TransformAssociationByDevice([FromForm] int batchSize, [FromForm] int numberOfBatch)
         {
             return await associationByDeviceJobService.TransformAssociationByDevice(batchSize, numberOfBatch);
         }
 
-        [HttpPost("affected-evidence")]
+        [HttpPost("AffectedEvidence")]
         public async Task<bool> TransformAffectedEvidence([FromForm] int batchSize)
         {
             return await affectedEvidenceJobService.Execute(batchSize);
