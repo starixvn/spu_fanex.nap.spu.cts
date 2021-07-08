@@ -8,7 +8,7 @@
 
     public interface IRealtimeClassificationServices
     {
-        public RealtimeClassificationServices GetCustomerGeneralCategoryHasChangeForRunRealtime();
+        RealtimeClassificationServices GetCustomerGeneralCategoryHasChangeForRunRealtime();
 
         RealtimeClassificationServices ScanningRealtimeClassification(int batchSize);
 
@@ -17,6 +17,8 @@
         void ClassifyCustomerGeneralCategoryRealtime(IEnumerable<CustClassificationRealtimeEntity> custClassification);
 
         RealtimeClassificationServices RealtimeUpdateLastScanTime(bool isGeneralCategory);
+
+        IEnumerable<CustClassificationRealtimeEntity> CustomerClassification { get; }
     }
 
     public class RealtimeClassificationServices : IRealtimeClassificationServices
@@ -81,6 +83,11 @@
             realtimeClassificationDataAccess.RealtimeUpdateLastScanTime(isGeneralCategory);
 
             return this;
+        }
+
+        IEnumerable<CustClassificationRealtimeEntity> IRealtimeClassificationServices.CustomerClassification 
+        { 
+            get => customerClassification; 
         }
     }
 }
