@@ -37,6 +37,8 @@
         {
             try
             {
+                Utilities.LogSentryInfo(serviceName, $"{DateTime.Now}", string.Empty, true, sentryClient);
+
                 if (batchSize > 0)
                 {
                     JobRun(batchSize);
@@ -75,30 +77,14 @@
 
         private void JobRun(int batchSize)
         {
-            IEnumerable<CustClassificationDailyEntity> customers = null;
+            var customers = dailyClassificationServices.GetCustClassificationForDailyScanning(1, batchSize);
 
-            do
+            if (customers != null && customers.Any())
             {
-                try
-                {
-                    customers = dailyClassificationServices.GetCustClassificationForDailyScanning(1, batchSize);
+                dailyClassificationServices.ScanningDailyClassification(customers, true);
 
-                    if (customers != null && customers.Any())
-                    {
-                        dailyClassificationServices.ScanningDailyClassification(customers, true);
-                    }
-
-                    if (appSettings.IsDailyScanningInterrupt)
-                    {
-                        Utilities.LogSentryError(serviceName, "Interrupt Daily Scanning Classification", string.Empty, new Exception(), sentryClient);
-                        return;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
-                }
-            } while (customers == null || customers.Any());
+                JobRun(batchSize);
+            }
         }
     }
 
