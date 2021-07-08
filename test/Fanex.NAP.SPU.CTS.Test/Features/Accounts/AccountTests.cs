@@ -1,6 +1,8 @@
 ﻿using Fanex.NAP.SPU.CTS.Features.Transform.Accounts;
 using Fanex.NAP.SPU.CTS.Features.Transform.Accounts.Entities;
+using Fanex.NAP.SPU.CTS.Shares;
 using FluentAssertions;
+using Newtonsoft.Json;
 using NSubstitute;
 using System;
 using System.Collections.Generic;
@@ -79,6 +81,42 @@ namespace Fanex.NAP.SPU.CTS.Tests.Features.Accounts
             var result = accountServices.GetRawAccount(100, 2);
 
             result.Should().BeEquivalentTo(accountEntity);
-        }       
+        }
+
+        [Fact]
+        public void TransformAccount_WhenSuccess_ReturnDataResult()
+        {
+            var accountEntity = new List<AccountEntity> {
+                new AccountEntity
+                {
+                   AccountId = 1,
+                   BatchId = 1,
+                   LastLoginTime = DateTime.Now,
+                   LoginName = "abc",
+                   SubscriberId = 1
+                },
+                 new AccountEntity
+                {
+                   AccountId = 2,
+                   BatchId = 1,
+                   LastLoginTime = DateTime.Now,
+                   LoginName = "abczzz",
+                   SubscriberId = 1
+                }
+            };
+
+            var jsonResult = JsonConvert.SerializeObject(accountEntity);
+
+            var expectedResult = new DataResult { 
+                ErrorCode = 0,
+                ErrorMessage = string.Empty
+            };
+
+            accountDataAccess.TransformDCSAccount(jsonResult).Returns(expectedResult);
+
+            var result = accountServices.TransformAccount(accountEntity);
+
+            result.Should().BeEquivalentTo(expectedResult);
+        }
     }
 }
