@@ -2,7 +2,7 @@
 {
     public class RoleCustomerEntity
     {
-        public int CustID { get; set; }
+        public long CustID { get; set; }
 
         public int RoleID { get; set; }
     }

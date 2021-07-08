@@ -11,7 +11,7 @@
     {
         IEnumerable<ProblemAccountsEntity> GetProblemAccounts(DateTime? dateTime, string serviceName, bool isWriteLog);
 
-        IEnumerable<int> InsertProblemAccountToCTS(IEnumerable<ProblemAccountsEntity> problemAccounts, bool isRescan, string serviceName, bool isWriteLog);
+        IEnumerable<long> InsertProblemAccountToCTS(IEnumerable<ProblemAccountsEntity> problemAccounts, bool isRescan, string serviceName, bool isWriteLog);
 
         IEnumerable<ProblemAccountsEntity> GetProblemAccounts_IBC(string custIDs, DateTime? dateTime);
 
@@ -43,7 +43,7 @@
             return problemAccounts;
         }
 
-        public IEnumerable<int> InsertProblemAccountToCTS(IEnumerable<ProblemAccountsEntity> problemAccounts, bool isRescan, string serviceName, bool isWriteLog)
+        public IEnumerable<long> InsertProblemAccountToCTS(IEnumerable<ProblemAccountsEntity> problemAccounts, bool isRescan, string serviceName, bool isWriteLog)
         {
             if (problemAccounts != null && problemAccounts.Any())
             {
@@ -60,7 +60,7 @@
                 return result.CustIds;
             }
 
-            return new List<int>();
+            return new List<long>();
         }
 
         public IEnumerable<ProblemAccountsEntity> GetProblemAccounts_IBC(string custIDs, DateTime? dateTime)

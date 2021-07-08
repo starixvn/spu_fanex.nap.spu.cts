@@ -12,7 +12,7 @@
 
         void ClassifyCustomerGeneralCategoryDaily(IEnumerable<CustClassificationDailyEntity> customers, bool isCheckLast14Days);
 
-        void ClassifyCustomerGeneralCategoryDaily(IEnumerable<int> customers, bool isCheckLast14Days);
+        void ClassifyCustomerGeneralCategoryDaily(IEnumerable<long> customers, bool isCheckLast14Days);
 
         void UpdateDailyClassificationStatus(IEnumerable<CustClassificationDailyEntity> customers);
     }
@@ -55,7 +55,7 @@
             }
         }
 
-        public void ClassifyCustomerGeneralCategoryDaily(IEnumerable<int> customers, bool isCheckLast14Days)
+        public void ClassifyCustomerGeneralCategoryDaily(IEnumerable<long> customers, bool isCheckLast14Days)
         {
             if (customers != null && customers.Any())
             {

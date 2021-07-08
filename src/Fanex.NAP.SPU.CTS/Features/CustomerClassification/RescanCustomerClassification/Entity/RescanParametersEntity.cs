@@ -5,7 +5,7 @@
 
     public class RescanParametersEntity
     {
-        public IEnumerable<int> CustIds { get; set; }
+        public IEnumerable<long> CustIds { get; set; }
 
         public bool IsCheckPAFromNAP { get; set; }
 

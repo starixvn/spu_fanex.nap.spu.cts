@@ -47,7 +47,7 @@
                  }
             };
 
-            var custIds = new List<int> { 1, 2, 3, 4 };
+            var custIds = new List<long> { 1, 2, 3, 4 };
 
             custClassToMainDBDataAccess.GetLatestClassification("1,2,3,4").Returns(lastestCustomerClassification);
 

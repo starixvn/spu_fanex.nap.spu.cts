@@ -59,7 +59,7 @@
         [Fact]
         public void ClassifyCustomerCategoryByCustIds_WhenSuccess_ReturnNotException()
         {
-            var custIds = new List<int> { 1, 2, 3 };
+            var custIds = new List<long> { 1, 2, 3 };
 
             dailyClassificationDataAccess.ClassifyCustomerGeneralCategoryDaily(string.Join(",", custIds), true);
 

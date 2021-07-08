@@ -12,7 +12,7 @@
 
     public interface ICustClassToMainDBService
     {
-        IEnumerable<LatestClassificationEntity> GetLatestClassification(IEnumerable<int> custIds, string serviceName, bool isWriteLog);
+        IEnumerable<LatestClassificationEntity> GetLatestClassification(IEnumerable<long> custIds, string serviceName, bool isWriteLog);
 
         bool PushCustClassificationToMainDB(IEnumerable<LatestClassificationEntity> lastestClassifications, string serviceName, bool isWriteLog);
 
@@ -24,7 +24,7 @@
 
         bool RetryUpdateDangerLevelToMainDB(IEnumerable<DangerLevelEntity> dangerLevels, DangerLevel typeId, int retryTime, string serviceName);
 
-        void PushDataToExternal(IEnumerable<int> custIds, PushDataToExternalEntity paras);
+        void PushDataToExternal(IEnumerable<long> custIds, PushDataToExternalEntity paras);
     }
 
     public class CustClassToMainDBService : ICustClassToMainDBService
@@ -44,7 +44,7 @@
         }
 
 
-        public void PushDataToExternal(IEnumerable<int> custIds, PushDataToExternalEntity paras)
+        public void PushDataToExternal(IEnumerable<long> custIds, PushDataToExternalEntity paras)
         {
             if (custIds == null || !custIds.Any())
             {
@@ -92,7 +92,7 @@
             return isSuccess;
         }
 
-        public IEnumerable<LatestClassificationEntity> GetLatestClassification(IEnumerable<int> custIds, string serviceName, bool isWriteLog)
+        public IEnumerable<LatestClassificationEntity> GetLatestClassification(IEnumerable<long> custIds, string serviceName, bool isWriteLog)
         {
             var lastestClassification = new List<LatestClassificationEntity>();
 

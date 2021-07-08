@@ -3,7 +3,6 @@
     using Fanex.NAP.SPU.CTS.Features.CustomerClassification.DailyClassification;
     using Fanex.NAP.SPU.CTS.Features.CustomerClassification.ProblemAccountInsert;
     using Fanex.NAP.SPU.CTS.Features.PushDataToExternal.CustClassificationToMainDB;
-    using Fanex.NAP.SPU.CTS.Features.PushDataToExternal.FeedCCToSoon88;
     using Fanex.NAP.SPU.CTS.Shares;
     using Newtonsoft.Json;
     using Sentry;
@@ -16,23 +15,23 @@
     {
         void RescanCustomerClassify(RescanParametersEntity paras);
 
-        IEnumerable<int> GetAgentCusts(IEnumerable<int> custIds);
+        RescanCustClassificationService GetAgentCusts(IEnumerable<long> custIds);
 
-        IEnumerable<int> InsertCustEvidenceCategorToCTS(IEnumerable<int> custIds, FlowTypeRescanCC flowTypeRescanCC, int internalBatchSize, string serviceName);
+        RescanCustClassificationService GetExistedCustEvidences(IEnumerable<long> custIds);
 
-        IEnumerable<CustEvidenceEntity> GetExistedCustomerEvidences(string custIds);
+        RescanCustClassificationService InsertCustEvidenceCategorToCTS(RescanParametersEntity paras);
 
-        IEnumerable<int> SyncCustomerEvidenceToCategory(IEnumerable<CustEvidenceEntity> existedEvidences, bool isWriteLogRescan, int internalBatchSize, string serviceName);
+        RescanCustClassificationService GetRobotUsers(IEnumerable<long> custIds);
 
-        IEnumerable<ProblemAccountsEntity> GetProblemAccounts(IEnumerable<int> custIds, bool isCheckPAFromNAP);
+        IEnumerable<long> SyncRobotUserToUpdateCategory(IEnumerable<long> custIds);
 
-        IEnumerable<long> SyncRobotUserToUpdateCategory(IEnumerable<int> custIds);
+        RescanCustClassificationService GetProblemAccountFromNAPPA(IEnumerable<long> custIds, bool isCheckPAFromNAP);
 
-        IEnumerable<ProblemAccountsEntity> GetProblemAccountFromNAPPA(string custIds);
+        RescanCustClassificationService InsertProblemAccountToCTS(RescanParametersEntity paras);
 
-        IEnumerable<int> InsertProblemAccountToCTS(IEnumerable<ProblemAccountsEntity> problemAccounts, RescanParametersEntity paras);
+        RescanCustClassificationService RescanProblemAccount(RescanParametersEntity paras);
 
-        void RescanNormalAccount(IEnumerable<int> customers, int internalBatchSize);
+        RescanCustClassificationService RescanNormalAccount(RescanParametersEntity paras);
     }
 
     public class RescanCustClassificationService : IRescanCustClassificationService
@@ -40,149 +39,102 @@
         private readonly IRescanCustClassificationDataAccess rescanCustClassificationDataAccess;
         private readonly IProblemAccountServices problemAccountServices;
         private readonly ICustClassToMainDBService custClassToMainDBService;
-        private readonly IFeedSoon88Services feedSoon88Services;
         private readonly ISentryClient sentryClient;
         private readonly IDailyClassificationServices dailyClassificationServices;
+        private readonly List<ProblemAccountsEntity> problemAccounts;
+        private readonly List<CustEvidenceEntity> existedEvidences;
+        private readonly List<long> custIdsToRescanPA;
 
         public RescanCustClassificationService(
             IRescanCustClassificationDataAccess rescanCustClassificationDataAccess,
             ISentryClient sentryClient,
             IProblemAccountServices problemAccountServices,
             ICustClassToMainDBService custClassToMainDBService,
-            IFeedSoon88Services feedSoon88Services,
             IDailyClassificationServices dailyClassificationServices)
         {
             this.rescanCustClassificationDataAccess = rescanCustClassificationDataAccess;
             this.problemAccountServices = problemAccountServices;
             this.custClassToMainDBService = custClassToMainDBService;
-            this.feedSoon88Services = feedSoon88Services;
             this.sentryClient = sentryClient;
             this.dailyClassificationServices = dailyClassificationServices;
+            this.custIdsToRescanPA = new List<long>();
+            this.problemAccounts = new List<ProblemAccountsEntity>();
+            this.existedEvidences = new List<CustEvidenceEntity>();
         }
 
         public void RescanCustomerClassify(RescanParametersEntity paras)
         {
-            if (paras.CustIds == null || paras.CustIds.Any())
-            {
-                return;
-            }
-
-            var custIdList = new List<int>();
-
-            //Rescan PA - Get SMA CustId
-            var roleCusomters = GetAgentCusts(paras.CustIds);
-            custIdList.AddRange(roleCusomters);
-
-            // Rescan PA - Get PA From Evidence in CTS
-            var problemAccountsFromEvi = InsertCustEvidenceCategorToCTS(paras.CustIds, paras.FlowTypeRescanCC, paras.InternalBatchSize, paras.ServiceName);
-            custIdList.AddRange(problemAccountsFromEvi);
-
-            // Rescan PA - Get PA From RobotUser & NAP PA
-            var problemAccounts = GetProblemAccounts(paras.CustIds, paras.IsCheckPAFromNAP);
-            if (problemAccounts != null && problemAccounts.Any())
-            {
-                var custIds = InsertProblemAccountToCTS(problemAccounts, paras);
-                custIdList.AddRange(custIds);
-            }
-
-            //Rescan PA - Push CC & CN88
-            var custIdsToSyncCC = custIdList?.Distinct();
-
-            if (custIdsToSyncCC != null && custIdsToSyncCC.Any())
-            {
-                custClassToMainDBService.PushDataToExternal(custIdsToSyncCC, new PushDataToExternalEntity
-                {
-                    ExternalBatchSize = paras.ExternalBatchSize,
-                    FeedSoon88API = paras.FeedSoon88API,
-                    IsPushCCToSoon88 = paras.IsPushCCToSoon88,
-                    IsUpdateDangerToMainDB = false,
-                    IsWriteLog = paras.IsWriteLog,
-                    ServiceName = paras.ServiceName
-                });
-            }
-
-            // Rescan Normal
-            paras.CustIds.ToList().RemoveAll(x => custIdsToSyncCC.Contains(x));
-
             if (paras.CustIds != null && paras.CustIds.Any())
             {
-                RescanNormalAccount(paras.CustIds, paras.InternalBatchSize);
+                GetAgentCusts(paras.CustIds)
+               .GetExistedCustEvidences(paras.CustIds).InsertCustEvidenceCategorToCTS(paras)
+               .GetRobotUsers(paras.CustIds).GetProblemAccountFromNAPPA(paras.CustIds, paras.IsCheckPAFromNAP).InsertProblemAccountToCTS(paras)
+               .RescanProblemAccount(paras)
+               .RescanNormalAccount(paras);
             }
         }
 
-        public IEnumerable<int> GetAgentCusts(IEnumerable<int> custIds)
+        public RescanCustClassificationService GetAgentCusts(IEnumerable<long> custIds)
         {
-            var agentIds = new List<int>();
-
             if (custIds != null && custIds.Any())
             {
                 var data = rescanCustClassificationDataAccess.GetRoleCustomer(string.Join(",", custIds));
 
                 if (data != null && data.Any())
                 {
-                    agentIds = data.Where(c => c.RoleID == (int)CustomerRole.Agent
+                    var agentIds = data.Where(c => c.RoleID == (int)CustomerRole.Agent
                                             || c.RoleID == (int)CustomerRole.Master
                                             || c.RoleID == (int)CustomerRole.Super)
                                .Select(c => c.CustID)?.ToList();
+
+                    custIdsToRescanPA.AddRange(agentIds);
                 }
             }
 
-            return agentIds;
+            return this;
         }
 
-        public IEnumerable<int> InsertCustEvidenceCategorToCTS(IEnumerable<int> custIds, FlowTypeRescanCC flowTypeRescanCC, int internalBatchSize, string serviceName)
+        public RescanCustClassificationService GetExistedCustEvidences(IEnumerable<long> custIds)
         {
-            var existedCustEvidences = GetExistedCustomerEvidences(string.Join(",", custIds));
-
-            var isWriteLogRescan = flowTypeRescanCC != FlowTypeRescanCC.NewMember;
-
-            var custIdsToSyncCC = SyncCustomerEvidenceToCategory(existedCustEvidences, isWriteLogRescan, internalBatchSize, serviceName);
-
-            return custIdsToSyncCC;
-        }
-
-        public IEnumerable<CustEvidenceEntity> GetExistedCustomerEvidences(string custIds)
-        {
-            IEnumerable<CustEvidenceEntity> existedEvidences = new List<CustEvidenceEntity>();
-
-            if (!string.IsNullOrEmpty(custIds))
+            if (custIds != null && custIds.Any())
             {
-                existedEvidences = rescanCustClassificationDataAccess.GetExistedEvidences(custIds);
+                string custIdsToString = string.Join(",", custIds);
+
+                var accountEvidences = rescanCustClassificationDataAccess.GetExistedEvidences(custIdsToString);
+
+                existedEvidences.AddRange(accountEvidences);
             }
 
-            return existedEvidences;
+            return this;
         }
 
-        public IEnumerable<int> SyncCustomerEvidenceToCategory(IEnumerable<CustEvidenceEntity> existedEvidences, bool isWriteLogRescan, int internalBatchSize, string serviceName)
+        public RescanCustClassificationService InsertCustEvidenceCategorToCTS(RescanParametersEntity paras)
         {
-            var custIds = new List<int>();
+            var isWriteLogRescan = paras.FlowTypeRescanCC != FlowTypeRescanCC.NewMember;
 
             if (existedEvidences != null && existedEvidences.Any())
             {
-                var evidencesChunk = existedEvidences.Chunk(internalBatchSize);
+                var evidencesChunk = existedEvidences.Chunk(paras.InternalBatchSize);
 
                 foreach (var evidences in evidencesChunk)
                 {
                     var result = rescanCustClassificationDataAccess.SyncCustomerEvidenceToCategory(JsonConvert.SerializeObject(evidences), isWriteLogRescan);
-                    custIds.AddRange((IEnumerable<int>)result.OutParam["custIds"]);
+                    custIdsToRescanPA.AddRange((IEnumerable<long>)result.OutParam["custIds"]);
 
                     if (result.ErrorCode == -1)
                     {
-                        Utilities.LogSentryError(serviceName, "RescanCC - SyncCustEvidence fail", evidences, new Exception(result.ErrorMsg), sentryClient);
+                        Utilities.LogSentryError(paras.ServiceName, "RescanCC - SyncCustEvidence fail", evidences, new Exception(result.ErrorMsg), sentryClient);
                     }
                 }
             }
 
-            return custIds;
+            return this;
         }
 
-        public IEnumerable<ProblemAccountsEntity> GetProblemAccounts(IEnumerable<int> custIds, bool isCheckPAFromNAP)
+        public RescanCustClassificationService GetRobotUsers(IEnumerable<long> custIds)
         {
-            var problemAccounts = new List<ProblemAccountsEntity>();
-
             if (custIds != null && custIds.Any())
             {
-                //PA - RobotUser
                 var robotUsers = SyncRobotUserToUpdateCategory(custIds);
 
                 if (robotUsers != null && robotUsers.Any())
@@ -196,57 +148,48 @@
                         });
                     });
                 }
-
-                //PA - NAP PA
-                if (isCheckPAFromNAP)
-                {
-                    var existedProblemAccounts = GetProblemAccountFromNAPPA(string.Join(",", custIds)).ToList();
-                    problemAccounts.AddRange(existedProblemAccounts);
-                }
             }
 
-            return problemAccounts;
+            return this;
         }
 
-        public IEnumerable<long> SyncRobotUserToUpdateCategory(IEnumerable<int> custIds)
+        public IEnumerable<long> SyncRobotUserToUpdateCategory(IEnumerable<long> custIds)
         {
-            var robotUser = new List<long>();
+            IEnumerable<long> robotUser = new List<long>();
 
-            var custs = rescanCustClassificationDataAccess.GetCustByRobotSiteRule(string.Join(",", custIds)).ToList();
+            var custs = rescanCustClassificationDataAccess.GetCustByRobotSiteRule(string.Join(",", custIds));
 
             var getRobotUser = rescanCustClassificationDataAccess.GetExistedRobotUser(string.Join(",", custs));
 
             if (!string.IsNullOrEmpty(getRobotUser))
             {
-                robotUser = getRobotUser.Split(',').Select(long.Parse).ToList();
+                robotUser = getRobotUser.Split(',').Select(long.Parse);
             }
 
             return robotUser;
         }
 
-        public IEnumerable<ProblemAccountsEntity> GetProblemAccountFromNAPPA(string custIds)
+        public RescanCustClassificationService GetProblemAccountFromNAPPA(IEnumerable<long> custIds, bool isCheckPAFromNAP)
         {
-            var problemAccounts = new List<ProblemAccountsEntity>();
-
-            if (!string.IsNullOrEmpty(custIds))
+            if (custIds != null && custIds.Any() && isCheckPAFromNAP)
             {
-                var problemAccountsNAPCM = problemAccountServices.GetProblemAccounts_IBC(custIds, null).ToList();
-                var problemAccountsCN88 = problemAccountServices.GetProblemAccounts_CN88(custIds, null).ToList();
+                string custIdsToString = string.Join(",", custIds);
+
+                var problemAccountsNAPCM = problemAccountServices.GetProblemAccounts_IBC(custIdsToString, null);
+                var problemAccountsCN88 = problemAccountServices.GetProblemAccounts_CN88(custIdsToString, null);
 
                 problemAccounts.AddRange(problemAccountsNAPCM);
                 problemAccounts.AddRange(problemAccountsCN88);
             }
 
-            return problemAccounts?.Distinct();
+            return this;
         }
 
-        public IEnumerable<int> InsertProblemAccountToCTS(IEnumerable<ProblemAccountsEntity> problemAccounts, RescanParametersEntity paras)
+        public RescanCustClassificationService InsertProblemAccountToCTS(RescanParametersEntity paras)
         {
-            var custIds = new List<int>();
-
             if (problemAccounts != null && problemAccounts.Any())
             {
-                var problemAccountsChunk = problemAccounts.Chunk(paras.InternalBatchSize);
+                var problemAccountsChunk = problemAccounts.Distinct().Chunk(paras.InternalBatchSize);
 
                 var isWriteLogRescan = paras.FlowTypeRescanCC != FlowTypeRescanCC.NewMember;
 
@@ -254,26 +197,49 @@
                 {
                     var problemCustIds = problemAccountServices.InsertProblemAccountToCTS(problemAccs, isWriteLogRescan, paras.ServiceName, paras.IsWriteLog);
 
-                    custIds.AddRange(problemCustIds);
+                    custIdsToRescanPA.AddRange(problemCustIds);
                 }
             }
 
-            return custIds;
+            return this;
         }
 
-        public void RescanNormalAccount(IEnumerable<int> customers, int internalBatchSize)
+        public RescanCustClassificationService RescanProblemAccount(RescanParametersEntity paras)
         {
-            if (customers == null || !customers.Any())
+            if (custIdsToRescanPA != null && custIdsToRescanPA.Any())
             {
-                return;
+                custClassToMainDBService.PushDataToExternal(custIdsToRescanPA.Distinct(), new PushDataToExternalEntity
+                {
+                    ExternalBatchSize = paras.ExternalBatchSize,
+                    FeedSoon88API = paras.FeedSoon88API,
+                    IsPushCCToSoon88 = paras.IsPushCCToSoon88,
+                    IsUpdateDangerToMainDB = false,
+                    IsWriteLog = paras.IsWriteLog,
+                    ServiceName = paras.ServiceName
+                });
             }
 
-            var custIdsChunk = customers.Chunk(internalBatchSize).ToList();
+            return this;
+        }
 
-            foreach (var custIds in custIdsChunk)
+        public RescanCustClassificationService RescanNormalAccount(RescanParametersEntity paras)
+        {
+            if (paras.CustIds != null && paras.CustIds.Any())
             {
-                dailyClassificationServices.ClassifyCustomerGeneralCategoryDaily(custIds, false);
+                paras.CustIds.ToList().RemoveAll(x => custIdsToRescanPA.Contains(x));
+
+                if (paras.CustIds != null && paras.CustIds.Any())
+                {
+                    var custIdsChunk = paras.CustIds.Chunk(paras.InternalBatchSize);
+
+                    foreach (var custIds in custIdsChunk)
+                    {
+                        dailyClassificationServices.ClassifyCustomerGeneralCategoryDaily(custIds, false);
+                    }
+                }
             }
+
+            return this;
         }
     }
 }

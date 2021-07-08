@@ -4,7 +4,7 @@
     {
         public int CTSCustID { get; set; }
 
-        public int CustID { get; set; }
+        public long CustID { get; set; }
 
         public int CustSubID { get; set; }
 

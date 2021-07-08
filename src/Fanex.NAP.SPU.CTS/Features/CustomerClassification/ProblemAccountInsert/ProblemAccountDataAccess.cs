@@ -52,12 +52,12 @@
                 IsRescan = isRescan
             };
 
-            var custIds = repository.Fetch<int>(criteria);
+            var custIds = repository.Fetch<long>(criteria);
 
             return new InsertCategoryResultEntity
             {
                 ErrorMessage = criteria.ErrorMessage,
-                CustIds = custIds ?? new List<int>()
+                CustIds = custIds ?? new List<long>()
             };
         }
     }

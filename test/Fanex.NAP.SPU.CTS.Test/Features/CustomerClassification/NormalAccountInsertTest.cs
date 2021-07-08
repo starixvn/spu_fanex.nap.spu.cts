@@ -240,7 +240,7 @@
 
             var ouput = new InsertCategoryResultEntity
             {
-                CustIds = new List<int> { 1, 2, 3 },
+                CustIds = new List<long> { 1, 2, 3 },
                 ErrorMessage = string.Empty
             };
 

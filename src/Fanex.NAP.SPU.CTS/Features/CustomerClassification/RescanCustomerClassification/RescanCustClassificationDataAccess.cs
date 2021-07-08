@@ -50,7 +50,7 @@
 
         public DBResult SyncCustomerEvidenceToCategory(string jsonData, bool isRescan)
         {
-            var custIds = new List<int>();
+            var custIds = new List<long>();
 
             var criteria = new SyncCustEvidenceToCTSCategoryCriteria
             {
@@ -60,7 +60,7 @@
 
             if (!string.IsNullOrEmpty(jsonData))
             {
-                custIds = repository.Fetch<int>(criteria).ToList();
+                custIds = repository.Fetch<long>(criteria).ToList();
             }
 
             return new DBResult

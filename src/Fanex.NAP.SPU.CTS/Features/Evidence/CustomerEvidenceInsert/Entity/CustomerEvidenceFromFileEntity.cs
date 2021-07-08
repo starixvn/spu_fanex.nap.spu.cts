@@ -10,7 +10,7 @@
 
         public int SubscriberID { get; set; }
 
-        public int CustID { get; set; }
+        public long CustID { get; set; }
 
         public int EvidenceID { get; set; }
 

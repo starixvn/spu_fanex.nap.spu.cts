@@ -109,7 +109,7 @@
             var dataResult = new InsertCategoryResultEntity
             {
                 ErrorMessage = string.Empty,
-                CustIds = new List<int>() { 1, 2, 3, 4, 5 }
+                CustIds = new List<long>() { 1, 2, 3, 4, 5 }
             };
 
             var problemAccountJson = JsonConvert.SerializeObject(problemAccounts);

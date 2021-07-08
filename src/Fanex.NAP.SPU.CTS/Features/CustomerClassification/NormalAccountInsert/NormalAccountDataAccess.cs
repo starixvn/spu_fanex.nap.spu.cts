@@ -47,7 +47,7 @@
                 NewClassification = newClassification
             };
 
-            var custIds = repository.Fetch<int>(criteria);
+            var custIds = repository.Fetch<long>(criteria);
 
             return new InsertCategoryResultEntity { ErrorMessage = criteria.ErrorMessage, CustIds = custIds };
         }

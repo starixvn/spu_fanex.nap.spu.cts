@@ -16,7 +16,7 @@
 
         bool UpdateAppliedStatusClassification(IEnumerable<CustomerClassificationEntity> custClassifications);
 
-        IEnumerable<int> InsertMainCustomerClassification(IEnumerable<CustomerClassificationEntity> custClassifications
+        IEnumerable<long> InsertMainCustomerClassification(IEnumerable<CustomerClassificationEntity> custClassifications
                                                         , IEnumerable<CustAssociationProblemAccountEntity> custAssociationPA
                                                         , string serviceName, bool isWriteLog);
 
@@ -64,7 +64,7 @@
             return new List<CustAssociationProblemAccountEntity>();
         }
 
-        public IEnumerable<int> InsertMainCustomerClassification(IEnumerable<CustomerClassificationEntity> custClassifications
+        public IEnumerable<long> InsertMainCustomerClassification(IEnumerable<CustomerClassificationEntity> custClassifications
                                                                 , IEnumerable<CustAssociationProblemAccountEntity> custAssociationPA
                                                                 , string serviceName
                                                                 , bool isWriteLog)
@@ -87,7 +87,7 @@
                 }
             }
 
-            return new List<int>();
+            return new List<long>();
         }
 
         public bool UpdateAppliedStatusClassification(IEnumerable<CustomerClassificationEntity> custClassifications)

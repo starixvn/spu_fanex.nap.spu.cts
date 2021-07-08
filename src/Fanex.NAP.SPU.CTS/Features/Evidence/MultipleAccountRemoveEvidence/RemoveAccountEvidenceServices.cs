@@ -16,7 +16,7 @@
 
         RemoveAccountEvidenceServices UpdateCustomerEvidence(IEnumerable<CustomerEvidenceQueueEntity> customerEvidence, string serviceName);
 
-        IEnumerable<int> PrepareCustRescanClassification();
+        IEnumerable<long> PrepareCustRescanClassification();
     }
 
     public class RemoveAccountEvidenceServices : IRemoveAccountEvidenceServices
@@ -76,16 +76,16 @@
             return this;
         }
 
-        public IEnumerable<int> PrepareCustRescanClassification ()
+        public IEnumerable<long> PrepareCustRescanClassification ()
         {
             if(updateResult.ErrorCode == 0 && modifyResult.OutParam.ContainsKey("custIds"))
             {
-                var custIds = modifyResult.OutParam["custIds"]?.ToString().Split(',').Select(int.Parse);
+                var custIds = modifyResult.OutParam["custIds"]?.ToString().Split(',').Select(long.Parse);
 
                 return custIds;
             }
 
-            return new List<int>();
+            return new List<long>();
         }
     }
 }
