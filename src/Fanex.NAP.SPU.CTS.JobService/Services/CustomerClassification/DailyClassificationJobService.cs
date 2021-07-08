@@ -4,15 +4,12 @@
     using Fanex.NAP.SPU.CTS.Shares;
     using Sentry;
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
     public interface IDailyClassificationJobService
     {
         Task<bool> Execute(int batchSize);
-
-        Task<bool> InterruptDailyScanningJob(bool isInterrupt);
     }
 
     public class DailyClassificationJobService : IDailyClassificationJobService
@@ -20,16 +17,13 @@
         private readonly string serviceName;
         private readonly ISentryClient sentryClient;
         private readonly IDailyClassificationServices dailyClassificationServices;
-        private readonly IAppSettings appSettings;
 
         public DailyClassificationJobService(
             ISentryClient sentryClient,
-            IDailyClassificationServices dailyClassificationServices,
-            IAppSettings appSettings)
+            IDailyClassificationServices dailyClassificationServices)
         {
             this.sentryClient = sentryClient;
             this.dailyClassificationServices = dailyClassificationServices;
-            this.appSettings = appSettings;
             this.serviceName = "DailyClassification";
         }
 
@@ -58,30 +52,24 @@
             return Task.FromResult(true);
         }
 
-        public Task<bool> InterruptDailyScanningJob(bool isInterrupt)
-        {
-            try
-            {
-                bool result = appSettings.InterruptDailyScanningJob(isInterrupt);
-
-                return Task.FromResult(result);
-            }
-            catch (Exception e)
-            {
-                sentryClient.CaptureException(e);
-                return Task.FromResult(false);
-            }
-        }
-
         #region Private Methods
 
         private void JobRun(int batchSize)
         {
-            var customers = dailyClassificationServices.GetCustClassificationForDailyScanning(1, batchSize);
-
-            if (customers != null && customers.Any())
+            try
             {
-                dailyClassificationServices.ScanningDailyClassification(customers, true);
+                var customers = dailyClassificationServices.GetCustClassificationForDailyScanning(1, batchSize);
+
+                if (customers != null && customers.Any())
+                {
+                    dailyClassificationServices.ScanningDailyClassification(customers, true);
+
+                    JobRun(batchSize);
+                }
+            }
+            catch(TimeoutException ex)
+            {
+                Utilities.LogSentryError(serviceName, ex.Message, (batchSize), ex, sentryClient);
 
                 JobRun(batchSize);
             }

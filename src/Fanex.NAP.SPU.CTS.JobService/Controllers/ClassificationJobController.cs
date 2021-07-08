@@ -51,12 +51,6 @@
             return await this.dailyClassificationJobService.Execute(batchSize);
         }
 
-        [HttpPost("interruptDailyClassification")]
-        public async Task<bool> DailyScanningClassification([FromForm] bool isInterruptDailyClassificationJob)
-        {
-            return await this.dailyClassificationJobService.InterruptDailyScanningJob(isInterruptDailyClassificationJob);
-        }
-
         [HttpPost("scanningRealtimeClassification")]
         public async Task<bool> RealtimeScanningClassification([FromForm] int batchSize)
         {

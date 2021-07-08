@@ -41,11 +41,10 @@
         int CustomerEvidenceMailingToSPU { get; }
 
         bool TransformCTSCustomerIsWriteLog { get; }
+
         int TransformCTSCustomerBatchSize { get; }
 
         bool UpdateIsWriteLogSetting(string serviceName, bool isWriteLog);
-
-        bool InterruptDailyScanningJob(bool isInterrupted);
     }
 
     public class AppSettings : IAppSettings
@@ -68,7 +67,6 @@
             spName = GetValue<string>(nameof(SPName));
             soon88FeedDataAPI = GetValue<string>(nameof(Soon88FeedDataAPI));
             matchMonitorNumberOfThread = GetValue<int>("MatchMonitor:NumberOfThread");
-            isDailyScanningInterrupt = GetValue<bool>("DailyClassification:IsInterruptJob");
         }
 
         #region Variables
@@ -124,6 +122,7 @@
         public int CustomerEvidenceMailingToSPU => GetValue<int>("CustomerEvidenceInsert:MailingIdToSPU");
 
         public bool TransformCTSCustomerIsWriteLog => GetValue<bool>("TransformCTSCustomer:IsWriteLog");
+
         public int TransformCTSCustomerBatchSize => GetValue<int>("TransformCTSCustomer:BatchSize");
 
         #endregion Variables
@@ -179,27 +178,6 @@
             try
             {
                 SetValue<bool>(serviceName + ":IsWriteLog", isWriteLog);
-            }
-            catch
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        public bool InterruptDailyScanningJob(bool isInterrupted)
-        {
-            var key = "DailyClassification:IsInterruptJob";
-
-            if (configuration[key] == null)
-            {
-                return false;
-            }
-
-            try
-            {
-                SetValue<bool>(key, isInterrupted);
             }
             catch
             {

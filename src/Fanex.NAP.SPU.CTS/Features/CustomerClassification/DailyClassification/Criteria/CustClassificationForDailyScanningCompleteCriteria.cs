@@ -10,7 +10,7 @@
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_CustClassification_DailyScan_Get_Complete";
+            return "CTS_DC_CustClassification_DailyScan_UpdateStatus";
         }
 
         public override bool IsValid()
