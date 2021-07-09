@@ -2,8 +2,8 @@
 
 <Functions>
 	<Function Name="JobSerice">
-		<Setting Key="DCS_DC_TransformToCTS_Account_GetPackage" SpName="DCS_DC_TransformToCTS_Account_GetPackage" DbName="MySQL.DCS_DataCenter.ctsService" />
-		<Setting Key="CTS_DC_TransformDCSAccountToCTSCustomer" SpName="CTS_DC_TransformDCSAccountToCTSCustomer" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
+		<Setting Key="DCS_DC_Transform_Account_GetPackage" SpName="DCS_DC_Transform_Account_GetPackage" DbName="MySQL.DCS_DataCenter.ctsService" />
+		<Setting Key="CTS_DC_Transform_DCSAccountToCTSCustomer" SpName="CTS_DC_Transform_DCSAccountToCTSCustomer" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
 	</Function>
 	<Function Name="Customer">
 		<Setting Key="CTS_DC_CustInfo_CheckCustNotExistedByCustIds" SpName="CTS_DC_CustInfo_CheckCustNotExistedByCustIds" DbName="MySQL.CTS_DataCenter.ctsService" />

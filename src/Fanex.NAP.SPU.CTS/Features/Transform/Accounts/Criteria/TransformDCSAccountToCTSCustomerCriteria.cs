@@ -10,7 +10,7 @@ namespace Fanex.NAP.SPU.CTS.Features.Transform.Accounts.Criteria
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_TransformDCSAccountToCTSCustomer";
+            return "CTS_DC_Transform_DCSAccountToCTSCustomer";
         }
 
         public override bool IsValid()

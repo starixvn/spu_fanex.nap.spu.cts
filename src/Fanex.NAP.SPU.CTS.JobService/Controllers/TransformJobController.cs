@@ -3,7 +3,6 @@
     using Fanex.NAP.SPU.CTS.JobService.Services;
     using Microsoft.AspNetCore.Mvc;
     using Sentry;
-    using System;
     using System.Threading.Tasks;
 
     [ApiController]
@@ -48,7 +47,7 @@
         [HttpPost("TransformAccount")]
         public async Task<bool> Account([FromForm] int size, [FromForm] int numberOfBatch)
         {            
-            return await this.accountJobService.Execute(size, numberOfBatch);
+            return await accountJobService.Execute(size, numberOfBatch);
         }
 
         [HttpPost("SyncUserPermission")]

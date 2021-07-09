@@ -1,11 +1,11 @@
-﻿using Fanex.Data.Repository;
-using Fanex.NAP.SPU.CTS.Features.Transform.Accounts.Criteria;
-using Fanex.NAP.SPU.CTS.Features.Transform.Accounts.Entities;
-using Fanex.NAP.SPU.CTS.Shares;
-using System.Collections.Generic;
-
-namespace Fanex.NAP.SPU.CTS.Features.Transform.Accounts
+﻿namespace Fanex.NAP.SPU.CTS.Features.Transform.Accounts
 {
+    using Fanex.Data.Repository;
+    using Fanex.NAP.SPU.CTS.Features.Transform.Accounts.Criteria;
+    using Fanex.NAP.SPU.CTS.Features.Transform.Accounts.Entities;
+    using Fanex.NAP.SPU.CTS.Shares;
+    using System.Collections.Generic;
+
     public interface IAccountDataAccess
     {
         DataResult TransformDCSAccount(string accountJson);
@@ -52,13 +52,6 @@ namespace Fanex.NAP.SPU.CTS.Features.Transform.Accounts
 
         public void ReTranformAccount(string jsonData, long? lastCustID)
         {
-            if (string.IsNullOrEmpty(jsonData))
-            {
-                return;
-            }
-
-            var repository = new DynamicRepository();
-
             var criteria = new ReTransformAccountCriteria
             {
                 CustomerInfo = jsonData,
