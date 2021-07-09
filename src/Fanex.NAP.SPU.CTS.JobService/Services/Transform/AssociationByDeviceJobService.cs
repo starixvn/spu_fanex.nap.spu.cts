@@ -28,12 +28,13 @@
             try
             {
                 associationByDeviceService.TransformAssociationByDevice(batchSize, numOfBatch);
-
+                sentryClient.CaptureMessage("Done TransformAssociationByDevice");
                 return Task.FromResult(true);
             }
             catch (Exception ex)
             {
                 sentryClient.CaptureException(ex);
+                sentryClient.CaptureMessage("Done TransformAssociationByDevice with error");
                 return Task.FromResult(false);
             }
         }
