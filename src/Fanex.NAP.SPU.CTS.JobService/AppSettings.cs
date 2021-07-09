@@ -12,33 +12,15 @@
 
         string SPName { get; }
 
-        string Soon88FeedDataAPI { get; }
-
         int MatchMonitorNumberOfThread { get; }
 
         bool MatchMonitorIsWriteLog { get; }
-
-        bool ProblemAccountIsWriteLog { get; }
-
-        bool NormalAccountIsWriteLog { get; }
 
         int SiteId { get; }
 
         bool UserPermissionIsWriteLog { get; }
 
         int UpdateLastLoginBatchSize { get; }
-
-        bool IsDailyScanningInterrupt { get; }
-
-        bool RobotAccountIsWriteLog { get; }
-
-        string RobotAccountCreditSites { get; }
-
-        bool RemoveAccountEvidenceIsWriteLog { get; }
-
-        bool CustomerEvidenceIsSendMailToSPU { get; }
-
-        int CustomerEvidenceMailingToSPU { get; }
 
         bool TransformCTSCustomerIsWriteLog { get; }
 
@@ -57,8 +39,6 @@
         private readonly string evironmentName;
         private readonly string spName;
         private readonly int matchMonitorNumberOfThread;
-        private readonly string soon88FeedDataAPI;
-        private readonly bool isDailyScanningInterrupt;
 
         public AppSettings(IConfiguration configuration)
         {
@@ -67,7 +47,6 @@
             environment = GetValue<string>(nameof(Environment));
             evironmentName = GetValue<string>(nameof(Environment));
             spName = GetValue<string>(nameof(SPName));
-            soon88FeedDataAPI = GetValue<string>(nameof(Soon88FeedDataAPI));
             matchMonitorNumberOfThread = GetValue<int>("MatchMonitor:NumberOfThread");
         }
 
@@ -95,33 +74,15 @@
 
         public string SPName => spName;
 
-        public string Soon88FeedDataAPI => soon88FeedDataAPI;
-
         public int MatchMonitorNumberOfThread => matchMonitorNumberOfThread;
 
-        public bool IsDailyScanningInterrupt => isDailyScanningInterrupt;
-
         public bool MatchMonitorIsWriteLog => GetValue<bool>("MatchMonitor:IsWriteLog");
-
-        public bool ProblemAccountIsWriteLog => GetValue<bool>("ProblemAccountInsert:IsWriteLog");
 
         public int SiteId => GetValue<int>("UserPermission:SiteId");
 
         public int UpdateLastLoginBatchSize => GetValue<int>("UpdateLastLoginTime:BatchSize");
 
         public bool UserPermissionIsWriteLog => GetValue<bool>("UserPermission:IsWriteLog");
-
-        public bool NormalAccountIsWriteLog => GetValue<bool>("NormalAccountInsert:IsWriteLog");
-
-        public bool RobotAccountIsWriteLog => GetValue<bool>("RobotAccountInsert:IsWriteLog");
-
-        public string RobotAccountCreditSites => GetValue<string>("RobotAccountInsert:Credit-Sites");
-
-        public bool RemoveAccountEvidenceIsWriteLog => GetValue<bool>("RemoveAccountEvidence:IsWriteLog");
-
-        public bool CustomerEvidenceIsSendMailToSPU => GetValue<bool>("CustomerEvidenceInsert:IsSendMailToSPU");
-
-        public int CustomerEvidenceMailingToSPU => GetValue<int>("CustomerEvidenceInsert:MailingIdToSPU");
 
         public bool TransformCTSCustomerIsWriteLog => GetValue<bool>("TransformCTSCustomer:IsWriteLog");
 
