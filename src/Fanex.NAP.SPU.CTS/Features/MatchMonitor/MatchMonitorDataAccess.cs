@@ -1,13 +1,11 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor
 {
-    using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Criteria;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
     using Fanex.NAP.SPU.CTS.Shares;
     using System;
     using System.Collections.Generic;
-    using System.Linq;
 
     public interface IMatchMonitorDataAccess
     {
@@ -22,7 +20,7 @@
 
     public class MatchMonitorDataAccess : IMatchMonitorDataAccess
     {
-        readonly IDynamicRepository repository;
+        private readonly IDynamicRepository repository;
 
         public MatchMonitorDataAccess()
         {
@@ -39,10 +37,7 @@
                 EventDate = DateTime.Now
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<TicketDetailEntity>(criteria).ToList();
-            }
+            return repository.Fetch<TicketDetailEntity>(criteria);
         }
 
         public IEnumerable<int> InsertMatchMonitorStaging(string matchTransJson)
@@ -52,10 +47,7 @@
                 MatchTransJson = matchTransJson
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<int>(criteria).ToList();
-            }
+            return repository.Fetch<int>(criteria);
         }
 
         public void InsertMatchMonitorRule(int tempGroupID)
@@ -65,20 +57,14 @@
                 TempGroupID = tempGroupID
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                db.ExecuteNonQuery(criteria);
-            }
+            repository.Execute(criteria);
         }
 
         public void UpdateMatchTransComplete()
         {
             var criteria = new MatchTransUpdateCompleteCriteria();
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                db.ExecuteNonQuery(criteria);
-            }
+            repository.Execute(criteria);
         }
     }
 }

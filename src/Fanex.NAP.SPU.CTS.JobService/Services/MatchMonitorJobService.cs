@@ -81,6 +81,7 @@
         }
 
         #region Private Methods
+
         private void JobRun(int batchSize)
         {
             Int64 lastScannedTransId = GetLastScannedTransId();
@@ -138,7 +139,7 @@
         {
             var log = new ConcurrentQueue<int>();
 
-            var options = new ParallelOptions()
+            var options = new ParallelOptions
             {
                 MaxDegreeOfParallelism = appSettings.MatchMonitorNumberOfThread
             };
@@ -147,19 +148,9 @@
             {
                 Parallel.For(0, groupIds.Count, options, i =>
                 {
-                    try
-                    {
-                        log.Enqueue(groupIds[i]);
+                    matchMonitorServices.InsertMatchMonitorRule(groupIds[i]);
 
-                        matchMonitorServices.InsertMatchMonitorRule(groupIds[i]);
-
-                        Thread.Sleep(5);
-                    }
-                    catch (Exception ex)
-                    {
-                        Utilities.LogSentryError(serviceName, $"InsertMatchMonitorRule fail", groupIds[i], ex, sentryClient);
-                        throw new Exception($"{serviceName} - InsertMatchMonitorRule fail - Data {JsonConvert.SerializeObject(groupIds)}", ex);
-                    }
+                    Thread.Sleep(5);
                 });
             }
             catch (AggregateException ex)
@@ -169,6 +160,6 @@
             }
         }
 
-        #endregion
+        #endregion Private Methods
     }
 }
