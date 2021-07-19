@@ -27,5 +27,11 @@
 
             return await this.matchMonitorJobService.Execute(size);
         }
+
+        [HttpPost("updatewritelog")]
+        public async Task<bool> UpdateMatchMonitorWriteLog([FromForm]string serviceName, [FromForm] bool isWriteLog)
+        {
+            return await this.matchMonitorJobService.UpdateWriteLogSetting(serviceName, isWriteLog);
+        }
     }
 }

@@ -18,7 +18,7 @@
     {
         Task<bool> Execute(int batchSize);
 
-        Task<bool> UpdateWriteLogSetting(bool isWriteLog);
+        Task<bool> UpdateWriteLogSetting(string serviceName, bool isWriteLog);
     }
 
     public class MatchMonitorJobService : IMatchMonitorJobService
@@ -57,7 +57,7 @@
             }
             catch (Exception ex)
             {
-                sentryClient.CaptureException(ex);
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
 
                 return Task.FromResult(false);
             }
@@ -65,7 +65,7 @@
             return Task.FromResult(true);
         }
 
-        public Task<bool> UpdateWriteLogSetting(bool isWriteLog)
+        public Task<bool> UpdateWriteLogSetting(string serviceName, bool isWriteLog)
         {
             try
             {
