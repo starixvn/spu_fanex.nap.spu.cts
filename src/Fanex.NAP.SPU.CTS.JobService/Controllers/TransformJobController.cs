@@ -56,6 +56,10 @@
             return await userPermissionJobService.SyncUserPermissionFromNAP();
         }
 
+        /// <summary>
+        /// This function is unused - will be removed later
+        /// </summary>
+        /// <returns>This function is unused</returns>
         [HttpPost("UpdateLastLoginTime")]
         public async Task<bool> UpdateLastLoginTime()
         {
