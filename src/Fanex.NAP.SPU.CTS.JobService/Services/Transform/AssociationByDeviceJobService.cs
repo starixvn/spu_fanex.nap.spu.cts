@@ -28,15 +28,15 @@
             try
             {
                 associationByDeviceService.TransformAssociationByDevice(batchSize, numOfBatch, appSettings.TransformAssByDeviceIsWriteLog);
-                sentryClient.CaptureMessage("Done TransformAssociationByDevice");
-                return Task.FromResult(true);
             }
             catch (Exception ex)
             {
                 sentryClient.CaptureException(ex);
-                sentryClient.CaptureMessage("Done TransformAssociationByDevice with error");
+                
                 return Task.FromResult(false);
             }
+
+            return Task.FromResult(true);
         }
     }
 }

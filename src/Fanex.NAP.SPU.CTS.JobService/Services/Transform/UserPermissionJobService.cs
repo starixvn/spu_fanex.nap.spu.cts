@@ -30,9 +30,19 @@
         {
             try
             {
-                var userPermissions = permissionService.GetUserPermissionFromNAP(FSFunctionKeys.AssociatedAccountMonitor, FSFunctionKeys.AssociatedAccountMonitorKey, appSettings.SiteId, appSettings.UserPermissionIsWriteLog);
-                var userPermissionFromNAP = permissionService.GetUserPermissionFromNAP(FSFunctionKeys.ProbationManagement, FSFunctionKeys.ProbationManagementKey, appSettings.SiteId, appSettings.UserPermissionIsWriteLog);
+                var userPermissions = permissionService.GetUserPermissionFromNAP(
+                    FSFunctionKeys.AssociatedAccountMonitor, 
+                    FSFunctionKeys.AssociatedAccountMonitorKey, 
+                    appSettings.SiteId, 
+                    appSettings.UserPermissionIsWriteLog);
+                var userPermissionFromNAP = permissionService.GetUserPermissionFromNAP(
+                    FSFunctionKeys.ProbationManagement, 
+                    FSFunctionKeys.ProbationManagementKey, 
+                    appSettings.SiteId, 
+                    appSettings.UserPermissionIsWriteLog);
+
                 userPermissions.AddRange(userPermissionFromNAP);
+
                 permissionService.InsertUserPermission(userPermissions);
 
                 return Task.FromResult(true);

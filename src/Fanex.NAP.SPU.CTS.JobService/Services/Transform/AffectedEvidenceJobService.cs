@@ -32,15 +32,15 @@
                 {
                     // Set BetLimit
                     affectedEvidenceService.UpdateBetLimitByEvidenceRemoving(custIds);
-                }
-
-                return Task.FromResult(true);
+                }                
             }
             catch (Exception ex)
             {
                 sentryClient.CaptureException(ex);
                 return Task.FromResult(false);
             }
+
+            return Task.FromResult(true);
         }
     }
 }

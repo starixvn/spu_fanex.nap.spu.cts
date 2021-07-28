@@ -3,7 +3,6 @@
     using Fanex.NAP.Client.Models.ValueObject;
     using Fanex.NAP.Client.Services;
     using Fanex.NAP.SPU.CTS.Features.UserPermission.Entities;
-    using Fanex.NAP.SPU.CTS.Shares;
     using Newtonsoft.Json;
     using Sentry;
     using System.Collections.Generic;
@@ -42,11 +41,11 @@
         public List<UserPermissionModel> GetUserPermissionFromNAP(string functionName, int functionKey, int siteId, bool isWriteLogInfo)
         {
             var userPolicy = userService.GetUserPolicies(functionName, siteId);
-            Utilities.LogSentryInfo("UserPermisison", "Get User Permission", userPolicy, isWriteLogInfo, sentryClient);
-
+            
             if (userPolicy != null && userPolicy.Any())
             {
                 var userPermission = userPolicy.Select(x => TransformUserPermission(x, functionKey));
+
                 return userPermission.ToList();
             }
 
@@ -55,11 +54,16 @@
 
         public UserPermissionModel TransformUserPermission(UserPolicy userPolicy, int functionKey)
         {
-            return new UserPermissionModel
+            if(userPolicy != null && userPolicy.User != null)
             {
-                UserID = userPolicy.User.Id,
-                FuncID = functionKey
-            };
+                return new UserPermissionModel
+                {
+                    UserID = userPolicy.User.Id,
+                    FuncID = functionKey
+                };
+            }
+
+            return null;
         }
     }
 }
