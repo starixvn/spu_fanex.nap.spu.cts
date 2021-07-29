@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.Transform.AssociationByDevice
 {
+    using Fanex.NAP.SPU.CTS.Features.Transform.AssociationByDevice.Entities;
     using Fanex.NAP.SPU.CTS.Shares;
     using Newtonsoft.Json;
     using Sentry;
@@ -11,37 +12,53 @@
 
     public interface IAssociationByDeviceService
     {
-        void TransformAssociationByDevice(int numOfAssociation, int numOfBatch, bool isWriteLog);
+        void TransformAssociationByDevice(IEnumerable<RawAssociationEntity> rawAssociations);
+
+        IEnumerable<RawAssociationEntity> GetRawAssociation(int quantityPerBatch, int numOfBatch);                
     }
 
     public class AssociationByDeviceService : IAssociationByDeviceService
     {
         private readonly IAssociationByDeviceDataAccess dataAccess;
-        private readonly ISentryClient sentryClient;
-        private readonly string serviceName = "AssociationByDeviceService";
 
+        private readonly ISentryClient sentryClient;
+        
         public AssociationByDeviceService(IAssociationByDeviceDataAccess dataAccess, ISentryClient sentryClient)
         {
             this.dataAccess = dataAccess;
             this.sentryClient = sentryClient;
         }
 
-        public void TransformAssociationByDevice(int numOfAssociation, int numOfBatch, bool isWriteLog)
+        public IEnumerable<RawAssociationEntity> GetRawAssociation(int quantityPerBatch, int numOfBatch)
         {
-            var listAssociation = dataAccess.GetRawAssociation(numOfAssociation, numOfBatch);
-            Utilities.LogSentryInfo(serviceName, "GetRawAssociation", listAssociation, isWriteLog, sentryClient);
+            return dataAccess.GetRawAssociation(quantityPerBatch, numOfBatch);
+        }
 
-            if (listAssociation.Any())
+        public void TransformAssociationByDevice(IEnumerable<RawAssociationEntity> rawAssociations)
+        {
+            if (rawAssociations != null && rawAssociations.Any())
+            {                
+                var associationJson = JsonConvert.SerializeObject(TransformData(rawAssociations));
+
+                dataAccess.TransformAssociationByDevice(associationJson);
+            }
+        }
+
+        private IEnumerable<RawAssociationModel> TransformData(IEnumerable<RawAssociationEntity> rawAssociations)
+        {
+            if (rawAssociations != null && rawAssociations.Any())
             {
-                var groupTrans = listAssociation.GroupBy(x => x.BatchId);
-
-                Parallel.ForEach(groupTrans, trans =>
+                return rawAssociations.Select(x => new RawAssociationModel
                 {
-                    var associationJson = JsonConvert.SerializeObject(trans.ToList());
-                    Utilities.LogSentryInfo(serviceName, "TransformAssociationByDevice", trans, isWriteLog, sentryClient);
-                    dataAccess.TransformAssociationByDevice(associationJson);
+                    AccountId = x.AccountId,
+                    AssociationId = x.AssociationId,
+                    CreatedTime = x.CreatedTime.ToString("yyyy-MM-dd hh:mm:ss.fff"),
+                    DeviceId = x.DeviceId,
+                    SubscriberId = x.SubscriberId
                 });
             }
+
+            return new List<RawAssociationModel>();
         }
     }
 }

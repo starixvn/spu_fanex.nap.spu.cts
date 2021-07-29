@@ -1,11 +1,13 @@
 ﻿namespace Fanex.NAP.SPU.CTS.JobService.Services
 {
+    using Fanex.NAP.Client.Models.ValueObject;
     using Fanex.NAP.SPU.CTS.Features.UserPermission;
     using Fanex.NAP.SPU.CTS.Features.UserPermission.Entities;
     using Fanex.NAP.SPU.CTS.Shares;
     using Sentry;
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
 
     public interface IUserPermissionJobService
@@ -18,6 +20,10 @@
         private readonly IUserPermissionService permissionService;
         private readonly ISentryClient sentryClient;
         private readonly IAppSettings appSettings;
+        private readonly Dictionary<int, string> functions = new Dictionary<int, string> {
+                    { FSFunctionKeys.AssociatedAccountMonitorKey, FSFunctionKeys.AssociatedAccountMonitor },
+                    { FSFunctionKeys.ProbationManagementKey, FSFunctionKeys.ProbationManagement }
+                };
 
         public UserPermissionJobService(ISentryClient sentryClient, IUserPermissionService permissionService, IAppSettings appSettings)
         {
@@ -30,27 +36,36 @@
         {
             try
             {
-                var userPermissions = permissionService.GetUserPermissionFromNAP(
-                    FSFunctionKeys.AssociatedAccountMonitor, 
-                    FSFunctionKeys.AssociatedAccountMonitorKey, 
-                    appSettings.SiteId, 
-                    appSettings.UserPermissionIsWriteLog);
-                var userPermissionFromNAP = permissionService.GetUserPermissionFromNAP(
-                    FSFunctionKeys.ProbationManagement, 
-                    FSFunctionKeys.ProbationManagementKey, 
-                    appSettings.SiteId, 
-                    appSettings.UserPermissionIsWriteLog);
+                var userPermissions = new List<UserPermissionModel>();
 
-                userPermissions.AddRange(userPermissionFromNAP);
+                foreach (var function in functions)
+                {
+                    var userPolicy = permissionService.GetUserPolicies(function.Value, appSettings.SiteId);
+
+                    if (userPolicy != null && userPolicy.Any())
+                    {
+                        UpateUserPermission(userPermissions, function, userPolicy);
+                    }
+                }
 
                 permissionService.InsertUserPermission(userPermissions);
-
-                return Task.FromResult(true);
             }
             catch (Exception ex)
             {
                 sentryClient.CaptureException(ex);
                 return Task.FromResult(false);
+            }
+
+            return Task.FromResult(true);
+        }
+
+        private void UpateUserPermission(List<UserPermissionModel> userPermissions, KeyValuePair<int, string> function, IEnumerable<UserPolicy> userPolicy)
+        {
+            var userPermission = permissionService.GetUserPermissionFromNAP(userPolicy.ToList(), function.Key);
+
+            if (userPermission != null && userPermission.Any())
+            {
+                userPermissions.AddRange(userPermission);
             }
         }
     }

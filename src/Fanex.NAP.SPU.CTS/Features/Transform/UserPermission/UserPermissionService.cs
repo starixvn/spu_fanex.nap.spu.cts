@@ -12,9 +12,9 @@
     {
         void InsertUserPermission(IEnumerable<UserPermissionModel> userPermissions);
 
-        List<UserPermissionModel> GetUserPermissionFromNAP(string functionName, int functionKey, int siteId, bool isWriteLogInfo);
+        IEnumerable<UserPermissionModel> GetUserPermissionFromNAP(List<UserPolicy> userPolicy, int functionKey);
 
-        UserPermissionModel TransformUserPermission(UserPolicy userPolicy, int functionKey);
+        IEnumerable<UserPolicy> GetUserPolicies(string functionName, int siteId);
     }
 
     public class UserPermissionService : IUserPermissionService
@@ -38,21 +38,7 @@
             }
         }
 
-        public List<UserPermissionModel> GetUserPermissionFromNAP(string functionName, int functionKey, int siteId, bool isWriteLogInfo)
-        {
-            var userPolicy = userService.GetUserPolicies(functionName, siteId);
-            
-            if (userPolicy != null && userPolicy.Any())
-            {
-                var userPermission = userPolicy.Select(x => TransformUserPermission(x, functionKey));
-
-                return userPermission.ToList();
-            }
-
-            return new List<UserPermissionModel>();
-        }
-
-        public UserPermissionModel TransformUserPermission(UserPolicy userPolicy, int functionKey)
+        private UserPermissionModel TransformUserPermission(UserPolicy userPolicy, int functionKey)
         {
             if(userPolicy != null && userPolicy.User != null)
             {
@@ -64,6 +50,28 @@
             }
 
             return null;
+        }
+
+        public IEnumerable<UserPolicy> GetUserPolicies(string functionName, int siteId)
+        {
+            if(!string.IsNullOrWhiteSpace(functionName) && siteId != 0)
+            {
+                return userService.GetUserPolicies(functionName, siteId);
+            }
+
+            return new List<UserPolicy>();
+        }
+
+        public IEnumerable<UserPermissionModel> GetUserPermissionFromNAP(List<UserPolicy> userPolicy, int functionKey)
+        {
+            if (userPolicy != null && userPolicy.Any())
+            {
+                var userPermission = userPolicy.Select(x => TransformUserPermission(x, functionKey));
+
+                return userPermission;
+            }
+
+            return new List<UserPermissionModel>();
         }
     }
 }

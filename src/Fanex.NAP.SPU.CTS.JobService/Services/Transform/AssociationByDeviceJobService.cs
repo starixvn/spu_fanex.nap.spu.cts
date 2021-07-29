@@ -3,6 +3,7 @@
     using Fanex.NAP.SPU.CTS.Features.Transform.AssociationByDevice;
     using Sentry;
     using System;
+    using System.Linq;
     using System.Threading.Tasks;
 
     public interface IAssociationByDeviceJobService
@@ -27,7 +28,17 @@
         {
             try
             {
-                associationByDeviceService.TransformAssociationByDevice(batchSize, numOfBatch, appSettings.TransformAssByDeviceIsWriteLog);
+                var rawData = associationByDeviceService.GetRawAssociation(batchSize, numOfBatch);
+
+                if(rawData != null && rawData.Any())
+                {
+                    var groupTrans = rawData.GroupBy(x => x.BatchId);
+
+                    Parallel.ForEach(groupTrans, trans =>
+                    {
+                        associationByDeviceService.TransformAssociationByDevice(trans);
+                    });                                        
+                }                                
             }
             catch (Exception ex)
             {

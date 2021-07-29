@@ -11,7 +11,7 @@
 
     public interface IAssociationByDeviceDataAccess
     {
-        IEnumerable<RawAssociationModel> GetRawAssociation(int quantityPerBatch, int numOfBatch);
+        IEnumerable<RawAssociationEntity> GetRawAssociation(int quantityPerBatch, int numOfBatch);
 
         void TransformAssociationByDevice(string associationJson);
     }
@@ -25,7 +25,7 @@
             repository = new DynamicRepository();
         }
 
-        public IEnumerable<RawAssociationModel> GetRawAssociation(int quantityPerBatch, int numOfBatch)
+        public IEnumerable<RawAssociationEntity> GetRawAssociation(int quantityPerBatch, int numOfBatch)
         {
             var criteria = new GetRawAssociationListCriteria
             {
@@ -33,7 +33,7 @@
                 NumberOfBatch = numOfBatch
             };
 
-            return repository.Fetch<RawAssociationModel>(criteria);
+            return repository.Fetch<RawAssociationEntity>(criteria);
         }
 
         public void TransformAssociationByDevice(string associationJson)
