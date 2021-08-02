@@ -1,4 +1,6 @@
-﻿using Fanex.NAP.SPU.CTS.Features.Transform.Accounts;
+﻿using Fanex.Logging.Extensions;
+using Fanex.Logging.Extensions.Database;
+using Fanex.NAP.SPU.CTS.Features.Transform.Accounts;
 using Sentry;
 using Sentry.Protocol;
 using System.Linq;
@@ -33,7 +35,12 @@ namespace Fanex.NAP.SPU.CTS.JobService.Services
             }
             catch (System.Exception ex)
             {
-                sentryClient.CaptureException(ex);
+                var logMessage = new LogMessage(ex.Message)
+                      .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                      .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex))
+                      .ToString();
+
+                sentryClient.CaptureMessage(logMessage, SentryLevel.Error);
 
                 return Task.FromResult(false);
             }
