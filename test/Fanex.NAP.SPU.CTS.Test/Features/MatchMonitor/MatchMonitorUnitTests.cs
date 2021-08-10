@@ -17,14 +17,14 @@
         private readonly IMatchMonitorServices matchMonitorServices;
 
         private readonly ISystemParameterServices commonServices;
-        private readonly ISystemParameterDataAccess commonDataAccess;
+        private readonly SystemParameterDataAccess commonDataAccess;
 
         public MatchMonitorUnitTests()
         {
             matchMonitorDataAccess = Substitute.For<IMatchMonitorDataAccess>();
             matchMonitorServices = new MatchMonitorServices(matchMonitorDataAccess);
 
-            commonDataAccess = Substitute.For<ISystemParameterDataAccess>();
+            commonDataAccess = Substitute.For<SystemParameterDataAccess>();
             commonServices = new SystemParameterServices(commonDataAccess);
         }
 
