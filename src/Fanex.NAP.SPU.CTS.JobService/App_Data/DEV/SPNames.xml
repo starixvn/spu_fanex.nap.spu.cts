@@ -44,6 +44,7 @@
 	</Function>
   <Function name="ArchiveCTSCustomer">
     <Setting Key="CTS_DC_ArchiveCustomer" SpName="CTS_DC_ArchiveCustomer" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
+    <Setting Key="CTS_DC_SystemParameter_Update" SpName="CTS_DC_SystemParameter_Update" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
     <Setting Key="CTS_ArchiveCustomer_Get" SpName="CTS_ArchiveCustomer_Get" DbName="DBARCCUST.bodb_Customer.bodbSPUNet" />
   </Function>
 </Functions>
