@@ -137,8 +137,6 @@
 
         private void InsertParallelMatchRule(List<int> groupIds)
         {
-            var log = new ConcurrentQueue<int>();
-
             var options = new ParallelOptions
             {
                 MaxDegreeOfParallelism = appSettings.MatchMonitorNumberOfThread
@@ -150,12 +148,11 @@
                 {
                     matchMonitorServices.InsertMatchMonitorRule(groupIds[i]);
 
-                    Thread.Sleep(5);
+                    Thread.Sleep(MatchMonitor_SleepTimes);
                 });
             }
             catch (AggregateException ex)
             {
-                Utilities.LogSentryInfo(serviceName, "Check duplicate  ", log, true, sentryClient);
                 throw new AggregateException($"{serviceName} - InsertMatchMonitorRule fail - Data {JsonConvert.SerializeObject(groupIds)}", ex);
             }
         }

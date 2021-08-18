@@ -3,7 +3,6 @@
     using Fanex.NAP.SPU.CTS.JobService.Services;
     using Microsoft.AspNetCore.Mvc;
     using Sentry;
-    using System;
     using System.Threading.Tasks;
 
     [ApiController]
@@ -23,8 +22,6 @@
         [HttpPost("matchmonitor")]
         public async Task<bool> MatchMonitor([FromForm] int size)
         {
-            sentryClient.CaptureMessage($"Match Monitor Service is running at {DateTime.Now}");
-
             return await this.matchMonitorJobService.Execute(size);
         }
 
