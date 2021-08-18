@@ -16,6 +16,8 @@
 
         public const int RemoveEvidences_ClearActionId = 3;
 
+        public const int MatchMonitor_SleepTimes = 5;
+
         public enum MatchMonitorQueryTypes
         {
             Service = 1,
