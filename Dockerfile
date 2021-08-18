@@ -28,4 +28,5 @@ RUN sed -i 's/MinProtocol = TLSv1.2/MinProtocol = TLSv1/g' /usr/lib/ssl/openssl.
 COPY --from=builder /app .
 
 ENTRYPOINT ["dotnet", "Fanex.NAP.SPU.CTS.JobService.dll"]
-ENV TZ="America/New_York"
+
+ENV TZ="America/La_Paz"
