@@ -11,12 +11,15 @@
     {
         private readonly ISentryClient sentryClient;
         private readonly IMatchMonitorJobService matchMonitorJobService;
-
+        private readonly ICustomerStatusJobService customerStatusJobService;
+        
         public JobController(ISentryClient sentryClient,
-            IMatchMonitorJobService matchMonitorJobService)
+            IMatchMonitorJobService matchMonitorJobService,
+            ICustomerStatusJobService customerStatusJobService)
         {
             this.sentryClient = sentryClient;
             this.matchMonitorJobService = matchMonitorJobService;
+            this.customerStatusJobService = customerStatusJobService;
         }
 
         [HttpPost("matchmonitor")]
@@ -25,8 +28,14 @@
             return await this.matchMonitorJobService.Execute(size);
         }
 
+        [HttpPost("customerstatus")]
+        public async Task<bool> InitialCustomerStatus()
+        {
+            return await this.customerStatusJobService.Execute();
+        }
+
         [HttpPost("updatewritelog")]
-        public async Task<bool> UpdateMatchMonitorWriteLog([FromForm]string serviceName, [FromForm] bool isWriteLog)
+        public async Task<bool> UpdateWriteLog([FromForm]string serviceName, [FromForm] bool isWriteLog)
         {
             return await this.matchMonitorJobService.UpdateWriteLogSetting(serviceName, isWriteLog);
         }

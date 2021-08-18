@@ -5,6 +5,7 @@
     using Fanex.NAP.Client.Services;
     using Fanex.NAP.SPU.CTS.Features.AffectedEvidence;
     using Fanex.NAP.SPU.CTS.Features.ExistingCustomer;
+    using Fanex.NAP.SPU.CTS.Features.InitialCustomerStatus;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
     using Fanex.NAP.SPU.CTS.Features.SystemParameter;
     using Fanex.NAP.SPU.CTS.Features.Transform.Accounts;
@@ -35,6 +36,8 @@
             RegisterUpdateLastLogin(services);
 
             RegisterDataAccesLayer(services);
+
+            RegisterInitialCustomerStatus(services);
         }
 
         private static void RegisterNAPService(this IServiceCollection services)
@@ -97,6 +100,13 @@
         {
             services.AddSingleton<ISystemParameterServices, SystemParameterServices>();
             services.AddSingleton<ISystemParameterDataAccess, SystemParameterDataAccess>();
+        }
+
+        private static void RegisterInitialCustomerStatus(this IServiceCollection services)
+        {
+            services.AddSingleton<ICustomerStatusDataAccess, CustomerStatusDataAccess>();
+            services.AddSingleton<ICustomerStatusServices, CustomerStatusServices>();
+            services.AddSingleton<ICustomerStatusJobService, CustomerStatusJobService>();
         }
     }
 }

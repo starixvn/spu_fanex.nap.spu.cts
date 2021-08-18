@@ -1,33 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 
 <Functions>
-	<Function Name="JobSerice">
-		<Setting Key="DCS_DC_Transform_Account_GetPackage" SpName="DCS_DC_Transform_Account_GetPackage" DbName="MySQL.DCS_DataCenter.ctsService" />
-		<Setting Key="CTS_DC_Transform_DCSAccountToCTSCustomer" SpName="CTS_DC_Transform_DCSAccountToCTSCustomer" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
-	</Function>
-	<Function Name="Customer">
-		<Setting Key="CTS_DC_CustInfo_CheckCustNotExistedByCustIds" SpName="CTS_DC_CustInfo_CheckCustNotExistedByCustIds" DbName="MySQL.CTS_DataCenter.ctsService" />
-		<Setting Key="CTS_GetPlacedBetCustomers" SpName="CTS_GetPlacedBetCustomers" DbName="SQL.bodb02.bodbAdminNet"></Setting>
-	</Function>
-	<Function Name="MatchMonitor">
-		<Setting Key="CTS_DC_SystemParameter_Get" SpName="CTS_DC_SystemParameter_Get" DbName="MySQL.CTS_DataCenter.ctsService" />
-		<Setting Key="CTS_Rpt_MatchMonitor_TicketDetails" SpName="CTS_Rpt_MatchMonitor_TicketDetails" DbName="SQL.bodb02.bodbSPUNet"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_Staging_Insert" SpName="CTS_DC_MatchMonitor_Staging_Insert" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_Rule" SpName="CTS_DC_MatchMonitor_Rule" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_Rule_Complete" SpName="CTS_DC_MatchMonitor_Rule_Complete" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
-	</Function>
-	<Function Name="SyncUserPermisison">
-		<Setting Key="CTS_DC_Common_InsertUserPermission" SpName="CTS_DC_Common_InsertUserPermission" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
-	</Function>
-	<Function Name="UpdateLastLogin">
-		<Setting Key="CTS_DC_CustInfo_UpdateLastLoginTime" SpName="CTS_DC_CustInfo_UpdateLastLoginTime" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
-	</Function>
-	<Function Name="AssociationByDevice">
-		<Setting Key="DCS_DC_Transform_Association_GetPackage" SpName="DCS_DC_Transform_Association_GetPackage" DbName="MySQL.DCS_DataCenter.ctsService" />
-		<Setting Key="CTS_DC_Association_InsertAssociationByDevice" SpName="CTS_DC_Association_InsertAssociationByDevice" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
-	</Function>
-	<Function name="AffectedEvidence">
-		<Setting Key="NAP_BLControl_EvidenceFlagged" SpName="NAP_BLControl_EvidenceFlagged_UAT1" DbName="SQL.CustDB.bodbAdminNet" />
-		<Setting Key="CTS_DC_CustEvidence_InsertFromAssociation" SpName="CTS_DC_CustEvidence_InsertFromAssociation" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
-	</Function>
 </Functions>
