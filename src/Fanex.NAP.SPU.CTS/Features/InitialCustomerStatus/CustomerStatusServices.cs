@@ -63,15 +63,20 @@
 
         public ICustomerStatusServices UpdateCustomerStatus()
         {
-            var custInfoJson = string.Empty;
+            var custInfoJson = JsonConvert.SerializeObject(string.Empty);
 
-            if(custStatusInfo!=null && custStatusInfo.Any())
+            if (custStatusInfo != null && custStatusInfo.Any())
             {
-                custInfoJson = JsonConvert.SerializeObject(custStatusInfo.Select(c => new
+                var custStatus = custStatusInfo.Where(c => c.CustStatusID != 0);
+
+                if (custStatus != null && custStatus.Any())
                 {
-                    CustID = c.CustID,
-                    CustStatusID = c.CustStatusID
-                }));
+                    custInfoJson = JsonConvert.SerializeObject(custStatus.Select(c => new
+                    {
+                        CustID = c.CustID,
+                        CustStatusID = c.CustStatusID
+                    }));
+                }
             }
 
             customerStatusDataAccess.UpdateCustomerStatus(custInfoJson, lastCustId);

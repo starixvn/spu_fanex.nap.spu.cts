@@ -12,7 +12,7 @@
         private readonly ISentryClient sentryClient;
         private readonly IMatchMonitorJobService matchMonitorJobService;
         private readonly ICustomerStatusJobService customerStatusJobService;
-        
+
         public JobController(ISentryClient sentryClient,
             IMatchMonitorJobService matchMonitorJobService,
             ICustomerStatusJobService customerStatusJobService)
@@ -35,7 +35,7 @@
         }
 
         [HttpPost("updatewritelog")]
-        public async Task<bool> UpdateWriteLog([FromForm]string serviceName, [FromForm] bool isWriteLog)
+        public async Task<bool> UpdateWriteLog([FromForm] string serviceName, [FromForm] bool isWriteLog)
         {
             return await this.matchMonitorJobService.UpdateWriteLogSetting(serviceName, isWriteLog);
         }

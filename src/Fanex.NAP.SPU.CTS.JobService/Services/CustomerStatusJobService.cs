@@ -56,7 +56,7 @@ namespace Fanex.NAP.SPU.CTS.JobService.Services
             customerStatusServices
                 .Start()
                 .GetCustIds(appSettings.CustomerStatusBatchSize)
-                .GetCustomerFromMainDBForUpdate(UpdateCustomer.FromCustInfo)
+                .GetCustomerFromMainDBForUpdate(UpdateCustomer.FromProductStatus)
                 .UpdateCustomerStatus();
         }
     }
