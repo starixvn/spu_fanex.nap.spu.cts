@@ -28,7 +28,7 @@
             return await this.matchMonitorJobService.Execute(size);
         }
 
-        [HttpPost("customerstatus")]
+        [HttpPost("initialcustomerstatus")]
         public async Task<bool> InitialCustomerStatus()
         {
             return await this.customerStatusJobService.Execute();

@@ -42,9 +42,7 @@
                 SourceType = (int)sourceType
             };
 
-            var custInfos = repository.Fetch<CustomerMainDBModel>(criteria);
-
-            return custInfos;
+            return repository.Fetch<CustomerMainDBModel>(criteria);
         }
 
         public void UpdateCustomerStatus(string custInfoJson, long lastCustId)
