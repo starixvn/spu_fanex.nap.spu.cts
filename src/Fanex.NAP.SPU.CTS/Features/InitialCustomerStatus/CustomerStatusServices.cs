@@ -21,7 +21,7 @@
     {
         private readonly ICustomerStatusDataAccess customerStatusDataAccess;
         private IEnumerable<CustomerMainDBModel> custStatusInfo;
-        private long lastCustId;
+        private long? lastCustId;
         private string custIdsToString;
 
         public CustomerStatusServices(ICustomerStatusDataAccess customerStatusDataAccess)
@@ -32,7 +32,7 @@
         public ICustomerStatusServices Start()
         {
             custStatusInfo = new List<CustomerMainDBModel>();
-            lastCustId = 0;
+            lastCustId = null;
             custIdsToString = string.Empty;
 
             return this;
@@ -79,7 +79,10 @@
                 }
             }
 
-            customerStatusDataAccess.UpdateCustomerStatus(custInfoJson, lastCustId);
+            if (lastCustId != null)
+            {
+                customerStatusDataAccess.UpdateCustomerStatus(custInfoJson, lastCustId);
+            }
 
             return this;
         }

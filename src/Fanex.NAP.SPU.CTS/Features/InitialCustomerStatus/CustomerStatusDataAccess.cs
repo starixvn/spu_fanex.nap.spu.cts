@@ -12,7 +12,7 @@
 
         IEnumerable<CustomerMainDBModel> GetCustomerFromMainDBForUpdate(string custIds, UpdateCustomer sourceType);
 
-        void UpdateCustomerStatus(string custInfoJson, long lastCustId);
+        void UpdateCustomerStatus(string custInfoJson, long? lastCustId);
     }
 
     public class CustomerStatusDataAccess : ICustomerStatusDataAccess
@@ -45,7 +45,7 @@
             return repository.Fetch<CustomerMainDBModel>(criteria);
         }
 
-        public void UpdateCustomerStatus(string custInfoJson, long lastCustId)
+        public void UpdateCustomerStatus(string custInfoJson, long? lastCustId)
         {
             var criteria = new CustomerStatusUpdateCriteria
             {

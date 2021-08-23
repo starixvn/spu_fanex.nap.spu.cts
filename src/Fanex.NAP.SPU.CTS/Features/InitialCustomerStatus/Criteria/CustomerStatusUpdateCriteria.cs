@@ -9,7 +9,7 @@
         public string CustInfoJson { get; set; }
 
         [SpParam(SqlParamName = "ip_LastCustID")]
-        public long LastCustId { get; set; }
+        public long? LastCustId { get; set; }
 
         public override string GetSettingKey()
         {
