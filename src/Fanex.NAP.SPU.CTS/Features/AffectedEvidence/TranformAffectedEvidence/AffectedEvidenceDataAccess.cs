@@ -2,7 +2,6 @@
 {
     using Fanex.Data.Repository;
     using Fanex.NAP.SPU.CTS.Features.AffectedEvidence.Criteria;
-    using Fanex.NAP.SPU.CTS.Features.UserPermission.Criteria;
     using System.Collections.Generic;
 
     public interface IAffectedEvidenceDataAccess
@@ -14,7 +13,7 @@
 
     public class AffectedEvidenceDataAccess : IAffectedEvidenceDataAccess
     {
-        readonly IDynamicRepository repository;
+        private readonly IDynamicRepository repository;
 
         public AffectedEvidenceDataAccess()
         {
