@@ -16,7 +16,7 @@
 
     public interface IMatchMonitorJobService
     {
-        Task<bool> Execute(int batchSize);
+        Task<bool> Execute(int batchSize, bool isLive);
 
         Task<bool> UpdateWriteLogSetting(string serviceName, bool isWriteLog);
     }
@@ -42,13 +42,13 @@
             this.serviceName = "MatchMonitor";
         }
 
-        public Task<bool> Execute(int batchSize)
+        public Task<bool> Execute(int batchSize, bool isLive)
         {
             try
             {
                 if (appSettings.MatchMonitorNumberOfThread > 0 && batchSize > 0)
                 {
-                    JobRun(batchSize);
+                    JobRun(batchSize, isLive);
                 }
                 else
                 {
@@ -82,74 +82,77 @@
 
         #region Private Methods
 
-        private void JobRun(int batchSize)
+        private void JobRun(int batchSize, bool isLive)
         {
-            Int64 lastScannedTransId = GetLastScannedTransId();
+            Int64 lastScannedTransId = GetLastScannedTransId(isLive);
 
-            var matchTrans = GetMatchTrans(lastScannedTransId, batchSize);
+            var matchTrans = GetMatchTrans(lastScannedTransId, batchSize, isLive);
 
             if (matchTrans != null && matchTrans.Any())
             {
-                InsertMatchMonitor(matchTrans);
+                InsertMatchMonitor(matchTrans, isLive);
             }
         }
 
-        private Int64 GetLastScannedTransId()
+        private Int64 GetLastScannedTransId(bool isLive)
         {
-            var lastScannedTransId = systemParameterServices.GetLastScannedId(SystemParameters.MatchMonitorLastScannedTrans);
+            var matchMonitorLastScannedTransIdLive = isLive ? SystemParameters.MatchMonitorLastScannedTrans : SystemParameters.MatchMonitorLastScannedTransNoneLive;
+
+            var lastScannedTransId = systemParameterServices.GetLastScannedId(matchMonitorLastScannedTransIdLive);
 
             Utilities.LogSentryInfo(serviceName, "Get LastScannedTransId", lastScannedTransId, appSettings.MatchMonitorIsWriteLog, sentryClient);
 
             return lastScannedTransId;
         }
 
-        private IEnumerable<TicketDetailEntity> GetMatchTrans(Int64 lastScannedTransId, int batchSize)
+        private IEnumerable<TicketDetailEntity> GetMatchTrans(Int64 lastScannedTransId, int batchSize, bool isLive)
         {
             var matchTrans = new List<TicketDetailEntity>();
 
             if (batchSize > 0)
             {
-                matchTrans = matchMonitorServices.GetMatchTrans(lastScannedTransId, batchSize).ToList();
+                matchTrans = matchMonitorServices.GetMatchTrans(lastScannedTransId, batchSize, isLive).ToList();
             }
 
             Utilities.LogSentryInfo(serviceName, "Get MatchTrans", matchTrans, appSettings.MatchMonitorIsWriteLog, sentryClient);
+
             return matchTrans;
         }
 
-        private void InsertMatchMonitor(IEnumerable<TicketDetailEntity> matchTrans)
+        private void InsertMatchMonitor(IEnumerable<TicketDetailEntity> matchTrans, bool isLive)
         {
             if (matchTrans != null && matchTrans.Any())
             {
-                var groupIds = matchMonitorServices.InsertMatchMonitorStaging(JsonConvert.SerializeObject(matchTrans));
+                var groupIds = matchMonitorServices.InsertMatchMonitorStaging(JsonConvert.SerializeObject(matchTrans), isLive);
 
                 Utilities.LogSentryInfo(serviceName, "Get GroupIds", groupIds, appSettings.MatchMonitorIsWriteLog, sentryClient);
 
                 if (groupIds != null && groupIds.Any())
                 {
-                    InsertParallelMatchRule(groupIds.ToList());
+                    InsertParallelMatchRule(groupIds, isLive);
+
                     Utilities.LogSentryInfo(serviceName, "Insert Rule done", string.Empty, appSettings.MatchMonitorIsWriteLog, sentryClient);
                 }
 
-                matchMonitorServices.UpdateMatchTransComplete();
+                matchMonitorServices.UpdateMatchTransComplete(string.Empty, isLive);
+
                 Utilities.LogSentryInfo(serviceName, "Update milestone done", matchTrans.Select(c => c.TransId).Max(), appSettings.MatchMonitorIsWriteLog, sentryClient);
             }
         }
 
-        private void InsertParallelMatchRule(List<int> groupIds)
-        {
-            var options = new ParallelOptions
-            {
-                MaxDegreeOfParallelism = appSettings.MatchMonitorNumberOfThread
-            };
-
+        private void InsertParallelMatchRule(IEnumerable<int> groupIds, bool isLive)
+        {            
             try
             {
-                Parallel.For(0, groupIds.Count, options, i =>
-                {
-                    matchMonitorServices.InsertMatchMonitorRule(groupIds[i]);
+                groupIds
+                    .AsParallel()
+                    .WithDegreeOfParallelism(appSettings.MatchMonitorNumberOfThread)
+                    .ForAll(x =>
+                    {
+                        matchMonitorServices.InsertMatchMonitorRule(x, isLive);
 
-                    Thread.Sleep(MatchMonitor_SleepTimes);
-                });
+                        Thread.Sleep(MatchMonitor_SleepTimes);
+                    });
             }
             catch (AggregateException ex)
             {

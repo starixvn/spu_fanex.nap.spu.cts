@@ -9,13 +9,13 @@
 
     public interface IMatchMonitorDataAccess
     {
-        IEnumerable<TicketDetailEntity> GetMatchTrans(Int64 LastScannedTransID, int batchSize);
+        IEnumerable<TicketDetailEntity> GetMatchTrans(Int64 LastScannedTransID, int batchSize, bool isLive);
 
-        IEnumerable<int> InsertMatchMonitorStaging(string matchTransJson);
+        IEnumerable<int> InsertMatchMonitorStaging(string matchTransJson, bool isLive);
 
-        void InsertMatchMonitorRule(int tempGroupID);
+        void InsertMatchMonitorRule(int tempGroupID, bool isLive);
 
-        void UpdateMatchTransComplete();
+        void UpdateMatchTransComplete(string result, bool isLive);
     }
 
     public class MatchMonitorDataAccess : IMatchMonitorDataAccess
@@ -27,42 +27,49 @@
             repository = new DynamicRepository();
         }
 
-        public IEnumerable<TicketDetailEntity> GetMatchTrans(Int64 LastScannedTransID, int batchSize)
+        public IEnumerable<TicketDetailEntity> GetMatchTrans(Int64 LastScannedTransID, int batchSize, bool isLive)
         {
             var criteria = new MatchTransGetCriteria
             {
                 QueryType = (int)Consts.MatchMonitorQueryTypes.Service,
                 LastScannedTransID = LastScannedTransID,
                 BatchSize = batchSize,
-                EventDate = DateTime.Now
+                EventDate = DateTime.Now,
+                IsLive = isLive
             };
 
             return repository.Fetch<TicketDetailEntity>(criteria);
         }
 
-        public IEnumerable<int> InsertMatchMonitorStaging(string matchTransJson)
+        public IEnumerable<int> InsertMatchMonitorStaging(string matchTransJson, bool isLive)
         {
             var criteria = new MatchMonitorStagingInsertCriteria
             {
-                MatchTransJson = matchTransJson
+                MatchTransJson = matchTransJson,
+                IsLive = isLive
             };
 
             return repository.Fetch<int>(criteria);
         }
 
-        public void InsertMatchMonitorRule(int tempGroupID)
+        public void InsertMatchMonitorRule(int tempGroupID, bool isLive)
         {
             var criteria = new MatchMonitorRuleInsertCriteria
             {
-                TempGroupID = tempGroupID
+                TempGroupID = tempGroupID,
+                IsLive = isLive 
             };
 
             repository.Execute(criteria);
         }
 
-        public void UpdateMatchTransComplete()
+        public void UpdateMatchTransComplete(string result, bool isLive)
         {
-            var criteria = new MatchTransUpdateCompleteCriteria();
+            var criteria = new MatchTransUpdateCompleteCriteria
+            {
+                Result = result,
+                IsLive = isLive
+            };
 
             repository.Execute(criteria);
         }

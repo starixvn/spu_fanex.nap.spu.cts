@@ -8,6 +8,9 @@
         [SpParam(SqlParamName = "ip_TempGroupID")]
         public int TempGroupID { get; set; }
 
+        [SpParam(SqlParamName = "ip_IsLive")]
+        public bool IsLive { get; set; }
+
         public override string GetSettingKey()
                 => "CTS_DC_MatchMonitor_Rule";
 

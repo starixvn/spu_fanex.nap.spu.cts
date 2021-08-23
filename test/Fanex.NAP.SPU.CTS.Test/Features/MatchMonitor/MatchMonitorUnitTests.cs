@@ -37,9 +37,11 @@
         }
 
         [Theory]
-        [InlineData(1, 10)]
-        [InlineData(10, 100)]
-        public void GetMatchTrans_WhenSuccess_ReturnMat(Int64 LastScannedTransID, int batchSize)
+        [InlineData(1, 10, true)]
+        [InlineData(10, 100, true)]
+        [InlineData(1, 10, false)]
+        [InlineData(10, 100, false)]
+        public void GetMatchTrans_WhenSuccess_ReturnMat(Int64 LastScannedTransID, int batchSize, bool isLive)
         {
             var output = new List<TicketDetailEntity>
             {
@@ -91,16 +93,18 @@
                 }
             };
 
-            matchMonitorDataAccess.GetMatchTrans(LastScannedTransID, batchSize).Returns(output);
+            matchMonitorDataAccess.GetMatchTrans(LastScannedTransID, batchSize, isLive).Returns(output);
 
-            var result = matchMonitorServices.GetMatchTrans(LastScannedTransID, batchSize);
+            var result = matchMonitorServices.GetMatchTrans(LastScannedTransID, batchSize, isLive);
 
             result.Should().NotBeNull();
             result.Should().BeEquivalentTo(output);
         }
 
-        [Fact]
-        public void InsertMatchMonitorStaging_WhenSuccess_ReturnGroupIds()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void InsertMatchMonitorStaging_WhenSuccess_ReturnGroupIds(bool isLive)
         {
             var ticketDetails = new List<TicketDetailEntity>
             {
@@ -156,35 +160,38 @@
 
             var ticketDetailToJson = JsonConvert.SerializeObject(ticketDetails);
 
-            matchMonitorDataAccess.InsertMatchMonitorStaging(ticketDetailToJson).Returns(groupIds);
+            matchMonitorDataAccess.InsertMatchMonitorStaging(ticketDetailToJson, isLive).Returns(groupIds);
 
-            var result = matchMonitorServices.InsertMatchMonitorStaging(ticketDetailToJson);
+            var result = matchMonitorServices.InsertMatchMonitorStaging(ticketDetailToJson, isLive);
 
             result.Should().NotBeNull();
             result.Should().BeEquivalentTo(groupIds);
         }
 
         [Theory]
-        [InlineData(1)]
-        [InlineData(2)]
-        [InlineData(3)]
-        public void InsertMatchMonitorRule_WhenSuccess_ReturnNotException(int tempGroupId)
+        [InlineData(1, true)]
+        [InlineData(2, true)]
+        [InlineData(3, true)]
+        [InlineData(1, false)]
+        [InlineData(2, false)]
+        [InlineData(3, false)]
+        public void InsertMatchMonitorRule_WhenSuccess_ReturnNotException(int tempGroupId, bool isLive)
         {
-            matchMonitorDataAccess.InsertMatchMonitorRule(tempGroupId);
+            matchMonitorDataAccess.InsertMatchMonitorRule(tempGroupId, isLive);
 
-            Action action = () => matchMonitorServices.InsertMatchMonitorRule(tempGroupId);
+            Action action = () => matchMonitorServices.InsertMatchMonitorRule(tempGroupId, isLive);
 
             action.Should().NotThrow<Exception>();
         }
 
-        [Fact]
-        public void UpdateMatchTransComplete_WhenSuccess_ReturnNotException()
-        {
-            matchMonitorDataAccess.UpdateMatchTransComplete();
+        //[Fact]
+        //public void UpdateMatchTransComplete_WhenSuccess_ReturnNotException()
+        //{
+        //    matchMonitorDataAccess.UpdateMatchTransComplete();
 
-            Action action = () => matchMonitorServices.UpdateMatchTransComplete();
+        //    Action action = () => matchMonitorServices.UpdateMatchTransComplete();
 
-            action.Should().NotThrow<Exception>();
-        }
+        //    action.Should().NotThrow<Exception>();
+        //}
     }
 }
