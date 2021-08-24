@@ -38,6 +38,8 @@
             RegisterDataAccesLayer(services);
 
             RegisterInitialCustomerStatus(services);
+
+            RegisterAffectedEvidenceFromQueue(services);
         }
 
         private static void RegisterNAPService(this IServiceCollection services)
@@ -107,6 +109,13 @@
             services.AddSingleton<ICustomerStatusDataAccess, CustomerStatusDataAccess>();
             services.AddSingleton<ICustomerStatusServices, CustomerStatusServices>();
             services.AddSingleton<ICustomerStatusJobService, CustomerStatusJobService>();
+        }
+
+        private static void RegisterAffectedEvidenceFromQueue(this IServiceCollection services)
+        {
+            services.AddSingleton<IAffectedEvidenceFromQueueDataAccess, AffectedEvidenceFromQueueDataAccess>();
+            services.AddSingleton<IAffectedEvidenceFromQueueService, AffectedEvidenceFromQueueService>();
+            services.AddSingleton<IAffectedEvidenceFromQueueJobService, AffectedEvidenceFromQueueJobService>();
         }
     }
 }

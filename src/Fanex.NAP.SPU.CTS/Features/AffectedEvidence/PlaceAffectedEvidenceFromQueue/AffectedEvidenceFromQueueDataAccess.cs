@@ -2,6 +2,7 @@
 {
     using Fanex.Data.Repository;
     using Fanex.NAP.SPU.CTS.Features.AffectedEvidence.Criteria;
+    using System;
 
     public interface IAffectedEvidenceFromQueueDataAccess
     {
@@ -28,7 +29,7 @@
 
             repository.Execute(criteria);
 
-            return criteria.IsExist;
+            return Convert.ToBoolean(criteria.IsExist);
         }
 
         public bool RemoveAssociationAffectedEvidence(int batchSize)
@@ -40,7 +41,7 @@
 
             repository.Execute(criteria);
 
-            return criteria.IsExist;
+            return Convert.ToBoolean(criteria.IsExist);
         }
     }
 }

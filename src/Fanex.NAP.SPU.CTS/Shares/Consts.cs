@@ -1,6 +1,6 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Shares
 {
-    public static class Constants
+    public static class Consts
     {
         public const int RetryPushCCToExternal = 3;
 
@@ -17,6 +17,8 @@
         public const int RemoveEvidences_ClearActionId = 3;
 
         public const int MatchMonitor_SleepTimes = 5;
+
+        public const int AffectedEvidence_SleepTimes = 1;
 
         public enum MatchMonitorQueryTypes
         {

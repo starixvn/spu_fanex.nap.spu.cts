@@ -9,7 +9,7 @@
         public int BatchSize { get; set; }
 
         [SpParam(SqlParamName = "op_IsExist")]
-        public bool IsExist { get; set; }
+        public int IsExist { get; set; }
 
         public override string GetSettingKey()
         {

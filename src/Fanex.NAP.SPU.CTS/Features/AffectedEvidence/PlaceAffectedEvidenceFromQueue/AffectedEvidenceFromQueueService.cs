@@ -1,4 +1,7 @@
-﻿namespace Fanex.NAP.SPU.CTS.Features.AffectedEvidence
+﻿using Fanex.NAP.SPU.CTS.Shares;
+using System.Threading;
+
+namespace Fanex.NAP.SPU.CTS.Features.AffectedEvidence
 {
     public interface IAffectedEvidenceFromQueueService
     {
@@ -23,6 +26,8 @@
             while (isContinue)
             {
                 isContinue = dataAccess.InsertAssociationAffectedEvidence(batchSize);
+
+                Thread.Sleep(Consts.AffectedEvidence_SleepTimes);
             }
         }
 
@@ -33,6 +38,8 @@
             while (isContinue)
             {
                 isContinue = dataAccess.RemoveAssociationAffectedEvidence(batchSize);
+
+                Thread.Sleep(Consts.AffectedEvidence_SleepTimes);
             }
         }
     }

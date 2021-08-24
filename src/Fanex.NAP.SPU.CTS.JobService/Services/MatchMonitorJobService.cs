@@ -12,7 +12,7 @@
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
-    using static Fanex.NAP.SPU.CTS.Shares.Constants;
+    using static Fanex.NAP.SPU.CTS.Shares.Consts;
 
     public interface IMatchMonitorJobService
     {

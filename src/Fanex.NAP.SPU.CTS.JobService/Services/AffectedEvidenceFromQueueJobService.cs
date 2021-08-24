@@ -6,19 +6,19 @@
     using System;
     using System.Threading.Tasks;
 
-    public interface IPlaceAffectedEvidenceFromQueue
+    public interface IAffectedEvidenceFromQueueJobService
     {
         Task<bool> Execute();
     }
 
-    public class PlaceAffectedEvidenceFromQueue : IPlaceAffectedEvidenceFromQueue
+    public class AffectedEvidenceFromQueueJobService : IAffectedEvidenceFromQueueJobService
     {
         private readonly string serviceName;
         private readonly ISentryClient sentryClient;
         private readonly IAffectedEvidenceFromQueueService affectedEvidenceFromQueueService;
         private readonly IAppSettings appSettings;
 
-        public PlaceAffectedEvidenceFromQueue(
+        public AffectedEvidenceFromQueueJobService(
             ISentryClient sentryClient,
             IAffectedEvidenceFromQueueService affectedEvidenceFromQueueService,
             IAppSettings appSettings)

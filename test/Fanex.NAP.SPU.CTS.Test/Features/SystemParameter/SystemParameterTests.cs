@@ -5,7 +5,7 @@
     using NSubstitute;
     using System;
     using Xunit;
-    using static Fanex.NAP.SPU.CTS.Shares.Constants;
+    using static Fanex.NAP.SPU.CTS.Shares.Consts;
 
     public class SystemParameterTests
     {
