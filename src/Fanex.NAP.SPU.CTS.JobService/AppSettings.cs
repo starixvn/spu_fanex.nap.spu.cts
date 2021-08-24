@@ -29,6 +29,8 @@
         bool UpdateIsWriteLogSetting(string serviceName, bool isWriteLog);
 
         bool TransformAssByDeviceIsWriteLog { get; }
+
+        int CustomerStatusBatchSize { get; }
     }
 
     public class AppSettings : IAppSettings
@@ -89,6 +91,8 @@
         public int TransformCTSCustomerBatchSize => GetValue<int>("TransformCTSCustomer:BatchSize");
 
         public bool TransformAssByDeviceIsWriteLog => GetValue<bool>("TransformAssociationByDevice:IsWriteLog");
+
+        public int CustomerStatusBatchSize => GetValue<int>("CustomerStatus:BatchSize");
 
         #endregion Variables
 
