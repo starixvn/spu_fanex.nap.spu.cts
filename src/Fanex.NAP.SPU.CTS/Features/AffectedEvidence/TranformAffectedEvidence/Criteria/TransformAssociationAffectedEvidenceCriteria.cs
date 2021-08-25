@@ -5,7 +5,7 @@
 
     public class TransformAssociationAffectedEvidenceCriteria : NonQueryCommand
     {
-        [SpParam(SqlParamName = "ip_Batch")]
+        [SpParam(SqlParamName = "ip_BatchSize")]
         public int BatchSize { get; set; }
 
         public override string GetSettingKey()
