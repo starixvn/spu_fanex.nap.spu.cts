@@ -1,7 +1,7 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.SystemParameter
 {
     using System;
-    using static Fanex.NAP.SPU.CTS.Shares.Constants;
+    using static Fanex.NAP.SPU.CTS.Shares.Consts;
 
     public interface ISystemParameterServices
     {

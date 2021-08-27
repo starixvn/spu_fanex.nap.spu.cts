@@ -3,7 +3,7 @@ using Fanex.NAP.SPU.CTS.Shares;
 using Sentry;
 using System;
 using System.Threading.Tasks;
-using static Fanex.NAP.SPU.CTS.Shares.Constants;
+using static Fanex.NAP.SPU.CTS.Shares.Consts;
 
 namespace Fanex.NAP.SPU.CTS.JobService.Services
 {

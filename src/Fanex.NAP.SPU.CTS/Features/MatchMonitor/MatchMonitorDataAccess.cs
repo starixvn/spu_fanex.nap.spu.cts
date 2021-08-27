@@ -31,7 +31,7 @@
         {
             var criteria = new MatchTransGetCriteria
             {
-                QueryType = (int)Constants.MatchMonitorQueryTypes.Service,
+                QueryType = (int)Consts.MatchMonitorQueryTypes.Service,
                 LastScannedTransID = LastScannedTransID,
                 BatchSize = batchSize,
                 EventDate = DateTime.Now

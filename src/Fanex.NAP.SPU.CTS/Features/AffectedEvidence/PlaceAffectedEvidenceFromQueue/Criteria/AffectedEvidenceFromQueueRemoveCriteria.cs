@@ -3,14 +3,17 @@
     using Fanex.Data;
     using Fanex.Data.Repository;
 
-    public class TransformAssociationAffectedEvidenceCriteria : NonQueryCommand
+    public class AffectedEvidenceFromQueueRemoveCriteria : NonQueryCommand
     {
-        [SpParam(SqlParamName = "ip_Batch")]
+        [SpParam(SqlParamName = "ip_BatchSize")]
         public int BatchSize { get; set; }
+
+        [SpParam(SqlParamName = "op_IsExist")]
+        public int IsExist { get; set; }
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_CustEvidence_InsertFromAssociation";
+            return "CTS_DC_CustEvidenceQueue_Affected_Remove";
         }
 
         public override bool IsValid()

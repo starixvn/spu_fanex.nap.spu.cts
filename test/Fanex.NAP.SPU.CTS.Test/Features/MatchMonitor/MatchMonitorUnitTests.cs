@@ -9,7 +9,7 @@
     using System;
     using System.Collections.Generic;
     using Xunit;
-    using static Fanex.NAP.SPU.CTS.Shares.Constants;
+    using static Fanex.NAP.SPU.CTS.Shares.Consts;
 
     public class MatchMonitorUnitTests
     {

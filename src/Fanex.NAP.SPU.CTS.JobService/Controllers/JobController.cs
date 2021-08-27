@@ -12,14 +12,17 @@
         private readonly ISentryClient sentryClient;
         private readonly IMatchMonitorJobService matchMonitorJobService;
         private readonly ICustomerStatusJobService customerStatusJobService;
+        private readonly IAffectedEvidenceFromQueueJobService affectedEvidenceFromQueueJobService;
 
         public JobController(ISentryClient sentryClient,
             IMatchMonitorJobService matchMonitorJobService,
-            ICustomerStatusJobService customerStatusJobService)
+            ICustomerStatusJobService customerStatusJobService,
+            IAffectedEvidenceFromQueueJobService affectedEvidenceFromQueueJobService)
         {
             this.sentryClient = sentryClient;
             this.matchMonitorJobService = matchMonitorJobService;
             this.customerStatusJobService = customerStatusJobService;
+            this.affectedEvidenceFromQueueJobService = affectedEvidenceFromQueueJobService;
         }
 
         [HttpPost("matchmonitor")]
@@ -32,6 +35,12 @@
         public async Task<bool> InitialCustomerStatus()
         {
             return await this.customerStatusJobService.Execute();
+        }
+
+        [HttpPost("AffectedEvidenceFromQueue")]
+        public async Task<bool> PlaceAffectedEvidenceFromQueue()
+        {
+            return await this.affectedEvidenceFromQueueJobService.Execute();
         }
 
         [HttpPost("updatewritelog")]
