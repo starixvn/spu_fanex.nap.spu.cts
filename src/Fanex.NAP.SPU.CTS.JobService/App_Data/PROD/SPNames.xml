@@ -34,7 +34,12 @@
 		<Setting Key="CTS_DC_CustInfo_Healing_GetCustIDs" SpName="CTS_DC_CustInfo_Healing_GetCustIDs" DbName="MySQL.CTS_DataCenter.ctsService" />
 		<Setting Key="CTS_DC_CustInfo_Healing_Update" SpName="CTS_DC_CustInfo_Healing_Update" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
 		<Setting Key="CTS_Customer_GetInfoByCustIdList" SpName="CTS_Customer_GetInfoByCustIdList" DbName="SQL.bodb02.bodbSPUNet" TimeOut="600" />
-		<Setting Key="CTS_DC_CustEvidenceQueue_Affected_Insert" SpName="CTS_DC_CustEvidenceQueue_Affected_Insert" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" TimeOut="600"/>
-		<Setting Key="CTS_DC_CustEvidenceQueue_Affected_Remove" SpName="CTS_DC_CustEvidenceQueue_Affected_Remove" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" TimeOut="600"/>
+		<Setting Key="CTS_DC_CustEvidenceQueue_Affected_Insert" SpName="CTS_DC_CustEvidenceQueue_Affected_Insert" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" TimeOut="600" />
+		<Setting Key="CTS_DC_CustEvidenceQueue_Affected_Remove" SpName="CTS_DC_CustEvidenceQueue_Affected_Remove" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" TimeOut="600" />
+	</Function>
+	<Function name="ArchiveCustClassificationHistory">
+		<Setting Key="CTS_DC_CustClassification_History_DataUnChanged_CleanUp" SpName="CTS_DC_CustClassification_History_DataUnChanged_CleanUp" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
+		<Setting Key="CTS_DC_CustClassification_History_DataChanged_CleanUp" SpName="CTS_DC_CustClassification_History_DataChanged_CleanUp" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
+		<Setting Key="CTS_Archive_CustClassification_History_Insert" SpName="CTS_Archive_CustClassification_History_Insert" DbName="MySQL.CTS_Archive.ctsServiceAdmin" />
 	</Function>
 </Functions>

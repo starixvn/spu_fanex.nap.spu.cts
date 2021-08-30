@@ -20,6 +20,8 @@
 
         public const int AffectedEvidence_SleepTimes = 1;
 
+        public const int ArchiveCustClassification_SleepTimes = 20;
+
         public enum MatchMonitorQueryTypes
         {
             Service = 1,

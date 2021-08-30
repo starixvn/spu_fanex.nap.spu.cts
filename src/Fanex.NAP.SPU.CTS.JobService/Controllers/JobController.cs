@@ -13,16 +13,19 @@
         private readonly IMatchMonitorJobService matchMonitorJobService;
         private readonly ICustomerStatusJobService customerStatusJobService;
         private readonly IAffectedEvidenceFromQueueJobService affectedEvidenceFromQueueJobService;
+        private readonly IArchiveCustClassificationHistoryJobService archiveCustClassHistoryJobService;
 
         public JobController(ISentryClient sentryClient,
             IMatchMonitorJobService matchMonitorJobService,
             ICustomerStatusJobService customerStatusJobService,
-            IAffectedEvidenceFromQueueJobService affectedEvidenceFromQueueJobService)
+            IAffectedEvidenceFromQueueJobService affectedEvidenceFromQueueJobService,
+            IArchiveCustClassificationHistoryJobService archiveCustClassHistoryJobService)
         {
             this.sentryClient = sentryClient;
             this.matchMonitorJobService = matchMonitorJobService;
             this.customerStatusJobService = customerStatusJobService;
             this.affectedEvidenceFromQueueJobService = affectedEvidenceFromQueueJobService;
+            this.archiveCustClassHistoryJobService = archiveCustClassHistoryJobService;
         }
 
         [HttpPost("matchmonitor")]
@@ -41,6 +44,18 @@
         public async Task<bool> PlaceAffectedEvidenceFromQueue()
         {
             return await this.affectedEvidenceFromQueueJobService.Execute();
+        }
+
+        [HttpPost("CleanUpUnChangedCCHistory")]
+        public async Task<bool> CleanUpUnchangedCustClassificationHistory()
+        {
+            return await this.archiveCustClassHistoryJobService.CleanUpUnChangedCustClassHistory();
+        }
+
+        [HttpPost("ArchiveChangedCCHistory")]
+        public async Task<bool> ArchiveChangedCustClassificationHistory()
+        {
+            return await this.archiveCustClassHistoryJobService.ArchiveChangedCustClassHistory();
         }
 
         [HttpPost("updatewritelog")]
