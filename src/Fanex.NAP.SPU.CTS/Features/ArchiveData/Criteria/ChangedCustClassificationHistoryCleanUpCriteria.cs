@@ -6,7 +6,7 @@
     public class ChangedCustClassificationHistoryCleanUpCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "op_IsDataExist")]
-        public bool IsDataExist { get; set; }
+        public int IsDataExist { get; set; }
 
         public override string GetSettingKey()
         {

@@ -22,6 +22,8 @@
 
         public const int ArchiveCustClassification_SleepTimes = 20;
 
+        public const int ExpiredHttpRequest = 85500000; //23h 45p
+
         public enum MatchMonitorQueryTypes
         {
             Service = 1,

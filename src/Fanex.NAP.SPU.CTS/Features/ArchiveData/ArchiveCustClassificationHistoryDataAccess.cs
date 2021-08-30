@@ -3,6 +3,7 @@
     using Fanex.Data.Repository;
     using Fanex.NAP.SPU.CTS.Features.ArchiveData.Criteria;
     using Fanex.NAP.SPU.CTS.Features.ArchiveData.Entities;
+    using System;
     using System.Collections.Generic;
 
     public interface IArchiveCustClassificationHistoryDataAccess
@@ -29,7 +30,7 @@
 
             repository.Execute(criteria);
 
-            return criteria.IsDataExist;
+            return Convert.ToBoolean(criteria.IsDataExist);
         }
 
         public HistoryClassificationArchiveEntity CleanUpChangedCustClassificationHistory()
@@ -43,7 +44,7 @@
             var criteria = new ChangedCustClassificationHistoryCleanUpCriteria();
 
             output.CustClassificationHistory = repository.Fetch<CustClassificationHistoryEntity>(criteria);
-            output.IsExistData = criteria.IsDataExist;
+            output.IsExistData = Convert.ToBoolean(criteria.IsDataExist);
 
             return output;
         }

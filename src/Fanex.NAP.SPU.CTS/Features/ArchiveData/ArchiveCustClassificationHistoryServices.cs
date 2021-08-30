@@ -3,6 +3,7 @@
     using Fanex.NAP.SPU.CTS.Features.ArchiveData;
     using Fanex.NAP.SPU.CTS.Shares;
     using Newtonsoft.Json;
+    using System.Diagnostics;
     using System.Linq;
     using System.Threading;
 
@@ -25,8 +26,10 @@
         public void CleanUpUnChangedCustClassificationHistory()
         {
             var isContinue = true;
+            var watch = new Stopwatch();
+            watch.Start();
 
-            while (isContinue)
+            while (isContinue && !Utilities.IsExpireHttpRequest(watch))
             {
                 isContinue = dataAccess.CleanUpUnChangedCustClassificationHistory();
 
@@ -37,8 +40,10 @@
         public void ArchiveChangedCustClassificationHistory()
         {
             var isContinue = true;
+            var watch = new Stopwatch();
+            watch.Start();
 
-            while (isContinue)
+            while (isContinue && !Utilities.IsExpireHttpRequest(watch)) 
             {
                 var data = dataAccess.CleanUpChangedCustClassificationHistory();
 
