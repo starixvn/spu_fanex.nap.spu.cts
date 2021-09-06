@@ -104,7 +104,7 @@
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public void InsertMatchMonitorStaging_WhenSuccess_ReturnGroupIds(bool isLive)
+        public void InsertMatchMonitorStaging_WhenSuccess_ReturnListMatchStaging(bool isLive)
         {
             var ticketDetails = new List<TicketDetailEntity>
             {
@@ -156,33 +156,61 @@
                 }
             };
 
-            var groupIds = new List<int> { 1, 2, 3 };
+            var matchStagings = new List<MatchStagingModel> { 
+                new MatchStagingModel{ 
+                    MatchId = 1,
+                    BetTypeId = 1,
+                    TotalScore = 3
+                },
+                new MatchStagingModel{
+                    MatchId = 2,
+                    BetTypeId = 3,
+                    TotalScore = 2
+                },
+                new MatchStagingModel{
+                    MatchId = 3,
+                    BetTypeId = 7,
+                    TotalScore = 0
+                },
+            };
 
             var ticketDetailToJson = JsonConvert.SerializeObject(ticketDetails);
 
-            matchMonitorDataAccess.InsertMatchMonitorStaging(ticketDetailToJson, isLive).Returns(groupIds);
+            matchMonitorDataAccess.InsertMatchMonitorStaging(ticketDetailToJson, isLive).Returns(matchStagings);
 
             var result = matchMonitorServices.InsertMatchMonitorStaging(ticketDetailToJson, isLive);
 
             result.Should().NotBeNull();
-            result.Should().BeEquivalentTo(groupIds);
+            result.Should().BeEquivalentTo(matchStagings);
         }
 
-        [Theory]
-        [InlineData(1, true)]
-        [InlineData(2, true)]
-        [InlineData(3, true)]
-        [InlineData(1, false)]
-        [InlineData(2, false)]
-        [InlineData(3, false)]
-        public void InsertMatchMonitorRule_WhenSuccess_ReturnNotException(int tempGroupId, bool isLive)
-        {
-            matchMonitorDataAccess.InsertMatchMonitorRule(tempGroupId, isLive);
+        //[Theory]
+        //[InlineData(true, 1, 2, 1)]
+        //[InlineData(true, 1, 0, 3)]
+        //[InlineData(true, 1, 3, 7)]
+        //[InlineData(true, 1, 3, 8)]
+        //[InlineData(false, 1, 2, 1)]
+        //[InlineData(false, 1, 0, 3)]
+        //[InlineData(false, 1, 3, 7)]
+        //[InlineData(false, 1, 3, 8)]
+        //public void InsertMatchMonitorRule_WhenSuccess_ReturnNotException(bool isLive, int matchId, int totalScore, int bettypeId)
+        //{
+        //    var result = new List<MatchRuleCompletedModel> {
+        //        new MatchRuleCompletedModel
+        //        {
+        //            GroupId = 1,
+        //            IsHedging = false,
+        //            CustIdList = "17990615,50294551,50294551",
+        //            TransIdList = "111845019100,111845032053,111845032772",
+        //            OldGroupIdList = "0",
+        //            NoOfOldGroupIdList = 0
+        //        }
+        //    };
 
-            Action action = () => matchMonitorServices.InsertMatchMonitorRule(tempGroupId, isLive);
+        //    matchMonitorDataAccess.InsertMatchMonitorRule(isLive, matchId, totalScore, bettypeId).Returns(result);
 
-            action.Should().NotThrow<Exception>();
-        }
+            
+        //}
 
         //[Fact]
         //public void UpdateMatchTransComplete_WhenSuccess_ReturnNotException()

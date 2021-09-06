@@ -28,13 +28,13 @@
             this.archiveCustClassHistoryJobService = archiveCustClassHistoryJobService;
         }
 
-        [HttpPost("live/matchmonitor")]
+        [HttpPost("matchmonitorlive")]
         public async Task<bool> MatchMonitorLive([FromForm] int size)
         {
             return await this.matchMonitorJobService.Execute(size, true);
         }
 
-        [HttpPost("nonlive/matchmonitor")]
+        [HttpPost("matchmonitornonlive")]
         public async Task<bool> MatchMonitorNonLive([FromForm] int size)
         {
             return await this.matchMonitorJobService.Execute(size, false);

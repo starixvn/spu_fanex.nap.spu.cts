@@ -8,11 +8,13 @@
     {
         IEnumerable<TicketDetailEntity> GetMatchTrans(Int64 LastScannedTransID, int batchSize, bool isLive);
 
-        IEnumerable<int> InsertMatchMonitorStaging(string matchTransJson, bool isLive);
+        IEnumerable<MatchStagingModel> InsertMatchMonitorStaging(string matchTransJson, bool isLive);
 
-        void InsertMatchMonitorRule(int tempGroupID, bool isLive);
+        IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, int matchId, int totalScore, int bettypeId);
 
-        void UpdateMatchTransComplete(string result, bool isLive);
+        void UpdateMatchTransComplete(bool isLive, int matchId, int totalScore, int bettypeId, string transGroupJson);
+
+        void CleanMatchStaging(bool isLive);
     }
 
     public class MatchMonitorServices : IMatchMonitorServices
@@ -29,19 +31,24 @@
             return matchDataAccess.GetMatchTrans(LastScannedTransID, batchSize, isLive);
         }
 
-        public IEnumerable<int> InsertMatchMonitorStaging(string matchTransJson, bool isLive)
+        public IEnumerable<MatchStagingModel> InsertMatchMonitorStaging(string matchTransJson, bool isLive)
         {
             return matchDataAccess.InsertMatchMonitorStaging(matchTransJson, isLive);
         }
 
-        public void InsertMatchMonitorRule(int tempGroupID, bool isLive)
+        public IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, int matchId, int totalScore, int bettypeId)
         {
-            matchDataAccess.InsertMatchMonitorRule(tempGroupID, isLive);
+            return matchDataAccess.InsertMatchMonitorRule(isLive, matchId, totalScore, bettypeId);
         }
 
-        public void UpdateMatchTransComplete(string result, bool isLive)
+        public void UpdateMatchTransComplete(bool isLive, int matchId, int totalScore, int bettypeId, string transGroupJson)
         {
-            matchDataAccess.UpdateMatchTransComplete(result, isLive);
+            matchDataAccess.UpdateMatchTransComplete(isLive, matchId, totalScore, bettypeId, transGroupJson);
+        }
+
+        public void CleanMatchStaging(bool isLive)
+        {
+            matchDataAccess.CleanMatchStaging(isLive);
         }
     }
 }

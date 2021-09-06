@@ -92,6 +92,8 @@
             {
                 InsertMatchMonitor(matchTrans, isLive);
             }
+
+            matchMonitorServices.CleanMatchStaging(isLive);
         }
 
         private Int64 GetLastScannedTransId(bool isLive)
@@ -123,40 +125,37 @@
         {
             if (matchTrans != null && matchTrans.Any())
             {
-                var groupIds = matchMonitorServices.InsertMatchMonitorStaging(JsonConvert.SerializeObject(matchTrans), isLive);
+                var matchStaging = matchMonitorServices.InsertMatchMonitorStaging(JsonConvert.SerializeObject(matchTrans), isLive);
 
-                Utilities.LogSentryInfo(serviceName, "Get GroupIds", groupIds, appSettings.MatchMonitorIsWriteLog, sentryClient);
-
-                if (groupIds != null && groupIds.Any())
+                if (matchStaging != null && matchStaging.Any())
                 {
-                    InsertParallelMatchRule(groupIds, isLive);
-
-                    Utilities.LogSentryInfo(serviceName, "Insert Rule done", string.Empty, appSettings.MatchMonitorIsWriteLog, sentryClient);
-                }
-
-                matchMonitorServices.UpdateMatchTransComplete(string.Empty, isLive);
-
-                Utilities.LogSentryInfo(serviceName, "Update milestone done", matchTrans.Select(c => c.TransId).Max(), appSettings.MatchMonitorIsWriteLog, sentryClient);
+                    InsertParallelMatchRule(isLive, matchStaging);
+                }               
             }
         }
 
-        private void InsertParallelMatchRule(IEnumerable<int> groupIds, bool isLive)
-        {            
+        private void InsertParallelMatchRule(bool isLive, IEnumerable<MatchStagingModel> matchStaging)
+        {
             try
             {
-                groupIds
+                matchStaging
                     .AsParallel()
                     .WithDegreeOfParallelism(appSettings.MatchMonitorNumberOfThread)
                     .ForAll(x =>
                     {
-                        matchMonitorServices.InsertMatchMonitorRule(x, isLive);
+                        var matchRuleCompleted = matchMonitorServices.InsertMatchMonitorRule(isLive, x.MatchId, x.TotalScore, x.BetTypeId);
+
+                        if (matchRuleCompleted != null && matchRuleCompleted.Any())
+                        {
+                            matchMonitorServices.UpdateMatchTransComplete(isLive, x.MatchId, x.TotalScore, x.BetTypeId, JsonConvert.SerializeObject(matchRuleCompleted));
+                        }
 
                         Thread.Sleep(MatchMonitor_SleepTimes);
                     });
             }
             catch (AggregateException ex)
             {
-                throw new AggregateException($"{serviceName} - InsertMatchMonitorRule fail - Data {JsonConvert.SerializeObject(groupIds)}", ex);
+                throw new AggregateException($"{serviceName} - Insert Match Monitor Rule failed.", ex);
             }
         }
 
