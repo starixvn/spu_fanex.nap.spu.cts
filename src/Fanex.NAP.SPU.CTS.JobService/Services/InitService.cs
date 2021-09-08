@@ -4,6 +4,7 @@
     using Fanex.NAP.Client.Helpers.Web;
     using Fanex.NAP.Client.Services;
     using Fanex.NAP.SPU.CTS.Features.AffectedEvidence;
+    using Fanex.NAP.SPU.CTS.Features.ArchiveData;
     using Fanex.NAP.SPU.CTS.Features.ExistingCustomer;
     using Fanex.NAP.SPU.CTS.Features.InitialCustomerStatus;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
@@ -40,6 +41,8 @@
             RegisterInitialCustomerStatus(services);
 
             RegisterAffectedEvidenceFromQueue(services);
+
+            RegisterArchiveCustClassificationHistory(services);
         }
 
         private static void RegisterNAPService(this IServiceCollection services)
@@ -116,6 +119,13 @@
             services.AddSingleton<IAffectedEvidenceFromQueueDataAccess, AffectedEvidenceFromQueueDataAccess>();
             services.AddSingleton<IAffectedEvidenceFromQueueService, AffectedEvidenceFromQueueService>();
             services.AddSingleton<IAffectedEvidenceFromQueueJobService, AffectedEvidenceFromQueueJobService>();
+        }
+
+        private static void RegisterArchiveCustClassificationHistory(this IServiceCollection services)
+        {
+            services.AddSingleton<IArchiveCustClassificationHistoryDataAccess, ArchiveCustClassificationHistoryDataAccess>();
+            services.AddSingleton<IArchiveCustClassificationHistoryServices, ArchiveCustClassificationHistoryServices>();
+            services.AddSingleton<IArchiveCustClassificationHistoryJobService, ArchiveCustClassificationHistoryJobService>();
         }
     }
 }

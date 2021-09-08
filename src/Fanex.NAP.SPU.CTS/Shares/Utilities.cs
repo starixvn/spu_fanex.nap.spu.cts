@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using Sentry;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -102,6 +103,18 @@ namespace Fanex.NAP.SPU.CTS.Shares
             {
                 return sr.ReadToEnd();
             }
+        }
+
+        public static bool IsExpireHttpRequest(Stopwatch watch)
+        {
+            if(watch.ElapsedMilliseconds > Consts.ExpiredHttpRequest)
+            {
+                watch.Stop();
+
+                return true;
+            }
+
+            return false;
         }
     }
 }

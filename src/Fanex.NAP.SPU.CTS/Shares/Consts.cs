@@ -20,6 +20,10 @@
 
         public const int AffectedEvidence_SleepTimes = 1;
 
+        public const int ArchiveCustClassification_SleepTimes = 10000;
+
+        public const int ExpiredHttpRequest = 85500000; //23h 45p
+
         public enum MatchMonitorQueryTypes
         {
             Service = 1,
