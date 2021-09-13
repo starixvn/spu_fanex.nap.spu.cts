@@ -5,7 +5,7 @@
     using Fanex.NAP.SPU.CTS.Features.ArchiveData.Customer.Entities;
     using System;
     using System.Collections.Generic;
-    using static Fanex.NAP.SPU.CTS.Shares.Constants;
+    using static Fanex.NAP.SPU.CTS.Shares.Consts;
 
     public interface IArchiveCustomerDataAccess
     {

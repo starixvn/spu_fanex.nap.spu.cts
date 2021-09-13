@@ -5,7 +5,7 @@
     using Sentry;
     using System;
     using System.Linq;
-    using static Fanex.NAP.SPU.CTS.Shares.Constants;
+    using static Fanex.NAP.SPU.CTS.Shares.Consts;
 
     public interface IArchiveCustomerService
     {
