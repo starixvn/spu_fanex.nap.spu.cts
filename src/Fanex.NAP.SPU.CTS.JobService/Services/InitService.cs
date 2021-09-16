@@ -5,6 +5,7 @@
     using Fanex.NAP.Client.Services;
     using Fanex.NAP.SPU.CTS.Features.AffectedEvidence;
     using Fanex.NAP.SPU.CTS.Features.ArchiveData;
+    using Fanex.NAP.SPU.CTS.Features.ArchiveData.Customer;
     using Fanex.NAP.SPU.CTS.Features.ExistingCustomer;
     using Fanex.NAP.SPU.CTS.Features.InitialCustomerStatus;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
@@ -13,6 +14,7 @@
     using Fanex.NAP.SPU.CTS.Features.Transform.AssociationByDevice;
     using Fanex.NAP.SPU.CTS.Features.UpdateLastLogin;
     using Fanex.NAP.SPU.CTS.Features.UserPermission;
+    using Fanex.NAP.SPU.CTS.JobService.Services.ArchiveData;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.DependencyInjection;
 
@@ -38,11 +40,20 @@
 
             RegisterDataAccesLayer(services);
 
+            RegisterArchiveDataService(services);
+            
             RegisterInitialCustomerStatus(services);
 
             RegisterAffectedEvidenceFromQueue(services);
 
             RegisterArchiveCustClassificationHistory(services);
+        }
+
+        private static void RegisterArchiveDataService(this IServiceCollection services)
+        {
+            services.AddSingleton<IArchiveCustomerService, ArchiveCustomerService>();
+            services.AddSingleton<IArchiveCustomerDataAccess, ArchiveCustomerDataAccess>();
+            services.AddSingleton<IArchiveCustomerJobService, ArchiveCustomerJobService>();
         }
 
         private static void RegisterNAPService(this IServiceCollection services)
@@ -104,7 +115,7 @@
         private static void RegisterDataAccesLayer(this IServiceCollection services)
         {
             services.AddSingleton<ISystemParameterServices, SystemParameterServices>();
-            services.AddSingleton<ISystemParameterDataAccess, SystemParameterDataAccess>();
+            services.AddSingleton<SystemParameterDataAccess, SystemParameterDataAccess>();
         }
 
         private static void RegisterInitialCustomerStatus(this IServiceCollection services)

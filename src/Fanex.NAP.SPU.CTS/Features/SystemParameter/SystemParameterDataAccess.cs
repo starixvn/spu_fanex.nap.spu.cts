@@ -6,9 +6,9 @@
 
     public interface ISystemParameterDataAccess
     {
-        SystemParameterEntity GetPreviousTimingExecution(SystemParameters paramID);
+        SystemParameterEntity GetSystemParameterByID(SystemParameters paramID);
 
-        void UpdateTimingExecution(string paraValue, SystemParameters paramId);
+        void UpdateValueForSystemParameterByID(string paraValue, SystemParameters paramId);
     }
 
     public class SystemParameterDataAccess : ISystemParameterDataAccess
@@ -20,9 +20,9 @@
             repository = new DynamicRepository();
         }
 
-        public SystemParameterEntity GetPreviousTimingExecution(SystemParameters paramID)
+        public SystemParameterEntity GetSystemParameterByID(SystemParameters paramID)
         {
-            var criteria = new PreviousTimingExecutionGetCriteria
+            var criteria = new GetSystemParameterCriteria
             {
                 ParamID = (int)paramID
             };
@@ -33,9 +33,9 @@
             }
         }
 
-        public void UpdateTimingExecution(string paraValue, SystemParameters paramId)
+        public void UpdateValueForSystemParameterByID(string paraValue, SystemParameters paramId)
         {
-            var criteria = new PreviousTimingExecutionUpdateCriteria
+            var criteria = new UpdateSystemParameterCriteria
             {
                 ParamId = (int)paramId,
                 ParamValue = paraValue

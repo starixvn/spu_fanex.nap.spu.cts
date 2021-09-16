@@ -9,12 +9,12 @@
 
     public class SystemParameterTests
     {
-        private readonly ISystemParameterDataAccess systemParameterDataAccess;
+        private readonly SystemParameterDataAccess systemParameterDataAccess;
         private readonly ISystemParameterServices systemParameterServices;
 
         public SystemParameterTests()
         {
-            systemParameterDataAccess = Substitute.For<ISystemParameterDataAccess>();
+            systemParameterDataAccess = Substitute.For<SystemParameterDataAccess>();
 
             systemParameterServices = new SystemParameterServices(systemParameterDataAccess);
         }
@@ -29,7 +29,7 @@
                 ParameterValue = "212121"
             };
 
-            systemParameterDataAccess.GetPreviousTimingExecution(paraID).Returns(output);
+            systemParameterDataAccess.GetSystemParameterByID(paraID).Returns(output);
 
             var result = systemParameterServices.GetLastScannedId(paraID);
 
@@ -48,7 +48,7 @@
                 ParameterValue = "2021-07-05 22:50:55"
             };
 
-            systemParameterDataAccess.GetPreviousTimingExecution(paraID).Returns(output);
+            systemParameterDataAccess.GetSystemParameterByID(paraID).Returns(output);
 
             var result = systemParameterServices.GetLastScannedDateTime(paraID);
 
@@ -59,9 +59,9 @@
         [InlineData(SystemParameters.ProblemAccountLastScannedTime, "2021-07-05 22:50:53")]
         public void UpdateTimingExecution_WhenSuccess(SystemParameters paraId, string lastScannedTime)
         {
-            systemParameterDataAccess.UpdateTimingExecution(lastScannedTime, paraId);
+            systemParameterDataAccess.UpdateValueForSystemParameterByID(lastScannedTime, paraId);
 
-            bool isSuccess = systemParameterServices.UpdateTimingExecution(lastScannedTime, paraId);
+            bool isSuccess = systemParameterServices.UpdateValueForSystemParamById(lastScannedTime, paraId);
 
             isSuccess.Should().BeTrue();
         }

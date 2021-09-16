@@ -32,15 +32,15 @@
             {
                 var rawData = associationByDeviceService.GetRawAssociation(batchSize, numOfBatch);
 
-                if(rawData != null && rawData.Any())
+                if (rawData != null && rawData.Any())
                 {
                     var groupTrans = rawData.GroupBy(x => x.BatchId);
 
                     Parallel.ForEach(groupTrans, trans =>
                     {
                         associationByDeviceService.TransformAssociationByDevice(trans);
-                    });                                        
-                }                                
+                    });
+                }
             }
             catch (Exception ex)
             {
@@ -50,8 +50,6 @@
                       .ToString();
 
                 sentryClient.CaptureMessage(logMessage, Sentry.Protocol.SentryLevel.Error);
-               
-                return Task.FromResult(false);
             }
 
             return Task.FromResult(true);

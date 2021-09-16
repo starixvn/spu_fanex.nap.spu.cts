@@ -9,40 +9,49 @@
 
         DateTime? GetLastScannedDateTime(SystemParameters paraID);
 
-        bool UpdateTimingExecution(string paraValue, SystemParameters paramId);
+        bool UpdateValueForSystemParamById(string paraValue, SystemParameters paramId);
+
+        T GetSystemParamById<T>(SystemParameters paraID);
     }
 
     public class SystemParameterServices : ISystemParameterServices
     {
-        private readonly ISystemParameterDataAccess systemParameterDataAccess;
+        private readonly SystemParameterDataAccess systemParameterDataAccess;
 
-        public SystemParameterServices(ISystemParameterDataAccess systemParameterDataAccess)
+        public SystemParameterServices(SystemParameterDataAccess systemParameterDataAccess)
         {
             this.systemParameterDataAccess = systemParameterDataAccess;
         }
 
         public Int64 GetLastScannedId(SystemParameters paraID)
         {
-            var lastScannedTransID = systemParameterDataAccess.GetPreviousTimingExecution(paraID);
+            var lastScannedTransID = systemParameterDataAccess.GetSystemParameterByID(paraID);
 
             return lastScannedTransID != null ? Int64.Parse(lastScannedTransID?.ParameterValue) : 0;
         }
 
         public DateTime? GetLastScannedDateTime(SystemParameters paraID)
         {
-            var lastScannedTransID = systemParameterDataAccess.GetPreviousTimingExecution(paraID);
+            var lastScannedTransID = systemParameterDataAccess.GetSystemParameterByID(paraID);
 
             return lastScannedTransID != null ? DateTime.Parse(lastScannedTransID?.ParameterValue) : null;
         }
 
-        public bool UpdateTimingExecution(string paraValue, SystemParameters paramId)
+        public bool UpdateValueForSystemParamById(string paraValue, SystemParameters paramId)
         {
             if (!string.IsNullOrEmpty(paraValue))
             {
-                systemParameterDataAccess.UpdateTimingExecution(paraValue, paramId);
+                systemParameterDataAccess.UpdateValueForSystemParameterByID(paraValue, paramId);
             }
 
             return true;
+        }
+
+        public T GetSystemParamById<T>(SystemParameters paraID)
+        {
+            var systemParam = systemParameterDataAccess.GetSystemParameterByID(paraID);
+
+            return (T)Convert.ChangeType(systemParam.ParameterValue, typeof(T));
         }
     }
 }

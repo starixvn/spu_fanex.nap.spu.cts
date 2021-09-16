@@ -34,7 +34,11 @@
         {
             ProblemAccountLastScannedTime = 2,
             RobotAccountLastScannedTime = 3,
-            MatchMonitorLastScannedTrans = 20
+            MatchMonitorLastScannedTrans = 20,
+            ArchiveCustomerLastTime_Credit = 24,
+            ArchiveCustomerLastCustID_Credit = 25,
+            ArchiveCustomerLastTime_Deposit = 26,
+            ArchiveCustomerLastCustID_Deposit = 27
         };
 
         public enum DangerLevel
@@ -76,6 +80,12 @@
             FromCustomer = 1,
             FromCustInfo = 2,
             FromProductStatus = 3
+        };
+        
+        public enum SubscriberType
+        {
+            Credit = 0,
+            Deposit = 1
         };
     }
 }
