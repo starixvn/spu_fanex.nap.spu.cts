@@ -31,8 +31,6 @@
         bool TransformAssByDeviceIsWriteLog { get; }
 
         int CustomerStatusBatchSize { get; }
-        
-        int AffectedEvidenceFromQueueBatchSize { get; }
     }
 
     public class AppSettings : IAppSettings
@@ -95,9 +93,7 @@
         public bool TransformAssByDeviceIsWriteLog => GetValue<bool>("TransformAssociationByDevice:IsWriteLog");
 
         public int CustomerStatusBatchSize => GetValue<int>("CustomerStatus:BatchSize");
-        
-        public int AffectedEvidenceFromQueueBatchSize => GetValue<int>("AffectedEvidenceFromQueue:BatchSize");
-
+       
         #endregion Variables
 
         #region Methods

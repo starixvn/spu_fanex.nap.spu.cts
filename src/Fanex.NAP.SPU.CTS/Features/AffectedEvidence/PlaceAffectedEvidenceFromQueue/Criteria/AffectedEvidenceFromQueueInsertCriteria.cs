@@ -3,13 +3,10 @@
     using Fanex.Data;
     using Fanex.Data.Repository;
 
-    public class AffectedEvidenceFromQueueInsertCriteria : NonQueryCommand
+    public class AffectedEvidenceFromQueueInsertCriteria : CriteriaBase
     {
-        [SpParam(SqlParamName = "ip_BatchSize")]
-        public int BatchSize { get; set; }
-
-        [SpParam(SqlParamName = "op_IsExist")]
-        public int IsExist { get; set; }
+        [SpParam(SqlParamName = "op_IsDataExist")]
+        public int IsDataExist { get; set; }
 
         public override string GetSettingKey()
         {
@@ -18,7 +15,7 @@
 
         public override bool IsValid()
         {
-            return BatchSize > 0;
+            return true;
         }
     }
 }

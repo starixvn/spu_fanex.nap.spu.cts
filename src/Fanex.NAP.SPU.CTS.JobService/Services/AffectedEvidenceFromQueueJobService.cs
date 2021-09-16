@@ -33,14 +33,7 @@
         {
             try
             {
-                if (appSettings.AffectedEvidenceFromQueueBatchSize > 0)
-                {
-                    JobRun();
-                }
-                else
-                {
-                    Utilities.LogSentryError(serviceName, "Invalid BatchSize", (appSettings.AffectedEvidenceFromQueueBatchSize), new NullReferenceException(), sentryClient);
-                }
+                JobRun();
             }
             catch (Exception ex)
             {
@@ -58,11 +51,11 @@
         {
             Parallel.Invoke(() =>
             {
-                affectedEvidenceFromQueueService.InsertAssociationAffectedEvidenceFromQueue(appSettings.AffectedEvidenceFromQueueBatchSize);
+                affectedEvidenceFromQueueService.InsertAssociationAffectedEvidenceFromQueue();
             },
             () =>
             {
-                affectedEvidenceFromQueueService.RemoveAssociationAffectedEvidenceFromQueue(appSettings.AffectedEvidenceFromQueueBatchSize);
+                affectedEvidenceFromQueueService.RemoveAssociationAffectedEvidenceFromQueue();
             });
         }
 
