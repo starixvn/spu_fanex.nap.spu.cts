@@ -9,6 +9,10 @@
 
     public interface IArchiveCustClassificationHistoryServices
     {
+        void CleanUpUnChangedCustClassificationHistoryContinuously();
+
+        void ArchiveChangedCustClassificationHistoryContinuously();
+
         void CleanUpUnChangedCustClassificationHistory();
 
         void ArchiveChangedCustClassificationHistory();
@@ -23,7 +27,7 @@
             this.dataAccess = dataAccess;
         }
 
-        public void CleanUpUnChangedCustClassificationHistory()
+        public void CleanUpUnChangedCustClassificationHistoryContinuously()
         {
             var isContinue = true;
             var watch = new Stopwatch();
@@ -37,13 +41,13 @@
             }
         }
 
-        public void ArchiveChangedCustClassificationHistory()
+        public void ArchiveChangedCustClassificationHistoryContinuously()
         {
             var isContinue = true;
             var watch = new Stopwatch();
             watch.Start();
 
-            while (isContinue && !Utilities.IsExpireHttpRequest(watch)) 
+            while (isContinue && !Utilities.IsExpireHttpRequest(watch))
             {
                 var data = dataAccess.CleanUpChangedCustClassificationHistory();
 
@@ -57,6 +61,23 @@
                 }
 
                 Thread.Sleep(Consts.ArchiveCustClassification_SleepTimes);
+            }
+        }
+
+        public void CleanUpUnChangedCustClassificationHistory()
+        {
+            dataAccess.CleanUpUnChangedCustClassificationHistory();
+        }
+
+        public void ArchiveChangedCustClassificationHistory()
+        {
+            var data = dataAccess.CleanUpChangedCustClassificationHistory();
+
+            if (data.CustClassificationHistory != null && data.CustClassificationHistory.Any())
+            {
+                var custClassHistoryJson = JsonConvert.SerializeObject(data.CustClassificationHistory);
+
+                dataAccess.ArchiveCustClassificationHistory(custClassHistoryJson);
             }
         }
     }
