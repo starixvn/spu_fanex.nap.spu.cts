@@ -31,7 +31,7 @@
 
                 if (result.CustIds.Any())
                 {
-                    dataAccess.UpdateBetLimitOfFlaggedCustomer(string.Join(",", result.CustIds));
+                    UpdateBetLimitOfFlaggedCustomer(result.CustIds);
                 }
 
                 Thread.Sleep(Consts.AffectedEvidence_SleepTimes);
@@ -48,10 +48,26 @@
 
                 if (result.CustIds.Any())
                 {
-                    dataAccess.UpdateBetLimitOfUnflaggedCustomer(string.Join(",", result.CustIds));
+                    UpdateBetLimitOfUnflaggedCustomer(result.CustIds);
                 }
 
                 Thread.Sleep(Consts.AffectedEvidence_SleepTimes);
+            }
+        }
+
+        public void UpdateBetLimitOfFlaggedCustomer(IEnumerable<long> custIds)
+        {
+            if(custIds != null && custIds.Any())
+            {
+                dataAccess.UpdateBetLimitOfFlaggedCustomer(string.Join(",", custIds));
+            }
+        }
+
+        public void UpdateBetLimitOfUnflaggedCustomer(IEnumerable<long> custIds)
+        {
+            if (custIds != null && custIds.Any())
+            {
+                dataAccess.UpdateBetLimitOfUnflaggedCustomer(string.Join(",", custIds));
             }
         }
     }

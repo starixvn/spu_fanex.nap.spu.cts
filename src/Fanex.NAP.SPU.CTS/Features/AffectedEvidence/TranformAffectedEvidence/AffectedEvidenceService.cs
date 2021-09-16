@@ -2,12 +2,13 @@
 {
     using Sentry;
     using System.Collections.Generic;
+    using System.Linq;
 
     public interface IAffectedEvidenceService
     {
         IEnumerable<int> TransformAssociationAffectedEvidence(int batchSize);
 
-        void UpdateBetLimitByEvidenceRemoving(IEnumerable<int> custIds);
+        void UpdateBetLimitOfFlaggedCustomer(IEnumerable<int> custIds);
     }
 
     public class AffectedEvidenceService : IAffectedEvidenceService
@@ -24,9 +25,12 @@
             return dataAccess.TransformAssociationAffectedEvidence(batchSize);
         }
 
-        public void UpdateBetLimitByEvidenceRemoving(IEnumerable<int> custIds)
+        public void UpdateBetLimitOfFlaggedCustomer(IEnumerable<int> custIds)
         {
-            dataAccess.UpdateBetLimitByEvidenceRemoving(custIds);
+            if(custIds != null && custIds.Any())
+            {
+                dataAccess.UpdateBetLimitOfFlaggedCustomer(string.Join(",", custIds));
+            }
         }
     }
 }

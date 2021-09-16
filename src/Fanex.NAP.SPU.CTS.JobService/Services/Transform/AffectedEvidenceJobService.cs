@@ -32,8 +32,7 @@
 
                 if (custIds.Any())
                 {
-                    // Set BetLimit
-                    affectedEvidenceService.UpdateBetLimitByEvidenceRemoving(custIds);
+                    affectedEvidenceService.UpdateBetLimitOfFlaggedCustomer(custIds);
                 }                
             }
             catch (Exception ex)
