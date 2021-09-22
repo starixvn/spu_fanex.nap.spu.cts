@@ -22,8 +22,5 @@ namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities
 
         [JsonProperty("OldGroupIDList")]
         public string OldGroupIdList { get; set; }
-
-        [JsonProperty("NoOfOldGroupID")]
-        public int NoOfOldGroupIdList { get; set; }
     }
 }
