@@ -35,6 +35,7 @@
             ProblemAccountLastScannedTime = 2,
             RobotAccountLastScannedTime = 3,
             MatchMonitorLastScannedTrans = 20,
+            MatchMonitorLastScannedTransNoneLive = 29,
             ArchiveCustomerLastTime_Credit = 24,
             ArchiveCustomerLastCustID_Credit = 25,
             ArchiveCustomerLastTime_Deposit = 26,

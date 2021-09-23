@@ -21,6 +21,8 @@
         [SpParam(SqlParamName = "EventDate")]
         public DateTime EventDate { get; set; }
 
+        public bool IsLive { get; set; }
+
         public override string GetSettingKey()
                 => "CTS_Rpt_MatchMonitor_TicketDetails";
 

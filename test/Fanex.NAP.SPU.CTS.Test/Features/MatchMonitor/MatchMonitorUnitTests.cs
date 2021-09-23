@@ -37,9 +37,11 @@
         }
 
         [Theory]
-        [InlineData(1, 10)]
-        [InlineData(10, 100)]
-        public void GetMatchTrans_WhenSuccess_ReturnMat(Int64 LastScannedTransID, int batchSize)
+        [InlineData(1, 10, true)]
+        [InlineData(10, 100, true)]
+        [InlineData(1, 10, false)]
+        [InlineData(10, 100, false)]
+        public void GetMatchTrans_WhenSuccess_ReturnMat(Int64 LastScannedTransID, int batchSize, bool isLive)
         {
             var output = new List<TicketDetailEntity>
             {
@@ -91,16 +93,18 @@
                 }
             };
 
-            matchMonitorDataAccess.GetMatchTrans(LastScannedTransID, batchSize).Returns(output);
+            matchMonitorDataAccess.GetMatchTrans(LastScannedTransID, batchSize, isLive).Returns(output);
 
-            var result = matchMonitorServices.GetMatchTrans(LastScannedTransID, batchSize);
+            var result = matchMonitorServices.GetMatchTrans(LastScannedTransID, batchSize, isLive);
 
             result.Should().NotBeNull();
             result.Should().BeEquivalentTo(output);
         }
 
-        [Fact]
-        public void InsertMatchMonitorStaging_WhenSuccess_ReturnGroupIds()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void InsertMatchMonitorStaging_WhenSuccess_ReturnListMatchStaging(bool isLive)
         {
             var ticketDetails = new List<TicketDetailEntity>
             {
@@ -152,39 +156,70 @@
                 }
             };
 
-            var groupIds = new List<int> { 1, 2, 3 };
+            var matchStagings = new List<MatchStagingModel> { 
+                new MatchStagingModel{ 
+                    MatchId = 1,
+                    BetTypeId = 1,
+                    TotalScore = 3
+                },
+                new MatchStagingModel{
+                    MatchId = 2,
+                    BetTypeId = 3,
+                    TotalScore = 2
+                },
+                new MatchStagingModel{
+                    MatchId = 3,
+                    BetTypeId = 7,
+                    TotalScore = 0
+                },
+            };
 
             var ticketDetailToJson = JsonConvert.SerializeObject(ticketDetails);
 
-            matchMonitorDataAccess.InsertMatchMonitorStaging(ticketDetailToJson).Returns(groupIds);
+            matchMonitorDataAccess.InsertMatchMonitorStaging(ticketDetailToJson, isLive).Returns(matchStagings);
 
-            var result = matchMonitorServices.InsertMatchMonitorStaging(ticketDetailToJson);
+            var result = matchMonitorServices.InsertMatchMonitorStaging(ticketDetailToJson, isLive);
 
             result.Should().NotBeNull();
-            result.Should().BeEquivalentTo(groupIds);
+            result.Should().BeEquivalentTo(matchStagings);
         }
 
-        [Theory]
-        [InlineData(1)]
-        [InlineData(2)]
-        [InlineData(3)]
-        public void InsertMatchMonitorRule_WhenSuccess_ReturnNotException(int tempGroupId)
-        {
-            matchMonitorDataAccess.InsertMatchMonitorRule(tempGroupId);
+        //[Theory]
+        //[InlineData(true, 1, 2, 1)]
+        //[InlineData(true, 1, 0, 3)]
+        //[InlineData(true, 1, 3, 7)]
+        //[InlineData(true, 1, 3, 8)]
+        //[InlineData(false, 1, 2, 1)]
+        //[InlineData(false, 1, 0, 3)]
+        //[InlineData(false, 1, 3, 7)]
+        //[InlineData(false, 1, 3, 8)]
+        //public void InsertMatchMonitorRule_WhenSuccess_ReturnNotException(bool isLive, int matchId, int totalScore, int bettypeId)
+        //{
+        //    var result = new List<MatchRuleCompletedModel> {
+        //        new MatchRuleCompletedModel
+        //        {
+        //            GroupId = 1,
+        //            IsHedging = false,
+        //            CustIdList = "17990615,50294551,50294551",
+        //            TransIdList = "111845019100,111845032053,111845032772",
+        //            OldGroupIdList = "0",
+        //            NoOfOldGroupIdList = 0
+        //        }
+        //    };
 
-            Action action = () => matchMonitorServices.InsertMatchMonitorRule(tempGroupId);
+        //    matchMonitorDataAccess.InsertMatchMonitorRule(isLive, matchId, totalScore, bettypeId).Returns(result);
 
-            action.Should().NotThrow<Exception>();
-        }
+            
+        //}
 
-        [Fact]
-        public void UpdateMatchTransComplete_WhenSuccess_ReturnNotException()
-        {
-            matchMonitorDataAccess.UpdateMatchTransComplete();
+        //[Fact]
+        //public void UpdateMatchTransComplete_WhenSuccess_ReturnNotException()
+        //{
+        //    matchMonitorDataAccess.UpdateMatchTransComplete();
 
-            Action action = () => matchMonitorServices.UpdateMatchTransComplete();
+        //    Action action = () => matchMonitorServices.UpdateMatchTransComplete();
 
-            action.Should().NotThrow<Exception>();
-        }
+        //    action.Should().NotThrow<Exception>();
+        //}
     }
 }

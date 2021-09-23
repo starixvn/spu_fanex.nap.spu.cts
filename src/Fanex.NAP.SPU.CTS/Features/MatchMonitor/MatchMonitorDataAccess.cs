@@ -9,13 +9,15 @@
 
     public interface IMatchMonitorDataAccess
     {
-        IEnumerable<TicketDetailEntity> GetMatchTrans(Int64 LastScannedTransID, int batchSize);
+        IEnumerable<TicketDetailEntity> GetMatchTrans(Int64 LastScannedTransID, int batchSize, bool isLive);
 
-        IEnumerable<int> InsertMatchMonitorStaging(string matchTransJson);
+        IEnumerable<MatchStagingModel> InsertMatchMonitorStaging(string matchTransJson, bool isLive);
 
-        void InsertMatchMonitorRule(int tempGroupID);
+        IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, int matchId, int totalScore, int bettypeId);
 
-        void UpdateMatchTransComplete();
+        void UpdateMatchTransComplete(bool isLive, int matchId, int totalScore, int bettypeId, string transGroupJson);
+
+        void CleanMatchStaging(bool isLive);
     }
 
     public class MatchMonitorDataAccess : IMatchMonitorDataAccess
@@ -27,42 +29,64 @@
             repository = new DynamicRepository();
         }
 
-        public IEnumerable<TicketDetailEntity> GetMatchTrans(Int64 LastScannedTransID, int batchSize)
+        public IEnumerable<TicketDetailEntity> GetMatchTrans(Int64 LastScannedTransID, int batchSize, bool isLive)
         {
             var criteria = new MatchTransGetCriteria
             {
                 QueryType = (int)Consts.MatchMonitorQueryTypes.Service,
                 LastScannedTransID = LastScannedTransID,
                 BatchSize = batchSize,
-                EventDate = DateTime.Now
+                EventDate = DateTime.Now,
+                IsLive = isLive
             };
 
             return repository.Fetch<TicketDetailEntity>(criteria);
         }
 
-        public IEnumerable<int> InsertMatchMonitorStaging(string matchTransJson)
+        public IEnumerable<MatchStagingModel> InsertMatchMonitorStaging(string matchTransJson, bool isLive)
         {
             var criteria = new MatchMonitorStagingInsertCriteria
             {
-                MatchTransJson = matchTransJson
+                MatchTransJson = matchTransJson,
+                IsLive = isLive
             };
 
-            return repository.Fetch<int>(criteria);
+            return repository.Fetch<MatchStagingModel>(criteria);
         }
 
-        public void InsertMatchMonitorRule(int tempGroupID)
+        public IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, int matchId, int totalScore, int bettypeId)
         {
             var criteria = new MatchMonitorRuleInsertCriteria
             {
-                TempGroupID = tempGroupID
+               IsLive = isLive,
+               BettypeId = bettypeId,
+               MatchId = matchId,
+               TotalScore = totalScore
+            };
+
+            return repository.Fetch<MatchRuleCompletedModel>(criteria);
+        }
+
+        public void UpdateMatchTransComplete(bool isLive, int matchId, int totalScore, int bettypeId, string transGroupJson)
+        {
+            var criteria = new MatchTransUpdateCompleteCriteria
+            {
+                IsLive = isLive,
+                BettypeId = bettypeId,
+                MatchId = matchId,
+                TotalScore = totalScore,
+                TransGroupJson = transGroupJson
             };
 
             repository.Execute(criteria);
         }
 
-        public void UpdateMatchTransComplete()
+        public void CleanMatchStaging(bool isLive)
         {
-            var criteria = new MatchTransUpdateCompleteCriteria();
+            var criteria = new MatchMonitorStagingCleanCriteria
+            {
+                IsLive = isLive
+            };
 
             repository.Execute(criteria);
         }
