@@ -8,13 +8,15 @@
     {
         IEnumerable<TicketDetailEntity> GetMatchTrans(Int64 LastScannedTransID, int batchSize, bool isLive);
 
-        IEnumerable<MatchStagingModel> InsertMatchMonitorStaging(string matchTransJson, bool isLive);
+        void InsertMatchMonitorStaging(string matchTransJson, bool isLive);
 
-        IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, int matchId, int totalScore, int bettypeId);
+        IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, int matchId, int totalScore, int bettypeId, long maxTransId);
 
-        void UpdateMatchTransComplete(bool isLive, int matchId, int totalScore, int bettypeId, string transGroupJson);
+        void UpdateMatchTransComplete(bool isLive, int matchId, int totalScore, int bettypeId, string transGroupJson, long maxTransId);
 
-        void CleanMatchStaging(bool isLive);
+        void CleanMatchStaging(bool isLive, long maxTransId);
+
+        MatchMonitorRuleModel GetMatchMonitorRule(bool isLive);
     }
 
     public class MatchMonitorServices : IMatchMonitorServices
@@ -31,24 +33,29 @@
             return matchDataAccess.GetMatchTrans(LastScannedTransID, batchSize, isLive);
         }
 
-        public IEnumerable<MatchStagingModel> InsertMatchMonitorStaging(string matchTransJson, bool isLive)
+        public void InsertMatchMonitorStaging(string matchTransJson, bool isLive)
         {
-            return matchDataAccess.InsertMatchMonitorStaging(matchTransJson, isLive);
+            matchDataAccess.InsertMatchMonitorStaging(matchTransJson, isLive);
         }
 
-        public IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, int matchId, int totalScore, int bettypeId)
+        public IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, int matchId, int totalScore, int bettypeId, long maxTransId)
         {
-            return matchDataAccess.InsertMatchMonitorRule(isLive, matchId, totalScore, bettypeId);
+            return matchDataAccess.InsertMatchMonitorRule(isLive, matchId, totalScore, bettypeId, maxTransId);
         }
 
-        public void UpdateMatchTransComplete(bool isLive, int matchId, int totalScore, int bettypeId, string transGroupJson)
+        public void UpdateMatchTransComplete(bool isLive, int matchId, int totalScore, int bettypeId, string transGroupJson, long maxTransId)
         {
-            matchDataAccess.UpdateMatchTransComplete(isLive, matchId, totalScore, bettypeId, transGroupJson);
+            matchDataAccess.UpdateMatchTransComplete(isLive, matchId, totalScore, bettypeId, transGroupJson, maxTransId);
         }
 
-        public void CleanMatchStaging(bool isLive)
+        public void CleanMatchStaging(bool isLive, long maxTransId)
         {
-            matchDataAccess.CleanMatchStaging(isLive);
+            matchDataAccess.CleanMatchStaging(isLive, maxTransId);
+        }
+
+        public MatchMonitorRuleModel GetMatchMonitorRule(bool isLive)
+        {
+            return matchDataAccess.GetMatchMonitorRule(isLive);
         }
     }
 }

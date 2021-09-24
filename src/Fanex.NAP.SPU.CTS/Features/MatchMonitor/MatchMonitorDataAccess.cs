@@ -11,13 +11,15 @@
     {
         IEnumerable<TicketDetailEntity> GetMatchTrans(Int64 LastScannedTransID, int batchSize, bool isLive);
 
-        IEnumerable<MatchStagingModel> InsertMatchMonitorStaging(string matchTransJson, bool isLive);
+        void InsertMatchMonitorStaging(string matchTransJson, bool isLive);
 
-        IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, int matchId, int totalScore, int bettypeId);
+        IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, int matchId, int totalScore, int bettypeId, long maxTransId);
 
-        void UpdateMatchTransComplete(bool isLive, int matchId, int totalScore, int bettypeId, string transGroupJson);
+        void UpdateMatchTransComplete(bool isLive, int matchId, int totalScore, int bettypeId, string transGroupJson, long maxTransId);
 
-        void CleanMatchStaging(bool isLive);
+        void CleanMatchStaging(bool isLive, long maxTransId);
+
+        MatchMonitorRuleModel GetMatchMonitorRule(bool isLive);
     }
 
     public class MatchMonitorDataAccess : IMatchMonitorDataAccess
@@ -43,7 +45,7 @@
             return repository.Fetch<TicketDetailEntity>(criteria);
         }
 
-        public IEnumerable<MatchStagingModel> InsertMatchMonitorStaging(string matchTransJson, bool isLive)
+        public void InsertMatchMonitorStaging(string matchTransJson, bool isLive)
         {
             var criteria = new MatchMonitorStagingInsertCriteria
             {
@@ -51,23 +53,24 @@
                 IsLive = isLive
             };
 
-            return repository.Fetch<MatchStagingModel>(criteria);
+            repository.Execute(criteria);
         }
 
-        public IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, int matchId, int totalScore, int bettypeId)
+        public IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, int matchId, int totalScore, int bettypeId, long maxTransId)
         {
             var criteria = new MatchMonitorRuleInsertCriteria
             {
-               IsLive = isLive,
-               BettypeId = bettypeId,
-               MatchId = matchId,
-               TotalScore = totalScore
+                IsLive = isLive,
+                BettypeId = bettypeId,
+                MatchId = matchId,
+                TotalScore = totalScore,
+                MaxTransId = maxTransId
             };
 
             return repository.Fetch<MatchRuleCompletedModel>(criteria);
         }
 
-        public void UpdateMatchTransComplete(bool isLive, int matchId, int totalScore, int bettypeId, string transGroupJson)
+        public void UpdateMatchTransComplete(bool isLive, int matchId, int totalScore, int bettypeId, string transGroupJson, long maxTransId)
         {
             var criteria = new MatchTransUpdateCompleteCriteria
             {
@@ -75,20 +78,39 @@
                 BettypeId = bettypeId,
                 MatchId = matchId,
                 TotalScore = totalScore,
-                TransGroupJson = transGroupJson
+                TransGroupJson = transGroupJson,
+                MaxTransId = maxTransId
             };
 
             repository.Execute(criteria);
         }
 
-        public void CleanMatchStaging(bool isLive)
+        public void CleanMatchStaging(bool isLive, long maxTransId)
         {
             var criteria = new MatchMonitorStagingCleanCriteria
             {
-                IsLive = isLive
+                IsLive = isLive,
+                MaxTransId = maxTransId
             };
 
             repository.Execute(criteria);
+        }
+
+        public MatchMonitorRuleModel GetMatchMonitorRule(bool isLive)
+        {
+            var criteria = new MatchMonitorRuleGetCriteria
+            {
+                IsLive = isLive,
+                MaxTransId = 0
+            };
+
+            var result = repository.Fetch<MatchStagingModel>(criteria);
+
+            return new MatchMonitorRuleModel
+            {
+                MaxTransId = criteria.MaxTransId,
+                MatchStagingList = criteria.MaxTransId != 0 ? result : new List<MatchStagingModel>()
+            };
         }
     }
 }

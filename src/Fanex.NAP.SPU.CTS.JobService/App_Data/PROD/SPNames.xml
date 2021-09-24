@@ -16,6 +16,7 @@
 		<Setting Key="CTS_DC_MatchMonitor_Rule" SpName="CTS_DC_MatchMonitor_Rule" DbName="MySQL.SLAVE.CTS_DataCenter.ctsService"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_Rule_Complete" SpName="CTS_DC_MatchMonitor_Rule_Complete" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_Staging_Clean" SpName="CTS_DC_MatchMonitor_Staging_Clean" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_Rule_Get" SpName="CTS_DC_MatchMonitor_Rule_Get" DbName="MySQL.SLAVE.CTS_DataCenter.ctsService"></Setting>
 	</Function>
 	<Function Name="SyncUserPermisison">
 		<Setting Key="CTS_DC_Common_InsertUserPermission" SpName="CTS_DC_Common_InsertUserPermission" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />

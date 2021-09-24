@@ -8,6 +8,9 @@ namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Criteria
         [SpParam(SqlParamName = "ip_LiveIndicator")]
         public bool IsLive { get; set; }
 
+        [SpParam(SqlParamName = "ip_MaxTransID")]
+        public long MaxTransId { get; set; }
+
         public override string GetSettingKey()
         {
             return "CTS_DC_MatchMonitor_Staging_Clean";

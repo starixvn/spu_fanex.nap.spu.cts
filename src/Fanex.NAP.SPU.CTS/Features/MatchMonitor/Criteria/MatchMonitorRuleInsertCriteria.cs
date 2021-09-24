@@ -15,10 +15,13 @@
         public int TotalScore { get; set; }
 
         [SpParam(SqlParamName = "ip_BettypeID")]
-        public int BettypeId { get; set; }                
+        public int BettypeId { get; set; }
+
+        [SpParam(SqlParamName = "ip_MaxTransID")]
+        public long MaxTransId { get; set; }
 
         public override string GetSettingKey()
-                => "CTS_DC_MatchMonitor_Rule";
+                => "CTS_DC_MatchMonitor_Rule_Process";
 
         public override bool IsValid()
             => true;

@@ -16,9 +16,14 @@
 
     public interface IMatchMonitorJobService
     {
-        Task<bool> Execute(int batchSize, bool isLive);
+        //Task<bool> Execute(int batchSize, bool isLive);
 
-        Task<bool> UpdateWriteLogSetting(string serviceName, bool isWriteLog);
+        Task<bool> InsertTicketDetail(int batchSize, bool isLive);
+
+        Task<bool> ProcessRule(int batchSize, bool isLive);
+
+
+        //Task<bool> UpdateWriteLogSetting(string serviceName, bool isWriteLog);
     }
 
     public class MatchMonitorJobService : IMatchMonitorJobService
@@ -42,67 +47,65 @@
             this.serviceName = "MatchMonitor";
         }
 
-        public Task<bool> Execute(int batchSize, bool isLive)
-        {
-            try
-            {
-                if (appSettings.MatchMonitorNumberOfThread > 0 && batchSize > 0)
-                {
-                    JobRun(batchSize, isLive);
-                }
-                else
-                {
-                    Utilities.LogSentryError(serviceName, "Invalid NumberOfThread, BatchSize", (appSettings.MatchMonitorNumberOfThread, batchSize), new NullReferenceException(), sentryClient);
-                }
-            }
-            catch (Exception ex)
-            {
-                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
+        //public Task<bool> Execute(int batchSize, bool isLive)
+        //{
+        //    try
+        //    {
+        //        if (appSettings.MatchMonitorNumberOfThread > 0 && batchSize > 0)
+        //        {
+        //            JobRun(batchSize, isLive);
+        //        }
+        //        else
+        //        {
+        //            Utilities.LogSentryError(serviceName, "Invalid NumberOfThread, BatchSize", (appSettings.MatchMonitorNumberOfThread, batchSize), new NullReferenceException(), sentryClient);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
 
-                return Task.FromResult(false);
-            }
+        //        return Task.FromResult(false);
+        //    }
 
-            return Task.FromResult(true);
-        }
+        //    return Task.FromResult(true);
+        //}
 
-        public Task<bool> UpdateWriteLogSetting(string serviceName, bool isWriteLog)
-        {
-            try
-            {
-                bool result = appSettings.UpdateIsWriteLogSetting(serviceName, isWriteLog);
+        //public Task<bool> UpdateWriteLogSetting(string serviceName, bool isWriteLog)
+        //{
+        //    try
+        //    {
+        //        bool result = appSettings.UpdateIsWriteLogSetting(serviceName, isWriteLog);
 
-                return Task.FromResult(result);
-            }
-            catch (Exception e)
-            {
-                sentryClient.CaptureException(e);
-                return Task.FromResult(false);
-            }
-        }
+        //        return Task.FromResult(result);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        sentryClient.CaptureException(e);
+        //        return Task.FromResult(false);
+        //    }
+        //}
 
         #region Private Methods
 
-        private void JobRun(int batchSize, bool isLive)
-        {
-            Int64 lastScannedTransId = GetLastScannedTransId(isLive);
+        //private void JobRun(int batchSize, bool isLive)
+        //{
+        //    Int64 lastScannedTransId = GetLastScannedTransId(isLive);
 
-            var matchTrans = GetMatchTrans(lastScannedTransId, batchSize, isLive);
+        //    var matchTrans = GetMatchTrans(lastScannedTransId, batchSize, isLive);
 
-            if (matchTrans != null && matchTrans.Any())
-            {
-                InsertMatchMonitor(matchTrans, isLive);
-            }
+        //    if (matchTrans != null && matchTrans.Any())
+        //    {
+        //        InsertMatchMonitor(matchTrans, isLive);
+        //    }
 
-            matchMonitorServices.CleanMatchStaging(isLive);
-        }
+        //    matchMonitorServices.CleanMatchStaging(isLive);
+        //}
 
         private Int64 GetLastScannedTransId(bool isLive)
         {
             var matchMonitorLastScannedTransIdLive = isLive ? SystemParameters.MatchMonitorLastScannedTrans : SystemParameters.MatchMonitorLastScannedTransNoneLive;
 
-            var lastScannedTransId = systemParameterServices.GetLastScannedId(matchMonitorLastScannedTransIdLive);
-
-            Utilities.LogSentryInfo(serviceName, "Get LastScannedTransId", lastScannedTransId, appSettings.MatchMonitorIsWriteLog, sentryClient);
+            var lastScannedTransId = systemParameterServices.GetLastScannedId(matchMonitorLastScannedTransIdLive);                        
 
             return lastScannedTransId;
         }
@@ -114,49 +117,116 @@
             if (batchSize > 0)
             {
                 matchTrans = matchMonitorServices.GetMatchTrans(lastScannedTransId, batchSize, isLive).ToList();
-            }
-
-            Utilities.LogSentryInfo(serviceName, "Get MatchTrans", matchTrans, appSettings.MatchMonitorIsWriteLog, sentryClient);
+            }                        
 
             return matchTrans;
         }
 
-        private void InsertMatchMonitor(IEnumerable<TicketDetailEntity> matchTrans, bool isLive)
-        {
-            if (matchTrans != null && matchTrans.Any())
-            {
-                var matchStaging = matchMonitorServices.InsertMatchMonitorStaging(JsonConvert.SerializeObject(matchTrans), isLive);
+        
 
-                if (matchStaging != null && matchStaging.Any())
-                {
-                    InsertParallelMatchRule(isLive, matchStaging);
-                }               
-            }
-        }
+        //private void InsertMatchMonitor(IEnumerable<TicketDetailEntity> matchTrans, bool isLive)
+        //{
+        //    if (matchTrans != null && matchTrans.Any())
+        //    {
+        //        var matchStaging = matchMonitorServices.InsertMatchMonitorStaging(JsonConvert.SerializeObject(matchTrans), isLive);
 
-        private void InsertParallelMatchRule(bool isLive, IEnumerable<MatchStagingModel> matchStaging)
+        //        if (matchStaging != null && matchStaging.Any())
+        //        {
+        //            InsertParallelMatchRule(isLive, matchStaging);
+        //        }               
+        //    }
+        //}
+
+        //private void InsertParallelMatchRule(bool isLive, IEnumerable<MatchStagingModel> matchStaging)
+        //{
+        //    try
+        //    {
+        //        matchStaging
+        //            .AsParallel()
+        //            .WithDegreeOfParallelism(appSettings.MatchMonitorNumberOfThread)
+        //            .ForAll(x =>
+        //            {
+         //               var matchRuleCompleted = matchMonitorServices.InsertMatchMonitorRule(isLive, x.MatchId, x.TotalScore, x.BetTypeId);
+
+        //                if (matchRuleCompleted != null && matchRuleCompleted.Any())
+        //                {
+        //                    matchMonitorServices.UpdateMatchTransComplete(isLive, x.MatchId, x.TotalScore, x.BetTypeId, JsonConvert.SerializeObject(matchRuleCompleted));
+        //                }
+
+        //                Thread.Sleep(MatchMonitor_SleepTimes);
+        //            });
+        //    }
+        //    catch (AggregateException ex)
+        //    {
+        //        throw new AggregateException($"{serviceName} - Insert Match Monitor Rule failed.", ex);
+        //    }
+        //}
+
+        public Task<bool> InsertTicketDetail(int batchSize, bool isLive)
         {
             try
             {
-                matchStaging
-                    .AsParallel()
-                    .WithDegreeOfParallelism(appSettings.MatchMonitorNumberOfThread)
-                    .ForAll(x =>
-                    {
-                        var matchRuleCompleted = matchMonitorServices.InsertMatchMonitorRule(isLive, x.MatchId, x.TotalScore, x.BetTypeId);
+                var lastScannedTransId = GetLastScannedTransId(isLive);
 
-                        if (matchRuleCompleted != null && matchRuleCompleted.Any())
-                        {
-                            matchMonitorServices.UpdateMatchTransComplete(isLive, x.MatchId, x.TotalScore, x.BetTypeId, JsonConvert.SerializeObject(matchRuleCompleted));
-                        }
+                var matchTrans = GetMatchTrans(lastScannedTransId, batchSize, isLive);
 
-                        Thread.Sleep(MatchMonitor_SleepTimes);
-                    });
+                if (matchTrans != null && matchTrans.Any())
+                {
+                    matchMonitorServices.InsertMatchMonitorStaging(JsonConvert.SerializeObject(matchTrans), isLive);
+                }                
             }
-            catch (AggregateException ex)
+            catch (Exception ex)
             {
-                throw new AggregateException($"{serviceName} - Insert Match Monitor Rule failed.", ex);
+
+                sentryClient.CaptureException(ex);
+                return Task.FromResult(false);
             }
+
+            return Task.FromResult(true);
+        }
+
+        public Task<bool> ProcessRule(int batchSize, bool isLive)
+        {
+            try
+            {
+                var matchMonitorRule = matchMonitorServices.GetMatchMonitorRule(isLive);
+
+                if (matchMonitorRule != null && matchMonitorRule.MaxTransId != 0)
+                {
+                    matchMonitorRule
+                        .MatchStagingList
+                        .AsParallel()
+                        .WithDegreeOfParallelism(appSettings.MatchMonitorNumberOfThread)
+                        .ForAll(x =>
+                        {
+                            var matchRuleCompleted = matchMonitorServices.InsertMatchMonitorRule(isLive, x.MatchId, x.TotalScore, x.BetTypeId, matchMonitorRule.MaxTransId);
+
+                            if (matchRuleCompleted != null && matchRuleCompleted.Any())
+                            {
+                                matchMonitorServices.UpdateMatchTransComplete(
+                                    isLive, 
+                                    x.MatchId, 
+                                    x.TotalScore, 
+                                    x.BetTypeId, 
+                                    JsonConvert.SerializeObject(matchRuleCompleted),
+                                    matchMonitorRule.MaxTransId);
+                            }
+
+                            Thread.Sleep(MatchMonitor_SleepTimes);
+                        });
+                }
+
+                matchMonitorServices.CleanMatchStaging(isLive, matchMonitorRule.MaxTransId);
+
+                return Task.FromResult(true);
+            }
+            catch (Exception ex)
+            {
+
+                sentryClient.CaptureException(ex);
+
+                return Task.FromResult(false);
+            }            
         }
 
         #endregion Private Methods

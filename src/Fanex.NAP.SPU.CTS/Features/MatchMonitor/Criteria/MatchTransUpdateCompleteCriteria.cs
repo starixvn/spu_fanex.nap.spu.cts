@@ -20,6 +20,9 @@
         [SpParam(SqlParamName = "ip_TransGroup")]
         public string TransGroupJson { get; set; }
 
+        [SpParam(SqlParamName = "ip_MaxTransID")]
+        public long MaxTransId { get; set; }
+
         public override string GetSettingKey()
                 => "CTS_DC_MatchMonitor_Rule_Complete";
 
