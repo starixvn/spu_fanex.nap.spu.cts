@@ -19,7 +19,7 @@
 
         void CleanMatchStaging(bool isLive, long maxTransId);
 
-        MatchMonitorRuleModel GetMatchMonitorRule(bool isLive);
+        MatchMonitorRuleModel GetMatchMonitorRule(bool isLive, int rowSize);
     }
 
     public class MatchMonitorDataAccess : IMatchMonitorDataAccess
@@ -96,12 +96,13 @@
             repository.Execute(criteria);
         }
 
-        public MatchMonitorRuleModel GetMatchMonitorRule(bool isLive)
+        public MatchMonitorRuleModel GetMatchMonitorRule(bool isLive, int rowSize)
         {
             var criteria = new MatchMonitorRuleGetCriteria
             {
                 IsLive = isLive,
-                MaxTransId = 0
+                MaxTransId = 0,
+                RowSize = rowSize
             };
 
             var result = repository.Fetch<MatchStagingModel>(criteria);

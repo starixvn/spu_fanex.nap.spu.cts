@@ -16,7 +16,7 @@
 
         void CleanMatchStaging(bool isLive, long maxTransId);
 
-        MatchMonitorRuleModel GetMatchMonitorRule(bool isLive);
+        MatchMonitorRuleModel GetMatchMonitorRule(bool isLive, int rowSize);
     }
 
     public class MatchMonitorServices : IMatchMonitorServices
@@ -53,9 +53,9 @@
             matchDataAccess.CleanMatchStaging(isLive, maxTransId);
         }
 
-        public MatchMonitorRuleModel GetMatchMonitorRule(bool isLive)
+        public MatchMonitorRuleModel GetMatchMonitorRule(bool isLive, int rowSize)
         {
-            return matchDataAccess.GetMatchMonitorRule(isLive);
+            return matchDataAccess.GetMatchMonitorRule(isLive, rowSize);
         }
     }
 }

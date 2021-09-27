@@ -66,7 +66,7 @@
         {
             try
             {
-                var matchMonitorRule = matchMonitorServices.GetMatchMonitorRule(isLive);
+                var matchMonitorRule = matchMonitorServices.GetMatchMonitorRule(isLive, batchSize);
 
                 if (matchMonitorRule != null && matchMonitorRule.MaxTransId != 0)
                 {

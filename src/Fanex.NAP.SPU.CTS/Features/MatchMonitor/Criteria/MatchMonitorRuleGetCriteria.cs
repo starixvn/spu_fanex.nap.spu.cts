@@ -11,6 +11,9 @@ namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Criteria
         [SpParam(SqlParamName = "op_MaxTransID")]
         public long MaxTransId { get; set; }
 
+        [SpParam(SqlParamName = "ip_NoOfRow")]
+        public int RowSize { get; set; }
+
         public override string GetSettingKey()
         {
             return "CTS_DC_MatchMonitor_Rule_Get";
