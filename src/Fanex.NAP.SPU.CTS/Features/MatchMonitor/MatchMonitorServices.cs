@@ -10,11 +10,11 @@
 
         void InsertMatchMonitorStaging(string matchTransJson, bool isLive);
 
-        IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, int matchId, int totalScore, int bettypeId, long maxTransId);
+        IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, int matchId, int totalScore, int bettypeId, UInt64 maxTransId);
 
-        void UpdateMatchTransComplete(bool isLive, int matchId, int totalScore, int bettypeId, string transGroupJson, long maxTransId);
+        void UpdateMatchTransComplete(bool isLive, int matchId, int totalScore, int bettypeId, string transGroupJson, UInt64 maxTransId);
 
-        void CleanMatchStaging(bool isLive, long maxTransId);
+        void CleanMatchStaging(bool isLive, UInt64 maxTransId);
 
         MatchMonitorRuleModel GetMatchMonitorRule(bool isLive, int rowSize);
     }
@@ -38,17 +38,17 @@
             matchDataAccess.InsertMatchMonitorStaging(matchTransJson, isLive);
         }
 
-        public IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, int matchId, int totalScore, int bettypeId, long maxTransId)
+        public IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, int matchId, int totalScore, int bettypeId, UInt64 maxTransId)
         {
             return matchDataAccess.InsertMatchMonitorRule(isLive, matchId, totalScore, bettypeId, maxTransId);
         }
 
-        public void UpdateMatchTransComplete(bool isLive, int matchId, int totalScore, int bettypeId, string transGroupJson, long maxTransId)
+        public void UpdateMatchTransComplete(bool isLive, int matchId, int totalScore, int bettypeId, string transGroupJson, UInt64 maxTransId)
         {
             matchDataAccess.UpdateMatchTransComplete(isLive, matchId, totalScore, bettypeId, transGroupJson, maxTransId);
         }
 
-        public void CleanMatchStaging(bool isLive, long maxTransId)
+        public void CleanMatchStaging(bool isLive, UInt64 maxTransId)
         {
             matchDataAccess.CleanMatchStaging(isLive, maxTransId);
         }

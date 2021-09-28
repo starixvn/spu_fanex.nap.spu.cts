@@ -13,11 +13,11 @@
 
         void InsertMatchMonitorStaging(string matchTransJson, bool isLive);
 
-        IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, int matchId, int totalScore, int bettypeId, long maxTransId);
+        IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, int matchId, int totalScore, int bettypeId, UInt64 maxTransId);
 
-        void UpdateMatchTransComplete(bool isLive, int matchId, int totalScore, int bettypeId, string transGroupJson, long maxTransId);
+        void UpdateMatchTransComplete(bool isLive, int matchId, int totalScore, int bettypeId, string transGroupJson, UInt64 maxTransId);
 
-        void CleanMatchStaging(bool isLive, long maxTransId);
+        void CleanMatchStaging(bool isLive, UInt64 maxTransId);
 
         MatchMonitorRuleModel GetMatchMonitorRule(bool isLive, int rowSize);
     }
@@ -56,7 +56,7 @@
             repository.Execute(criteria);
         }
 
-        public IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, int matchId, int totalScore, int bettypeId, long maxTransId)
+        public IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, int matchId, int totalScore, int bettypeId, UInt64 maxTransId)
         {
             var criteria = new MatchMonitorRuleInsertCriteria
             {
@@ -70,7 +70,7 @@
             return repository.Fetch<MatchRuleCompletedModel>(criteria);
         }
 
-        public void UpdateMatchTransComplete(bool isLive, int matchId, int totalScore, int bettypeId, string transGroupJson, long maxTransId)
+        public void UpdateMatchTransComplete(bool isLive, int matchId, int totalScore, int bettypeId, string transGroupJson, UInt64 maxTransId)
         {
             var criteria = new MatchTransUpdateCompleteCriteria
             {
@@ -85,7 +85,7 @@
             repository.Execute(criteria);
         }
 
-        public void CleanMatchStaging(bool isLive, long maxTransId)
+        public void CleanMatchStaging(bool isLive, UInt64 maxTransId)
         {
             var criteria = new MatchMonitorStagingCleanCriteria
             {

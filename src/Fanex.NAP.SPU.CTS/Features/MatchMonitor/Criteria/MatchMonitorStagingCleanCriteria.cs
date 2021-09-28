@@ -1,5 +1,6 @@
 ﻿using Fanex.Data;
 using Fanex.Data.Repository;
+using System;
 
 namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Criteria
 {
@@ -9,7 +10,7 @@ namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Criteria
         public bool IsLive { get; set; }
 
         [SpParam(SqlParamName = "ip_MaxTransID")]
-        public long MaxTransId { get; set; }
+        public UInt64 MaxTransId { get; set; }
 
         public override string GetSettingKey()
         {

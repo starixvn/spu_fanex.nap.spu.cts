@@ -2,6 +2,7 @@
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
+    using System;
 
     public class MatchMonitorRuleInsertCriteria : NonQueryCommand
     {
@@ -18,7 +19,7 @@
         public int BettypeId { get; set; }
 
         [SpParam(SqlParamName = "ip_MaxTransID")]
-        public long MaxTransId { get; set; }
+        public UInt64 MaxTransId { get; set; }
 
         public override string GetSettingKey()
                 => "CTS_DC_MatchMonitor_Rule_Process";
