@@ -1,13 +1,15 @@
-﻿using Fanex.NAP.SPU.CTS.Shares;
-using System.Threading;
-
-namespace Fanex.NAP.SPU.CTS.Features.AffectedEvidence
+﻿namespace Fanex.NAP.SPU.CTS.Features.AffectedEvidence
 {
+    using Fanex.NAP.SPU.CTS.Shares;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
+
     public interface IAffectedEvidenceFromQueueService
     {
-        void InsertAssociationAffectedEvidenceFromQueue(int batchSize);
+        void InsertAssociationAffectedEvidenceFromQueue();
 
-        void RemoveAssociationAffectedEvidenceFromQueue(int batchSize);
+        void RemoveAssociationAffectedEvidenceFromQueue();
     }
 
     public class AffectedEvidenceFromQueueService : IAffectedEvidenceFromQueueService
@@ -19,27 +21,53 @@ namespace Fanex.NAP.SPU.CTS.Features.AffectedEvidence
             this.dataAccess = dataAccess;
         }
 
-        public void InsertAssociationAffectedEvidenceFromQueue(int batchSize)
+        public void InsertAssociationAffectedEvidenceFromQueue()
         {
-            var isContinue = true;
+            var result = new ResultAffectedEvidenceFromQueueEntity { CustIds = new List<long>(), IsContinue = true };
 
-            while (isContinue)
+            while (result.IsContinue)
             {
-                isContinue = dataAccess.InsertAssociationAffectedEvidence(batchSize);
+                result = dataAccess.InsertAssociationAffectedEvidence();
+
+                if (result.CustIds.Any())
+                {
+                    UpdateBetLimitOfFlaggedCustomer(result.CustIds);
+                }
 
                 Thread.Sleep(Consts.AffectedEvidence_SleepTimes);
             }
         }
 
-        public void RemoveAssociationAffectedEvidenceFromQueue(int batchSize)
+        public void RemoveAssociationAffectedEvidenceFromQueue()
         {
-            var isContinue = true;
+            var result = new ResultAffectedEvidenceFromQueueEntity { CustIds = new List<long>(), IsContinue = true };
 
-            while (isContinue)
+            while (result.IsContinue)
             {
-                isContinue = dataAccess.RemoveAssociationAffectedEvidence(batchSize);
+                result = dataAccess.RemoveAssociationAffectedEvidence();
+
+                if (result.CustIds.Any())
+                {
+                    UpdateBetLimitOfUnflaggedCustomer(result.CustIds);
+                }
 
                 Thread.Sleep(Consts.AffectedEvidence_SleepTimes);
+            }
+        }
+
+        public void UpdateBetLimitOfFlaggedCustomer(IEnumerable<long> custIds)
+        {
+            if(custIds != null && custIds.Any())
+            {
+                dataAccess.UpdateBetLimitOfFlaggedCustomer(string.Join(",", custIds));
+            }
+        }
+
+        public void UpdateBetLimitOfUnflaggedCustomer(IEnumerable<long> custIds)
+        {
+            if (custIds != null && custIds.Any())
+            {
+                dataAccess.UpdateBetLimitOfUnflaggedCustomer(string.Join(",", custIds));
             }
         }
     }

@@ -2,13 +2,19 @@
 {
     using Fanex.Data.Repository;
     using Fanex.NAP.SPU.CTS.Features.AffectedEvidence.Criteria;
+    using Fanex.NAP.SPU.CTS.Shares.Models;
     using System;
+    using System.Collections.Generic;
 
     public interface IAffectedEvidenceFromQueueDataAccess
     {
-        bool InsertAssociationAffectedEvidence(int batchSize);
+        ResultAffectedEvidenceFromQueueEntity InsertAssociationAffectedEvidence();
 
-        bool RemoveAssociationAffectedEvidence(int batchSize);
+        ResultAffectedEvidenceFromQueueEntity RemoveAssociationAffectedEvidence();
+
+        DBResult UpdateBetLimitOfFlaggedCustomer(string custIds);
+
+        DBResult UpdateBetLimitOfUnflaggedCustomer(string custIds);
     }
 
     public class AffectedEvidenceFromQueueDataAccess : IAffectedEvidenceFromQueueDataAccess
@@ -20,28 +26,62 @@
             repository = new DynamicRepository();
         }
 
-        public bool InsertAssociationAffectedEvidence(int batchSize)
+        public ResultAffectedEvidenceFromQueueEntity InsertAssociationAffectedEvidence()
         {
-            var criteria = new AffectedEvidenceFromQueueInsertCriteria
+            var criteria = new AffectedEvidenceFromQueueInsertCriteria();
+
+            var custIds = repository.Fetch<long>(criteria);
+
+            return new ResultAffectedEvidenceFromQueueEntity
             {
-                BatchSize = batchSize
+                CustIds = custIds ?? new List<long>(),
+                IsContinue = Convert.ToBoolean(criteria.IsDataExist)
             };
-
-            repository.Execute(criteria);
-
-            return Convert.ToBoolean(criteria.IsExist);
         }
 
-        public bool RemoveAssociationAffectedEvidence(int batchSize)
+        public ResultAffectedEvidenceFromQueueEntity RemoveAssociationAffectedEvidence()
         {
-            var criteria = new AffectedEvidenceFromQueueRemoveCriteria
+            var criteria = new AffectedEvidenceFromQueueRemoveCriteria();
+
+            var custIds = repository.Fetch<long>(criteria);
+
+            return new ResultAffectedEvidenceFromQueueEntity
             {
-                BatchSize = batchSize
+                CustIds = custIds ?? new List<long>(),
+                IsContinue = Convert.ToBoolean(criteria.IsDataExist)
+            };
+        }
+
+        public DBResult UpdateBetLimitOfFlaggedCustomer(string custIds)
+        {
+            var criteria = new BetLimitByEvidenceAddingUpdateCriteria
+            {
+                CustIDList = custIds
             };
 
             repository.Execute(criteria);
 
-            return Convert.ToBoolean(criteria.IsExist);
+            return new DBResult
+            {
+                ErrorCode = string.IsNullOrEmpty(criteria.ErrorMessage) ? 0 : -1,
+                ErrorMsg = criteria.ErrorMessage
+            };
+        }
+
+        public DBResult UpdateBetLimitOfUnflaggedCustomer(string custIds)
+        {
+            var criteria = new BetLimitByEvidenceRemovingUpdateCriteria
+            {
+                CustIDList = custIds
+            };
+
+            repository.Execute(criteria);
+
+            return new DBResult
+            {
+                ErrorCode = string.IsNullOrEmpty(criteria.ErrorMessage) ? 0 : -1,
+                ErrorMsg = criteria.ErrorMessage
+            };
         }
     }
 }

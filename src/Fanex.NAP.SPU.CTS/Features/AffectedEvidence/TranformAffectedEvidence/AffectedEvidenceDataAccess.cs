@@ -8,7 +8,7 @@
     {
         IEnumerable<int> TransformAssociationAffectedEvidence(int batchSize);
 
-        void UpdateBetLimitByEvidenceRemoving(IEnumerable<int> custIds);
+        void UpdateBetLimitOfFlaggedCustomer(string custIds);
     }
 
     public class AffectedEvidenceDataAccess : IAffectedEvidenceDataAccess
@@ -30,11 +30,11 @@
             return repository.Fetch<int>(criteria);
         }
 
-        public void UpdateBetLimitByEvidenceRemoving(IEnumerable<int> custIds)
+        public void UpdateBetLimitOfFlaggedCustomer(string custIds)
         {
-            var criteria = new UpdateBetLimitByEvidenceRemovingCriteria
+            var criteria = new BetLimitByEvidenceRemovingUpdateCriteria
             {
-                CustIDList = string.Join(",", custIds)
+                CustIDList = custIds
             };
 
             repository.Execute(criteria);

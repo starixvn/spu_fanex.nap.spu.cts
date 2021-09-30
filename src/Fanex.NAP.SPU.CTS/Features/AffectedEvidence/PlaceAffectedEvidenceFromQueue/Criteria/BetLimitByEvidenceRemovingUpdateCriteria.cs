@@ -1,19 +1,23 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.AffectedEvidence.Criteria
 {
+    using Fanex.Data;
     using Fanex.Data.Repository;
 
-    public class UpdateBetLimitByEvidenceRemovingCriteria : NonQueryCommand
+    public class BetLimitByEvidenceRemovingUpdateCriteria : NonQueryCommand
     {
         public string CustIDList { get; set; }
 
+        [SpParam(SqlParamName = "op_ErrorMessage")]
+        public string ErrorMessage { get; set; }
+
         public override string GetSettingKey()
         {
-            return "NAP_BLControl_EvidenceFlagged";
+            return "NAP_BLControl_EvidenceUnflagged";
         }
 
         public override bool IsValid()
         {
-            return !string.IsNullOrEmpty(CustIDList);
+            return true;
         }
     }
 }
