@@ -101,88 +101,88 @@
             result.Should().BeEquivalentTo(output);
         }
 
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public void InsertMatchMonitorStaging_WhenSuccess_ReturnListMatchStaging(bool isLive)
-        {
-            var ticketDetails = new List<TicketDetailEntity>
-            {
-                new TicketDetailEntity
-                {
-                    CustId = 1,
-                    AwayId = 1,
-                    BetTeam = string.Empty,
-                    BetType = 1,
-                    Hdp1 = 1,
-                    Hdp2 = 1,
-                    MatchId = 1,
-                    HomeId = 1,
-                    LeagueId = 1,
-                    LiveAwayScore = 1,
-                    LiveHomeScore = 1,
-                    LiveIndicator = true,
-                    Odds = 1,
-                    Stake = 1,
-                    TransId = 1,
-                    EventDate = DateTime.Parse("2021-07-05 22:50:55"),
-                    EventStatus = string.Empty,
-                    KickOffTime = DateTime.Parse("2021-07-05 22:50:55"),
-                    TicketStatus = 1,
-                    TransDate = DateTime.Parse("2021-07-05 22:50:55")
-                },
-                new TicketDetailEntity
-                {
-                    CustId = 2,
-                    AwayId = 2,
-                    BetTeam = string.Empty,
-                    BetType = 2,
-                    Hdp1 = 2,
-                    Hdp2 = 2,
-                    MatchId = 2,
-                    HomeId = 2,
-                    LeagueId = 2,
-                    LiveAwayScore = 2,
-                    LiveHomeScore = 2,
-                    LiveIndicator = true,
-                    Odds = 2,
-                    Stake = 2,
-                    TransId = 2,
-                    EventDate = DateTime.Parse("2021-07-05 22:50:55"),
-                    EventStatus = string.Empty,
-                    KickOffTime = DateTime.Parse("2021-07-05 22:50:55"),
-                    TicketStatus = 2,
-                    TransDate = DateTime.Parse("2021-07-05 22:50:55")
-                }
-            };
+        //[Theory]
+        //[InlineData(true)]
+        //[InlineData(false)]
+        //public void InsertMatchMonitorStaging_WhenSuccess_ReturnListMatchStaging(bool isLive)
+        //{
+        //    var ticketDetails = new List<TicketDetailEntity>
+        //    {
+        //        new TicketDetailEntity
+        //        {
+        //            CustId = 1,
+        //            AwayId = 1,
+        //            BetTeam = string.Empty,
+        //            BetType = 1,
+        //            Hdp1 = 1,
+        //            Hdp2 = 1,
+        //            MatchId = 1,
+        //            HomeId = 1,
+        //            LeagueId = 1,
+        //            LiveAwayScore = 1,
+        //            LiveHomeScore = 1,
+        //            LiveIndicator = true,
+        //            Odds = 1,
+        //            Stake = 1,
+        //            TransId = 1,
+        //            EventDate = DateTime.Parse("2021-07-05 22:50:55"),
+        //            EventStatus = string.Empty,
+        //            KickOffTime = DateTime.Parse("2021-07-05 22:50:55"),
+        //            TicketStatus = 1,
+        //            TransDate = DateTime.Parse("2021-07-05 22:50:55")
+        //        },
+        //        new TicketDetailEntity
+        //        {
+        //            CustId = 2,
+        //            AwayId = 2,
+        //            BetTeam = string.Empty,
+        //            BetType = 2,
+        //            Hdp1 = 2,
+        //            Hdp2 = 2,
+        //            MatchId = 2,
+        //            HomeId = 2,
+        //            LeagueId = 2,
+        //            LiveAwayScore = 2,
+        //            LiveHomeScore = 2,
+        //            LiveIndicator = true,
+        //            Odds = 2,
+        //            Stake = 2,
+        //            TransId = 2,
+        //            EventDate = DateTime.Parse("2021-07-05 22:50:55"),
+        //            EventStatus = string.Empty,
+        //            KickOffTime = DateTime.Parse("2021-07-05 22:50:55"),
+        //            TicketStatus = 2,
+        //            TransDate = DateTime.Parse("2021-07-05 22:50:55")
+        //        }
+        //    };
 
-            var matchStagings = new List<MatchStagingModel> { 
-                new MatchStagingModel{ 
-                    MatchId = 1,
-                    BetTypeId = 1,
-                    TotalScore = 3
-                },
-                new MatchStagingModel{
-                    MatchId = 2,
-                    BetTypeId = 3,
-                    TotalScore = 2
-                },
-                new MatchStagingModel{
-                    MatchId = 3,
-                    BetTypeId = 7,
-                    TotalScore = 0
-                },
-            };
+        //    var matchStagings = new List<MatchStagingModel> { 
+        //        new MatchStagingModel{ 
+        //            MatchId = 1,
+        //            BetTypeId = 1,
+        //            TotalScore = 3
+        //        },
+        //        new MatchStagingModel{
+        //            MatchId = 2,
+        //            BetTypeId = 3,
+        //            TotalScore = 2
+        //        },
+        //        new MatchStagingModel{
+        //            MatchId = 3,
+        //            BetTypeId = 7,
+        //            TotalScore = 0
+        //        },
+        //    };
 
-            var ticketDetailToJson = JsonConvert.SerializeObject(ticketDetails);
+        //    var ticketDetailToJson = JsonConvert.SerializeObject(ticketDetails);
 
-            matchMonitorDataAccess.InsertMatchMonitorStaging(ticketDetailToJson, isLive).Returns(matchStagings);
+        //    matchMonitorDataAccess.InsertMatchMonitorStaging(ticketDetailToJson, isLive).Returns(matchStagings);
 
-            var result = matchMonitorServices.InsertMatchMonitorStaging(ticketDetailToJson, isLive);
+        //    var result = matchMonitorServices.InsertMatchMonitorStaging(ticketDetailToJson, isLive);
 
-            result.Should().NotBeNull();
-            result.Should().BeEquivalentTo(matchStagings);
-        }
+        //    result.Should().NotBeNull();
+        //    result.Should().BeEquivalentTo(matchStagings);
+        //}
 
         //[Theory]
         //[InlineData(true, 1, 2, 1)]

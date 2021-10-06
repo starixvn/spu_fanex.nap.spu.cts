@@ -28,16 +28,28 @@
             this.archiveCustClassHistoryJobService = archiveCustClassHistoryJobService;
         }
 
-        [HttpPost("matchmonitorlive")]
-        public async Task<bool> MatchMonitorLive([FromForm] int size)
+        [HttpPost("MatchMonitorInsertTicketDetailLive")]
+        public async Task<bool> MatchMonitorInsertTicketDetailLive([FromForm] int size)
         {
-            return await this.matchMonitorJobService.Execute(size, true);
+            return await this.matchMonitorJobService.InsertTicketDetail(size, true);
         }
 
-        [HttpPost("matchmonitornonlive")]
-        public async Task<bool> MatchMonitorNonLive([FromForm] int size)
+        [HttpPost("MatchMonitorInsertTicketDetailNonLive")]
+        public async Task<bool> MatchMonitorInsertTicketDetailNonLive([FromForm] int size)
         {
-            return await this.matchMonitorJobService.Execute(size, false);
+            return await this.matchMonitorJobService.InsertTicketDetail(size, false);
+        }
+
+        [HttpPost("MatchMonitorRuleLive")]
+        public async Task<bool> MatchMonitorRuleLive([FromForm] int size)
+        {
+            return await this.matchMonitorJobService.ProcessRule(size, true);
+        }
+
+        [HttpPost("MatchMonitorRuleNonLive")]
+        public async Task<bool> MatchMonitorRuleNonLive([FromForm] int size)
+        {
+            return await this.matchMonitorJobService.ProcessRule(size, false);
         }
 
         [HttpPost("initialcustomerstatus")]
@@ -64,10 +76,10 @@
             return await this.archiveCustClassHistoryJobService.ArchiveChangedCustClassHistory();
         }
 
-        [HttpPost("updatewritelog")]
-        public async Task<bool> UpdateWriteLog([FromForm] string serviceName, [FromForm] bool isWriteLog)
-        {
-            return await this.matchMonitorJobService.UpdateWriteLogSetting(serviceName, isWriteLog);
-        }
+        //[HttpPost("updatewritelog")]
+        //public async Task<bool> UpdateWriteLog([FromForm] string serviceName, [FromForm] bool isWriteLog)
+        //{
+        //    return await this.matchMonitorJobService.UpdateWriteLogSetting(serviceName, isWriteLog);
+        //}
     }
 }
