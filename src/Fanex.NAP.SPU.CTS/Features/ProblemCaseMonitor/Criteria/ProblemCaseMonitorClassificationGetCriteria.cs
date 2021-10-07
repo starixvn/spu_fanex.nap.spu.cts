@@ -6,7 +6,7 @@
     public class ProblemCaseMonitorClassificationGetCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "op_ClassificationHistoryID")]
-        public long ClassificationHistoryID { get; set; }
+        public ulong ClassificationHistoryID { get; set; }
 
         public override string GetSettingKey()
         {

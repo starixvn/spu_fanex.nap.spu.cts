@@ -55,7 +55,7 @@
 	<Function name="ProblemCaseMonitor">
 		<Setting Key="CTS_DC_ProblemCaseMonitor_Classification_Get" SpName="CTS_DC_ProblemCaseMonitor_Classification_Get" DbName="MySQL.SLAVE.CTS_DataCenter.ctsService" />
 		<Setting Key="CTS_DC_ProblemCaseMonitor_Classification_Insert" SpName="CTS_DC_ProblemCaseMonitor_Classification_Insert" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
-		<Setting Key="CTS_DC_ProblemCaseMonitor_Association_Get" SpName="CTS_DC_ProblemCaseMonitor_Association_Get" DbName="MySQL.SLAVE.CTS_DataCenter.ctsService" />
+		<Setting Key="CTS_DC_ProblemCaseMonitor_Association_Get" SpName="CTS_DC_ProblemCaseMonitor_Association_Get" DbName="MySQL.SLAVE.CTS_DataCenter.ctsService"  TimeOut="600" />
 		<Setting Key="CTS_DC_ProblemCaseMonitor_Association_Insert" SpName="CTS_DC_ProblemCaseMonitor_Association_Insert" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
 	</Function>
 </Functions>

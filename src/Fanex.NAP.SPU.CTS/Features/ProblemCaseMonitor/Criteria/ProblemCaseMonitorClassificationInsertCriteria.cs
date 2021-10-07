@@ -6,7 +6,7 @@
     public class ProblemCaseMonitorClassificationInsertCriteria : NonQueryCommand
     {
         [SpParam(SqlParamName = "ip_ClassificationHistoryID")]
-        public long ClassificationHistoryID { get; set; }
+        public ulong ClassificationHistoryID { get; set; }
 
         [SpParam(SqlParamName = "ip_ProblemCaseData")]
         public string ProblemCaseJson { get; set; }

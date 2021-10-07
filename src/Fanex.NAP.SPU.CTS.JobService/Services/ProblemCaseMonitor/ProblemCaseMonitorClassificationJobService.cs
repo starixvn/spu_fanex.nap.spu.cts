@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.SPU.CTS.JobService.Services
+﻿namespace Fanex.NAP.SPU.CTS.JobService.Services.ProblemCaseMonitor
 {
     using Fanex.Logging;
     using Fanex.Logging.Extensions;
@@ -10,19 +10,19 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    public interface IClassifyProblemCaseMonitorJobService
+    public interface IProblemCaseMonitorClassificationJobService
     {
         Task<bool> Execute();
     }
 
-    public class ClassifyProblemCaseMonitorJobService : IClassifyProblemCaseMonitorJobService
+    public class ProblemCaseMonitorClassificationJobService : IProblemCaseMonitorClassificationJobService
     {
         private readonly ISentryClient sentryClient;
-        private readonly IProblemCaseClassificationService problemCaseClassificationService;
+        private readonly IProblemCaseMonitorService problemCaseMonitorService;
 
-        public ClassifyProblemCaseMonitorJobService(IProblemCaseClassificationService problemCaseClassificationService, ISentryClient sentryClient)
+        public ProblemCaseMonitorClassificationJobService(IProblemCaseMonitorService problemCaseMonitorService, ISentryClient sentryClient)
         {
-            this.problemCaseClassificationService = problemCaseClassificationService;
+            this.problemCaseMonitorService = problemCaseMonitorService;
             this.sentryClient = sentryClient;
         }
 
@@ -30,19 +30,19 @@
         {
             try
             {
-                var problemCase = this.problemCaseClassificationService.GetProblemCaseMonitorClassification();
+                var problemCase = this.problemCaseMonitorService.GetProblemCaseMonitorClassification();
 
-                var updateResult = this.problemCaseClassificationService.InsertProblemCaseMonitorClassification(problemCase);
+                var updateResult = this.problemCaseMonitorService.InsertProblemCaseMonitorClassification(problemCase);               
             }
             catch (Exception ex)
             {
-                sentryClient.CaptureException(ex);
-
                 var logMessage = new LogMessage(ex.Message)
                         .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
                         .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
 
-                LogService.Error($"CTS - Classify Problem Case Monitor job Execute exeption message:  {logMessage}");
+                LogService.Error($"CTS - Problem Case Monitor Classification job Execute exeption message:  {logMessage}");
+
+                sentryClient.CaptureMessage(logMessage, Sentry.Protocol.SentryLevel.Error);
 
                 return Task.FromResult(false);                
             }

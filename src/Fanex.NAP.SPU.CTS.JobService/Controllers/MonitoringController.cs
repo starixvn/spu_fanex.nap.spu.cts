@@ -1,4 +1,5 @@
 ﻿using Fanex.NAP.SPU.CTS.JobService.Services;
+using Fanex.NAP.SPU.CTS.JobService.Services.ProblemCaseMonitor;
 using Microsoft.AspNetCore.Mvc;
 using Sentry;
 using System;
@@ -14,16 +15,18 @@ namespace Fanex.NAP.SPU.CTS.JobService.Controllers
         private readonly ISentryClient sentryClient;
 
         private readonly IExistingCustomerJobService existingCustomerJobService;
-        private readonly IClassifyProblemCaseMonitorJobService classifyProblemCaseMonitorJobService;
-
+        private readonly IProblemCaseMonitorClassificationJobService problemCaseMonitorClassificationJobService;
+        private readonly IProblemCaseMonitorAssociationJobService problemCaseMonitorAssociationJobService;
 
         public MonitoringController(ISentryClient sentryClient
             , IExistingCustomerJobService existingCustomerJobService
-            , IClassifyProblemCaseMonitorJobService classifyProblemCaseMonitorJobService)
+            , IProblemCaseMonitorClassificationJobService problemCaseMonitorClassificationJobService
+            , IProblemCaseMonitorAssociationJobService problemCaseMonitorAssociationJobService)
         {
             this.sentryClient = sentryClient;
             this.existingCustomerJobService = existingCustomerJobService;
-            this.classifyProblemCaseMonitorJobService = classifyProblemCaseMonitorJobService;
+            this.problemCaseMonitorClassificationJobService = problemCaseMonitorClassificationJobService;
+            this.problemCaseMonitorAssociationJobService = problemCaseMonitorAssociationJobService;
         }
 
         [HttpPost("existingcustomer")]
@@ -55,12 +58,16 @@ namespace Fanex.NAP.SPU.CTS.JobService.Controllers
             return await Task.FromResult(true);
         }
 
-        [HttpPost("classifyproblemcasemonitor")]
-        public async Task<bool> ClassifyProblemCaseMonitor()
+        [HttpPost("problemcasemonitorclassify")]
+        public async Task<bool> ProblemCaseMonitorClassification()
         {
-            return await this.classifyProblemCaseMonitorJobService.Execute();
+            return await this.problemCaseMonitorClassificationJobService.Execute();
         }
 
-
+        [HttpPost("problemcasemonitorassociation")]
+        public async Task<bool> ProblemCaseMonitorAssociation()
+        {
+            return await this.problemCaseMonitorAssociationJobService.Execute();
+        }
     }
 }

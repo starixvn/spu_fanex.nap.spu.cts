@@ -16,6 +16,7 @@
     using Fanex.NAP.SPU.CTS.Features.UpdateLastLogin;
     using Fanex.NAP.SPU.CTS.Features.UserPermission;
     using Fanex.NAP.SPU.CTS.JobService.Services.ArchiveData;
+    using Fanex.NAP.SPU.CTS.JobService.Services.ProblemCaseMonitor;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.DependencyInjection;
 
@@ -144,9 +145,10 @@
 
         private static void RegisterClassifyProblemCaseMonitor(this IServiceCollection services)
         {
-            services.AddSingleton<IProblemCaseClassificationDataAccess, ProblemCaseClassificationDataAccess>();
-            services.AddSingleton<IProblemCaseClassificationService, ProblemCaseClassificationService>();
-            services.AddSingleton<IClassifyProblemCaseMonitorJobService, ClassifyProblemCaseMonitorJobService>();
+            services.AddSingleton<IProblemCaseMonitorDataAccess, ProblemCaseMonitorDataAccess>();
+            services.AddSingleton<IProblemCaseMonitorService, ProblemCaseMonitorService>();
+            services.AddSingleton<IProblemCaseMonitorClassificationJobService, ProblemCaseMonitorClassificationJobService>();
+            services.AddSingleton<IProblemCaseMonitorAssociationJobService, ProblemCaseMonitorAssociationJobService>();
         }
     }
 }

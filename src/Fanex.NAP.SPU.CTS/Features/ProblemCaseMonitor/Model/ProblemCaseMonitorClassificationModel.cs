@@ -10,7 +10,7 @@
             ProblemCaseMonitorClassificationList = new List<ProblemCaseMonitorClassificationEntity>();
         }
 
-        public long ClassificationHistoryID { get; set; }
+        public ulong ClassificationHistoryID { get; set; }
 
         public IEnumerable<ProblemCaseMonitorClassificationEntity> ProblemCaseMonitorClassificationList { get; set; }
     }
