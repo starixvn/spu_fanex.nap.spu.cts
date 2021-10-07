@@ -14,11 +14,16 @@ namespace Fanex.NAP.SPU.CTS.JobService.Controllers
         private readonly ISentryClient sentryClient;
 
         private readonly IExistingCustomerJobService existingCustomerJobService;
+        private readonly IClassifyProblemCaseMonitorJobService classifyProblemCaseMonitorJobService;
 
-        public MonitoringController(ISentryClient sentryClient, IExistingCustomerJobService existingCustomerJobService)
+
+        public MonitoringController(ISentryClient sentryClient
+            , IExistingCustomerJobService existingCustomerJobService
+            , IClassifyProblemCaseMonitorJobService classifyProblemCaseMonitorJobService)
         {
             this.sentryClient = sentryClient;
             this.existingCustomerJobService = existingCustomerJobService;
+            this.classifyProblemCaseMonitorJobService = classifyProblemCaseMonitorJobService;
         }
 
         [HttpPost("existingcustomer")]
@@ -49,5 +54,13 @@ namespace Fanex.NAP.SPU.CTS.JobService.Controllers
 
             return await Task.FromResult(true);
         }
+
+        [HttpPost("classifyproblemcasemonitor")]
+        public async Task<bool> ClassifyProblemCaseMonitor()
+        {
+            return await this.classifyProblemCaseMonitorJobService.Execute();
+        }
+
+
     }
 }
