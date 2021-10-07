@@ -3,6 +3,7 @@
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
     using Fanex.NAP.SPU.CTS.Features.SystemParameter;
+    using Fanex.NAP.SPU.CTS.Shares;
     using Newtonsoft.Json;
     using Sentry;
     using System;
@@ -80,13 +81,23 @@
 
                             if (matchRuleCompleted != null && matchRuleCompleted.Any())
                             {
-                                matchMonitorServices.UpdateMatchTransComplete(
-                                    isLive,
-                                    x.MatchId,
-                                    x.TotalScore,
-                                    x.BetTypeId,
-                                    JsonConvert.SerializeObject(matchRuleCompleted),
-                                    matchMonitorRule.MaxTransId);
+                                try
+                                {
+                                    matchMonitorServices.UpdateMatchTransComplete(
+                                                                       isLive,
+                                                                       x.MatchId,
+                                                                       x.TotalScore,
+                                                                       x.BetTypeId,
+                                                                       JsonConvert.SerializeObject(matchRuleCompleted),
+                                                                       matchMonitorRule.MaxTransId);
+                                }
+                                catch (Exception e)
+                                {
+                                    var matchInfo = $"input: isLive {isLive} - MatchId {x.MatchId} - TotalScore {x.TotalScore} - Bettypeid {x.BetTypeId} - TranGroup { JsonConvert.SerializeObject(matchRuleCompleted)} - MaxTranId { matchMonitorRule.MaxTransId}";
+                                    Utilities.LogSentryError("MatchMonitor", matchInfo, string.Empty, e, sentryClient);
+                                    throw e;
+                                }
+                               
                             }
 
                             Thread.Sleep(MatchMonitor_SleepTimes);
