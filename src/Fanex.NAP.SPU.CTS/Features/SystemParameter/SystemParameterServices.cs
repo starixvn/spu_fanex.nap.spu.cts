@@ -7,6 +7,8 @@
     {
         Int64 GetLastScannedId(SystemParameters paraID);
 
+        Int64 GetLastScannedIdFromSlave(SystemParameters paraID);
+
         DateTime? GetLastScannedDateTime(SystemParameters paraID);
 
         bool UpdateValueForSystemParamById(string paraValue, SystemParameters paramId);
@@ -26,6 +28,13 @@
         public Int64 GetLastScannedId(SystemParameters paraID)
         {
             var lastScannedTransID = systemParameterDataAccess.GetSystemParameterByID(paraID);
+
+            return lastScannedTransID != null ? Int64.Parse(lastScannedTransID?.ParameterValue) : 0;
+        }
+
+        public Int64 GetLastScannedIdFromSlave(SystemParameters paraID)
+        {
+            var lastScannedTransID = systemParameterDataAccess.GetSystemParameterByIDFromSlave(paraID);
 
             return lastScannedTransID != null ? Int64.Parse(lastScannedTransID?.ParameterValue) : 0;
         }

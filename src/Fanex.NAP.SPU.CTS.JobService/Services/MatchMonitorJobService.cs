@@ -67,6 +67,11 @@
         {
             try
             {
+                if (IsReplicationDelay(isLive))
+                {
+                    return Task.FromResult(true);
+                }
+
                 var matchMonitorRule = matchMonitorServices.GetMatchMonitorRule(isLive, batchSize);
 
                 if (matchMonitorRule != null && matchMonitorRule.MaxTransId != 0)
@@ -81,23 +86,13 @@
 
                             if (matchRuleCompleted != null && matchRuleCompleted.Any())
                             {
-                                try
-                                {
-                                    matchMonitorServices.UpdateMatchTransComplete(
-                                                                       isLive,
-                                                                       x.MatchId,
-                                                                       x.TotalScore,
-                                                                       x.BetTypeId,
-                                                                       JsonConvert.SerializeObject(matchRuleCompleted),
-                                                                       matchMonitorRule.MaxTransId);
-                                }
-                                catch (Exception e)
-                                {
-                                    var matchInfo = $"input: isLive {isLive} - MatchId {x.MatchId} - TotalScore {x.TotalScore} - Bettypeid {x.BetTypeId} - TranGroup { JsonConvert.SerializeObject(matchRuleCompleted)} - MaxTranId { matchMonitorRule.MaxTransId}";
-                                    Utilities.LogSentryError("MatchMonitor", matchInfo, string.Empty, e, sentryClient);
-                                    throw e;
-                                }
-                               
+                                matchMonitorServices.UpdateMatchTransComplete(
+                                                                      isLive,
+                                                                      x.MatchId,
+                                                                      x.TotalScore,
+                                                                      x.BetTypeId,
+                                                                      JsonConvert.SerializeObject(matchRuleCompleted),
+                                                                      matchMonitorRule.MaxTransId);
                             }
 
                             Thread.Sleep(MatchMonitor_SleepTimes);
@@ -137,6 +132,22 @@
             }
 
             return matchTrans;
+        }
+
+        private bool IsReplicationDelay(bool isLive)
+        {
+            var paraId = isLive ? SystemParameters.MatchMonitorLastScannedRuleProcessLive : SystemParameters.MatchMonitorLastScannedRuleProcessNonLive;
+
+            var lastScannedRuleProcessMaster = systemParameterServices.GetLastScannedId(paraId);
+
+            var lastScannedRuleProcessSlave = systemParameterServices.GetLastScannedIdFromSlave(paraId);
+
+            if (lastScannedRuleProcessMaster == lastScannedRuleProcessSlave)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         #endregion Private Methods
