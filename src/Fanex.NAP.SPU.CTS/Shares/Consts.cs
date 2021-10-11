@@ -36,6 +36,8 @@
             RobotAccountLastScannedTime = 3,
             MatchMonitorLastScannedTrans = 20,
             MatchMonitorLastScannedTransNoneLive = 29,
+            MatchMonitorLastScannedRuleProcessLive = 47,
+            MatchMonitorLastScannedRuleProcessNonLive = 48,
             ArchiveCustomerLastTime_Credit = 24,
             ArchiveCustomerLastCustID_Credit = 25,
             ArchiveCustomerLastTime_Deposit = 26,

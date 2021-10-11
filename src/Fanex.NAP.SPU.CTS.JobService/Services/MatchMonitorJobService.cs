@@ -3,6 +3,7 @@
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
     using Fanex.NAP.SPU.CTS.Features.SystemParameter;
+    using Fanex.NAP.SPU.CTS.Shares;
     using Newtonsoft.Json;
     using Sentry;
     using System;
@@ -66,6 +67,11 @@
         {
             try
             {
+                if (IsReplicationDelay(isLive))
+                {
+                    return Task.FromResult(true);
+                }
+
                 var matchMonitorRule = matchMonitorServices.GetMatchMonitorRule(isLive, batchSize);
 
                 if (matchMonitorRule != null && matchMonitorRule.MaxTransId != 0)
@@ -81,12 +87,12 @@
                             if (matchRuleCompleted != null && matchRuleCompleted.Any())
                             {
                                 matchMonitorServices.UpdateMatchTransComplete(
-                                    isLive,
-                                    x.MatchId,
-                                    x.TotalScore,
-                                    x.BetTypeId,
-                                    JsonConvert.SerializeObject(matchRuleCompleted),
-                                    matchMonitorRule.MaxTransId);
+                                                                      isLive,
+                                                                      x.MatchId,
+                                                                      x.TotalScore,
+                                                                      x.BetTypeId,
+                                                                      JsonConvert.SerializeObject(matchRuleCompleted),
+                                                                      matchMonitorRule.MaxTransId);
                             }
 
                             Thread.Sleep(MatchMonitor_SleepTimes);
@@ -126,6 +132,22 @@
             }
 
             return matchTrans;
+        }
+
+        private bool IsReplicationDelay(bool isLive)
+        {
+            var paraId = isLive ? SystemParameters.MatchMonitorLastScannedRuleProcessLive : SystemParameters.MatchMonitorLastScannedRuleProcessNonLive;
+
+            var lastScannedRuleProcessMaster = systemParameterServices.GetLastScannedId(paraId);
+
+            var lastScannedRuleProcessSlave = systemParameterServices.GetLastScannedIdFromSlave(paraId);
+
+            if (lastScannedRuleProcessMaster == lastScannedRuleProcessSlave)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         #endregion Private Methods
