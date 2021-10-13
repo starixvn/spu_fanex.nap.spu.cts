@@ -67,11 +67,6 @@
         {
             try
             {
-                if (IsReplicationDelay(isLive))
-                {
-                    return Task.FromResult(true);
-                }
-
                 var matchMonitorRule = matchMonitorServices.GetMatchMonitorRule(isLive, batchSize);
 
                 if (matchMonitorRule != null && matchMonitorRule.MaxTransId != 0)
@@ -132,22 +127,6 @@
             }
 
             return matchTrans;
-        }
-
-        private bool IsReplicationDelay(bool isLive)
-        {
-            var paraId = isLive ? SystemParameters.MatchMonitorLastScannedRuleProcessLive : SystemParameters.MatchMonitorLastScannedRuleProcessNonLive;
-
-            var lastScannedRuleProcessMaster = systemParameterServices.GetLastScannedId(paraId);
-
-            var lastScannedRuleProcessSlave = systemParameterServices.GetLastScannedIdFromSlave(paraId);
-
-            if (lastScannedRuleProcessMaster == lastScannedRuleProcessSlave)
-            {
-                return false;
-            }
-
-            return true;
         }
 
         #endregion Private Methods
