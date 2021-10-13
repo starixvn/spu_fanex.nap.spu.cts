@@ -17,7 +17,7 @@
     {
         Task<bool> InsertTicketDetail(int batchSize, bool isLive);
 
-        Task<bool> ProcessRule(int batchSize, bool isLive);
+        Task<bool> ProcessRule(int batchSize, bool isLive, int numberOfThread);
     }
 
     public class MatchMonitorJobService : IMatchMonitorJobService
@@ -63,7 +63,7 @@
             return Task.FromResult(true);
         }
 
-        public Task<bool> ProcessRule(int batchSize, bool isLive)
+        public Task<bool> ProcessRule(int batchSize, bool isLive, int numberOfThread)
         {
             try
             {
@@ -74,7 +74,7 @@
                     matchMonitorRule
                         .MatchStagingList
                         .AsParallel()
-                        .WithDegreeOfParallelism(appSettings.MatchMonitorNumberOfThread)
+                        .WithDegreeOfParallelism(numberOfThread)
                         .ForAll(x =>
                         {
                             var matchRuleCompleted = matchMonitorServices.InsertMatchMonitorRule(isLive, x.MatchId, x.TotalScore, x.BetTypeId, matchMonitorRule.MaxTransId);
