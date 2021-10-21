@@ -12,8 +12,6 @@
 
         string SPName { get; }
 
-        int MatchMonitorNumberOfThread { get; }
-
         bool MatchMonitorIsWriteLog { get; }
 
         int SiteId { get; }
@@ -40,7 +38,6 @@
         private readonly string environment;
         private readonly string evironmentName;
         private readonly string spName;
-        private readonly int matchMonitorNumberOfThread;
 
         public AppSettings(IConfiguration configuration)
         {
@@ -49,7 +46,6 @@
             environment = GetValue<string>(nameof(Environment));
             evironmentName = GetValue<string>(nameof(Environment));
             spName = GetValue<string>(nameof(SPName));
-            matchMonitorNumberOfThread = GetValue<int>("MatchMonitor:NumberOfThread");
         }
 
         #region Variables
@@ -75,8 +71,6 @@
         public string EvironmentName => evironmentName;
 
         public string SPName => spName;
-
-        public int MatchMonitorNumberOfThread => matchMonitorNumberOfThread;
 
         public bool MatchMonitorIsWriteLog => GetValue<bool>("MatchMonitor:IsWriteLog");
 

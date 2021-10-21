@@ -17,7 +17,7 @@
     {
         Task<bool> InsertTicketDetail(int batchSize, bool isLive);
 
-        Task<bool> ProcessRule(int batchSize, bool isLive);
+        Task<bool> ProcessRule(int batchSize, bool isLive, int numberOfThread);
     }
 
     public class MatchMonitorJobService : IMatchMonitorJobService
@@ -63,15 +63,10 @@
             return Task.FromResult(true);
         }
 
-        public Task<bool> ProcessRule(int batchSize, bool isLive)
+        public Task<bool> ProcessRule(int batchSize, bool isLive, int numberOfThread)
         {
             try
             {
-                if (IsReplicationDelay(isLive))
-                {
-                    return Task.FromResult(true);
-                }
-
                 var matchMonitorRule = matchMonitorServices.GetMatchMonitorRule(isLive, batchSize);
 
                 if (matchMonitorRule != null && matchMonitorRule.MaxTransId != 0)
@@ -79,7 +74,7 @@
                     matchMonitorRule
                         .MatchStagingList
                         .AsParallel()
-                        .WithDegreeOfParallelism(appSettings.MatchMonitorNumberOfThread)
+                        .WithDegreeOfParallelism(numberOfThread)
                         .ForAll(x =>
                         {
                             var matchRuleCompleted = matchMonitorServices.InsertMatchMonitorRule(isLive, x.MatchId, x.TotalScore, x.BetTypeId, matchMonitorRule.MaxTransId);
@@ -132,22 +127,6 @@
             }
 
             return matchTrans;
-        }
-
-        private bool IsReplicationDelay(bool isLive)
-        {
-            var paraId = isLive ? SystemParameters.MatchMonitorLastScannedRuleProcessLive : SystemParameters.MatchMonitorLastScannedRuleProcessNonLive;
-
-            var lastScannedRuleProcessMaster = systemParameterServices.GetLastScannedId(paraId);
-
-            var lastScannedRuleProcessSlave = systemParameterServices.GetLastScannedIdFromSlave(paraId);
-
-            if (lastScannedRuleProcessMaster == lastScannedRuleProcessSlave)
-            {
-                return false;
-            }
-
-            return true;
         }
 
         #endregion Private Methods
