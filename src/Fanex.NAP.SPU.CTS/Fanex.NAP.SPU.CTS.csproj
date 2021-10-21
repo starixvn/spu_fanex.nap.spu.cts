@@ -25,4 +25,9 @@
     <PackageReference Include="UAParser" Version="3.1.47" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\ArchiveAssociationCustomer\Criteria\" />
+    <Folder Include="Features\ArchiveAssociationCustomer\Entities\" />
+  </ItemGroup>
+
 </Project>

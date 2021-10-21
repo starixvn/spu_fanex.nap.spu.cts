@@ -5,14 +5,14 @@
 
     public class ProblemCaseMonitorAssociationInsertCriteria : NonQueryCommand
     {
+        [SpParam(SqlParamName = "ip_ProblemCaseData")]
+        public string ProblemCaseJson { get; set; }
+
         [SpParam(SqlParamName = "ip_AssDeviceID")]
         public ulong AssDeviceID { get; set; }
 
         [SpParam(SqlParamName = "ip_AssIPID")]
-        public ulong AssIPID { get; set; }
-
-        [SpParam(SqlParamName = "ip_ProblemCaseData")]
-        public string ProblemCaseJson { get; set; }
+        public ulong AssIPID { get; set; }        
 
         public override string GetSettingKey()
         {

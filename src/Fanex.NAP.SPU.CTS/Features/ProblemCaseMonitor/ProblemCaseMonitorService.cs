@@ -33,7 +33,7 @@
         {
             if (problemCaseModel != null && problemCaseModel.ProblemCaseMonitorClassificationList.Any())
             {                
-                var problemCaseJson = JsonConvert.SerializeObject(problemCaseModel);
+                var problemCaseJson = JsonConvert.SerializeObject(problemCaseModel.ProblemCaseMonitorClassificationList);
 
                 return this.dataAccess.InsertProblemCaseMonitorClassification(problemCaseModel.ClassificationHistoryID, problemCaseJson);
             }
@@ -50,7 +50,7 @@
         {
             if (problemCaseModel != null && problemCaseModel.ProblemCaseMonitorAssociationList.Any())
             {
-                var problemCaseJson = JsonConvert.SerializeObject(problemCaseModel);
+                var problemCaseJson = JsonConvert.SerializeObject(problemCaseModel.ProblemCaseMonitorAssociationList);
 
                 return this.dataAccess.InsertProblemCaseMonitorAssociation(problemCaseModel.AssDeviceID, problemCaseModel.AssIPID, problemCaseJson);
             }

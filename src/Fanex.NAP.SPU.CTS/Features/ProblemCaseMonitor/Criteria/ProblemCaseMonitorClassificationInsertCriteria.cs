@@ -4,12 +4,12 @@
     using Fanex.Data.Repository;    
 
     public class ProblemCaseMonitorClassificationInsertCriteria : NonQueryCommand
-    {
-        [SpParam(SqlParamName = "ip_ClassificationHistoryID")]
-        public ulong ClassificationHistoryID { get; set; }
-
+    {        
         [SpParam(SqlParamName = "ip_ProblemCaseData")]
         public string ProblemCaseJson { get; set; }
+
+        [SpParam(SqlParamName = "ip_ClassificationHistoryID")]
+        public ulong ClassificationHistoryID { get; set; }
 
         public override string GetSettingKey()
         {
