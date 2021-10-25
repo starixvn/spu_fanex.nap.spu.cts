@@ -1,13 +1,24 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.ArchiveAssociationCustomer
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
-
-    public class RollbackAssociationCustomerService
+    public interface IRollbackAssociationCustomerService
     {
-
+        int RollbackAssociationCustomer();
     }
+
+    public class RollbackAssociationCustomerService : IRollbackAssociationCustomerService
+    {
+        private readonly IRollbackAssociationCustomerDataAccess dataAccess;
+
+        public RollbackAssociationCustomerService(IRollbackAssociationCustomerDataAccess dataAccess)
+        {
+            this.dataAccess = dataAccess;
+        }
+
+        public int RollbackAssociationCustomer()
+        {
+            return dataAccess.RollbackAssociationCustomer();
+        }
+        
+    }
+
 }

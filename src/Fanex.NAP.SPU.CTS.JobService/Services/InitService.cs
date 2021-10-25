@@ -4,6 +4,7 @@
     using Fanex.NAP.Client.Helpers.Web;
     using Fanex.NAP.Client.Services;
     using Fanex.NAP.SPU.CTS.Features.AffectedEvidence;
+    using Fanex.NAP.SPU.CTS.Features.ArchiveAssociationCustomer;
     using Fanex.NAP.SPU.CTS.Features.ArchiveData;
     using Fanex.NAP.SPU.CTS.Features.ArchiveData.Customer;
     using Fanex.NAP.SPU.CTS.Features.ExistingCustomer;
@@ -15,6 +16,7 @@
     using Fanex.NAP.SPU.CTS.Features.Transform.AssociationByDevice;
     using Fanex.NAP.SPU.CTS.Features.UpdateLastLogin;
     using Fanex.NAP.SPU.CTS.Features.UserPermission;
+    using Fanex.NAP.SPU.CTS.JobService.Services.ArchiveAssociationCustomer;
     using Fanex.NAP.SPU.CTS.JobService.Services.ArchiveData;
     using Fanex.NAP.SPU.CTS.JobService.Services.ProblemCaseMonitor;
     using Microsoft.AspNetCore.Http;
@@ -51,6 +53,9 @@
             RegisterArchiveCustClassificationHistory(services);
 
             RegisterClassifyProblemCaseMonitor(services);
+            
+            RegisterArchiveAssociationCustomer(services);
+
         }
 
         private static void RegisterArchiveDataService(this IServiceCollection services)
@@ -150,5 +155,16 @@
             services.AddSingleton<IProblemCaseMonitorClassificationJobService, ProblemCaseMonitorClassificationJobService>();
             services.AddSingleton<IProblemCaseMonitorAssociationJobService, ProblemCaseMonitorAssociationJobService>();
         }
+
+        private static void RegisterArchiveAssociationCustomer(this IServiceCollection services)
+        {
+            services.AddSingleton<IArchiveAssociationCustomerDataAccess, ArchiveAssociationCustomerDataAccess>();
+            services.AddSingleton<IRollbackAssociationCustomerDataAccess, RollbackAssociationCustomerDataAccess>();
+            services.AddSingleton<IArchiveAssociationCustomerService, ArchiveAssociationCustomerService>();
+            services.AddSingleton<IRollbackAssociationCustomerService, RollbackAssociationCustomerService>();
+            services.AddSingleton<IArchiveAssociationCustomerJobService, ArchiveAssociationCustomerJobService>();
+            services.AddSingleton<IRollbackAssociationCustomerJobService, RollbackAssociationCustomerJobService>();
+        }
+
     }
 }
