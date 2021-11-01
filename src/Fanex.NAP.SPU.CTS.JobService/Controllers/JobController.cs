@@ -41,15 +41,15 @@
         }
 
         [HttpPost("MatchMonitorRuleLive")]
-        public async Task<bool> MatchMonitorRuleLive([FromForm] int size, [FromForm] int numberOfThread)
+        public async Task<bool> MatchMonitorRuleLive([FromForm] int size, [FromForm] int numberOfThread, [FromForm] bool isProccessFromMaster = true)
         {
-            return await this.matchMonitorJobService.ProcessRule(size, true, numberOfThread);
+            return await this.matchMonitorJobService.ProcessRule(size, true, numberOfThread, isProccessFromMaster);
         }
 
         [HttpPost("MatchMonitorRuleNonLive")]
-        public async Task<bool> MatchMonitorRuleNonLive([FromForm] int size, [FromForm] int numberOfThread)
+        public async Task<bool> MatchMonitorRuleNonLive([FromForm] int size, [FromForm] int numberOfThread, [FromForm] bool isProccessFromMaster = true)
         {
-            return await this.matchMonitorJobService.ProcessRule(size, false, numberOfThread);
+            return await this.matchMonitorJobService.ProcessRule(size, false, numberOfThread, isProccessFromMaster);
         }
 
         [HttpPost("initialcustomerstatus")]
