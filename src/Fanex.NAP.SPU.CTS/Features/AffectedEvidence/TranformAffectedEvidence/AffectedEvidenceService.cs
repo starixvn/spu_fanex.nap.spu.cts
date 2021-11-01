@@ -6,7 +6,7 @@
 
     public interface IAffectedEvidenceService
     {
-        IEnumerable<int> TransformAssociationAffectedEvidence(int batchSize);
+        IEnumerable<int> TransformAssociationAffectedEvidence();
 
         void UpdateBetLimitOfFlaggedCustomer(IEnumerable<int> custIds);
     }
@@ -20,9 +20,9 @@
             this.dataAccess = dataAccess;
         }
 
-        public IEnumerable<int> TransformAssociationAffectedEvidence(int batchSize)
+        public IEnumerable<int> TransformAssociationAffectedEvidence()
         {
-            return dataAccess.TransformAssociationAffectedEvidence(batchSize);
+            return dataAccess.TransformAssociationAffectedEvidence();
         }
 
         public void UpdateBetLimitOfFlaggedCustomer(IEnumerable<int> custIds)
