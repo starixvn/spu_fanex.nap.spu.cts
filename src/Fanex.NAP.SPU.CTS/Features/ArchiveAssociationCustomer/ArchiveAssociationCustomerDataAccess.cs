@@ -5,7 +5,7 @@
 
     public interface IArchiveAssociationCustomerDataAccess
     {
-        bool ArchiveAssociationCustomer();
+        void ArchiveAssociationCustomer();
     }
 
     public class ArchiveAssociationCustomerDataAccess : IArchiveAssociationCustomerDataAccess
@@ -17,13 +17,11 @@
             repository = new DynamicRepository();
         }
 
-        public bool ArchiveAssociationCustomer()
+        public void ArchiveAssociationCustomer()
         {
             var criteria = new ArchiveAssociationCustomerCriteria();
 
             repository.Execute(criteria);
-
-            return criteria.IsDataExist != 0;
         }
     }
 }

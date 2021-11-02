@@ -43,13 +43,7 @@
 
         private void ArchiveAssociationCustomer()
         {
-            var isExistData = false;
-
-            do
-            {
-                isExistData = this.archiveAssociationCustomerService.ArchiveAssociationCustomer();
-
-            } while (isExistData);
+            this.archiveAssociationCustomerService.ArchiveAssociationCustomer();
         }
 
     }

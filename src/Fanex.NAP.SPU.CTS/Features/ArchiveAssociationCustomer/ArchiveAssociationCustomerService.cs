@@ -8,7 +8,7 @@
 
     public interface IArchiveAssociationCustomerService
     {
-        bool ArchiveAssociationCustomer();
+        void ArchiveAssociationCustomer();
     }
 
     public class ArchiveAssociationCustomerService : IArchiveAssociationCustomerService
@@ -20,9 +20,9 @@
             this.dataAccess = dataAccess;
         }
 
-        public bool ArchiveAssociationCustomer()
+        public void ArchiveAssociationCustomer()
         {
-            return dataAccess.ArchiveAssociationCustomer();
+            dataAccess.ArchiveAssociationCustomer();
         }
     }
 }
