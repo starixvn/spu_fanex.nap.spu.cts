@@ -15,6 +15,8 @@
 
         IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, int matchId, int totalScore, int bettypeId, UInt64 maxTransId);
 
+        IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRuleToSlaveDB(bool isLive, int matchId, int totalScore, int bettypeId, UInt64 maxTransId);
+
         void UpdateMatchTransComplete(bool isLive, int matchId, int totalScore, int bettypeId, string transGroupJson, UInt64 maxTransId);
 
         void CleanMatchStaging(bool isLive, UInt64 maxTransId);
@@ -59,6 +61,21 @@
         public IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, int matchId, int totalScore, int bettypeId, UInt64 maxTransId)
         {
             var criteria = new MatchMonitorRuleInsertCriteria
+            {
+                IsLive = isLive,
+                BettypeId = bettypeId,
+                MatchId = matchId,
+                TotalScore = totalScore,
+                MaxTransId = maxTransId
+            };
+
+            return repository.Fetch<MatchRuleCompletedModel>(criteria);
+        }
+
+
+        public IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRuleToSlaveDB(bool isLive, int matchId, int totalScore, int bettypeId, UInt64 maxTransId)
+        {
+            var criteria = new MatchMonitorRuleInsertToSlaveDBCriteria
             {
                 IsLive = isLive,
                 BettypeId = bettypeId,

@@ -3,7 +3,6 @@
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
     using Fanex.NAP.SPU.CTS.Features.SystemParameter;
-    using Fanex.NAP.SPU.CTS.Shares;
     using Newtonsoft.Json;
     using Sentry;
     using System;
@@ -17,16 +16,14 @@
     {
         Task<bool> InsertTicketDetail(int batchSize, bool isLive);
 
-        Task<bool> ProcessRule(int batchSize, bool isLive, int numberOfThread);
+        Task<bool> ProcessRule(int batchSize, bool isLive, int numberOfThread, bool isProccessFromMaster);
     }
 
     public class MatchMonitorJobService : IMatchMonitorJobService
     {
-        private readonly string serviceName;
         private readonly ISentryClient sentryClient;
         private readonly IMatchMonitorServices matchMonitorServices;
         private readonly ISystemParameterServices systemParameterServices;
-        private readonly IAppSettings appSettings;
 
         public MatchMonitorJobService(
             ISentryClient sentryClient,
@@ -37,8 +34,6 @@
             this.sentryClient = sentryClient;
             this.matchMonitorServices = matchMonitorServices;
             this.systemParameterServices = commonServices;
-            this.appSettings = appSettings;
-            this.serviceName = "MatchMonitor";
         }
 
         public Task<bool> InsertTicketDetail(int batchSize, bool isLive)
@@ -63,10 +58,15 @@
             return Task.FromResult(true);
         }
 
-        public Task<bool> ProcessRule(int batchSize, bool isLive, int numberOfThread)
+        public Task<bool> ProcessRule(int batchSize, bool isLive, int numberOfThread, bool isProccessFromMaster)
         {
             try
             {
+                if (!isProccessFromMaster && IsReplicationDelay(isLive))
+                {
+                    return Task.FromResult(true);
+                }
+
                 var matchMonitorRule = matchMonitorServices.GetMatchMonitorRule(isLive, batchSize);
 
                 if (matchMonitorRule != null && matchMonitorRule.MaxTransId != 0)
@@ -77,7 +77,7 @@
                         .WithDegreeOfParallelism(numberOfThread)
                         .ForAll(x =>
                         {
-                            var matchRuleCompleted = matchMonitorServices.InsertMatchMonitorRule(isLive, x.MatchId, x.TotalScore, x.BetTypeId, matchMonitorRule.MaxTransId);
+                            var matchRuleCompleted = matchMonitorServices.InsertMatchMonitorRule(isLive, x.MatchId, x.TotalScore, x.BetTypeId, matchMonitorRule.MaxTransId, isProccessFromMaster);
 
                             if (matchRuleCompleted != null && matchRuleCompleted.Any())
                             {
@@ -127,6 +127,22 @@
             }
 
             return matchTrans;
+        }
+
+        private bool IsReplicationDelay(bool isLive)
+        {
+            var paraId = isLive ? SystemParameters.MatchMonitorLastScannedRuleProcessLive : SystemParameters.MatchMonitorLastScannedRuleProcessNonLive;
+
+            var lastScannedRuleProcessMaster = systemParameterServices.GetLastScannedId(paraId);
+
+            var lastScannedRuleProcessSlave = systemParameterServices.GetLastScannedIdFromSlave(paraId);
+
+            if (lastScannedRuleProcessMaster == lastScannedRuleProcessSlave)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         #endregion Private Methods

@@ -9,6 +9,8 @@
         SystemParameterEntity GetSystemParameterByID(SystemParameters paramID);
 
         void UpdateValueForSystemParameterByID(string paraValue, SystemParameters paramId);
+
+        SystemParameterEntity GetSystemParameterByIDFromSlave(SystemParameters paramID);
     }
 
     public class SystemParameterDataAccess : ISystemParameterDataAccess
@@ -42,6 +44,19 @@
             };
 
             repository.Execute(criteria);
+        }
+
+        public SystemParameterEntity GetSystemParameterByIDFromSlave(SystemParameters paramID)
+        {
+            var criteria = new GetSystemParameterFromSlaveCriteria
+            {
+                ParamID = (int)paramID
+            };
+
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            {
+                return db.QueryEntity<SystemParameterEntity>(criteria);
+            }
         }
     }
 }
