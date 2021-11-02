@@ -6,7 +6,7 @@
 
     public interface IAffectedEvidenceDataAccess
     {
-        IEnumerable<int> TransformAssociationAffectedEvidence(int batchSize);
+        IEnumerable<int> TransformAssociationAffectedEvidence();
 
         void UpdateBetLimitOfFlaggedCustomer(string custIds);
     }
@@ -20,12 +20,9 @@
             repository = new DynamicRepository();
         }
 
-        public IEnumerable<int> TransformAssociationAffectedEvidence(int batchSize)
+        public IEnumerable<int> TransformAssociationAffectedEvidence()
         {
-            var criteria = new TransformAssociationAffectedEvidenceCriteria
-            {
-                BatchSize = batchSize
-            };
+            var criteria = new TransformAssociationAffectedEvidenceCriteria();
 
             return repository.Fetch<int>(criteria);
         }

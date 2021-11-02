@@ -10,7 +10,7 @@
 
     public interface IAffectedEvidenceJobService
     {
-        Task<bool> Execute(int batchSize);
+        Task<bool> Execute();
     }
 
     public class AffectedEvidenceJobService : IAffectedEvidenceJobService
@@ -24,11 +24,11 @@
             this.affectedEvidenceService = affectedEvidenceService;
         }
 
-        public Task<bool> Execute(int batchSize)
+        public Task<bool> Execute()
         {
             try
             {
-                var custIds = affectedEvidenceService.TransformAssociationAffectedEvidence(batchSize);
+                var custIds = affectedEvidenceService.TransformAssociationAffectedEvidence();
 
                 if (custIds.Any())
                 {

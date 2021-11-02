@@ -38,9 +38,9 @@
         }
 
         [HttpPost("AffectedEvidence")]
-        public async Task<bool> TransformAffectedEvidence([FromForm] int batchSize)
+        public async Task<bool> TransformAffectedEvidence()
         {
-            return await affectedEvidenceJobService.Execute(batchSize);
+            return await affectedEvidenceJobService.Execute();
         }
 
         [HttpPost("TransformAccount")]
