@@ -29,6 +29,8 @@
         bool TransformAssByDeviceIsWriteLog { get; }
 
         int CustomerStatusBatchSize { get; }
+
+        string SentryDsn { get; }
     }
 
     public class AppSettings : IAppSettings
@@ -38,6 +40,7 @@
         private readonly string environment;
         private readonly string evironmentName;
         private readonly string spName;
+        private readonly string sentryDsn;
 
         public AppSettings(IConfiguration configuration)
         {
@@ -46,6 +49,7 @@
             environment = GetValue<string>(nameof(Environment));
             evironmentName = GetValue<string>(nameof(Environment));
             spName = GetValue<string>(nameof(SPName));
+            sentryDsn = GetValue<string>("Sentry:Dsn");
         }
 
         #region Variables
@@ -87,7 +91,9 @@
         public bool TransformAssByDeviceIsWriteLog => GetValue<bool>("TransformAssociationByDevice:IsWriteLog");
 
         public int CustomerStatusBatchSize => GetValue<int>("CustomerStatus:BatchSize");
-       
+
+        public string SentryDsn => sentryDsn;
+
         #endregion Variables
 
         #region Methods
