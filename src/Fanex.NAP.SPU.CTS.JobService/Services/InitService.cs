@@ -9,12 +9,14 @@
     using Fanex.NAP.SPU.CTS.Features.ExistingCustomer;
     using Fanex.NAP.SPU.CTS.Features.InitialCustomerStatus;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
+    using Fanex.NAP.SPU.CTS.Features.ProblemCaseMonitor;
     using Fanex.NAP.SPU.CTS.Features.SystemParameter;
     using Fanex.NAP.SPU.CTS.Features.Transform.Accounts;
     using Fanex.NAP.SPU.CTS.Features.Transform.AssociationByDevice;
     using Fanex.NAP.SPU.CTS.Features.UpdateLastLogin;
     using Fanex.NAP.SPU.CTS.Features.UserPermission;
     using Fanex.NAP.SPU.CTS.JobService.Services.ArchiveData;
+    using Fanex.NAP.SPU.CTS.JobService.Services.ProblemCaseMonitor;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.DependencyInjection;
 
@@ -47,6 +49,8 @@
             RegisterAffectedEvidenceFromQueue(services);
 
             RegisterArchiveCustClassificationHistory(services);
+
+            RegisterClassifyProblemCaseMonitor(services);
         }
 
         private static void RegisterArchiveDataService(this IServiceCollection services)
@@ -137,6 +141,14 @@
             services.AddSingleton<IArchiveCustClassificationHistoryDataAccess, ArchiveCustClassificationHistoryDataAccess>();
             services.AddSingleton<IArchiveCustClassificationHistoryServices, ArchiveCustClassificationHistoryServices>();
             services.AddSingleton<IArchiveCustClassificationHistoryJobService, ArchiveCustClassificationHistoryJobService>();
+        }
+
+        private static void RegisterClassifyProblemCaseMonitor(this IServiceCollection services)
+        {
+            services.AddSingleton<IProblemCaseMonitorDataAccess, ProblemCaseMonitorDataAccess>();
+            services.AddSingleton<IProblemCaseMonitorService, ProblemCaseMonitorService>();
+            services.AddSingleton<IProblemCaseMonitorClassificationJobService, ProblemCaseMonitorClassificationJobService>();
+            services.AddSingleton<IProblemCaseMonitorAssociationJobService, ProblemCaseMonitorAssociationJobService>();
         }
     }
 }

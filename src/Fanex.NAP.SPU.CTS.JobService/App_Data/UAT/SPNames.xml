@@ -1,4 +1,61 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 
 <Functions>
+	<Function Name="JobSerice">
+		<Setting Key="DCS_DC_Transform_Account_GetPackage" SpName="DCS_DC_Transform_Account_GetPackage_xtest" DbName="MySQL.DCS_DataCenter.ctsService" />
+		<Setting Key="CTS_DC_Transform_DCSAccountToCTSCustomer" SpName="CTS_DC_Transform_DCSAccountToCTSCustomer_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
+	</Function>
+	<Function Name="Customer">
+		<Setting Key="CTS_DC_CustInfo_CheckCustNotExistedByCustIds" SpName="CTS_DC_CustInfo_CheckCustNotExistedByCustIds_xtest" DbName="MySQL.CTS_DataCenter.ctsService" />
+		<Setting Key="CTS_GetPlacedBetCustomers" SpName="CTS_GetPlacedBetCustomers_xtest" DbName="SQL.bodb02.bodbAdminNet"></Setting>
+	</Function>
+	<Function Name="MatchMonitor">
+		<Setting Key="CTS_DC_SystemParameter_Get" SpName="CTS_DC_SystemParameter_Get_xtest" DbName="MySQL.CTS_DataCenter.ctsService" />
+		<Setting Key="CTS_Rpt_MatchMonitor_TicketDetails" SpName="CTS_Rpt_MatchMonitor_TicketDetails_xtest" DbName="SQL.bodb02.bodbSPUNet"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_Staging_Insert" SpName="CTS_DC_MatchMonitor_Staging_Insert_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_Rule_Complete" SpName="CTS_DC_MatchMonitor_Rule_Complete_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_Staging_Clean" SpName="CTS_DC_MatchMonitor_Staging_Clean_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_Rule_Process" SpName="CTS_DC_MatchMonitor_Rule_Process_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.ctsService"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_Rule_Get" SpName="CTS_DC_MatchMonitor_Rule_Get_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.ctsService"></Setting>
+	</Function>
+	<Function Name="SyncUserPermisison">
+		<Setting Key="CTS_DC_Common_InsertUserPermission" SpName="CTS_DC_Common_InsertUserPermission_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
+	</Function>
+	<Function Name="UpdateLastLogin">
+		<Setting Key="CTS_DC_CustInfo_UpdateLastLoginTime" SpName="CTS_DC_CustInfo_UpdateLastLoginTime_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
+	</Function>
+	<Function Name="AssociationByDevice">
+		<Setting Key="DCS_DC_Transform_Association_GetPackage" SpName="DCS_DC_Transform_Association_GetPackage_xtest" DbName="MySQL.DCS_DataCenter.ctsService" />
+		<Setting Key="CTS_DC_Association_InsertAssociationByDevice" SpName="CTS_DC_Association_InsertAssociationByDevice_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
+	</Function>
+	<Function name="AffectedEvidence">
+		<Setting Key="NAP_BLControl_EvidenceFlagged" SpName="NAP_BLControl_EvidenceFlagged_xtest" DbName="SQL.CustDB.bodbAdminNet" />
+		<Setting Key="CTS_DC_CustEvidence_InsertFromAssociation" SpName="CTS_DC_CustEvidence_InsertFromAssociation_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" TimeOut="3600" />
+		<Setting Key="CTS_DC_CustEvidenceQueue_Affected_Insert" SpName="CTS_DC_CustEvidenceQueue_Affected_Insert_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" TimeOut="600" />
+		<Setting Key="CTS_DC_CustEvidenceQueue_Affected_Remove" SpName="CTS_DC_CustEvidenceQueue_Affected_Remove_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" TimeOut="600" />
+		<Setting Key="NAP_BLControl_EvidenceFlagged" SpName="NAP_BLControl_EvidenceFlagged_xtest" DbName="SQL.CustDB.bodbAdminNet" TimeOut="600" />
+		<Setting Key="NAP_BLControl_EvidenceUnflagged" SpName="NAP_BLControl_EvidenceUnflagged_xtest" DbName="SQL.CustDB.bodbAdminNet" TimeOut="600" />
+	</Function>
+	<Function name="CustomerStatus">
+		<Setting Key="CTS_DC_CustInfo_Healing_GetCustIDs" SpName="CTS_DC_CustInfo_Healing_GetCustIDs_xtest" DbName="MySQL.CTS_DataCenter.ctsService" />
+		<Setting Key="CTS_DC_CustInfo_Healing_Update" SpName="CTS_DC_CustInfo_Healing_Update_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
+		<Setting Key="CTS_Customer_GetInfoByCustIdList" SpName="CTS_Customer_GetInfoByCustIdList_xtest" DbName="SQL.bodb02.bodbSPUNet" TimeOut="600" />
+	</Function>
+	<Function name="ArchiveCustClassificationHistory">
+		<Setting Key="CTS_DC_CustClassification_History_DataUnChanged_CleanUp" SpName="CTS_DC_CustClassification_History_DataUnChanged_CleanUp_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
+		<Setting Key="CTS_DC_CustClassification_History_DataChanged_CleanUp" SpName="CTS_DC_CustClassification_History_DataChanged_CleanUp_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" TimeOut="600"/>
+		<Setting Key="CTS_Archive_CustClassification_History_Insert" SpName="CTS_Archive_CustClassification_History_Insert_xtest" DbName="MySQL.CTS_Archive.ctsServiceAdmin" />
+	</Function>
+	<Function name="ArchiveCTSCustomer">
+		<Setting Key="CTS_DC_ArchiveCustomer" SpName="CTS_DC_ArchiveCustomer_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" TimeOut="600"/>
+		<Setting Key="CTS_DC_SystemParameter_Update" SpName="CTS_DC_SystemParameter_Update_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
+		<Setting Key="CTS_ArchiveCustomer_Get" SpName="CTS_ArchiveCustomer_Get_xtest" DbName="DBARCCUST.bodb_Customer.bodbSPUNet" />
+	</Function>
+
+	<Function name="ProblemCaseMonitor">
+		<Setting Key="CTS_DC_ProblemCaseMonitor_Classification_Get" SpName="CTS_DC_ProblemCaseMonitor_Classification_Get_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.ctsService" />
+		<Setting Key="CTS_DC_ProblemCaseMonitor_Classification_Insert" SpName="CTS_DC_ProblemCaseMonitor_Classification_Insert_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
+		<Setting Key="CTS_DC_ProblemCaseMonitor_Association_Get" SpName="CTS_DC_ProblemCaseMonitor_Association_Get_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.ctsService"  TimeOut="600" />
+		<Setting Key="CTS_DC_ProblemCaseMonitor_Association_Insert" SpName="CTS_DC_ProblemCaseMonitor_Association_Insert_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
+	</Function>
 </Functions>
