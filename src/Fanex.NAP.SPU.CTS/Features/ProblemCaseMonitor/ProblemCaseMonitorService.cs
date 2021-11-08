@@ -38,7 +38,7 @@
                 return this.dataAccess.InsertProblemCaseMonitorClassification(problemCaseModel.ClassificationHistoryID, problemCaseJson);
             }
 
-            return 1;
+            return this.dataAccess.InsertProblemCaseMonitorClassification(problemCaseModel.ClassificationHistoryID, "[]");
         }
 
         public ProblemCaseMonitorAssociationModel GetProblemCaseMonitorAssociation()
@@ -55,7 +55,7 @@
                 return this.dataAccess.InsertProblemCaseMonitorAssociation(problemCaseModel.AssDeviceID, problemCaseModel.AssIPID, problemCaseJson);
             }
 
-            return 1;
+            return this.dataAccess.InsertProblemCaseMonitorAssociation(problemCaseModel.AssDeviceID, problemCaseModel.AssIPID, "[]");
         }
     }
 }
