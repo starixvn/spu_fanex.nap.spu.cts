@@ -58,4 +58,9 @@
 		<Setting Key="CTS_DC_ProblemCaseMonitor_Association_Get" SpName="CTS_DC_ProblemCaseMonitor_Association_Get" DbName="MySQL.SLAVE.CTS_DataCenter.ctsService"  TimeOut="600" />
 		<Setting Key="CTS_DC_ProblemCaseMonitor_Association_Insert" SpName="CTS_DC_ProblemCaseMonitor_Association_Insert" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
 	</Function>
+	<Function name="ArchiveAssociationCustomer">
+		<Setting Key="CTS_Arc_CustomerAssociation_Archive" SpName="CTS_Arc_CustomerAssociation_Archive" DbName="MySQL.CTS_Archive.ctsServiceAdmin" />
+		<Setting Key="CTS_Arc_CustomerAssociation_Rollback" SpName="CTS_Arc_CustomerAssociation_Rollback" DbName="MySQL.CTS_Archive.ctsServiceAdmin" />		
+	</Function>
+
 </Functions>
