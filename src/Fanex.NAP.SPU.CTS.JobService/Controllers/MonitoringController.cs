@@ -72,7 +72,8 @@ namespace Fanex.NAP.SPU.CTS.JobService.Controllers
         {
             return await this.problemCaseMonitorAssociationJobService.Execute();
         }
-        
+
+        [HttpPost("scan-tw-problem-account-customer")]
         public async Task<bool> ScanTWSystemFormulaBetCustomer()
         {
             return await twProblemAccountJobService.DailyScan();

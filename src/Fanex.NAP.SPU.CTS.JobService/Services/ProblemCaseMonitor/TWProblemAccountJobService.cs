@@ -4,10 +4,10 @@
     using Fanex.Logging.Extensions;
     using Fanex.Logging.Extensions.Database;
     using Fanex.NAP.SPU.CTS.Features.TWProblemAccount;
+    using Fanex.NAP.SPU.CTS.Features.TWProblemAccount.Criteria;
     using Fanex.NAP.SPU.CTS.Features.TWProblemAccount.Entities;
     using Sentry;
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -40,13 +40,42 @@
                                 {
                                     CustID = sCust.CustID,
                                     Username = sCust.Username,
-                                    IsMonitorCategoryGroup = (sCust != null) && sCust.IsMonitorCategoryGroup,
-                                    Winloss = pCust.Winloss
+                                    IsMonitorCategoryGroup = sCust.IsMonitorCategoryGroup,
+                                    IsMonitorSite = sCust.IsMonitorSite,
+                                    Winloss = pCust == null ? 0 : pCust.Winloss,
+                                    RoleId = sCust.RoleId,
+                                    ReasonId = sCust.ReasonId,
+                                    PreventActionId = sCust.PreventActionId,
+                                    Comment = sCust.Comment,
+                                    VoidTime = sCust.VoidTime,
+                                    LimitAmount = sCust.LimitAmount,
+                                    UserId = sCust.UserId,
+                                    Ip = sCust.Ip
                                 }).ToList();
-                var markPAList = fullData.Where(c => c.Winloss >= 0 && c.IsMonitorCategoryGroup);
 
-                //twProblemAccService.InsertProblemAccToNAP(string.Join(",", markPAList.Select(c => c.Username)));
-                twProblemAccService.RemoveSystemFormulaBetCustomer(string.Join(",", markPAList.Select(c => c.Username)));
+                var markPAList = fullData.Where(c => c.Winloss >= 0 && !c.IsMonitorCategoryGroup);
+                var markPAListGroupByInsertTime = markPAList.GroupBy(c => c.InsertTime);
+                foreach (var paList in markPAListGroupByInsertTime)
+                {
+                    if (paList.Any())
+                    {
+                        var firtItem = paList.FirstOrDefault();
+                        var param = new NapProblemAccInsertCriteria
+                        {
+                            RoleId = firtItem.RoleId,
+                            ReasonId = firtItem.ReasonId,
+                            PreventActionId = firtItem.PreventActionId,
+                            Comment = firtItem.Comment,
+                            VoidTime = firtItem.VoidTime,
+                            LimitAmount = firtItem.LimitAmount,
+                            UserId = firtItem.UserId,
+                            IP = firtItem.Ip
+                        };
+
+                        twProblemAccService.InsertProblemAccToNAP(string.Join(",", paList.Select(c => c.Username)), param);
+                        twProblemAccService.RemoveSystemFormulaBetCustomer(string.Join(",", paList.Select(c => c.CustID)));
+                    }
+                }
             }
             catch (Exception ex)
             {

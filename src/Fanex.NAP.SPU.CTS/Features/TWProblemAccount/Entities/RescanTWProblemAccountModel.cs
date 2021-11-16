@@ -23,7 +23,7 @@
 
         public string VoidTime { get; set; }
 
-        public decimal LimitAccount { get; set; }
+        public decimal LimitAmount { get; set; }
 
         public int UserId { get; set; }
 
@@ -31,6 +31,10 @@
 
         public bool IsMonitorCategoryGroup { get; set; }
 
+        public bool IsMonitorSite { get; set; }
+
         public decimal? Winloss { get; set; }
+
+        public DateTime InsertTime { get; set; }
     }
 }
