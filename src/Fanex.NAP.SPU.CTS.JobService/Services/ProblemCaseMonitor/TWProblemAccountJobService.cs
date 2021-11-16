@@ -31,50 +31,59 @@
         {
             try
             {
-                var scanningCust = twProblemAccService.ScanSystemFormulaBetMonitor();
-                var perfCust = twProblemAccService.GetCustomerPerformance(string.Join(",", scanningCust.Select(c => c.CustID)));
-                var fullData = (from sCust in scanningCust
-                                join pCust in perfCust on sCust.CustID equals pCust.CustID into temp
-                                from pCust in temp.DefaultIfEmpty()
-                                select new RescanTWProblemAccountModel
-                                {
-                                    CustID = sCust.CustID,
-                                    Username = sCust.Username,
-                                    IsMonitorCategoryGroup = sCust.IsMonitorCategoryGroup,
-                                    IsMonitorSite = sCust.IsMonitorSite,
-                                    Winloss = pCust == null ? 0 : pCust.Winloss,
-                                    RoleId = sCust.RoleId,
-                                    ReasonId = sCust.ReasonId,
-                                    PreventActionId = sCust.PreventActionId,
-                                    Comment = sCust.Comment,
-                                    VoidTime = sCust.VoidTime,
-                                    LimitAmount = sCust.LimitAmount,
-                                    UserId = sCust.UserId,
-                                    Ip = sCust.Ip
-                                }).ToList();
-
-                var markPAList = fullData.Where(c => c.Winloss >= 0 && !c.IsMonitorCategoryGroup);
-                var markPAListGroupByInsertTime = markPAList.GroupBy(c => c.InsertTime);
-                foreach (var paList in markPAListGroupByInsertTime)
+                uint lastCustID;
+                var scanningCust = twProblemAccService.ScanSystemFormulaBetMonitor(out lastCustID);
+                while (scanningCust != null && scanningCust.Any())
                 {
-                    if (paList.Any())
-                    {
-                        var firtItem = paList.FirstOrDefault();
-                        var param = new NapProblemAccInsertCriteria
-                        {
-                            RoleId = firtItem.RoleId,
-                            ReasonId = firtItem.ReasonId,
-                            PreventActionId = firtItem.PreventActionId,
-                            Comment = firtItem.Comment,
-                            VoidTime = firtItem.VoidTime,
-                            LimitAmount = firtItem.LimitAmount,
-                            UserId = firtItem.UserId,
-                            IP = firtItem.Ip
-                        };
+                    var perfCust = twProblemAccService.GetCustomerPerformance(string.Join(",", scanningCust.Select(c => c.CustID)));
+                    var fullData = (from sCust in scanningCust
+                                    join pCust in perfCust on sCust.CustID equals pCust.CustID into temp
+                                    from pCust in temp.DefaultIfEmpty()
+                                    select new RescanTWProblemAccountModel
+                                    {
+                                        CustID = sCust.CustID,
+                                        Username = sCust.Username,
+                                        IsMonitorCategoryGroup = sCust.IsMonitorCategoryGroup,
+                                        IsMonitorSite = sCust.IsMonitorSite,
+                                        Winloss = pCust == null ? 0 : pCust.Winloss,
+                                        RoleId = sCust.RoleId,
+                                        ReasonId = sCust.ReasonId,
+                                        PreventActionId = sCust.PreventActionId,
+                                        Comment = sCust.Comment,
+                                        VoidTime = sCust.VoidTime,
+                                        LimitAmount = sCust.LimitAmount,
+                                        UserId = sCust.UserId,
+                                        Ip = sCust.Ip
+                                    }).ToList();
 
-                        twProblemAccService.InsertProblemAccToNAP(string.Join(",", paList.Select(c => c.Username)), param);
-                        twProblemAccService.RemoveSystemFormulaBetCustomer(string.Join(",", paList.Select(c => c.CustID)));
+                    var markPAList = fullData.Where(c => c.Winloss >= 0 && !c.IsMonitorCategoryGroup);
+                    var markPAListGroupByInsertTime = markPAList.GroupBy(c => c.InsertTime);
+                    foreach (var paList in markPAListGroupByInsertTime)
+                    {
+                        if (paList.Any())
+                        {
+                            var firtItem = paList.FirstOrDefault();
+                            var param = new NapProblemAccInsertCriteria
+                            {
+                                RoleId = firtItem.RoleId,
+                                ReasonId = firtItem.ReasonId,
+                                PreventActionId = firtItem.PreventActionId,
+                                Comment = firtItem.Comment,
+                                VoidTime = firtItem.VoidTime,
+                                LimitAmount = firtItem.LimitAmount,
+                                UserId = firtItem.UserId,
+                                IP = firtItem.Ip
+                            };
+
+                            twProblemAccService.InsertProblemAccToNAP(string.Join(",", paList.Select(c => c.Username)), param);
+                            twProblemAccService.RemoveSystemFormulaBetCustomer(string.Join(",", paList.Select(c => c.CustID)));
+                        }
                     }
+
+                    twProblemAccService.ScanSystemFormulaBetMonitorComplete(lastCustID);
+
+                    // prepare for new Batch
+                    scanningCust = twProblemAccService.ScanSystemFormulaBetMonitor(out lastCustID);
                 }
             }
             catch (Exception ex)

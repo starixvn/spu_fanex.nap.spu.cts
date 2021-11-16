@@ -11,10 +11,11 @@
 
     public interface ITWProblemAccountDataAccess
     {
-        IEnumerable<RescanTWProblemAccountModel> ScanSystemFormulaBetMonitor();
+        IEnumerable<RescanTWProblemAccountModel> ScanSystemFormulaBetMonitor(out uint lastCustID);
         IEnumerable<RescanTWProblemAccountModel> GetCustomerPerformance(string custIdList);
         void RemoveSystemFormulaBetCustomer(string custIdList);
         void InsertProblemAccToNAP(string usernameList, NapProblemAccInsertCriteria paramFromTW);
+        void ScanSystemFormulaBetMonitorComplete(uint lastCustId);
     }
 
     public class TWProblemAccountDataAccess : ITWProblemAccountDataAccess
@@ -26,10 +27,12 @@
             repository = new DynamicRepository();
         }
 
-        public IEnumerable<RescanTWProblemAccountModel> ScanSystemFormulaBetMonitor()
+        public IEnumerable<RescanTWProblemAccountModel> ScanSystemFormulaBetMonitor(out uint lastCustID)
         {
             var criteria = new ScanSystemFormulaBetCustomerCriteria();
-            return repository.Fetch<RescanTWProblemAccountModel>(criteria);
+            var result = repository.Fetch<RescanTWProblemAccountModel>(criteria);
+            lastCustID = criteria.LastCustId;
+            return result;
         }
 
         public IEnumerable<RescanTWProblemAccountModel> GetCustomerPerformance(string custIdList)
@@ -47,6 +50,16 @@
             var criteria = new RemoveSystemFormulaBetCustomerCriteria
             {
                 CustIdList = custIdList
+            };
+
+            repository.Execute(criteria);
+        }
+        
+        public void ScanSystemFormulaBetMonitorComplete(uint lastCustId)
+        {
+            var criteria = new ScanSystemFormulaBetCustomerCompleteCriteria
+            {
+                LastCustId = lastCustId
             };
 
             repository.Execute(criteria);

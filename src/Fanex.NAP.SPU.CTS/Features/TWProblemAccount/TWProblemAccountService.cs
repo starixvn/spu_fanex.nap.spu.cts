@@ -2,18 +2,15 @@
 {
     using Fanex.NAP.SPU.CTS.Features.TWProblemAccount.Criteria;
     using Fanex.NAP.SPU.CTS.Features.TWProblemAccount.Entities;
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
     public interface ITWProblemAccountService
     {
-        IEnumerable<RescanTWProblemAccountModel> ScanSystemFormulaBetMonitor();
+        IEnumerable<RescanTWProblemAccountModel> ScanSystemFormulaBetMonitor(out uint lastCustID);
         IEnumerable<RescanTWProblemAccountModel> GetCustomerPerformance(string custIdList);
         void RemoveSystemFormulaBetCustomer(string custIdList);
         void InsertProblemAccToNAP(string usernameList, NapProblemAccInsertCriteria paramFromTW);
+        void ScanSystemFormulaBetMonitorComplete(uint lastCustId);
     }
 
     public class TWProblemAccountService : ITWProblemAccountService
@@ -25,9 +22,9 @@
             this.dataAccess = dataAccess;
         }
 
-        public IEnumerable<RescanTWProblemAccountModel> ScanSystemFormulaBetMonitor()
+        public IEnumerable<RescanTWProblemAccountModel> ScanSystemFormulaBetMonitor(out uint lastCustID)
         {
-            return dataAccess.ScanSystemFormulaBetMonitor();
+            return dataAccess.ScanSystemFormulaBetMonitor(out lastCustID);
         }
 
         public IEnumerable<RescanTWProblemAccountModel> GetCustomerPerformance(string custIdList)
@@ -38,6 +35,11 @@
         public void RemoveSystemFormulaBetCustomer(string custIdList)
         {
             dataAccess.RemoveSystemFormulaBetCustomer(custIdList);
+        } 
+        
+        public void ScanSystemFormulaBetMonitorComplete(uint lastCustId)
+        {
+            dataAccess.ScanSystemFormulaBetMonitorComplete(lastCustId);
         }
         
         public void InsertProblemAccToNAP(string usernameList, NapProblemAccInsertCriteria paramFromTW)
