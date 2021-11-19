@@ -9,7 +9,7 @@
         IEnumerable<RescanTWProblemAccountModel> ScanSystemFormulaBetMonitor(out uint lastCustID);
         IEnumerable<RescanTWProblemAccountModel> GetCustomerPerformance(string custIdList);
         void RemoveSystemFormulaBetCustomer(string custIdList);
-        void InsertProblemAccToNAP(string usernameList, NapProblemAccInsertCriteria paramFromTW);
+        void InsertProblemAccToNAP(NapProblemAccInsertCriteria paramFromTW);
         void ScanSystemFormulaBetMonitorComplete(uint lastCustId);
     }
 
@@ -42,9 +42,9 @@
             dataAccess.ScanSystemFormulaBetMonitorComplete(lastCustId);
         }
         
-        public void InsertProblemAccToNAP(string usernameList, NapProblemAccInsertCriteria paramFromTW)
+        public void InsertProblemAccToNAP(NapProblemAccInsertCriteria paramFromTW)
         {
-            dataAccess.InsertProblemAccToNAP(usernameList, paramFromTW);
+            dataAccess.InsertProblemAccToNAP(paramFromTW);
         }
     }
 }

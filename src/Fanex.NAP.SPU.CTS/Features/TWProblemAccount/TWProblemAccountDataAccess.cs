@@ -14,7 +14,7 @@
         IEnumerable<RescanTWProblemAccountModel> ScanSystemFormulaBetMonitor(out uint lastCustID);
         IEnumerable<RescanTWProblemAccountModel> GetCustomerPerformance(string custIdList);
         void RemoveSystemFormulaBetCustomer(string custIdList);
-        void InsertProblemAccToNAP(string usernameList, NapProblemAccInsertCriteria paramFromTW);
+        void InsertProblemAccToNAP(NapProblemAccInsertCriteria paramFromTW);
         void ScanSystemFormulaBetMonitorComplete(uint lastCustId);
     }
 
@@ -65,22 +65,9 @@
             repository.Execute(criteria);
         }
 
-        public void InsertProblemAccToNAP(string usernameList, NapProblemAccInsertCriteria paramFromTW)
+        public void InsertProblemAccToNAP(NapProblemAccInsertCriteria paramFromTW)
         {
-            var criteria = new NapProblemAccInsertCriteria
-            {
-                CustomerList = usernameList,
-                RoleId = paramFromTW.RoleId,
-                ReasonId = paramFromTW.ReasonId,
-                PreventActionId = paramFromTW.PreventActionId,
-                Comment = paramFromTW.Comment,
-                VoidTime = paramFromTW.VoidTime,
-                LimitAmount = paramFromTW.LimitAmount,
-                UserId = paramFromTW.UserId,
-                IP = paramFromTW.IP
-            };
-
-            repository.Execute(criteria);
+            repository.Execute(paramFromTW);
         }
     }
 }

@@ -6,6 +6,7 @@
     using Fanex.NAP.SPU.CTS.Features.TWProblemAccount;
     using Fanex.NAP.SPU.CTS.Features.TWProblemAccount.Criteria;
     using Fanex.NAP.SPU.CTS.Features.TWProblemAccount.Entities;
+    using Newtonsoft.Json;
     using Sentry;
     using System;
     using System.Linq;
@@ -63,8 +64,10 @@
                         if (paList.Any())
                         {
                             var firtItem = paList.FirstOrDefault();
+
                             var param = new NapProblemAccInsertCriteria
                             {
+                                CustomerList = string.Join(",", paList.Select(c => c.Username)),
                                 RoleId = firtItem.RoleId,
                                 ReasonId = firtItem.ReasonId,
                                 PreventActionId = firtItem.PreventActionId,
@@ -75,7 +78,8 @@
                                 IP = firtItem.Ip
                             };
 
-                            twProblemAccService.InsertProblemAccToNAP(string.Join(",", paList.Select(c => c.Username)), param);
+                            LogService.Info(JsonConvert.SerializeObject(param));
+                            twProblemAccService.InsertProblemAccToNAP(param);
                             twProblemAccService.RemoveSystemFormulaBetCustomer(string.Join(",", paList.Select(c => c.CustID)));
                         }
                     }
