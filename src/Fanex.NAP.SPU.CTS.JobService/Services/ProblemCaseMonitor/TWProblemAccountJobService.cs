@@ -54,7 +54,8 @@
                                         VoidTime = sCust.VoidTime,
                                         LimitAmount = sCust.LimitAmount,
                                         UserId = sCust.UserId,
-                                        Ip = sCust.Ip
+                                        Ip = sCust.Ip,
+                                        InsertTime = sCust.InsertTime
                                     }).ToList();
 
                     var markPAList = fullData.Where(c => c.Winloss >= 0 && !c.IsMonitorCategoryGroup);
