@@ -79,7 +79,6 @@
                                 IP = firtItem.Ip
                             };
 
-                            LogService.Info(JsonConvert.SerializeObject(param));
                             twProblemAccService.InsertProblemAccToNAP(param);
                             twProblemAccService.RemoveSystemFormulaBetCustomer(string.Join(",", paList.Select(c => c.CustID)));
                         }
