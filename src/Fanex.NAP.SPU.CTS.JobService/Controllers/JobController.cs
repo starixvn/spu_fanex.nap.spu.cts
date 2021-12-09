@@ -58,10 +58,16 @@
             return await this.customerStatusJobService.Execute();
         }
 
-        [HttpPost("AffectedEvidenceFromQueue")]
-        public async Task<bool> PlaceAffectedEvidenceFromQueue()
+        [HttpPost("AffectedEvidenceInsertFromQueue")]
+        public async Task<bool> InsertAffectedEvidenceFromQueue()
         {
-            return await this.affectedEvidenceFromQueueJobService.Execute();
+            return await this.affectedEvidenceFromQueueJobService.InsertAffectedEvidences();
+        }
+
+        [HttpPost("AffectedEvidenceRemoveFromQueue")]
+        public async Task<bool> RemoveAffectedEvidenceFromQueue()
+        {
+            return await this.affectedEvidenceFromQueueJobService.RemoveAffectedEvidences();
         }
 
         [HttpPost("CleanUpUnChangedCCHistory")]

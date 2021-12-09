@@ -8,7 +8,9 @@
 
     public interface IAffectedEvidenceFromQueueJobService
     {
-        Task<bool> Execute();
+        Task<bool> InsertAffectedEvidences();
+
+        Task<bool> RemoveAffectedEvidences();
     }
 
     public class AffectedEvidenceFromQueueJobService : IAffectedEvidenceFromQueueJobService
@@ -26,14 +28,14 @@
             this.sentryClient = sentryClient;
             this.affectedEvidenceFromQueueService = affectedEvidenceFromQueueService;
             this.appSettings = appSettings;
-            this.serviceName = "PlaceAffectedEvidenceFromQueue";
+            this.serviceName = "AffectedEvidenceFromQueue";
         }
 
-        public Task<bool> Execute()
+        public Task<bool> InsertAffectedEvidences()
         {
             try
             {
-                JobRun();
+                affectedEvidenceFromQueueService.InsertAssociationAffectedEvidenceFromQueue();
             }
             catch (Exception ex)
             {
@@ -45,20 +47,20 @@
             return Task.FromResult(true);
         }
 
-        #region Private Methods
-
-        private void JobRun()
+        public Task<bool> RemoveAffectedEvidences()
         {
-            Parallel.Invoke(() =>
-            {
-                affectedEvidenceFromQueueService.InsertAssociationAffectedEvidenceFromQueue();
-            },
-            () =>
+            try
             {
                 affectedEvidenceFromQueueService.RemoveAssociationAffectedEvidenceFromQueue();
-            });
-        }
+            }
+            catch (Exception ex)
+            {
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
 
-        #endregion Private Methods
+                return Task.FromResult(false);
+            }
+
+            return Task.FromResult(true);
+        }
     }
 }
