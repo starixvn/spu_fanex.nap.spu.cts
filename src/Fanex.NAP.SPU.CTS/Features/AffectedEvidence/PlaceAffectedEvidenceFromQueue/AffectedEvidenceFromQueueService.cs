@@ -1,9 +1,7 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.AffectedEvidence
 {
-    using Fanex.NAP.SPU.CTS.Shares;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Threading;
 
     public interface IAffectedEvidenceFromQueueService
     {
@@ -23,35 +21,21 @@
 
         public void InsertAssociationAffectedEvidenceFromQueue()
         {
-            var result = new ResultAffectedEvidenceFromQueueEntity { CustIds = new List<long>(), IsContinue = true };
+            var result = dataAccess.InsertAssociationAffectedEvidence();
 
-            while (result.IsContinue)
+            if (result.CustIds.Any())
             {
-                result = dataAccess.InsertAssociationAffectedEvidence();
-
-                if (result.CustIds.Any())
-                {
-                    UpdateBetLimitOfFlaggedCustomer(result.CustIds);
-                }
-
-                Thread.Sleep(Consts.AffectedEvidence_SleepTimes);
+                UpdateBetLimitOfFlaggedCustomer(result.CustIds);
             }
         }
 
         public void RemoveAssociationAffectedEvidenceFromQueue()
         {
-            var result = new ResultAffectedEvidenceFromQueueEntity { CustIds = new List<long>(), IsContinue = true };
+            var result = dataAccess.RemoveAssociationAffectedEvidence();
 
-            while (result.IsContinue)
+            if (result.CustIds.Any())
             {
-                result = dataAccess.RemoveAssociationAffectedEvidence();
-
-                if (result.CustIds.Any())
-                {
-                    UpdateBetLimitOfUnflaggedCustomer(result.CustIds);
-                }
-
-                Thread.Sleep(Consts.AffectedEvidence_SleepTimes);
+                UpdateBetLimitOfUnflaggedCustomer(result.CustIds);
             }
         }
 
