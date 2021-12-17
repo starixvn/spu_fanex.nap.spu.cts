@@ -8,6 +8,7 @@
         [JsonProperty("TransID")]
         public Int64 TransId { get; set; }
 
+        [JsonProperty("TransDate")]
         public DateTime TransDate { get; set; }
 
         [JsonProperty("MatchID")]
@@ -22,6 +23,10 @@
         [JsonProperty("LeagueID")]
         public Int64 LeagueId { get; set; }
 
+        [JsonProperty("LeagueName")]
+        public string LeagueName { get; set; }
+
+        [JsonProperty("EventDate")]
         public DateTime EventDate { get; set; }
 
         [JsonProperty("EventStatus")]
@@ -39,6 +44,7 @@
         [JsonIgnore]
         public string BetTeam { get; set; }
 
+        [JsonProperty("Stake")]
         public Decimal Stake { get; set; }
 
         [JsonIgnore]
@@ -50,10 +56,13 @@
         [JsonIgnore]
         public Decimal Hdp2 { get; set; }
 
+        [JsonProperty("LiveHomeScore")]
         public int LiveHomeScore { get; set; }
 
+        [JsonProperty("LiveAwayScore")]
         public int LiveAwayScore { get; set; }
 
+        [JsonIgnore]
         public bool LiveIndicator { get; set; }
 
         [JsonIgnore]
