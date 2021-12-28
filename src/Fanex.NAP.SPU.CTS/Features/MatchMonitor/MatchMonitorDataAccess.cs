@@ -17,7 +17,7 @@
 
         IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRuleToSlaveDB(bool isLive, int matchId, int totalScore, int bettypeId, UInt64 maxTransId);
 
-        void UpdateMatchTransComplete(bool isLive, int matchId, int totalScore, int bettypeId, string transGroupJson, UInt64 maxTransId);
+        void UpdateMatchTransComplete(MatchMonitorRuleCompleteParaModel para);
 
         void CleanMatchStaging(bool isLive, UInt64 maxTransId);
 
@@ -87,16 +87,16 @@
             return repository.Fetch<MatchRuleCompletedModel>(criteria);
         }
 
-        public void UpdateMatchTransComplete(bool isLive, int matchId, int totalScore, int bettypeId, string transGroupJson, UInt64 maxTransId)
+        public void UpdateMatchTransComplete(MatchMonitorRuleCompleteParaModel para)
         {
             var criteria = new MatchTransUpdateCompleteCriteria
             {
-                IsLive = isLive,
-                BettypeId = bettypeId,
-                MatchId = matchId,
-                TotalScore = totalScore,
-                TransGroupJson = transGroupJson,
-                MaxTransId = maxTransId
+                IsLive = para.IsLive,
+                BettypeId = para.BettypeId,
+                MatchId = para.MatchId,
+                TotalScore = para.TotalScore,
+                TransGroupJson = para.TransGroupJson,
+                MaxTransId = para.MaxTransId
             };
 
             repository.Execute(criteria);

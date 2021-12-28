@@ -81,13 +81,14 @@
 
                             if (matchRuleCompleted != null && matchRuleCompleted.Any())
                             {
-                                matchMonitorServices.UpdateMatchTransComplete(
-                                                                      isLive,
-                                                                      x.MatchId,
-                                                                      x.TotalScore,
-                                                                      x.BetTypeId,
-                                                                      JsonConvert.SerializeObject(matchRuleCompleted),
-                                                                      matchMonitorRule.MaxTransId);
+                                matchMonitorServices.UpdateMatchTransComplete(new MatchMonitorRuleCompleteParaModel {
+                                                                      IsLive = isLive,
+                                                                      MatchId = x.MatchId,
+                                                                      TotalScore = x.TotalScore,
+                                                                      BettypeId = x.BetTypeId,
+                                                                      TransGroupJson = JsonConvert.SerializeObject(matchRuleCompleted),
+                                                                      MaxTransId = matchMonitorRule.MaxTransId
+                                });
                             }
 
                             Thread.Sleep(MatchMonitor_SleepTimes);

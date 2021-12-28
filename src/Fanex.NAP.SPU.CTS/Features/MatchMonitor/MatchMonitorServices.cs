@@ -12,7 +12,7 @@
 
         IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, int matchId, int totalScore, int bettypeId, UInt64 maxTransId, bool isProccessFromMaster);
 
-        void UpdateMatchTransComplete(bool isLive, int matchId, int totalScore, int bettypeId, string transGroupJson, UInt64 maxTransId);
+        void UpdateMatchTransComplete(MatchMonitorRuleCompleteParaModel para);
 
         void CleanMatchStaging(bool isLive, UInt64 maxTransId);
 
@@ -44,9 +44,9 @@
                 : matchDataAccess.InsertMatchMonitorRuleToSlaveDB(isLive, matchId, totalScore, bettypeId, maxTransId);
         }
 
-        public void UpdateMatchTransComplete(bool isLive, int matchId, int totalScore, int bettypeId, string transGroupJson, UInt64 maxTransId)
+        public void UpdateMatchTransComplete(MatchMonitorRuleCompleteParaModel para)
         {
-            matchDataAccess.UpdateMatchTransComplete(isLive, matchId, totalScore, bettypeId, transGroupJson, maxTransId);
+            matchDataAccess.UpdateMatchTransComplete(para);
         }
 
         public void CleanMatchStaging(bool isLive, UInt64 maxTransId)
