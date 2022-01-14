@@ -6,11 +6,7 @@ namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities
     {
         public bool IsLive { get; set; }
 
-        public int MatchId { get; set; }
-
-        public int TotalScore { get; set; }
-
-        public int BettypeId { get; set; }
+        public MatchStagingModel MatchInfo { get; set; }
 
         public string TransGroupJson { get; set; }
 

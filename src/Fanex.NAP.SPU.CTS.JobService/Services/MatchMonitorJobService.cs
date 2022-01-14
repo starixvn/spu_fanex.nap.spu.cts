@@ -75,17 +75,15 @@
                         .MatchStagingList
                         .AsParallel()
                         .WithDegreeOfParallelism(numberOfThread)
-                        .ForAll(x =>
+                        .ForAll(matchInfo =>
                         {
-                            var matchRuleCompleted = matchMonitorServices.InsertMatchMonitorRule(isLive, x.MatchId, x.TotalScore, x.BetTypeId, matchMonitorRule.MaxTransId, isProccessFromMaster);
+                            var matchRuleCompleted = matchMonitorServices.InsertMatchMonitorRule(isLive, matchMonitorRule.MaxTransId, matchInfo, isProccessFromMaster);
 
                             if (matchRuleCompleted != null && matchRuleCompleted.Any())
                             {
                                 matchMonitorServices.UpdateMatchTransComplete(new MatchMonitorRuleCompleteParaModel {
                                                                       IsLive = isLive,
-                                                                      MatchId = x.MatchId,
-                                                                      TotalScore = x.TotalScore,
-                                                                      BettypeId = x.BetTypeId,
+                                                                      MatchInfo = matchInfo,
                                                                       TransGroupJson = JsonConvert.SerializeObject(matchRuleCompleted),
                                                                       MaxTransId = matchMonitorRule.MaxTransId
                                 });

@@ -18,6 +18,9 @@
         [SpParam(SqlParamName = "ip_BettypeID")]
         public int BettypeId { get; set; }
 
+        [SpParam(SqlParamName = "ip_BetID")]
+        public Int64 BetId { get; set; }
+
         [SpParam(SqlParamName = "ip_MaxTransID")]
         public UInt64 MaxTransId { get; set; }
 
