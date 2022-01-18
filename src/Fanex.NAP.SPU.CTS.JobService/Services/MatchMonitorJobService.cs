@@ -16,7 +16,7 @@
     {
         Task<bool> InsertTicketDetail(int batchSize, bool isLive);
 
-        Task<bool> ProcessRule(int batchSize, bool isLive, int numberOfThread, bool isProccessFromMaster);
+        Task<bool> ProcessRule(int batchSize, bool isLive, int numberOfThread, bool isFromMasterDB);
     }
 
     public class MatchMonitorJobService : IMatchMonitorJobService
@@ -58,11 +58,11 @@
             return Task.FromResult(true);
         }
 
-        public Task<bool> ProcessRule(int batchSize, bool isLive, int numberOfThread, bool isProccessFromMaster)
+        public Task<bool> ProcessRule(int batchSize, bool isLive, int numberOfThread, bool isFromMasterDB)
         {
             try
             {
-                if (!isProccessFromMaster && IsReplicationDelay(isLive))
+                if (!isFromMasterDB && IsReplicationDelay(isLive))
                 {
                     return Task.FromResult(true);
                 }
@@ -77,7 +77,7 @@
                         .WithDegreeOfParallelism(numberOfThread)
                         .ForAll(matchInfo =>
                         {
-                            var matchRuleCompleted = matchMonitorServices.InsertMatchMonitorRule(isLive, matchMonitorRule.MaxTransId, matchInfo, isProccessFromMaster);
+                            var matchRuleCompleted = matchMonitorServices.InsertMatchMonitorRule(isLive, matchMonitorRule.MaxTransId, matchInfo, isFromMasterDB);
 
                             if (matchRuleCompleted != null && matchRuleCompleted.Any())
                             {

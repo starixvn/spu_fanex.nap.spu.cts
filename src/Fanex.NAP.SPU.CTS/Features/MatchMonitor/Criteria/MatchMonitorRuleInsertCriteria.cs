@@ -6,6 +6,13 @@
 
     public class MatchMonitorRuleInsertCriteria : NonQueryCommand
     {
+        private readonly bool isFromMasterDB;
+
+        public MatchMonitorRuleInsertCriteria(bool isFromMasterDB)
+        {
+            this.isFromMasterDB = isFromMasterDB;
+        }
+
         [SpParam(SqlParamName = "ip_LiveIndicator")]
         public bool IsLive { get; set; }
 
@@ -25,7 +32,7 @@
         public UInt64 MaxTransId { get; set; }
 
         public override string GetSettingKey()
-                => "CTS_DC_MatchMonitor_Rule_Process";
+                => isFromMasterDB ? "CTS_DC_MatchMonitor_Rule_Process" : "CTS_DC_MatchMonitor_Rule_Process_SLAVE";
 
         public override bool IsValid()
             => true;

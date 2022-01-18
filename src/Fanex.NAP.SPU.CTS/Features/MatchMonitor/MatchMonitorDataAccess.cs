@@ -13,9 +13,7 @@
 
         void InsertMatchMonitorStaging(string matchTransJson, bool isLive);
 
-        IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, UInt64 maxTransId, MatchStagingModel matchinfo);
-
-        IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRuleToSlaveDB(bool isLive, UInt64 maxTransId, MatchStagingModel matchinfo);
+        IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, UInt64 maxTransId, MatchStagingModel matchinfo, bool isFromMasterDB);
 
         void UpdateMatchTransComplete(MatchMonitorRuleCompleteParaModel para);
 
@@ -58,9 +56,9 @@
             repository.Execute(criteria);
         }
 
-        public IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, UInt64 maxTransId, MatchStagingModel matchinfo)
+        public IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, UInt64 maxTransId, MatchStagingModel matchinfo, bool isFromMasterDB)
         {
-            var criteria = new MatchMonitorRuleInsertCriteria
+            var criteria = new MatchMonitorRuleInsertCriteria(isFromMasterDB)
             {
                 IsLive = isLive,
                 BettypeId = matchinfo.BetTypeID,
@@ -73,21 +71,6 @@
             return repository.Fetch<MatchRuleCompletedModel>(criteria);
         }
 
-
-        public IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRuleToSlaveDB(bool isLive, UInt64 maxTransId, MatchStagingModel matchinfo)
-        {
-            var criteria = new MatchMonitorRuleInsertToSlaveDBCriteria
-            {
-                IsLive = isLive,
-                BettypeId = matchinfo.BetTypeID,
-                MatchId = matchinfo.MatchId,
-                TotalScore = matchinfo.TotalScore,
-                MaxTransId = maxTransId,
-                BetId = matchinfo.BetID
-            };
-
-            return repository.Fetch<MatchRuleCompletedModel>(criteria);
-        }
 
         public void UpdateMatchTransComplete(MatchMonitorRuleCompleteParaModel para)
         {
