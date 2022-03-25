@@ -10,7 +10,7 @@
 
         void InsertMatchMonitorStaging(string matchTransJson, bool isLive);
 
-        IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, int matchId, int totalScore, int bettypeId, UInt64 maxTransId, bool isProccessFromMaster);
+        IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, UInt64 maxTransId, MatchStagingModel matchinfo, bool isFromMasterDB);
 
         void UpdateMatchTransComplete(MatchMonitorRuleCompleteParaModel para);
 
@@ -38,10 +38,9 @@
             matchDataAccess.InsertMatchMonitorStaging(matchTransJson, isLive);
         }
 
-        public IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, int matchId, int totalScore, int bettypeId, UInt64 maxTransId, bool isProccessFromMaster)
+        public IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, UInt64 maxTransId, MatchStagingModel matchinfo, bool isFromMasterDB)
         {
-            return isProccessFromMaster ? matchDataAccess.InsertMatchMonitorRule(isLive, matchId, totalScore, bettypeId, maxTransId) 
-                : matchDataAccess.InsertMatchMonitorRuleToSlaveDB(isLive, matchId, totalScore, bettypeId, maxTransId);
+            return matchDataAccess.InsertMatchMonitorRule(isLive, maxTransId, matchinfo, isFromMasterDB);              
         }
 
         public void UpdateMatchTransComplete(MatchMonitorRuleCompleteParaModel para)

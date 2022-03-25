@@ -41,7 +41,7 @@
         [JsonProperty("CustID")]
         public Int64 CustId { get; set; }
 
-        [JsonIgnore]
+        [JsonProperty("Betteam")]
         public string BetTeam { get; set; }
 
         [JsonProperty("Stake")]
@@ -67,5 +67,11 @@
 
         [JsonIgnore]
         public int TicketStatus { get; set; }
+
+        [JsonProperty("BetID")]
+        public int BetId { get; set; }
+
+        [JsonProperty("SportType")]
+        public int SportType { get; set; }
     }
 }

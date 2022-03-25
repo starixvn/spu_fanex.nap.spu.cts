@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-
 namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities
 {
+    using System.Collections.Generic;
+
     public class MatchMonitorRuleModel
     {
         public UInt64 MaxTransId { get; set; }
