@@ -14,7 +14,6 @@
     using Fanex.NAP.SPU.CTS.Features.SystemParameter;
     using Fanex.NAP.SPU.CTS.Features.Transform.Accounts;
     using Fanex.NAP.SPU.CTS.Features.Transform.AssociationByDevice;
-    using Fanex.NAP.SPU.CTS.Features.TWProblemAccount;
     using Fanex.NAP.SPU.CTS.Features.UpdateLastLogin;
     using Fanex.NAP.SPU.CTS.Features.UserPermission;
     using Fanex.NAP.SPU.CTS.JobService.Services.ArchiveAssociationCustomer;
@@ -55,9 +54,7 @@
 
             RegisterClassifyProblemCaseMonitor(services);
             
-            RegisterArchiveAssociationCustomer(services);
-
-            RegisterTWProblemAccount(services);
+            RegisterArchiveAssociationCustomer(services);       
 
         }
 
@@ -158,14 +155,7 @@
             services.AddSingleton<IProblemCaseMonitorClassificationJobService, ProblemCaseMonitorClassificationJobService>();
             services.AddSingleton<IProblemCaseMonitorAssociationJobService, ProblemCaseMonitorAssociationJobService>();
         }
-
-        private static void RegisterTWProblemAccount(this IServiceCollection services)
-        {
-            services.AddSingleton<ITWProblemAccountJobService, TWProblemAccountJobService>();
-            services.AddSingleton<ITWProblemAccountService, TWProblemAccountService>();
-            services.AddSingleton<ITWProblemAccountDataAccess, TWProblemAccountDataAccess>();
-        }
-
+       
         private static void RegisterArchiveAssociationCustomer(this IServiceCollection services)
         {
             services.AddSingleton<IArchiveAssociationCustomerDataAccess, ArchiveAssociationCustomerDataAccess>();

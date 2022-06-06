@@ -57,13 +57,5 @@
 		<Setting Key="CTS_DC_ProblemCaseMonitor_Classification_Insert" SpName="CTS_DC_ProblemCaseMonitor_Classification_Insert_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
 		<Setting Key="CTS_DC_ProblemCaseMonitor_Association_Get" SpName="CTS_DC_ProblemCaseMonitor_Association_Get_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.ctsService"  TimeOut="600" />
 		<Setting Key="CTS_DC_ProblemCaseMonitor_Association_Insert" SpName="CTS_DC_ProblemCaseMonitor_Association_Insert_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
-	</Function>
-
-  <Function name="TWProblemAccountDetection">
-    <Setting Key="CTS_DC_TWProblemDetectionMonitor_Remove" SpName="CTS_DC_TWProblemDetectionMonitor_Remove" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
-    <Setting Key="CTS_DC_TWProblemDetectionMonitor_Insert" SpName="CTS_DC_TWProblemDetectionMonitor_Insert" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
-    <Setting Key="CTS_DC_TWProblemDetectionMonitor_Scan" SpName="CTS_DC_TWProblemDetectionMonitor_Scan" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
-    <Setting Key="CTS_CustomerClassification_GetPerformance" SpName="CTS_CustomerClassification_GetPerformance" DbName="SQL.bodbVR2Model.bodbSPUNet" />
-    <Setting Key="Nap_ProblemAccount_AutoInsertCustomer" SpName="Nap_ProblemAccount_AutoInsertCustomer" DbName="SQL.CustDB.bodbAdminNet" />
-  </Function>
+	</Function>  
 </Functions>

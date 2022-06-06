@@ -17,19 +17,16 @@ namespace Fanex.NAP.SPU.CTS.JobService.Controllers
         private readonly IExistingCustomerJobService existingCustomerJobService;
         private readonly IProblemCaseMonitorClassificationJobService problemCaseMonitorClassificationJobService;
         private readonly IProblemCaseMonitorAssociationJobService problemCaseMonitorAssociationJobService;
-        private readonly ITWProblemAccountJobService twProblemAccountJobService;
 
         public MonitoringController(ISentryClient sentryClient
             , IExistingCustomerJobService existingCustomerJobService
             , IProblemCaseMonitorClassificationJobService problemCaseMonitorClassificationJobService
-            , IProblemCaseMonitorAssociationJobService problemCaseMonitorAssociationJobService
-            , ITWProblemAccountJobService twProblemAccountJobService)
+            , IProblemCaseMonitorAssociationJobService problemCaseMonitorAssociationJobService)
         {
             this.sentryClient = sentryClient;
             this.existingCustomerJobService = existingCustomerJobService;
             this.problemCaseMonitorClassificationJobService = problemCaseMonitorClassificationJobService;
-            this.problemCaseMonitorAssociationJobService = problemCaseMonitorAssociationJobService;
-            this.twProblemAccountJobService = twProblemAccountJobService;
+            this.problemCaseMonitorAssociationJobService = problemCaseMonitorAssociationJobService;           
         }
 
         [HttpPost("existingcustomer")]
@@ -72,11 +69,6 @@ namespace Fanex.NAP.SPU.CTS.JobService.Controllers
         {
             return await this.problemCaseMonitorAssociationJobService.Execute();
         }
-
-        [HttpPost("scan-tw-problem-account-customer")]
-        public async Task<bool> ScanTWSystemFormulaBetCustomer()
-        {
-            return await twProblemAccountJobService.DailyScan();
-        }
+      
     }
 }
