@@ -67,5 +67,13 @@
         public bool IsDirect { get; set; }
 
         public long? TVSRequestID { get; set; }
+
+        public bool IsFromTVS { get; set; }
+
+        public bool IsFromTW { get; set; }
+
+        public bool IsFromCTS { get; set; }
+
+        public bool IsFromAI { get; set; }
     }
 }
