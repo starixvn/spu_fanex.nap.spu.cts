@@ -27,7 +27,7 @@
         {
             dataAccess.CleanUpUnChangedCustClassificationHistory().Returns(false);
 
-            Action action = () => services.CleanUpUnChangedCustClassificationHistoryContinuously();
+            Action action = () => services.CleanUpUnChangedCustClassificationHistory();
 
             action.Should().NotThrow<Exception>();
         }
@@ -61,7 +61,7 @@
 
             dataAccess.ArchiveCustClassificationHistory(historyDataJson);
 
-            Action action = () => services.ArchiveChangedCustClassificationHistoryContinuously();
+            Action action = () => services.ArchiveChangedCustClassificationHistory();
 
             action.Should().NotThrow<Exception>();
         }

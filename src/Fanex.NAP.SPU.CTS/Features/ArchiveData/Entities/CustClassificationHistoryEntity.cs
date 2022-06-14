@@ -61,5 +61,19 @@
         public long TWBetCount { get; set; }
 
         public decimal TWDesktopUsageRate { get; set; }
+
+        public string Remark { get; set; }
+
+        public bool IsDirect { get; set; }
+
+        public long? TVSRequestID { get; set; }
+
+        public bool IsFromTVS { get; set; }
+
+        public bool IsFromTW { get; set; }
+
+        public bool IsFromCTS { get; set; }
+
+        public bool IsFromAI { get; set; }
     }
 }
