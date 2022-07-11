@@ -34,9 +34,9 @@
 
                 if (custList.ScanAssociatedAccountList != null && custList.ScanAssociatedAccountList.Any())
                 {
-                    var custIDs = string.Join(",", custList.ScanAssociatedAccountList.Select(x => x.CustID));
+                    var custIDs = string.Join(",", custList.ScanAssociatedAccountList.Select(x => x.CustID).Distinct());
 
-                    var ctsCustIDs = string.Join(",", custList.ScanAssociatedAccountList.Select(x => x.CTSCustID));
+                    var ctsCustIDs = string.Join(",", custList.ScanAssociatedAccountList.Select(x => x.CTSCustID).Distinct());
 
                     var custInfoMainDBs = this.associatedGroupService.GetCustomerInfoMainDB(custIDs, DangerLevelABI);
 
