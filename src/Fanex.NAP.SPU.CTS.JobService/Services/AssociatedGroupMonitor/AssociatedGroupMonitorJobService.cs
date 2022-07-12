@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.SPU.CTS.JobService.Services.AssociatedGroupMonitor
 {
+    using Fanex.Logging;
     using Fanex.NAP.SPU.CTS.Features.AssociatedGroupMonitor;
     using Fanex.NAP.SPU.CTS.Shares;
     using Sentry;
@@ -29,7 +30,7 @@
         public Task<bool> ScanAssociatedAccount()
         {
             try
-            {
+            {             
                 var custList = this.associatedGroupService.ScanAssociatedAccount();
 
                 if (custList.ScanAssociatedAccountList != null && custList.ScanAssociatedAccountList.Any())
