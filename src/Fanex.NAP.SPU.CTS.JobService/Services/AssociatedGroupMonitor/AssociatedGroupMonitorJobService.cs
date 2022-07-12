@@ -2,7 +2,9 @@
 {
     using Fanex.Logging;
     using Fanex.NAP.SPU.CTS.Features.AssociatedGroupMonitor;
+    using Fanex.NAP.SPU.CTS.Features.SystemParameter;
     using Fanex.NAP.SPU.CTS.Shares;
+    using Fanex.NAP.SPU.CTS.Shares.Models;
     using Sentry;
     using System;
     using System.Collections.Generic;
@@ -20,40 +22,50 @@
         private const string serviceName = "ArchiveAssociationCustomer";
         private const int DangerLevelABI = 2;
         private readonly IAssociatedGroupMonitorService associatedGroupService;
+        private readonly ISystemParameterServices systemParameterServices;
 
-        public AssociatedGroupMonitorJobService(ISentryClient sentryClient, IAssociatedGroupMonitorService associatedGroupService)
+        public AssociatedGroupMonitorJobService(ISentryClient sentryClient
+            , IAssociatedGroupMonitorService associatedGroupService
+            , ISystemParameterServices systemParameterServices)
         {
             this.sentryClient = sentryClient;
             this.associatedGroupService = associatedGroupService;
+            this.systemParameterServices = systemParameterServices;
         }
 
         public Task<bool> ScanAssociatedAccount()
         {
             try
-            {             
-                var custList = this.associatedGroupService.ScanAssociatedAccount();
+            {
+                var dbResult = new DBResult { ErrorCode = 0 };
 
-                if (custList.ScanAssociatedAccountList != null && custList.ScanAssociatedAccountList.Any())
+                var custInfo = this.associatedGroupService.ScanAssociatedAccount();
+
+                if (custInfo.ScanAssociatedAccountList != null && custInfo.ScanAssociatedAccountList.Any())
                 {
-                    var custIDs = string.Join(",", custList.ScanAssociatedAccountList.Select(x => x.CustID).Distinct());
+                    var custIDs = string.Join(",", custInfo.ScanAssociatedAccountList.Select(x => x.CustID).Distinct());
 
-                    var ctsCustIDs = string.Join(",", custList.ScanAssociatedAccountList.Select(x => x.CTSCustID).Distinct());
+                    var ctsCustIDs = string.Join(",", custInfo.ScanAssociatedAccountList.Select(x => x.CTSCustID).Distinct());
 
                     var custInfoMainDBs = this.associatedGroupService.GetCustomerInfoMainDB(custIDs, DangerLevelABI);
 
-                    var updateDangerResult = this.associatedGroupService.UpdateDangerLevelToMainDB(custInfoMainDBs, custList.ABI);
+                    dbResult = this.associatedGroupService.UpdateDangerLevelToMainDB(custInfoMainDBs, custInfo.ABI);
 
-                    if (updateDangerResult.ErrorCode == 0)
+                    if (dbResult.ErrorCode == 0)
                     {
-                        this.associatedGroupService.AddAssociatedAccount(new AddAssociatedAccountModel
+                        dbResult = this.associatedGroupService.AddAssociatedAccount(new AddAssociatedAccountModel
                         {
-                            CustIDs = custIDs,
                             CTSCustIDs = ctsCustIDs,
                             IsAuto = true,
-                            ABI = custList.ABI,
-                            GroupID = custList.GroupID
+                            GroupID = custInfo.GroupID
                         });
-                    }
+                    }                                       
+                }
+
+                if (dbResult.ErrorCode == 0)
+                {
+                    this.systemParameterServices.UpdateValueForSystemParamById(custInfo.GroupID.ToString(), Consts.SystemParameters.AssociatedGroupLastGroupID);
+                    this.systemParameterServices.UpdateValueForSystemParamById(custInfo.LastCTSCustID.ToString(), Consts.SystemParameters.AssociatedGroupLastCTSCustID);
                 }
             }
             catch (Exception ex)

@@ -11,6 +11,9 @@
         [SpParam(SqlParamName = "op_ABI")]
         public int ABI { get; set; }
 
+        [SpParam(SqlParamName = "op_LastCTSCustID")]
+        public long LastCTSCustID { get; set; }
+
         public override string GetSettingKey()
         {
             return "CTS_DC_AssociatedGroup_Scan";

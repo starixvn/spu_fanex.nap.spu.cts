@@ -15,5 +15,7 @@
         public long GroupID { get; set; }
 
         public int ABI { get; set; }
+
+        public long LastCTSCustID { get; set; }
     }
 }
