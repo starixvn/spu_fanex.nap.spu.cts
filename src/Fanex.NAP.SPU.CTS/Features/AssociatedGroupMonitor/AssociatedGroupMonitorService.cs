@@ -1,6 +1,8 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.AssociatedGroupMonitor
 {
+    using Fanex.Logging;
     using Fanex.NAP.SPU.CTS.Shares.Models;
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.Linq;   
@@ -13,7 +15,7 @@
 
         IEnumerable<CustomerInfoMainDBEntity> GetCustomerInfoMainDB(string custIdList, int sourceType);
 
-        DBResult UpdateDangerLevelToMainDB(IEnumerable<CustomerInfoMainDBEntity> customerInfoMainDBs, int dangerType);
+        DBResult UpdateDangerLevelToMainDB(IEnumerable<CustomerInfoMainDBEntity> customerInfoMainDBs, int dangerLevel, int dangerType);
     }
 
     public class AssociatedGroupMonitorService : IAssociatedGroupMonitorService
@@ -40,15 +42,15 @@
             return dataAccess.GetCustomerInfoMainDB(custIdList, sourceType);
         }
 
-        public DBResult UpdateDangerLevelToMainDB(IEnumerable<CustomerInfoMainDBEntity> customerInfoMainDBs, int dangerType)
+        public DBResult UpdateDangerLevelToMainDB(IEnumerable<CustomerInfoMainDBEntity> customerInfoMainDBs, int dangerLevel, int dangerType)
         {
             var dangerLevels = customerInfoMainDBs
                 .Where(x => x.Danger2 == 0)
                 .Select(x => new DangerLevelModel
                 {
                     CustId = x.CustID,
-                    DangerLevel = dangerType
-                });
+                    DangerLevel = dangerLevel
+                });            
 
             if (dangerLevels.Any())
             {

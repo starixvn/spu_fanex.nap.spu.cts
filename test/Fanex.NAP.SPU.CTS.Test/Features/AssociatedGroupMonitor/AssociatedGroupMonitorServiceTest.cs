@@ -71,12 +71,13 @@
             // Arrange
             var custInfoMainDBModel = new List<CustomerInfoMainDBEntity>();
             var dangerLevelMode = new List<DangerLevelModel>();
+            var dangerLevel = 50;
             var dangerType = 2;
             var expectedResult = new DBResult();
 
             // Act
             associatedGroupMonitorDataAccess.UpdateDangerLevelToMainDB(dangerLevelMode, dangerType).Returns(expectedResult);
-            var result = associatedGroupMonitorService.UpdateDangerLevelToMainDB(custInfoMainDBModel, dangerType);
+            var result = associatedGroupMonitorService.UpdateDangerLevelToMainDB(custInfoMainDBModel, dangerLevel, dangerType);
 
             // Assert            
             result.Should().BeEquivalentTo(expectedResult);

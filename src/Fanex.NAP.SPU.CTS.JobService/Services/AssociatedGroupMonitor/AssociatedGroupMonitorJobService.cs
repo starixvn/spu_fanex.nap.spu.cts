@@ -5,6 +5,7 @@
     using Fanex.NAP.SPU.CTS.Features.SystemParameter;
     using Fanex.NAP.SPU.CTS.Shares;
     using Fanex.NAP.SPU.CTS.Shares.Models;
+    using Newtonsoft.Json;
     using Sentry;
     using System;
     using System.Collections.Generic;
@@ -48,8 +49,8 @@
                     var ctsCustIDs = string.Join(",", custInfo.ScanAssociatedAccountList.Select(x => x.CTSCustID).Distinct());
 
                     var custInfoMainDBs = this.associatedGroupService.GetCustomerInfoMainDB(custIDs, DangerLevelABI);
-
-                    dbResult = this.associatedGroupService.UpdateDangerLevelToMainDB(custInfoMainDBs, custInfo.ABI);
+                    
+                    dbResult = this.associatedGroupService.UpdateDangerLevelToMainDB(custInfoMainDBs, custInfo.ABI, DangerLevelABI);
 
                     if (dbResult.ErrorCode == 0)
                     {
