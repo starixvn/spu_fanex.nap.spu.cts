@@ -41,7 +41,9 @@
             ArchiveCustomerLastTime_Credit = 24,
             ArchiveCustomerLastCustID_Credit = 25,
             ArchiveCustomerLastTime_Deposit = 26,
-            ArchiveCustomerLastCustID_Deposit = 27
+            ArchiveCustomerLastCustID_Deposit = 27,
+            AssociatedGroupLastGroupID = 98,
+            AssociatedGroupLastCTSCustID = 99
         };
 
         public enum DangerLevel

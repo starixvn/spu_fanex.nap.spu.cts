@@ -62,7 +62,8 @@
 	</Function>
 	<Function name="ArchiveAssociationCustomer">
 		<Setting Key="CTS_Arc_CustomerAssociation_Archive" SpName="CTS_Arc_CustomerAssociation_Archive" DbName="MySQL.MASTER.CTS_Archive.ctsServiceAdmin" TimeOut="300" />
-		<Setting Key="CTS_Arc_CustomerAssociation_Rollback" SpName="CTS_Arc_CustomerAssociation_Rollback" DbName="MySQL.MASTER.CTS_Archive.ctsServiceAdmin" />		
+		<Setting Key="CTS_Arc_CustomerAssociation_Rollback" SpName="CTS_Arc_CustomerAssociation_Rollback" DbName="MySQL.MASTER.CTS_Archive.ctsServiceAdmin" />
+		<Setting Key="CTS_CustomerUpdDanger" SpName="CTS_CustomerUpdDanger" DbName="SQL.CustDB.bodbAdminNet" TimeOut="300" />
 	</Function>
  
 </Functions>

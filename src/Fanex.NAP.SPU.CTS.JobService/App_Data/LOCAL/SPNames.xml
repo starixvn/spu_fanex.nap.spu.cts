@@ -62,5 +62,10 @@
 		<Setting Key="CTS_Arc_CustomerAssociation_Archive" SpName="CTS_Arc_CustomerAssociation_Archive" DbName="MySQL.CTS_Archive.ctsServiceAdmin" />
 		<Setting Key="CTS_Arc_CustomerAssociation_Rollback" SpName="CTS_Arc_CustomerAssociation_Rollback" DbName="MySQL.CTS_Archive.ctsServiceAdmin" />		
 	</Function>
-  
+
+	<Function name="AssociatedGroupMonitor">
+		<Setting Key="CTS_DC_AssociatedGroup_Account_Add" SpName="CTS_DC_AssociatedGroup_Account_Add" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
+		<Setting Key="CTS_DC_AssociatedGroup_Scan" SpName="CTS_DC_AssociatedGroup_Scan" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
+		<Setting Key="CTS_CustomerUpdDanger" SpName="CTS_CustomerUpdDanger" DbName="SQL.CustDB.bodbAdminNet" TimeOut="300" />
+	</Function>
 </Functions>
