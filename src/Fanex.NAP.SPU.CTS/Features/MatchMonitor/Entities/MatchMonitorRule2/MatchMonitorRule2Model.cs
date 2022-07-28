@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities
 {
     using System.Collections.Generic;

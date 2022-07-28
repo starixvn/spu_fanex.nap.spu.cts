@@ -17,7 +17,7 @@
 
         MatchMonitorRule2Model GetMatchMonitorRule2(bool isLive, int rowSize);
 
-        IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, UInt64 maxTransId, MatchStagingModel matchinfo, bool isFromMasterDB);
+        IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, UInt64 maxTransId, MatchStagingRuleModel matchinfo, bool isFromMasterDB);
 
         IEnumerable<MatchRule2CompletedModel> InsertMatchMonitorRule2(bool isLive, UInt64 maxTransId, MatchStagingRule2Model matchinfo);
 
@@ -73,12 +73,12 @@
                 RowSize = rowSize
             };
 
-            var result = repository.Fetch<MatchStagingModel>(criteria);
+            var result = repository.Fetch<MatchStagingRuleModel>(criteria);
 
             return new MatchMonitorRuleModel
             {
                 MaxTransId = criteria.MaxTransId,
-                MatchStagingList = criteria.MaxTransId != 0 ? result : new List<MatchStagingModel>()
+                MatchStagingList = criteria.MaxTransId != 0 ? result : new List<MatchStagingRuleModel>()
             };
         }
 
@@ -100,7 +100,7 @@
             };
         }
 
-        public IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, UInt64 maxTransId, MatchStagingModel matchinfo, bool isFromMasterDB)
+        public IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, UInt64 maxTransId, MatchStagingRuleModel matchinfo, bool isFromMasterDB)
         {
             var criteria = new MatchMonitorRuleInsertCriteria(isFromMasterDB)
             {
@@ -131,10 +131,9 @@
             return repository.Fetch<MatchRule2CompletedModel>(criteria);
         }
 
-
         public void UpdateMatchTransComplete(MatchMonitorRuleCompleteParaModel para)
         {
-            var criteria = new MatchTransUpdateCompleteCriteria
+            var criteria = new MatchMonitorRuleCompleteCriteria
             {
                 IsLive = para.IsLive,
                 BettypeId = para.MatchInfo.BetTypeID,
@@ -167,7 +166,7 @@
 
         public void CleanMatchStaging(bool isLive, UInt64 maxTransId)
         {
-            var criteria = new MatchMonitorStagingCleanCriteria
+            var criteria = new MatchMonitorRuleTransCleanCriteria
             {
                 IsLive = isLive,
                 MaxTransId = maxTransId

@@ -86,11 +86,12 @@
 
                             if (matchRuleCompleted != null && matchRuleCompleted.Any())
                             {
-                                matchMonitorServices.UpdateMatchTransComplete(new MatchMonitorRuleCompleteParaModel {
-                                                                      IsLive = isLive,
-                                                                      MatchInfo = matchInfo,
-                                                                      TransGroupJson = JsonConvert.SerializeObject(matchRuleCompleted),
-                                                                      MaxTransId = matchMonitorRule.MaxTransId
+                                matchMonitorServices.UpdateMatchTransComplete(new MatchMonitorRuleCompleteParaModel
+                                {
+                                    IsLive = isLive,
+                                    MatchInfo = matchInfo,
+                                    TransGroupJson = JsonConvert.SerializeObject(matchRuleCompleted),
+                                    MaxTransId = matchMonitorRule.MaxTransId
                                 });
                             }
 

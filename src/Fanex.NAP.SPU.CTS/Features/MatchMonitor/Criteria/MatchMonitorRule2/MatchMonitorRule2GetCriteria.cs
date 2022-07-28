@@ -1,10 +1,10 @@
-﻿using Fanex.Data;
-using Fanex.Data.Repository;
-using System;
-
-namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Criteria
+﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Criteria
 {
-    class MatchMonitorRule2GetCriteria : NonQueryCommand
+    using Fanex.Data;
+    using Fanex.Data.Repository;
+    using System;
+
+    public class MatchMonitorRule2GetCriteria : NonQueryCommand
     {
         [SpParam(SqlParamName = "ip_LiveIndicator")]
         public bool IsLive { get; set; }

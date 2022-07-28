@@ -4,7 +4,7 @@
     using Fanex.Data.Repository;
     using System;
 
-    public class MatchTransUpdateCompleteCriteria : NonQueryCommand
+    public class MatchMonitorRuleCompleteCriteria : NonQueryCommand
     {
         [SpParam(SqlParamName = "ip_MatchID")]
         public int MatchId { get; set; }
@@ -13,8 +13,8 @@
         public bool IsLive { get; set; }
 
         [SpParam(SqlParamName = "ip_BettypeID")]
-        public int BettypeId { get; set; }       
-        
+        public int BettypeId { get; set; }
+
         [SpParam(SqlParamName = "ip_BetID")]
         public Int64 BetID { get; set; }
 
