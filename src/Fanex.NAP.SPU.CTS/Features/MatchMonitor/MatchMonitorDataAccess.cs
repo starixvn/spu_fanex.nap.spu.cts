@@ -13,13 +13,21 @@
 
         void InsertMatchMonitorStaging(string matchTransJson, bool isLive);
 
+        MatchMonitorRuleModel GetMatchMonitorRule(bool isLive, int rowSize);
+
+        MatchMonitorRule2Model GetMatchMonitorRule2(bool isLive, int rowSize);
+
         IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, UInt64 maxTransId, MatchStagingModel matchinfo, bool isFromMasterDB);
+
+        IEnumerable<MatchRule2CompletedModel> InsertMatchMonitorRule2(bool isLive, UInt64 maxTransId, MatchStagingRule2Model matchinfo);
 
         void UpdateMatchTransComplete(MatchMonitorRuleCompleteParaModel para);
 
+        void UpdateMatchMonitorRule2Complete(MatchMonitorRule2CompleteParaModel para);
+
         void CleanMatchStaging(bool isLive, UInt64 maxTransId);
 
-        MatchMonitorRuleModel GetMatchMonitorRule(bool isLive, int rowSize);
+        void CleanTransRule2(bool isLive, UInt64 maxTransId);
     }
 
     public class MatchMonitorDataAccess : IMatchMonitorDataAccess
@@ -56,6 +64,42 @@
             repository.Execute(criteria);
         }
 
+        public MatchMonitorRuleModel GetMatchMonitorRule(bool isLive, int rowSize)
+        {
+            var criteria = new MatchMonitorRuleGetCriteria
+            {
+                IsLive = isLive,
+                MaxTransId = 0,
+                RowSize = rowSize
+            };
+
+            var result = repository.Fetch<MatchStagingModel>(criteria);
+
+            return new MatchMonitorRuleModel
+            {
+                MaxTransId = criteria.MaxTransId,
+                MatchStagingList = criteria.MaxTransId != 0 ? result : new List<MatchStagingModel>()
+            };
+        }
+
+        public MatchMonitorRule2Model GetMatchMonitorRule2(bool isLive, int rowSize)
+        {
+            var criteria = new MatchMonitorRule2GetCriteria
+            {
+                IsLive = isLive,
+                MaxTransId = 0,
+                RowSize = rowSize
+            };
+
+            var result = repository.Fetch<MatchStagingRule2Model>(criteria);
+
+            return new MatchMonitorRule2Model
+            {
+                MaxTransId = criteria.MaxTransId,
+                MatchStagingList = criteria.MaxTransId != 0 ? result : new List<MatchStagingRule2Model>()
+            };
+        }
+
         public IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, UInt64 maxTransId, MatchStagingModel matchinfo, bool isFromMasterDB)
         {
             var criteria = new MatchMonitorRuleInsertCriteria(isFromMasterDB)
@@ -69,6 +113,22 @@
             };
 
             return repository.Fetch<MatchRuleCompletedModel>(criteria);
+        }
+
+        public IEnumerable<MatchRule2CompletedModel> InsertMatchMonitorRule2(bool isLive, UInt64 maxTransId, MatchStagingRule2Model matchinfo)
+        {
+            var criteria = new MatchMonitorRule2InsertCriteria()
+            {
+                IsLive = isLive,
+                BettypeId = matchinfo.BetTypeID,
+                MatchId = matchinfo.MatchId,
+                TotalScore = matchinfo.TotalScore,
+                MaxTransId = maxTransId,
+                BetId = matchinfo.BetID,
+                BetTeam = matchinfo.Betteam
+            };
+
+            return repository.Fetch<MatchRule2CompletedModel>(criteria);
         }
 
 
@@ -88,6 +148,23 @@
             repository.Execute(criteria);
         }
 
+        public void UpdateMatchMonitorRule2Complete(MatchMonitorRule2CompleteParaModel para)
+        {
+            var criteria = new MatchMonitorRule2CompleteCriteria
+            {
+                IsLive = para.IsLive,
+                BettypeId = para.MatchInfo.BetTypeID,
+                BetID = para.MatchInfo.BetID,
+                MatchId = para.MatchInfo.MatchId,
+                TotalScore = para.MatchInfo.TotalScore,
+                TransGroupJson = para.TransGroupJson,
+                MaxTransId = para.MaxTransId,
+                Betteam = para.MatchInfo.Betteam
+            };
+
+            repository.Execute(criteria);
+        }
+
         public void CleanMatchStaging(bool isLive, UInt64 maxTransId)
         {
             var criteria = new MatchMonitorStagingCleanCriteria
@@ -99,22 +176,15 @@
             repository.Execute(criteria);
         }
 
-        public MatchMonitorRuleModel GetMatchMonitorRule(bool isLive, int rowSize)
+        public void CleanTransRule2(bool isLive, UInt64 maxTransId)
         {
-            var criteria = new MatchMonitorRuleGetCriteria
+            var criteria = new MatchMonitorRule2TransCleanCriteria
             {
                 IsLive = isLive,
-                MaxTransId = 0,
-                RowSize = rowSize
+                MaxTransId = maxTransId
             };
 
-            var result = repository.Fetch<MatchStagingModel>(criteria);
-
-            return new MatchMonitorRuleModel
-            {
-                MaxTransId = criteria.MaxTransId,
-                MatchStagingList = criteria.MaxTransId != 0 ? result : new List<MatchStagingModel>()
-            };
+            repository.Execute(criteria);
         }
     }
 }
