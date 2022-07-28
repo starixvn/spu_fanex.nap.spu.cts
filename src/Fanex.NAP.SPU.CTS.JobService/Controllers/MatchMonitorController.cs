@@ -34,7 +34,7 @@
         /// <summary>
         /// Process Rule1 for GroupBeting, Hedging, Arbitrage
         /// </summary>
-        [HttpPost("MatchMonitorRuleLive")]
+        [HttpPost("MatchMonitorInsertRuleLive")]
         public async Task<bool> MatchMonitorRuleLive([FromForm] int size, [FromForm] int numberOfThread, [FromForm] bool isProccessFromMaster = true)
         {
             return await this.matchMonitorJobService.ProcessRule01(size, true, numberOfThread, isProccessFromMaster);
@@ -43,7 +43,7 @@
         /// <summary>
         /// Process Rule1 for GroupBeting, Hedging, Arbitrage
         /// </summary>
-        [HttpPost("MatchMonitorRuleNonLive")]
+        [HttpPost("MatchMonitorInsertRuleNonLive")]
         public async Task<bool> MatchMonitorRuleNonLive([FromForm] int size, [FromForm] int numberOfThread, [FromForm] bool isProccessFromMaster = true)
         {
             return await this.matchMonitorJobService.ProcessRule01(size, false, numberOfThread, isProccessFromMaster);
@@ -52,7 +52,7 @@
         /// <summary>
         /// Process Rule2 for FixedGame
         /// </summary>
-        [HttpPost("MatchMonitorRule2Live")]
+        [HttpPost("MatchMonitorInsertRule2Live")]
         public async Task<bool> MatchMonitorRule2Live([FromForm] int size, [FromForm] int numberOfThread)
         {
             return await this.matchMonitorJobService.ProcessRule02(size, true, numberOfThread);
@@ -61,7 +61,7 @@
         /// <summary>
         /// Insert Rule2 for FixedGame
         /// </summary>
-        [HttpPost("MatchMonitorRule2NonLive")]
+        [HttpPost("MatchMonitorInsertRule2NonLive")]
         public async Task<bool> MatchMonitorRule2NonLive([FromForm] int size, [FromForm] int numberOfThread)
         {
             return await this.matchMonitorJobService.ProcessRule02(size, false, numberOfThread);
