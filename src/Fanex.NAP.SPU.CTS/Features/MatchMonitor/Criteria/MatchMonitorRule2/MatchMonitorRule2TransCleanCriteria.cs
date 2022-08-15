@@ -14,7 +14,7 @@
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_MatchMonitor_Rule02_CleanTrans";
+            return "CTS_DC_MatchMonitor_Staging_CleanTrans";
         }
 
         public override bool IsValid()

@@ -4,9 +4,6 @@ namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities
 {
     public class MatchRule2CompletedModel
     {
-        [JsonProperty("GroupID")]
-        public int GroupId { get; set; }
-
         [JsonProperty("Reason")]
         public int Reason { get; set; }
 
@@ -15,8 +12,5 @@ namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities
 
         [JsonProperty("CustIDList")]
         public string CustIdList { get; set; }
-
-        [JsonProperty("OldGroupIDList")]
-        public string OldGroupIdList { get; set; }
     }
 }
