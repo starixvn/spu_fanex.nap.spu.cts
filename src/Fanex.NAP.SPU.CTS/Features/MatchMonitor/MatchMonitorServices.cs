@@ -14,7 +14,7 @@
 
         MatchMonitorRule2Model GetMatchMonitorRule2(bool isLive, int rowSize);
 
-        IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, UInt64 maxTransId, MatchStagingRuleModel matchinfo, bool isFromMasterDB);
+        IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, UInt64 maxTransId, MatchStagingRuleModel matchinfo);
 
         IEnumerable<MatchRule2CompletedModel> InsertMatchMonitorRule2(bool isLive, UInt64 maxTransId, MatchStagingRule2Model matchinfo);
 
@@ -56,9 +56,9 @@
             return matchDataAccess.GetMatchMonitorRule2(isLive, rowSize);
         }
 
-        public IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, UInt64 maxTransId, MatchStagingRuleModel matchinfo, bool isFromMasterDB)
+        public IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, UInt64 maxTransId, MatchStagingRuleModel matchinfo)
         {
-            return matchDataAccess.InsertMatchMonitorRule(isLive, maxTransId, matchinfo, isFromMasterDB);
+            return matchDataAccess.InsertMatchMonitorRule(isLive, maxTransId, matchinfo);
         }
 
         public IEnumerable<MatchRule2CompletedModel> InsertMatchMonitorRule2(bool isLive, UInt64 maxTransId, MatchStagingRule2Model matchinfo)

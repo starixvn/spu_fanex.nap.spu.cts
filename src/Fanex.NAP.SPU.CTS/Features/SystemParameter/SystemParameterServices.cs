@@ -12,8 +12,6 @@
         bool UpdateValueForSystemParamById(string paraValue, SystemParameters paramId);
 
         T GetSystemParamById<T>(SystemParameters paraID);
-
-        Int64 GetLastScannedIdFromSlave(SystemParameters paraID);
     }
 
     public class SystemParameterServices : ISystemParameterServices
@@ -54,13 +52,6 @@
             var systemParam = systemParameterDataAccess.GetSystemParameterByID(paraID);
 
             return (T)Convert.ChangeType(systemParam.ParameterValue, typeof(T));
-        }
-
-        public Int64 GetLastScannedIdFromSlave(SystemParameters paraID)
-        {
-            var lastScannedTransID = systemParameterDataAccess.GetSystemParameterByIDFromSlave(paraID);
-
-            return lastScannedTransID != null ? Int64.Parse(lastScannedTransID?.ParameterValue) : 0;
         }
     }
 }

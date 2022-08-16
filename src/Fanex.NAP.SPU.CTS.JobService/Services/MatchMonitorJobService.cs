@@ -16,7 +16,7 @@
     {
         Task<bool> InsertTicketDetail(int batchSize, bool isLive);
 
-        Task<bool> ProcessRule01(int batchSize, bool isLive, int numberOfThread, bool isFromMasterDB);
+        Task<bool> ProcessRule01(int batchSize, bool isLive, int numberOfThread);
 
         Task<bool> ProcessRule02(int batchSize, bool isLive, int numberOfThread);
     }
@@ -63,15 +63,10 @@
         /// <summary>
         /// Process Rule for GroupBeting, Hedging, Arbitrage
         /// </summary>
-        public Task<bool> ProcessRule01(int batchSize, bool isLive, int numberOfThread, bool isFromMasterDB)
+        public Task<bool> ProcessRule01(int batchSize, bool isLive, int numberOfThread)
         {
             try
             {
-                if (!isFromMasterDB && IsReplicationDelay(isLive))
-                {
-                    return Task.FromResult(true);
-                }
-
                 var matchMonitorRule = matchMonitorServices.GetMatchMonitorRule(isLive, batchSize);
 
                 if (matchMonitorRule != null && matchMonitorRule.MaxTransId != 0)
@@ -82,7 +77,7 @@
                         .WithDegreeOfParallelism(numberOfThread)
                         .ForAll(matchInfo =>
                         {
-                            var matchRuleCompleted = matchMonitorServices.InsertMatchMonitorRule(isLive, matchMonitorRule.MaxTransId, matchInfo, isFromMasterDB);
+                            var matchRuleCompleted = matchMonitorServices.InsertMatchMonitorRule(isLive, matchMonitorRule.MaxTransId, matchInfo);
 
                             if (matchRuleCompleted != null && matchRuleCompleted.Any())
                             {
@@ -176,22 +171,6 @@
             }
 
             return Enumerable.Empty<TicketDetailEntity>(); ;
-        }
-
-        private bool IsReplicationDelay(bool isLive)
-        {
-            var paraId = isLive ? SystemParameters.MatchMonitorLastScannedRuleProcessLive : SystemParameters.MatchMonitorLastScannedRuleProcessNonLive;
-
-            var lastScannedRuleProcessMaster = systemParameterServices.GetLastScannedId(paraId);
-
-            var lastScannedRuleProcessSlave = systemParameterServices.GetLastScannedIdFromSlave(paraId);
-
-            if (lastScannedRuleProcessMaster == lastScannedRuleProcessSlave)
-            {
-                return false;
-            }
-
-            return true;
         }
 
         #endregion Private Methods
