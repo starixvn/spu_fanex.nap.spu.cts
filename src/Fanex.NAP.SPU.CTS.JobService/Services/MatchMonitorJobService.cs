@@ -170,14 +170,12 @@
 
         private IEnumerable<TicketDetailEntity> GetMatchTrans(Int64 lastScannedTransId, int batchSize, bool isLive)
         {
-            var matchTrans = new List<TicketDetailEntity>();
-
             if (batchSize > 0)
             {
-                matchTrans = matchMonitorServices.GetMatchTrans(lastScannedTransId, batchSize, isLive).ToList();
+                return matchMonitorServices.GetMatchTrans(lastScannedTransId, batchSize, isLive);
             }
 
-            return matchTrans;
+            return Enumerable.Empty<TicketDetailEntity>(); ;
         }
 
         private bool IsReplicationDelay(bool isLive)
