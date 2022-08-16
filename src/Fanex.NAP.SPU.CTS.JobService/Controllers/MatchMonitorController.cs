@@ -53,18 +53,18 @@
         /// Process Rule2 for FixedGame
         /// </summary>
         [HttpPost("MatchMonitorInsertRule2Live")]
-        public async Task<bool> MatchMonitorRule2Live([FromForm] int size, [FromForm] int numberOfThread)
+        public async Task<bool> MatchMonitorRule2Live([FromForm] int numberOfThread)
         {
-            return await this.matchMonitorJobService.ProcessRule02(size, true, numberOfThread);
+            return await this.matchMonitorJobService.ProcessRule02(true, numberOfThread);
         }
 
         /// <summary>
         /// Insert Rule2 for FixedGame
         /// </summary>
         [HttpPost("MatchMonitorInsertRule2NonLive")]
-        public async Task<bool> MatchMonitorRule2NonLive([FromForm] int size, [FromForm] int numberOfThread)
+        public async Task<bool> MatchMonitorRule2NonLive([FromForm] int numberOfThread)
         {
-            return await this.matchMonitorJobService.ProcessRule02(size, false, numberOfThread);
+            return await this.matchMonitorJobService.ProcessRule02(false, numberOfThread);
         }
     }
 }

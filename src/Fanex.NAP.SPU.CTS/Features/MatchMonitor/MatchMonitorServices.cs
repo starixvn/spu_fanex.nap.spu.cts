@@ -12,7 +12,7 @@
 
         MatchMonitorRuleModel GetMatchMonitorRule(bool isLive, int rowSize);
 
-        MatchMonitorRule2Model GetMatchMonitorRule2(bool isLive, int rowSize);
+        MatchMonitorRule2Model GetMatchMonitorRule2(bool isLive);
 
         IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, UInt64 maxTransId, MatchStagingRuleModel matchinfo);
 
@@ -51,9 +51,9 @@
             return matchDataAccess.GetMatchMonitorRule(isLive, rowSize);
         }
 
-        public MatchMonitorRule2Model GetMatchMonitorRule2(bool isLive, int rowSize)
+        public MatchMonitorRule2Model GetMatchMonitorRule2(bool isLive)
         {
-            return matchDataAccess.GetMatchMonitorRule2(isLive, rowSize);
+            return matchDataAccess.GetMatchMonitorRule2(isLive);
         }
 
         public IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, UInt64 maxTransId, MatchStagingRuleModel matchinfo)

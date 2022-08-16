@@ -18,7 +18,7 @@
 
         Task<bool> ProcessRule01(int batchSize, bool isLive, int numberOfThread);
 
-        Task<bool> ProcessRule02(int batchSize, bool isLive, int numberOfThread);
+        Task<bool> ProcessRule02(bool isLive, int numberOfThread);
     }
 
     public class MatchMonitorJobService : IMatchMonitorJobService
@@ -109,11 +109,11 @@
         /// <summary>
         /// Process Rule for Fixed Game
         /// </summary>
-        public Task<bool> ProcessRule02(int batchSize, bool isLive, int numberOfThread)
+        public Task<bool> ProcessRule02(bool isLive, int numberOfThread)
         {
             try
             {
-                var matchMonitorRule2 = matchMonitorServices.GetMatchMonitorRule2(isLive, batchSize);
+                var matchMonitorRule2 = matchMonitorServices.GetMatchMonitorRule2(isLive);
 
                 if (matchMonitorRule2 != null && matchMonitorRule2.MaxTransId != 0)
                 {

@@ -15,7 +15,7 @@
 
         MatchMonitorRuleModel GetMatchMonitorRule(bool isLive, int rowSize);
 
-        MatchMonitorRule2Model GetMatchMonitorRule2(bool isLive, int rowSize);
+        MatchMonitorRule2Model GetMatchMonitorRule2(bool isLive);
 
         IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, UInt64 maxTransId, MatchStagingRuleModel matchinfo);
 
@@ -82,13 +82,12 @@
             };
         }
 
-        public MatchMonitorRule2Model GetMatchMonitorRule2(bool isLive, int rowSize)
+        public MatchMonitorRule2Model GetMatchMonitorRule2(bool isLive)
         {
             var criteria = new MatchMonitorRule2GetCriteria
             {
                 IsLive = isLive,
-                MaxTransId = 0,
-                RowSize = rowSize
+                MaxTransId = 0
             };
 
             var result = repository.Fetch<MatchStagingRule2Model>(criteria);
