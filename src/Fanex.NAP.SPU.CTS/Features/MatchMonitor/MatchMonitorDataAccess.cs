@@ -9,7 +9,7 @@
 
     public interface IMatchMonitorDataAccess
     {
-        IEnumerable<TicketDetailEntity> GetMatchTrans(Int64 LastScannedTransID, int batchSize, bool isLive);
+        IEnumerable<TicketDetailEntity> GetMatchTrans(long lastScannedSequenceID, int batchSize, bool isLive);
 
         void InsertMatchMonitorStaging(string matchTransJson, bool isLive);
 
@@ -39,12 +39,12 @@
             repository = new DynamicRepository();
         }
 
-        public IEnumerable<TicketDetailEntity> GetMatchTrans(Int64 LastScannedTransID, int batchSize, bool isLive)
+        public IEnumerable<TicketDetailEntity> GetMatchTrans(long lastScannedSequenceID, int batchSize, bool isLive)
         {
             var criteria = new MatchTransGetCriteria
             {
                 QueryType = (int)Consts.MatchMonitorQueryTypes.Service,
-                LastScannedTransID = LastScannedTransID,
+                LastScannedSequenceID = lastScannedSequenceID,
                 BatchSize = batchSize,
                 EventDate = DateTime.Now,
                 IsLive = isLive

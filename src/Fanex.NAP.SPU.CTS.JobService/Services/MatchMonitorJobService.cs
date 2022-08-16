@@ -42,9 +42,9 @@
         {
             try
             {
-                var lastScannedTransId = GetLastScannedTransId(isLive);
+                var lastScannedSequenceID = GetLastScannedSequenceID(isLive);
 
-                var matchTrans = GetMatchTrans(lastScannedTransId, batchSize, isLive);
+                var matchTrans = GetMatchTrans(lastScannedSequenceID, batchSize, isLive);
 
                 if (matchTrans != null && matchTrans.Any())
                 {
@@ -154,20 +154,18 @@
 
         #region Private Methods
 
-        private Int64 GetLastScannedTransId(bool isLive)
+        private Int64 GetLastScannedSequenceID(bool isLive)
         {
-            var matchMonitorLastScannedTransIdLive = isLive ? SystemParameters.MatchMonitorLastScannedTrans : SystemParameters.MatchMonitorLastScannedTransNoneLive;
+            var matchMonitorLastScannedSequenceIDLive = isLive ? SystemParameters.MatchMonitorLastScannedTrans : SystemParameters.MatchMonitorLastScannedTransNoneLive;
 
-            var lastScannedTransId = systemParameterServices.GetLastScannedId(matchMonitorLastScannedTransIdLive);
-
-            return lastScannedTransId;
+            return systemParameterServices.GetLastScannedId(matchMonitorLastScannedSequenceIDLive);
         }
 
-        private IEnumerable<TicketDetailEntity> GetMatchTrans(Int64 lastScannedTransId, int batchSize, bool isLive)
+        private IEnumerable<TicketDetailEntity> GetMatchTrans(long lastScannedSequenceID, int batchSize, bool isLive)
         {
             if (batchSize > 0)
             {
-                return matchMonitorServices.GetMatchTrans(lastScannedTransId, batchSize, isLive);
+                return matchMonitorServices.GetMatchTrans(lastScannedSequenceID, batchSize, isLive);
             }
 
             return Enumerable.Empty<TicketDetailEntity>(); ;
