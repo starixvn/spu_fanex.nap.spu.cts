@@ -25,7 +25,7 @@
 
         void UpdateMatchMonitorRule2Complete(MatchMonitorRule2CompleteParaModel para);
 
-        void CleanMatchStaging(bool isLive, UInt64 maxTransId);
+        void CleanMatchStaging(bool isLive, UInt64 maxSequenceID);
 
         void CleanTransRule2(bool isLive, UInt64 maxTransId);
     }
@@ -140,7 +140,7 @@
                 MatchId = para.MatchInfo.MatchId,
                 TotalScore = para.MatchInfo.TotalScore,
                 TransGroupJson = para.TransGroupJson,
-                MaxTransId = para.MaxTransId
+                MaxSequenceID = para.MaxSequenceID
             };
 
             repository.Execute(criteria);
@@ -163,12 +163,12 @@
             repository.Execute(criteria);
         }
 
-        public void CleanMatchStaging(bool isLive, UInt64 maxTransId)
+        public void CleanMatchStaging(bool isLive, UInt64 maxSequenceID)
         {
             var criteria = new MatchMonitorRuleTransCleanCriteria
             {
                 IsLive = isLive,
-                MaxTransId = maxTransId
+                MaxSequenceID = maxSequenceID
             };
 
             repository.Execute(criteria);

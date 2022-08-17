@@ -22,7 +22,7 @@
 
         void UpdateMatchMonitorRule2Complete(MatchMonitorRule2CompleteParaModel para);
 
-        void CleanMatchStaging(bool isLive, UInt64 maxTransId);
+        void CleanMatchStaging(bool isLive, UInt64 maxSequenceID);
 
         void CleanTransRule2(bool isLive, UInt64 maxTransId);
     }
@@ -76,9 +76,9 @@
             matchDataAccess.UpdateMatchMonitorRule2Complete(para);
         }
 
-        public void CleanMatchStaging(bool isLive, UInt64 maxTransId)
+        public void CleanMatchStaging(bool isLive, UInt64 maxSequenceID)
         {
-            matchDataAccess.CleanMatchStaging(isLive, maxTransId);
+            matchDataAccess.CleanMatchStaging(isLive, maxSequenceID);
         }
 
         public void CleanTransRule2(bool isLive, UInt64 maxTransId)
