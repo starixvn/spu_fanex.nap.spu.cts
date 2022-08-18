@@ -17,7 +17,7 @@
 
         MatchMonitorRule2Model GetMatchMonitorRule2(bool isLive);
 
-        IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, UInt64 maxTransId, MatchStagingRuleModel matchinfo);
+        IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, UInt64 maxSequenceID, MatchStagingRuleModel matchinfo);
 
         IEnumerable<MatchRule2CompletedModel> InsertMatchMonitorRule2(bool isLive, UInt64 maxTransId, MatchStagingRule2Model matchinfo);
 
@@ -107,7 +107,7 @@
                 BettypeId = matchinfo.BetTypeID,
                 MatchId = matchinfo.MatchId,
                 TotalScore = matchinfo.TotalScore,
-                MaxTransId = maxTransId,
+                MaxSequenceID = maxSequenceID,
                 BetId = matchinfo.BetID
             };
 

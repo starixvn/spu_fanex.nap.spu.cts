@@ -56,9 +56,9 @@
             return matchDataAccess.GetMatchMonitorRule2(isLive);
         }
 
-        public IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, UInt64 maxTransId, MatchStagingRuleModel matchinfo)
+        public IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, UInt64 maxSequenceID, MatchStagingRuleModel matchinfo)
         {
-            return matchDataAccess.InsertMatchMonitorRule(isLive, maxTransId, matchinfo);
+            return matchDataAccess.InsertMatchMonitorRule(isLive, maxSequenceID, matchinfo);
         }
 
         public IEnumerable<MatchRule2CompletedModel> InsertMatchMonitorRule2(bool isLive, UInt64 maxTransId, MatchStagingRule2Model matchinfo)
