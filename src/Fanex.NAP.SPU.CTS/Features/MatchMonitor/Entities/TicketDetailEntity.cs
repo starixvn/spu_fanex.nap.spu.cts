@@ -47,7 +47,7 @@
         [JsonProperty("Stake")]
         public Decimal Stake { get; set; }
 
-        [JsonIgnore]
+        [JsonProperty("Odds")]
         public Decimal Odds { get; set; }
 
         [JsonIgnore]
@@ -73,5 +73,8 @@
 
         [JsonProperty("SportType")]
         public int SportType { get; set; }
+
+        [JsonProperty("IsMajorLeague")]
+        public bool IsMajorLeague { get; set; }
     }
 }

@@ -9,7 +9,7 @@
         public string MatchTransJson { get; set; }
 
         [SpParam(SqlParamName = "ip_LiveIndicator")]
-        public bool IsLive { get; set; }                
+        public bool IsLive { get; set; }
 
         public override string GetSettingKey()
                 => "CTS_DC_MatchMonitor_Staging_Insert";

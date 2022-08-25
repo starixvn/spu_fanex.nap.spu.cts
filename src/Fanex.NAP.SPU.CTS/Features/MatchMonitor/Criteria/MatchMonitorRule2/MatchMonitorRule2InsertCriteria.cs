@@ -4,17 +4,13 @@
     using Fanex.Data.Repository;
     using System;
 
-    public class MatchMonitorRuleInsertCriteria : NonQueryCommand
+    public class MatchMonitorRule2InsertCriteria : NonQueryCommand
     {
-        private readonly bool isFromMasterDB;
-
-        public MatchMonitorRuleInsertCriteria(bool isFromMasterDB)
-        {
-            this.isFromMasterDB = isFromMasterDB;
-        }
-
         [SpParam(SqlParamName = "ip_LiveIndicator")]
         public bool IsLive { get; set; }
+
+        [SpParam(SqlParamName = "ip_MaxTransID")]
+        public UInt64 MaxTransId { get; set; }
 
         [SpParam(SqlParamName = "ip_MatchID")]
         public int MatchId { get; set; }
@@ -28,11 +24,11 @@
         [SpParam(SqlParamName = "ip_BetID")]
         public Int64 BetId { get; set; }
 
-        [SpParam(SqlParamName = "ip_MaxTransID")]
-        public UInt64 MaxTransId { get; set; }
+        [SpParam(SqlParamName = "ip_Betteam")]
+        public string BetTeam { get; set; }
 
         public override string GetSettingKey()
-                => isFromMasterDB ? "CTS_DC_MatchMonitor_Rule_Process" : "CTS_DC_MatchMonitor_Rule_Process_SLAVE";
+                => "CTS_DC_MatchMonitor_Rule02_Process";
 
         public override bool IsValid()
             => true;
