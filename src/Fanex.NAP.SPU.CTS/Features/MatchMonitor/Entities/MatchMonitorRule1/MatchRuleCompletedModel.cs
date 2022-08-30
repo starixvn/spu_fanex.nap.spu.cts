@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
-
-namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities
+﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities
 {
+    using Newtonsoft.Json;
+
     public class MatchRuleCompletedModel
     {
         [JsonProperty("GroupID")]
@@ -12,6 +12,9 @@ namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities
 
         [JsonProperty("TransIDList")]
         public string TransIDList { get; set; }
+
+        [JsonProperty("IsExistingHighStake")]
+        public bool IsExistingHighStake { get; set; }
 
         [JsonProperty("CustIDList")]
         public string CustIdList { get; set; }
