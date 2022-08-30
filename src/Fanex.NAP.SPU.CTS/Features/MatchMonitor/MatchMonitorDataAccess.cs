@@ -69,7 +69,6 @@
             var criteria = new MatchMonitorRuleGetCriteria
             {
                 IsLive = isLive,
-                MaxTransId = 0,
                 RowSize = rowSize
             };
 
@@ -77,8 +76,8 @@
 
             return new MatchMonitorRuleModel
             {
-                MaxTransId = criteria.MaxTransId,
-                MatchStagingList = criteria.MaxTransId != 0 ? result : new List<MatchStagingRuleModel>()
+                MaxSequenceID = criteria.MaxSequenceID,
+                MatchStagingList = criteria.MaxSequenceID != 0 ? result : new List<MatchStagingRuleModel>()
             };
         }
 
@@ -99,7 +98,7 @@
             };
         }
 
-        public IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, UInt64 maxTransId, MatchStagingRuleModel matchinfo)
+        public IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, UInt64 maxSequenceID, MatchStagingRuleModel matchinfo)
         {
             var criteria = new MatchMonitorRuleInsertCriteria()
             {
