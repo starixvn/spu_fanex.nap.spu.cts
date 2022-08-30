@@ -10,15 +10,16 @@
 		<Setting Key="CTS_GetPlacedBetCustomers" SpName="CTS_GetPlacedBetCustomers" DbName="SQL.bodb02.bodbAdminNet"></Setting>
 	</Function>
 	<Function Name="MatchMonitor">
-		<Setting Key="CTS_DC_SystemParameter_Get" SpName="CTS_DC_SystemParameter_Get" DbName="MySQL.CTS_DataCenter.ctsService" />
+		<Setting Key="CTS_DC_SystemParameter_Get" SpName="CTS_DC_SystemParameter_Get" DbName="MySQL.CTS_DataCenter.ctsService" />		
 		<Setting Key="CTS_Rpt_MatchMonitor_TicketDetails" SpName="CTS_Rpt_MatchMonitor_TicketDetails_xpre" DbName="SQL.bodb02.bodbSPUNet"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_Staging_Insert" SpName="CTS_DC_MatchMonitor_Staging_Insert_xpre" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 
+		
 		<Setting Key="CTS_DC_MatchMonitor_Rule_Get" SpName="CTS_DC_MatchMonitor_Rule_Get_xpre" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_Rule_Process" SpName="CTS_DC_MatchMonitor_Rule_Process_xpre" DbName="MySQL.SLAVE.CTS_DataCenter.ctsService"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_Rule_Complete" SpName="CTS_DC_MatchMonitor_Rule_Complete_xpre" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_Staging_Clean" SpName="CTS_DC_MatchMonitor_Staging_Clean_xpre" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
-		
+				
 		<Setting Key="CTS_DC_MatchMonitor_Rule02_Get" SpName="CTS_DC_MatchMonitor_Rule02_Get_xpre" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_Rule02_Process" SpName="CTS_DC_MatchMonitor_Rule02_Process_xpre" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_Rule02_Complete" SpName="CTS_DC_MatchMonitor_Rule02_Complete_xpre" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
