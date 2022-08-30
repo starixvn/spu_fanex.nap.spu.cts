@@ -115,7 +115,7 @@
             {
                 var matchMonitorRule2 = matchMonitorServices.GetMatchMonitorRule2(isLive);
 
-                if (matchMonitorRule2 != null && matchMonitorRule2.MaxTransId != 0)
+                if (matchMonitorRule2 != null && matchMonitorRule2.MaxSequenceID != 0)
                 {
                     matchMonitorRule2
                         .MatchStagingList
@@ -123,7 +123,7 @@
                         .WithDegreeOfParallelism(numberOfThread)
                         .ForAll(matchInfo =>
                         {
-                            var matchRuleCompleted = matchMonitorServices.InsertMatchMonitorRule2(isLive, matchMonitorRule2.MaxTransId, matchInfo);
+                            var matchRuleCompleted = matchMonitorServices.InsertMatchMonitorRule2(isLive, matchMonitorRule2.MaxSequenceID, matchInfo);
 
                             if (matchRuleCompleted != null && matchRuleCompleted.Any())
                             {
@@ -132,7 +132,7 @@
                                     IsLive = isLive,
                                     MatchInfo = matchInfo,
                                     TransGroupJson = JsonConvert.SerializeObject(matchRuleCompleted),
-                                    MaxTransId = matchMonitorRule2.MaxTransId
+                                    MaxSequenceID = matchMonitorRule2.MaxSequenceID
                                 });
                             }
 
@@ -140,7 +140,7 @@
                         });
                 }
 
-                matchMonitorServices.CleanTransRule2(isLive, matchMonitorRule2.MaxTransId);
+                matchMonitorServices.CleanTransRule2(isLive, matchMonitorRule2.MaxSequenceID);
 
                 return Task.FromResult(true);
             }

@@ -10,6 +10,6 @@ namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities
 
         public string TransGroupJson { get; set; }
 
-        public UInt64 MaxTransId { get; set; }
+        public UInt64 MaxSequenceID { get; set; }
     }
 }

@@ -9,8 +9,8 @@
         [SpParam(SqlParamName = "ip_LiveIndicator")]
         public bool IsLive { get; set; }
 
-        [SpParam(SqlParamName = "ip_MaxTransID")]
-        public UInt64 MaxTransId { get; set; }
+        [SpParam(SqlParamName = "ip_SequenceID")]
+        public UInt64 MaxSequenceID { get; set; }
 
         public override string GetSettingKey()
         {
