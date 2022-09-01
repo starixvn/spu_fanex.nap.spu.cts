@@ -5,8 +5,8 @@
 
     public class TicketDetailEntity
     {
-        [JsonProperty("SequenceId")]
-        public long SequenceId { get; set; }
+        [JsonProperty("SequenceID")]
+        public long SequenceID { get; set; }
 
         [JsonProperty("TransID")]
         public Int64 TransId { get; set; }
