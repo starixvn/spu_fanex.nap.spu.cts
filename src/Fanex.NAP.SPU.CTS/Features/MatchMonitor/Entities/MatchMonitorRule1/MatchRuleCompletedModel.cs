@@ -13,8 +13,8 @@
         [JsonProperty("TransIDList")]
         public string TransIDList { get; set; }
 
-        [JsonProperty("IsExistingHighStake")]
-        public bool IsExistingHighStake { get; set; }
+        [JsonProperty("HighStakeLicCustList")]
+        public bool HighStakeLicCustList { get; set; }
 
         [JsonProperty("CustIDList")]
         public string CustIdList { get; set; }
