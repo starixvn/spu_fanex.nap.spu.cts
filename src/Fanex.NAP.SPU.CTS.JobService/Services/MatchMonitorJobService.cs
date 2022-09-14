@@ -42,9 +42,9 @@
         {
             try
             {
-                var lastScannedTransId = GetLastScannedTransId(isLive);
+                var lastScannedSequenceID = GetLastScannedSequenceID(isLive);
 
-                var matchTrans = GetMatchTrans(lastScannedTransId, batchSize, isLive);
+                var matchTrans = GetMatchTrans(lastScannedSequenceID, batchSize, isLive);
 
                 if (matchTrans != null && matchTrans.Any())
                 {
@@ -69,7 +69,7 @@
             {
                 var matchMonitorRule = matchMonitorServices.GetMatchMonitorRule(isLive, batchSize);
 
-                if (matchMonitorRule != null && matchMonitorRule.MaxTransId != 0)
+                if (matchMonitorRule != null && matchMonitorRule.MaxSequenceID != 0)
                 {
                     matchMonitorRule
                         .MatchStagingList
@@ -77,7 +77,7 @@
                         .WithDegreeOfParallelism(numberOfThread)
                         .ForAll(matchInfo =>
                         {
-                            var matchRuleCompleted = matchMonitorServices.InsertMatchMonitorRule(isLive, matchMonitorRule.MaxTransId, matchInfo);
+                            var matchRuleCompleted = matchMonitorServices.InsertMatchMonitorRule(isLive, matchMonitorRule.MaxSequenceID, matchInfo);
 
                             if (matchRuleCompleted != null && matchRuleCompleted.Any())
                             {
@@ -86,7 +86,7 @@
                                     IsLive = isLive,
                                     MatchInfo = matchInfo,
                                     TransGroupJson = JsonConvert.SerializeObject(matchRuleCompleted),
-                                    MaxTransId = matchMonitorRule.MaxTransId
+                                    MaxSequenceID = matchMonitorRule.MaxSequenceID
                                 });
                             }
 
@@ -94,7 +94,7 @@
                         });
                 }
 
-                matchMonitorServices.CleanMatchStaging(isLive, matchMonitorRule.MaxTransId);
+                matchMonitorServices.CleanMatchStaging(isLive, matchMonitorRule.MaxSequenceID);
 
                 return Task.FromResult(true);
             }
@@ -115,7 +115,7 @@
             {
                 var matchMonitorRule2 = matchMonitorServices.GetMatchMonitorRule2(isLive);
 
-                if (matchMonitorRule2 != null && matchMonitorRule2.MaxTransId != 0)
+                if (matchMonitorRule2 != null && matchMonitorRule2.MaxSequenceID != 0)
                 {
                     matchMonitorRule2
                         .MatchStagingList
@@ -123,7 +123,7 @@
                         .WithDegreeOfParallelism(numberOfThread)
                         .ForAll(matchInfo =>
                         {
-                            var matchRuleCompleted = matchMonitorServices.InsertMatchMonitorRule2(isLive, matchMonitorRule2.MaxTransId, matchInfo);
+                            var matchRuleCompleted = matchMonitorServices.InsertMatchMonitorRule2(isLive, matchMonitorRule2.MaxSequenceID, matchInfo);
 
                             if (matchRuleCompleted != null && matchRuleCompleted.Any())
                             {
@@ -132,7 +132,7 @@
                                     IsLive = isLive,
                                     MatchInfo = matchInfo,
                                     TransGroupJson = JsonConvert.SerializeObject(matchRuleCompleted),
-                                    MaxTransId = matchMonitorRule2.MaxTransId
+                                    MaxSequenceID = matchMonitorRule2.MaxSequenceID
                                 });
                             }
 
@@ -140,7 +140,7 @@
                         });
                 }
 
-                matchMonitorServices.CleanTransRule2(isLive, matchMonitorRule2.MaxTransId);
+                matchMonitorServices.CleanTransRule2(isLive, matchMonitorRule2.MaxSequenceID);
 
                 return Task.FromResult(true);
             }
@@ -154,20 +154,18 @@
 
         #region Private Methods
 
-        private Int64 GetLastScannedTransId(bool isLive)
+        private Int64 GetLastScannedSequenceID(bool isLive)
         {
-            var matchMonitorLastScannedTransIdLive = isLive ? SystemParameters.MatchMonitorLastScannedTrans : SystemParameters.MatchMonitorLastScannedTransNoneLive;
+            var matchMonitorLastScannedSequenceIDLive = isLive ? SystemParameters.MatchMonitorLastScannedTrans : SystemParameters.MatchMonitorLastScannedTransNoneLive;
 
-            var lastScannedTransId = systemParameterServices.GetLastScannedId(matchMonitorLastScannedTransIdLive);
-
-            return lastScannedTransId;
+            return systemParameterServices.GetLastScannedId(matchMonitorLastScannedSequenceIDLive);
         }
 
-        private IEnumerable<TicketDetailEntity> GetMatchTrans(Int64 lastScannedTransId, int batchSize, bool isLive)
+        private IEnumerable<TicketDetailEntity> GetMatchTrans(long lastScannedSequenceID, int batchSize, bool isLive)
         {
             if (batchSize > 0)
             {
-                return matchMonitorServices.GetMatchTrans(lastScannedTransId, batchSize, isLive);
+                return matchMonitorServices.GetMatchTrans(lastScannedSequenceID, batchSize, isLive);
             }
 
             return Enumerable.Empty<TicketDetailEntity>(); ;

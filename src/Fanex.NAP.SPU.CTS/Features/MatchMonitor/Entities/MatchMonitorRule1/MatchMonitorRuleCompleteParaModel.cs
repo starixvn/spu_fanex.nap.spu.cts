@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities
+﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities
 {
+    using System;
+
     public class MatchMonitorRuleCompleteParaModel
     {
         public bool IsLive { get; set; }
@@ -10,6 +10,7 @@ namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities
 
         public string TransGroupJson { get; set; }
 
-        public UInt64 MaxTransId { get; set; }
+        public UInt64 MaxSequenceID { get; set; }
+        
     }
 }

@@ -41,7 +41,7 @@
         [InlineData(10, 100, true)]
         [InlineData(1, 10, false)]
         [InlineData(10, 100, false)]
-        public void GetMatchTrans_WhenSuccess_ReturnMat(Int64 LastScannedTransID, int batchSize, bool isLive)
+        public void GetMatchTrans_WhenSuccess_ReturnMat(long lastScannedSequenceID, int batchSize, bool isLive)
         {
             var output = new List<TicketDetailEntity>
             {
@@ -93,9 +93,9 @@
                 }
             };
 
-            matchMonitorDataAccess.GetMatchTrans(LastScannedTransID, batchSize, isLive).Returns(output);
+            matchMonitorDataAccess.GetMatchTrans(lastScannedSequenceID, batchSize, isLive).Returns(output);
 
-            var result = matchMonitorServices.GetMatchTrans(LastScannedTransID, batchSize, isLive);
+            var result = matchMonitorServices.GetMatchTrans(lastScannedSequenceID, batchSize, isLive);
 
             result.Should().NotBeNull();
             result.Should().BeEquivalentTo(output);

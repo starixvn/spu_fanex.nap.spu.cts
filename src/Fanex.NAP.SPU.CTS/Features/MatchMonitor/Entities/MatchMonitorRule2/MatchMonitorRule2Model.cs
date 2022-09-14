@@ -6,7 +6,7 @@ namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities
 
     public class MatchMonitorRule2Model
     {
-        public UInt64 MaxTransId { get; set; }
+        public UInt64 MaxSequenceID { get; set; }
 
         public IEnumerable<MatchStagingRule2Model> MatchStagingList { get; set; }
     }
