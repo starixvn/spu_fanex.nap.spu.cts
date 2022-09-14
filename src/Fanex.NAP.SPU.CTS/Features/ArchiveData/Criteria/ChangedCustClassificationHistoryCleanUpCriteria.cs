@@ -10,7 +10,7 @@
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_CustClassification_History_DataChanged_CleanUp";
+            return "CTS_DC_CustClassification_History_Archive";
         }
 
         public override bool IsValid()
