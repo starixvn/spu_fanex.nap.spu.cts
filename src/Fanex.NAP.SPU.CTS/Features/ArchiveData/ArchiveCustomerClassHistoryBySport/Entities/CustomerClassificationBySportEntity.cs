@@ -24,8 +24,6 @@
 
         public int TargetCC { get; set; }
 
-        public int FromCategoryID { get; set; }
-
         public int ActionType { get; set; }
 
         public DateTime LastModifiedDate { get; set; }
