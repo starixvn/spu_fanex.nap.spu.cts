@@ -13,19 +13,17 @@
         private readonly ISentryClient sentryClient;
         private readonly ICustomerStatusJobService customerStatusJobService;
         private readonly IAffectedEvidenceFromQueueJobService affectedEvidenceFromQueueJobService;
-        private readonly IArchiveCustClassificationHistoryJobService archiveCustClassHistoryJobService;
         private readonly IAssociatedGroupMonitorJobService associatedGroupMonitorJobService;
 
         public JobController(ISentryClient sentryClient,
             ICustomerStatusJobService customerStatusJobService,
             IAffectedEvidenceFromQueueJobService affectedEvidenceFromQueueJobService,
-            IArchiveCustClassificationHistoryJobService archiveCustClassHistoryJobService,
             IAssociatedGroupMonitorJobService associatedGroupMonitorJobService)
         {
             this.sentryClient = sentryClient;
             this.customerStatusJobService = customerStatusJobService;
             this.affectedEvidenceFromQueueJobService = affectedEvidenceFromQueueJobService;
-            this.archiveCustClassHistoryJobService = archiveCustClassHistoryJobService;
+
             this.associatedGroupMonitorJobService = associatedGroupMonitorJobService;
         }
 
@@ -45,18 +43,6 @@
         public async Task<bool> RemoveAffectedEvidenceFromQueue()
         {
             return await this.affectedEvidenceFromQueueJobService.RemoveAffectedEvidences();
-        }
-
-        [HttpPost("CleanUpUnChangedCCHistory")]
-        public async Task<bool> CleanUpUnchangedCustClassificationHistory()
-        {
-            return await this.archiveCustClassHistoryJobService.CleanUpUnChangedCustClassHistory();
-        }
-
-        [HttpPost("ArchiveChangedCCHistory")]
-        public async Task<bool> ArchiveChangedCustClassificationHistory()
-        {
-            return await this.archiveCustClassHistoryJobService.ArchiveChangedCustClassHistory();
         }
 
         [HttpPost("ScanAssociatedAccount")]

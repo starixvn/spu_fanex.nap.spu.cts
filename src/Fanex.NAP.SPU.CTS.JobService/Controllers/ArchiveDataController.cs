@@ -12,18 +12,21 @@
     {
         private readonly IArchiveCustomerJobService archiveCustomerJobService;
         private readonly IArchiveAssociationCustomerJobService archiveAssociationCustomerJobService;
-        private readonly IArchiveHistoryCCBySportJobService archiveHistoryCCBySportJobService;
         private readonly IRollbackAssociationCustomerJobService rollbackAssociationCustomerJobService;
+        private readonly IArchiveCustClassificationHistoryJobService archiveCustClassHistoryJobService;
+        private readonly IArchiveHistoryCCBySportJobService archiveHistoryCCBySportJobService;
 
         public ArchiveDataController(IArchiveCustomerJobService archiveCustomerJobService
             , IArchiveAssociationCustomerJobService archiveAssociationCustomerJobService
-            , IArchiveHistoryCCBySportJobService archiveHistoryCCBySportJobService
-            , IRollbackAssociationCustomerJobService rollbackAssociationCustomerJobService)
+            , IRollbackAssociationCustomerJobService rollbackAssociationCustomerJobService
+            , IArchiveCustClassificationHistoryJobService archiveCustClassHistoryJobService
+            , IArchiveHistoryCCBySportJobService archiveHistoryCCBySportJobService)
         {
             this.archiveCustomerJobService = archiveCustomerJobService;
             this.archiveAssociationCustomerJobService = archiveAssociationCustomerJobService;
-            this.archiveHistoryCCBySportJobService = archiveHistoryCCBySportJobService;
             this.rollbackAssociationCustomerJobService = rollbackAssociationCustomerJobService;
+            this.archiveCustClassHistoryJobService = archiveCustClassHistoryJobService;
+            this.archiveHistoryCCBySportJobService = archiveHistoryCCBySportJobService;
         }
 
         [HttpPost("ArchiveCustomer")]
@@ -44,7 +47,19 @@
             return await this.rollbackAssociationCustomerJobService.Execute();
         }
 
-        [HttpPost("ArchiveHistoryCCBySport")]
+        [HttpPost("CleanUpUnChangedCCHistory")]
+        public async Task<bool> CleanUpUnchangedCustClassificationHistory()
+        {
+            return await this.archiveCustClassHistoryJobService.CleanUpUnChangedCustClassHistory();
+        }
+
+        [HttpPost("ArchiveChangedCCHistory")]
+        public async Task<bool> ArchiveChangedCustClassificationHistory()
+        {
+            return await this.archiveCustClassHistoryJobService.ArchiveChangedCustClassHistory();
+        }
+
+        [HttpPost("ArchiveCCHistorBySport")]
         public async Task<bool> ArchiveHistoryCCBySportJobService()
         {
             return await this.archiveHistoryCCBySportJobService.ArchiveHistoryCCBySport();
