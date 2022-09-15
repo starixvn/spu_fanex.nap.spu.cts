@@ -60,6 +60,7 @@
 
             RegisterAssociatedGroupMonitor(services);
 
+            RegisterArchiveHistoryCCBySport(services);
         }
 
         private static void RegisterArchiveDataService(this IServiceCollection services)
@@ -175,6 +176,13 @@
             services.AddSingleton<IAssociatedGroupMonitorDataAccess, AssociatedGroupMonitorDataAccess>();
             services.AddSingleton<IAssociatedGroupMonitorService, AssociatedGroupMonitorService>();
             services.AddSingleton<IAssociatedGroupMonitorJobService, AssociatedGroupMonitorJobService>();
+        }
+
+        private static void RegisterArchiveHistoryCCBySport(this IServiceCollection services)
+        {
+            services.AddSingleton<IArchiveHistoryCCBySportDataAccess, ArchiveHistoryCCBySportDataAccess>();
+            services.AddSingleton<IArchiveHistoryCCBySportServices, ArchiveHistoryCCBySportServices>();
+            services.AddSingleton<IArchiveHistoryCCBySportJobService, ArchiveHistoryCCBySportJobService>();
         }
     }
 }

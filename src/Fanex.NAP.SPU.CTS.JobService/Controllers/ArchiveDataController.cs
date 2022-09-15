@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.SPU.CTS.JobService.Controllers
 {
+    using Fanex.NAP.SPU.CTS.JobService.Services;
     using Fanex.NAP.SPU.CTS.JobService.Services.ArchiveAssociationCustomer;
     using Fanex.NAP.SPU.CTS.JobService.Services.ArchiveData;
     using Microsoft.AspNetCore.Mvc;
@@ -11,14 +12,17 @@
     {
         private readonly IArchiveCustomerJobService archiveCustomerJobService;
         private readonly IArchiveAssociationCustomerJobService archiveAssociationCustomerJobService;
+        private readonly IArchiveHistoryCCBySportJobService archiveHistoryCCBySportJobService;
         private readonly IRollbackAssociationCustomerJobService rollbackAssociationCustomerJobService;
 
         public ArchiveDataController(IArchiveCustomerJobService archiveCustomerJobService
             , IArchiveAssociationCustomerJobService archiveAssociationCustomerJobService
+            , IArchiveHistoryCCBySportJobService archiveHistoryCCBySportJobService
             , IRollbackAssociationCustomerJobService rollbackAssociationCustomerJobService)
         {
             this.archiveCustomerJobService = archiveCustomerJobService;
             this.archiveAssociationCustomerJobService = archiveAssociationCustomerJobService;
+            this.archiveHistoryCCBySportJobService = archiveHistoryCCBySportJobService;
             this.rollbackAssociationCustomerJobService = rollbackAssociationCustomerJobService;
         }
 
@@ -39,6 +43,11 @@
         {
             return await this.rollbackAssociationCustomerJobService.Execute();
         }
-      
+
+        [HttpPost("ArchiveHistoryCCBySport")]
+        public async Task<bool> ArchiveHistoryCCBySportJobService()
+        {
+            return await this.archiveHistoryCCBySportJobService.ArchiveHistoryCCBySport();
+        }
     }
 }
