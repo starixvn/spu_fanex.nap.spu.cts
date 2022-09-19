@@ -53,7 +53,7 @@
             return await this.archiveHistoryClassificationJobService.ArchiveHistoryClassification();
         }
 
-        [HttpPost("ArchiveHistorClassificationBySport")]
+        [HttpPost("ArchiveHistoryClassificationBySport")]
         public async Task<bool> ArchiveHistoryClassificationBySportJobService()
         {
             return await this.archiveHistoryClassificationBySportJobService.ArchiveHistoryClassificationBySport();
