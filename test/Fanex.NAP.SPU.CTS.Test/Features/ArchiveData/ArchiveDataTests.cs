@@ -1,8 +1,6 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Tests.Features.ArchiveData
 {
-    using Fanex.NAP.SPU.CTS.Features.ArchiveData;
-    using Fanex.NAP.SPU.CTS.Features.ArchiveData.Entities;
-    using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
+    using Fanex.NAP.SPU.CTS.Features.ArchiveData.ClassificationHistory;
     using FluentAssertions;
     using Newtonsoft.Json;
     using NSubstitute;
@@ -25,7 +23,7 @@
         [Fact]
         public void ArchiveChangedCustClassificationHistory_WhenSuccess_ReturnNonException()
         {
-            var historyData = new ClassificationHistoryArchiveEntity
+            var historyData = new HistoryClassificationArchiveEntity
             {
                 CustClassificationHistory = new List<HistoryClassificationEntity>
                 {
@@ -47,7 +45,7 @@
 
             var historyDataJson = JsonConvert.SerializeObject(historyData.CustClassificationHistory);
 
-            dataAccess.ArchiveCustClassificationHistory().Returns(historyData);
+            dataAccess.ArchiveHistoryClassification().Returns(historyData);
 
             dataAccess.InsertHistoryClassificationToArchiveDB(historyDataJson);
 
