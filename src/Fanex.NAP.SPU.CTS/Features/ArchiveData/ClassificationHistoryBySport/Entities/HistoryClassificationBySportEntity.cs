@@ -1,8 +1,8 @@
-﻿namespace Fanex.NAP.SPU.CTS.Features.ArchiveData.Entities
+﻿namespace Fanex.NAP.SPU.CTS.Features.ArchiveData.ClassificationHistoryBySport
 {
     using System;
 
-    public class CustomerClassificationBySportEntity
+    public class HistoryClassificationBySportEntity
     {
         public long ID { get; set; }
 

@@ -1,9 +1,9 @@
-﻿namespace Fanex.NAP.SPU.CTS.Features.ArchiveData.Criteria
+﻿namespace Fanex.NAP.SPU.CTS.Features.ArchiveData.ClassificationHistory
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
 
-    public class CustClassificationHistoryArchiveCriteria : NonQueryCommand
+    public class HistoryClassificationInsertCriteria : NonQueryCommand
     {
         [SpParam(SqlParamName = "ip_HistoryJson")]
         public string HistoryDataJson { get; set; }

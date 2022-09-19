@@ -12,30 +12,30 @@
 
     public class ArchiveDataTests
     {
-        private readonly IArchiveCustClassificationHistoryDataAccess dataAccess;
-        private readonly IArchiveCustClassificationHistoryServices services;
+        private readonly IArchiveHistoryClassificationDataAccess dataAccess;
+        private readonly IArchiveHistoryClassificationServices services;
 
         public ArchiveDataTests()
         {
-            dataAccess = Substitute.For<IArchiveCustClassificationHistoryDataAccess>();
+            dataAccess = Substitute.For<IArchiveHistoryClassificationDataAccess>();
 
-            services = new ArchiveCustClassificationHistoryServices(dataAccess);
+            services = new ArchiveHistoryClassificationServices(dataAccess);
         }
 
         [Fact]
         public void ArchiveChangedCustClassificationHistory_WhenSuccess_ReturnNonException()
         {
-            var historyData = new HistoryClassificationArchiveEntity
+            var historyData = new ClassificationHistoryArchiveEntity
             {
-                CustClassificationHistory = new List<CustClassificationHistoryEntity>
+                CustClassificationHistory = new List<HistoryClassificationEntity>
                 {
-                  new CustClassificationHistoryEntity
+                  new HistoryClassificationEntity
                   {
                       ID = 1,
                       CustID = 1,
                       CTSCustID = 1
                   },
-                  new CustClassificationHistoryEntity
+                  new HistoryClassificationEntity
                   {
                       ID = 2,
                       CustID = 2,
@@ -49,9 +49,9 @@
 
             dataAccess.ArchiveCustClassificationHistory().Returns(historyData);
 
-            dataAccess.InsertCustClassificationHistoryToArchiveDB(historyDataJson);
+            dataAccess.InsertHistoryClassificationToArchiveDB(historyDataJson);
 
-            Action action = () => services.ArchiveCustClassificationHistory();
+            Action action = () => services.ArchiveHistoryClassification();
 
             action.Should().NotThrow<Exception>();
         }

@@ -1,9 +1,9 @@
-﻿namespace Fanex.NAP.SPU.CTS.Features.ArchiveData.Criteria
+﻿namespace Fanex.NAP.SPU.CTS.Features.ArchiveData.ClassificationHistory
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
 
-    public class ChangedCustClassificationHistoryCleanUpCriteria : CriteriaBase
+    public class HistoryClassificationArchiveCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "op_IsDataExist")]
         public int IsDataExist { get; set; }

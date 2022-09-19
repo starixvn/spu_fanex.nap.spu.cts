@@ -1,9 +1,9 @@
-﻿namespace Fanex.NAP.SPU.CTS.Features.ArchiveData.Criteria
+﻿namespace Fanex.NAP.SPU.CTS.Features.ArchiveData.ClassificationHistoryBySport
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
 
-    public class HistoryCCBySportArchiveCriteria : NonQueryCommand
+    public class HistoryClassificationBySportArchiveCriteria : NonQueryCommand
     {
         [SpParam(SqlParamName = "op_IsDataExist")]
         public int IsDataExist { get; set; }

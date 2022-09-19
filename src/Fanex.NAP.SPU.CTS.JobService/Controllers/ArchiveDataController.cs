@@ -13,20 +13,20 @@
         private readonly IArchiveCustomerJobService archiveCustomerJobService;
         private readonly IArchiveAssociationCustomerJobService archiveAssociationCustomerJobService;
         private readonly IRollbackAssociationCustomerJobService rollbackAssociationCustomerJobService;
-        private readonly IArchiveCustClassificationHistoryJobService archiveCustClassHistoryJobService;
-        private readonly IArchiveHistoryCCBySportJobService archiveHistoryCCBySportJobService;
+        private readonly IArchiveHistoryClassificationJobService archiveHistoryClassificationJobService;
+        private readonly IArchiveHistoryClassificationBySportJobService archiveHistoryClassificationBySportJobService;
 
         public ArchiveDataController(IArchiveCustomerJobService archiveCustomerJobService
             , IArchiveAssociationCustomerJobService archiveAssociationCustomerJobService
             , IRollbackAssociationCustomerJobService rollbackAssociationCustomerJobService
-            , IArchiveCustClassificationHistoryJobService archiveCustClassHistoryJobService
-            , IArchiveHistoryCCBySportJobService archiveHistoryCCBySportJobService)
+            , IArchiveHistoryClassificationJobService archiveHistoryClassificationJobService
+            , IArchiveHistoryClassificationBySportJobService archiveHistoryClassificationBySportJobService)
         {
             this.archiveCustomerJobService = archiveCustomerJobService;
             this.archiveAssociationCustomerJobService = archiveAssociationCustomerJobService;
             this.rollbackAssociationCustomerJobService = rollbackAssociationCustomerJobService;
-            this.archiveCustClassHistoryJobService = archiveCustClassHistoryJobService;
-            this.archiveHistoryCCBySportJobService = archiveHistoryCCBySportJobService;
+            this.archiveHistoryClassificationJobService = archiveHistoryClassificationJobService;
+            this.archiveHistoryClassificationBySportJobService = archiveHistoryClassificationBySportJobService;
         }
 
         [HttpPost("ArchiveCustomer")]
@@ -47,16 +47,16 @@
             return await this.rollbackAssociationCustomerJobService.Execute();
         }
 
-        [HttpPost("ArchiveCCHistory")]
-        public async Task<bool> ArchiveCustClassificationHistory()
+        [HttpPost("ArchiveHistoryClassification")]
+        public async Task<bool> ArchiveHistoryClassification()
         {
-            return await this.archiveCustClassHistoryJobService.ArchiveCustClassificationHistory();
+            return await this.archiveHistoryClassificationJobService.ArchiveHistoryClassification();
         }
 
-        [HttpPost("ArchiveCCHistorBySport")]
-        public async Task<bool> ArchiveHistoryCCBySportJobService()
+        [HttpPost("ArchiveHistorClassificationBySport")]
+        public async Task<bool> ArchiveHistoryClassificationBySportJobService()
         {
-            return await this.archiveHistoryCCBySportJobService.ArchiveHistoryCCBySport();
+            return await this.archiveHistoryClassificationBySportJobService.ArchiveHistoryClassificationBySport();
         }
     }
 }
