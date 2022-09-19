@@ -8,9 +8,7 @@
 
     public interface IArchiveCustClassificationHistoryJobService
     {
-        Task<bool> ArchiveChangedCustClassHistory();
-
-        Task<bool> CleanUpUnChangedCustClassHistory();
+        Task<bool> ArchiveCustClassificationHistory();
     }
 
     public class ArchiveCustClassificationHistoryJobService : IArchiveCustClassificationHistoryJobService
@@ -26,11 +24,11 @@
             this.serviceName = "ArchiveCustClassificationHistory";
         }
 
-        public Task<bool> ArchiveChangedCustClassHistory()
+        public Task<bool> ArchiveCustClassificationHistory()
         {
             try
             {
-                ArchiveChangedCustClassificationHistory();
+                archiveCustClassHistoryServices.ArchiveCustClassificationHistory();
             }
             catch (Exception ex)
             {
@@ -40,32 +38,6 @@
             }
 
             return Task.FromResult(true);
-        }
-
-        public Task<bool> CleanUpUnChangedCustClassHistory()
-        {
-            try
-            {
-                CleanUpUnChangedCustClassificationHistory();
-            }
-            catch (Exception ex)
-            {
-                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
-
-                return Task.FromResult(false);
-            }
-
-            return Task.FromResult(true);
-        }
-
-        private void ArchiveChangedCustClassificationHistory()
-        {
-            archiveCustClassHistoryServices.ArchiveChangedCustClassificationHistory();
-        }
-
-        private void CleanUpUnChangedCustClassificationHistory()
-        {
-            archiveCustClassHistoryServices.CleanUpUnChangedCustClassificationHistory();
         }
     }
 }

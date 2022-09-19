@@ -47,16 +47,10 @@
             return await this.rollbackAssociationCustomerJobService.Execute();
         }
 
-        [HttpPost("CleanUpUnChangedCCHistory")]
-        public async Task<bool> CleanUpUnchangedCustClassificationHistory()
+        [HttpPost("ArchiveCCHistory")]
+        public async Task<bool> ArchiveCustClassificationHistory()
         {
-            return await this.archiveCustClassHistoryJobService.CleanUpUnChangedCustClassHistory();
-        }
-
-        [HttpPost("ArchiveChangedCCHistory")]
-        public async Task<bool> ArchiveChangedCustClassificationHistory()
-        {
-            return await this.archiveCustClassHistoryJobService.ArchiveChangedCustClassHistory();
+            return await this.archiveCustClassHistoryJobService.ArchiveCustClassificationHistory();
         }
 
         [HttpPost("ArchiveCCHistorBySport")]

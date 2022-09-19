@@ -23,16 +23,6 @@
         }
 
         [Fact]
-        public void CleanUpUnChangedCustClassificationHistory_WhenSuccess_ReturnNonException()
-        {
-            dataAccess.CleanUpUnChangedCustClassificationHistory().Returns(false);
-
-            Action action = () => services.CleanUpUnChangedCustClassificationHistory();
-
-            action.Should().NotThrow<Exception>();
-        }
-
-        [Fact]
         public void ArchiveChangedCustClassificationHistory_WhenSuccess_ReturnNonException()
         {
             var historyData = new HistoryClassificationArchiveEntity
@@ -57,11 +47,11 @@
 
             var historyDataJson = JsonConvert.SerializeObject(historyData.CustClassificationHistory);
 
-            dataAccess.CleanUpChangedCustClassificationHistory().Returns(historyData);
+            dataAccess.ArchiveCustClassificationHistory().Returns(historyData);
 
-            dataAccess.ArchiveCustClassificationHistory(historyDataJson);
+            dataAccess.InsertCustClassificationHistoryToArchiveDB(historyDataJson);
 
-            Action action = () => services.ArchiveChangedCustClassificationHistory();
+            Action action = () => services.ArchiveCustClassificationHistory();
 
             action.Should().NotThrow<Exception>();
         }

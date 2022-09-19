@@ -6,9 +6,7 @@
 
     public interface IArchiveCustClassificationHistoryServices
     {
-        void CleanUpUnChangedCustClassificationHistory();
-
-        void ArchiveChangedCustClassificationHistory();
+        void ArchiveCustClassificationHistory();
     }
 
     public class ArchiveCustClassificationHistoryServices : IArchiveCustClassificationHistoryServices
@@ -20,20 +18,15 @@
             this.dataAccess = dataAccess;
         }
 
-        public void CleanUpUnChangedCustClassificationHistory()
+        public void ArchiveCustClassificationHistory()
         {
-            dataAccess.CleanUpUnChangedCustClassificationHistory();
-        }
-
-        public void ArchiveChangedCustClassificationHistory()
-        {
-            var data = dataAccess.CleanUpChangedCustClassificationHistory();
+            var data = dataAccess.ArchiveCustClassificationHistory();
 
             if (data.CustClassificationHistory != null && data.CustClassificationHistory.Any())
             {
                 var custClassHistoryJson = JsonConvert.SerializeObject(data.CustClassificationHistory);
 
-                dataAccess.ArchiveCustClassificationHistory(custClassHistoryJson);
+                dataAccess.InsertCustClassificationHistoryToArchiveDB(custClassHistoryJson);
             }
         }
     }

@@ -8,11 +8,9 @@
 
     public interface IArchiveCustClassificationHistoryDataAccess
     {
-        bool CleanUpUnChangedCustClassificationHistory();
+        HistoryClassificationArchiveEntity ArchiveCustClassificationHistory();
 
-        HistoryClassificationArchiveEntity CleanUpChangedCustClassificationHistory();
-
-        void ArchiveCustClassificationHistory(string historyDataJson);
+        void InsertCustClassificationHistoryToArchiveDB(string historyDataJson);
     }
 
     public class ArchiveCustClassificationHistoryDataAccess : IArchiveCustClassificationHistoryDataAccess
@@ -24,16 +22,7 @@
             repository = new DynamicRepository();
         }
 
-        public bool CleanUpUnChangedCustClassificationHistory()
-        {
-            var criteria = new UnChangedCustClassificationHistoryCleanUpCriteria();
-
-            repository.Execute(criteria);
-
-            return Convert.ToBoolean(criteria.IsDataExist);
-        }
-
-        public HistoryClassificationArchiveEntity CleanUpChangedCustClassificationHistory()
+        public HistoryClassificationArchiveEntity ArchiveCustClassificationHistory()
         {
             var output = new HistoryClassificationArchiveEntity
             {
@@ -49,7 +38,7 @@
             return output;
         }
 
-        public void ArchiveCustClassificationHistory(string historyDataJson)
+        public void InsertCustClassificationHistoryToArchiveDB(string historyDataJson)
         {
             var criteria = new CustClassificationHistoryArchiveCriteria
             {
