@@ -19,6 +19,8 @@
         Task<bool> ProcessRule01(int batchSize, bool isLive, int numberOfThread);
 
         Task<bool> ProcessRule02(bool isLive, int numberOfThread);
+
+        Task<bool> ProcessRule03(int batchSize, bool isLive, int numberOfThread);
     }
 
     public class MatchMonitorJobService : IMatchMonitorJobService
@@ -141,6 +143,52 @@
                 }
 
                 matchMonitorServices.CleanTransRule2(isLive, matchMonitorRule2.MaxSequenceID);
+
+                return Task.FromResult(true);
+            }
+            catch (Exception ex)
+            {
+                sentryClient.CaptureException(ex);
+
+                return Task.FromResult(false);
+            }
+        }
+
+        /// <summary>
+        /// Process Rule for Fixed Game
+        /// </summary>
+        public Task<bool> ProcessRule03(int batchSize, bool isLive, int numberOfThread)
+        {
+            try
+            {
+                var matchMonitorRule = matchMonitorServices.GetMatchMonitorRule3(isLive, batchSize);
+
+                if (matchMonitorRule != null && matchMonitorRule.MaxSequenceID != 0)
+                {
+                    matchMonitorRule
+                        .MatchStagingList
+                        .AsParallel()
+                        .WithDegreeOfParallelism(numberOfThread)
+                        .ForAll(matchInfo =>
+                        {
+                            var matchRuleCompleted = matchMonitorServices.InsertMatchMonitorRule3(isLive, matchMonitorRule.MaxSequenceID, matchInfo);
+
+                            if (matchRuleCompleted != null && matchRuleCompleted.Any())
+                            {
+                                matchMonitorServices.UpdateMatchMonitorRule3Complete(new MatchMonitorRuleCompleteParaModel
+                                {
+                                    IsLive = isLive,
+                                    MatchInfo = matchInfo,
+                                    TransGroupJson = JsonConvert.SerializeObject(matchRuleCompleted),
+                                    MaxSequenceID = matchMonitorRule.MaxSequenceID
+                                });
+                            }
+
+                            Thread.Sleep(MatchMonitor_SleepTimes);
+                        });
+                }
+
+                matchMonitorServices.CleanMatchStaging(isLive, matchMonitorRule.MaxSequenceID);
 
                 return Task.FromResult(true);
             }
