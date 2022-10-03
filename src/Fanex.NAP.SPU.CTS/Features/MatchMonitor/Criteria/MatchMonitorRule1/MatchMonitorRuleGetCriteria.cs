@@ -17,7 +17,7 @@
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_MatchMonitor_Rule_Get";
+            return "CTS_DC_MatchMonitor_Rule01_Get";
         }
 
         public override bool IsValid()

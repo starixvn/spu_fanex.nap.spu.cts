@@ -15,9 +15,9 @@
 		<Setting Key="CTS_DC_MatchMonitor_Staging_Insert" SpName="CTS_DC_MatchMonitor_Staging_Insert" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 
 		
-		<Setting Key="CTS_DC_MatchMonitor_Rule_Get" SpName="CTS_DC_MatchMonitor_Rule_Get" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_Rule_Process" SpName="CTS_DC_MatchMonitor_Rule_Process" DbName="MySQL.SLAVE.CTS_DataCenter.ctsService"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_Rule_Complete" SpName="CTS_DC_MatchMonitor_Rule_Complete" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_Rule01_Get" SpName="CTS_DC_MatchMonitor_Rule01_Get" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_Rule01_Process" SpName="CTS_DC_MatchMonitor_Rule01_Process" DbName="MySQL.SLAVE.CTS_DataCenter.ctsService"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_Rule01_Complete" SpName="CTS_DC_MatchMonitor_Rule01_Complete" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_Staging_Clean" SpName="CTS_DC_MatchMonitor_Staging_Clean" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 				
 		<Setting Key="CTS_DC_MatchMonitor_Rule02_Get" SpName="CTS_DC_MatchMonitor_Rule02_Get" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>

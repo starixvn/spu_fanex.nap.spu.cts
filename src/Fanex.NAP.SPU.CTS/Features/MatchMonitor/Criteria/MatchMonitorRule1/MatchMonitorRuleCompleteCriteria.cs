@@ -28,7 +28,7 @@
         public UInt64 MaxSequenceID { get; set; }
 
         public override string GetSettingKey()
-                => "CTS_DC_MatchMonitor_Rule_Complete";
+                => "CTS_DC_MatchMonitor_Rule01_Complete";
 
         public override bool IsValid()
             => true;
