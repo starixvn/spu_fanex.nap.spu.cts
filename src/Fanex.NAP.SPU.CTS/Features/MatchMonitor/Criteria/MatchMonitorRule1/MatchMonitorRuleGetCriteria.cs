@@ -9,9 +9,6 @@
         [SpParam(SqlParamName = "ip_LiveIndicator")]
         public bool IsLive { get; set; }
 
-        [SpParam(SqlParamName = "ip_NoOfRow")]
-        public int RowSize { get; set; }
-
         [SpParam(SqlParamName = "op_MaxSequenceID")]
         public UInt64 MaxSequenceID { get; set; }
 

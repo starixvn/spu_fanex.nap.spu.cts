@@ -16,11 +16,11 @@
     {
         Task<bool> InsertTicketDetail(int batchSize, bool isLive);
 
-        Task<bool> ProcessRule01(int batchSize, bool isLive, int numberOfThread);
+        Task<bool> ProcessRule01(bool isLive, int numberOfThread);
 
         Task<bool> ProcessRule02(bool isLive, int numberOfThread);
 
-        Task<bool> ProcessRule03(int batchSize, bool isLive, int numberOfThread);
+        Task<bool> ProcessRule03(bool isLive, int numberOfThread);
     }
 
     public class MatchMonitorJobService : IMatchMonitorJobService
@@ -65,11 +65,11 @@
         /// <summary>
         /// Process Rule for GroupBeting, Hedging, Arbitrage
         /// </summary>
-        public Task<bool> ProcessRule01(int batchSize, bool isLive, int numberOfThread)
+        public Task<bool> ProcessRule01(bool isLive, int numberOfThread)
         {
             try
             {
-                var matchMonitorRule = matchMonitorServices.GetMatchMonitorRule(isLive, batchSize);
+                var matchMonitorRule = matchMonitorServices.GetMatchMonitorRule(isLive);
 
                 if (matchMonitorRule != null && matchMonitorRule.MaxSequenceID != 0)
                 {
@@ -157,11 +157,11 @@
         /// <summary>
         /// Process Rule for Fixed Game
         /// </summary>
-        public Task<bool> ProcessRule03(int batchSize, bool isLive, int numberOfThread)
+        public Task<bool> ProcessRule03(bool isLive, int numberOfThread)
         {
             try
             {
-                var matchMonitorRule = matchMonitorServices.GetMatchMonitorRule3(isLive, batchSize);
+                var matchMonitorRule = matchMonitorServices.GetMatchMonitorRule3(isLive);
 
                 if (matchMonitorRule != null && matchMonitorRule.MaxSequenceID != 0)
                 {

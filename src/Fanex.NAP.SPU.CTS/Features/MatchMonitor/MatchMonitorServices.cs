@@ -10,11 +10,11 @@
 
         void InsertMatchMonitorStaging(string matchTransJson, bool isLive);
 
-        MatchMonitorRuleModel GetMatchMonitorRule(bool isLive, int rowSize);
+        MatchMonitorRuleModel GetMatchMonitorRule(bool isLive);
 
         MatchMonitorRule2Model GetMatchMonitorRule2(bool isLive);
 
-        MatchMonitorRuleModel GetMatchMonitorRule3(bool isLive, int rowSize);
+        MatchMonitorRuleModel GetMatchMonitorRule3(bool isLive);
 
         IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, UInt64 maxTransId, MatchStagingRuleModel matchinfo);
 
@@ -52,9 +52,9 @@
             matchDataAccess.InsertMatchMonitorStaging(matchTransJson, isLive);
         }
 
-        public MatchMonitorRuleModel GetMatchMonitorRule(bool isLive, int rowSize)
+        public MatchMonitorRuleModel GetMatchMonitorRule(bool isLive)
         {
-            return matchDataAccess.GetMatchMonitorRule(isLive, rowSize);
+            return matchDataAccess.GetMatchMonitorRule(isLive);
         }
 
         public MatchMonitorRule2Model GetMatchMonitorRule2(bool isLive)
@@ -62,9 +62,9 @@
             return matchDataAccess.GetMatchMonitorRule2(isLive);
         }
 
-        public MatchMonitorRuleModel GetMatchMonitorRule3(bool isLive, int rowSize)
+        public MatchMonitorRuleModel GetMatchMonitorRule3(bool isLive)
         {
-            return matchDataAccess.GetMatchMonitorRule3(isLive, rowSize);
+            return matchDataAccess.GetMatchMonitorRule3(isLive);
         }
 
         public IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, UInt64 maxSequenceID, MatchStagingRuleModel matchinfo)

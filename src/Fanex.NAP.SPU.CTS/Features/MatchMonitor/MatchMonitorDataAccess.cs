@@ -13,11 +13,11 @@
 
         void InsertMatchMonitorStaging(string matchTransJson, bool isLive);
 
-        MatchMonitorRuleModel GetMatchMonitorRule(bool isLive, int rowSize);
+        MatchMonitorRuleModel GetMatchMonitorRule(bool isLive);
 
         MatchMonitorRule2Model GetMatchMonitorRule2(bool isLive);
 
-        MatchMonitorRuleModel GetMatchMonitorRule3(bool isLive, int rowSize);
+        MatchMonitorRuleModel GetMatchMonitorRule3(bool isLive);
 
         IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, UInt64 maxSequenceID, MatchStagingRuleModel matchinfo);
        
@@ -70,12 +70,11 @@
             repository.Execute(criteria);
         }
 
-        public MatchMonitorRuleModel GetMatchMonitorRule(bool isLive, int rowSize)
+        public MatchMonitorRuleModel GetMatchMonitorRule(bool isLive)
         {
             var criteria = new MatchMonitorRuleGetCriteria
             {
-                IsLive = isLive,
-                RowSize = rowSize
+                IsLive = isLive
             };
 
             var result = repository.Fetch<MatchStagingRuleModel>(criteria);
@@ -104,12 +103,11 @@
             };
         }
 
-        public MatchMonitorRuleModel GetMatchMonitorRule3(bool isLive, int rowSize)
+        public MatchMonitorRuleModel GetMatchMonitorRule3(bool isLive)
         {
             var criteria = new MatchMonitorRule3GetCriteria
             {
-                IsLive = isLive,
-                RowSize = rowSize
+                IsLive = isLive
             };
 
             var result = repository.Fetch<MatchStagingRuleModel>(criteria);
