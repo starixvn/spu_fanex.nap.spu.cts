@@ -6,6 +6,7 @@
     using Fanex.NAP.SPU.CTS.Shares;
     using System;
     using System.Collections.Generic;
+    using static Fanex.NAP.SPU.CTS.Shares.Consts;
 
     public interface IMatchMonitorDataAccess
     {       
@@ -31,7 +32,7 @@
 
         void UpdateMatchMonitorRule3Complete(MatchMonitorRuleCompleteParaModel para);
 
-        void CleanMatchStaging(bool isLive, UInt64 maxSequenceID);
+        void CleanMatchStaging(bool isLive, UInt64 maxSequenceID, MatchMonitorRuleID ruleGroupID);
      
         void CleanTransRule2(bool isLive, UInt64 maxSequenceID);
     }
@@ -214,12 +215,13 @@
             repository.Execute(criteria);
         }
 
-        public void CleanMatchStaging(bool isLive, UInt64 maxSequenceID)
+        public void CleanMatchStaging(bool isLive, UInt64 maxSequenceID, MatchMonitorRuleID ruleGroupID)
         {
             var criteria = new MatchMonitorRuleTransCleanCriteria
             {
                 IsLive = isLive,             
-                MaxSequenceID = maxSequenceID
+                MaxSequenceID = maxSequenceID,
+                RuleGroupID = (int)ruleGroupID
             };
 
             repository.Execute(criteria);

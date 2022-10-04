@@ -3,6 +3,7 @@
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
     using System;
     using System.Collections.Generic;
+    using static Fanex.NAP.SPU.CTS.Shares.Consts;
 
     public interface IMatchMonitorServices
     {
@@ -28,7 +29,7 @@
        
         void UpdateMatchMonitorRule3Complete(MatchMonitorRuleCompleteParaModel para);
 
-        void CleanMatchStaging(bool isLive, UInt64 maxSequenceID);
+        void CleanMatchStaging(bool isLive, UInt64 maxSequenceID, MatchMonitorRuleID ruleGroupID);
 
         void CleanTransRule2(bool isLive, UInt64 maxSequenceID);
     }
@@ -97,9 +98,9 @@
             matchDataAccess.UpdateMatchMonitorRule3Complete(para);
         }
 
-        public void CleanMatchStaging(bool isLive, UInt64 maxSequenceID)
+        public void CleanMatchStaging(bool isLive, UInt64 maxSequenceID, MatchMonitorRuleID ruleGroupID)
         {
-            matchDataAccess.CleanMatchStaging(isLive, maxSequenceID);
+            matchDataAccess.CleanMatchStaging(isLive, maxSequenceID, ruleGroupID);
         }
 
         public void CleanTransRule2(bool isLive, UInt64 maxSequenceID)
