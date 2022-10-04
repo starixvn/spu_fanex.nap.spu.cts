@@ -14,8 +14,8 @@
 		<Setting Key="CTS_Rpt_MatchMonitor_TicketDetails" SpName="CTS_Rpt_MatchMonitor_TicketDetails_xtest" DbName="SQL.bodb02.bodbSPUNet"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_Staging_Insert" SpName="CTS_DC_MatchMonitor_Staging_Insert_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 
-		<Setting Key="CTS_DC_MatchMonitor_Rule01_Get" SpName="CTS_DC_MatchMonitor_Rule01_Get_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.ctsService"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_Rule01_Process" SpName="CTS_DC_MatchMonitor_Rule01_Process_xtest" DbName="MySQL.SLAVE.CTS_DataCenter.ctsService"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_Rule01_Get" SpName="CTS_DC_MatchMonitor_Rule01_Get_xtest" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_Rule01_Process" SpName="CTS_DC_MatchMonitor_Rule01_Process_xtest" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_Rule01_Complete" SpName="CTS_DC_MatchMonitor_Rule01_Complete_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_Staging_Clean" SpName="CTS_DC_MatchMonitor_Staging_Clean_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 		
@@ -23,6 +23,10 @@
 		<Setting Key="CTS_DC_MatchMonitor_Rule02_Process" SpName="CTS_DC_MatchMonitor_Rule02_Process_xtest" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_Rule02_Complete" SpName="CTS_DC_MatchMonitor_Rule02_Complete_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_Staging_CleanTrans" SpName="CTS_DC_MatchMonitor_Staging_CleanTrans_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
+
+		<Setting Key="CTS_DC_MatchMonitor_Rule03_Get" SpName="CTS_DC_MatchMonitor_Rule03_Get_xtest" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_Rule03_Process" SpName="CTS_DC_MatchMonitor_Rule03_Process_xtest" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_Rule03_Complete" SpName="CTS_DC_MatchMonitor_Rule03_Complete_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 	</Function>
 	<Function Name="SyncUserPermisison">
 		<Setting Key="CTS_DC_Common_InsertUserPermission" SpName="CTS_DC_Common_InsertUserPermission_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
