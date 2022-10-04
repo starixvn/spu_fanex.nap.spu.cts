@@ -1,8 +1,8 @@
-﻿namespace Fanex.NAP.SPU.CTS.Features.ArchiveData.Entities
+﻿namespace Fanex.NAP.SPU.CTS.Features.ArchiveData.ClassificationHistory
 {
     using System;
 
-    public class CustClassificationHistoryEntity
+    public class HistoryClassificationEntity
     {
         public long ID { get; set; }
 

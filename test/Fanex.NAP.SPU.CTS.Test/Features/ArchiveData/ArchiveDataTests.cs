@@ -1,8 +1,6 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Tests.Features.ArchiveData
 {
-    using Fanex.NAP.SPU.CTS.Features.ArchiveData;
-    using Fanex.NAP.SPU.CTS.Features.ArchiveData.Entities;
-    using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
+    using Fanex.NAP.SPU.CTS.Features.ArchiveData.ClassificationHistory;
     using FluentAssertions;
     using Newtonsoft.Json;
     using NSubstitute;
@@ -12,24 +10,14 @@
 
     public class ArchiveDataTests
     {
-        private readonly IArchiveCustClassificationHistoryDataAccess dataAccess;
-        private readonly IArchiveCustClassificationHistoryServices services;
+        private readonly IArchiveHistoryClassificationDataAccess dataAccess;
+        private readonly IArchiveHistoryClassificationServices services;
 
         public ArchiveDataTests()
         {
-            dataAccess = Substitute.For<IArchiveCustClassificationHistoryDataAccess>();
+            dataAccess = Substitute.For<IArchiveHistoryClassificationDataAccess>();
 
-            services = new ArchiveCustClassificationHistoryServices(dataAccess);
-        }
-
-        [Fact]
-        public void CleanUpUnChangedCustClassificationHistory_WhenSuccess_ReturnNonException()
-        {
-            dataAccess.CleanUpUnChangedCustClassificationHistory().Returns(false);
-
-            Action action = () => services.CleanUpUnChangedCustClassificationHistory();
-
-            action.Should().NotThrow<Exception>();
+            services = new ArchiveHistoryClassificationServices(dataAccess);
         }
 
         [Fact]
@@ -37,15 +25,15 @@
         {
             var historyData = new HistoryClassificationArchiveEntity
             {
-                CustClassificationHistory = new List<CustClassificationHistoryEntity>
+                CustClassificationHistory = new List<HistoryClassificationEntity>
                 {
-                  new CustClassificationHistoryEntity
+                  new HistoryClassificationEntity
                   {
                       ID = 1,
                       CustID = 1,
                       CTSCustID = 1
                   },
-                  new CustClassificationHistoryEntity
+                  new HistoryClassificationEntity
                   {
                       ID = 2,
                       CustID = 2,
@@ -57,11 +45,11 @@
 
             var historyDataJson = JsonConvert.SerializeObject(historyData.CustClassificationHistory);
 
-            dataAccess.CleanUpChangedCustClassificationHistory().Returns(historyData);
+            dataAccess.ArchiveHistoryClassification().Returns(historyData);
 
-            dataAccess.ArchiveCustClassificationHistory(historyDataJson);
+            dataAccess.InsertHistoryClassificationToArchiveDB(historyDataJson);
 
-            Action action = () => services.ArchiveChangedCustClassificationHistory();
+            Action action = () => services.ArchiveHistoryClassification();
 
             action.Should().NotThrow<Exception>();
         }

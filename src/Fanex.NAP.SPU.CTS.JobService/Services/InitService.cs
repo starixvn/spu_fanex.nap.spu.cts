@@ -5,7 +5,8 @@
     using Fanex.NAP.Client.Services;
     using Fanex.NAP.SPU.CTS.Features.AffectedEvidence;
     using Fanex.NAP.SPU.CTS.Features.ArchiveAssociationCustomer;
-    using Fanex.NAP.SPU.CTS.Features.ArchiveData;
+    using Fanex.NAP.SPU.CTS.Features.ArchiveData.ClassificationHistory;
+    using Fanex.NAP.SPU.CTS.Features.ArchiveData.ClassificationHistoryBySport;
     using Fanex.NAP.SPU.CTS.Features.ArchiveData.Customer;
     using Fanex.NAP.SPU.CTS.Features.AssociatedGroupMonitor;
     using Fanex.NAP.SPU.CTS.Features.ExistingCustomer;
@@ -52,7 +53,7 @@
 
             RegisterAffectedEvidenceFromQueue(services);
 
-            RegisterArchiveCustClassificationHistory(services);
+            RegisterArchiveHistoryClassification(services);
 
             RegisterClassifyProblemCaseMonitor(services);
             
@@ -60,6 +61,7 @@
 
             RegisterAssociatedGroupMonitor(services);
 
+            RegisterArchiveHistoryClassificationBySport(services);
         }
 
         private static void RegisterArchiveDataService(this IServiceCollection services)
@@ -145,11 +147,11 @@
             services.AddSingleton<IAffectedEvidenceFromQueueJobService, AffectedEvidenceFromQueueJobService>();
         }
 
-        private static void RegisterArchiveCustClassificationHistory(this IServiceCollection services)
+        private static void RegisterArchiveHistoryClassification(this IServiceCollection services)
         {
-            services.AddSingleton<IArchiveCustClassificationHistoryDataAccess, ArchiveCustClassificationHistoryDataAccess>();
-            services.AddSingleton<IArchiveCustClassificationHistoryServices, ArchiveCustClassificationHistoryServices>();
-            services.AddSingleton<IArchiveCustClassificationHistoryJobService, ArchiveCustClassificationHistoryJobService>();
+            services.AddSingleton<IArchiveHistoryClassificationDataAccess, ArchiveHistoryClassificationDataAccess>();
+            services.AddSingleton<IArchiveHistoryClassificationServices, ArchiveHistoryClassificationServices>();
+            services.AddSingleton<IArchiveHistoryClassificationJobService, ArchiveHistoryClassificationJobService>();
         }
 
         private static void RegisterClassifyProblemCaseMonitor(this IServiceCollection services)
@@ -175,6 +177,13 @@
             services.AddSingleton<IAssociatedGroupMonitorDataAccess, AssociatedGroupMonitorDataAccess>();
             services.AddSingleton<IAssociatedGroupMonitorService, AssociatedGroupMonitorService>();
             services.AddSingleton<IAssociatedGroupMonitorJobService, AssociatedGroupMonitorJobService>();
+        }
+
+        private static void RegisterArchiveHistoryClassificationBySport(this IServiceCollection services)
+        {
+            services.AddSingleton<IArchiveHistoryClassificationBySportDataAccess, ArchiveHistoryClassifcationBySportDataAccess>();
+            services.AddSingleton<IArchiveHistoryClassificationBySportServices, ArchiveHistoryClassificationBySportServices>();
+            services.AddSingleton<IArchiveHistoryClassificationBySportJobService, ArchiveHistoryClassificationBySportJobService>();
         }
     }
 }

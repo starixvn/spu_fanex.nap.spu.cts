@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.SPU.CTS.JobService.Controllers
 {
+    using Fanex.NAP.SPU.CTS.JobService.Services;
     using Fanex.NAP.SPU.CTS.JobService.Services.ArchiveAssociationCustomer;
     using Fanex.NAP.SPU.CTS.JobService.Services.ArchiveData;
     using Microsoft.AspNetCore.Mvc;
@@ -12,14 +13,20 @@
         private readonly IArchiveCustomerJobService archiveCustomerJobService;
         private readonly IArchiveAssociationCustomerJobService archiveAssociationCustomerJobService;
         private readonly IRollbackAssociationCustomerJobService rollbackAssociationCustomerJobService;
+        private readonly IArchiveHistoryClassificationJobService archiveHistoryClassificationJobService;
+        private readonly IArchiveHistoryClassificationBySportJobService archiveHistoryClassificationBySportJobService;
 
         public ArchiveDataController(IArchiveCustomerJobService archiveCustomerJobService
             , IArchiveAssociationCustomerJobService archiveAssociationCustomerJobService
-            , IRollbackAssociationCustomerJobService rollbackAssociationCustomerJobService)
+            , IRollbackAssociationCustomerJobService rollbackAssociationCustomerJobService
+            , IArchiveHistoryClassificationJobService archiveHistoryClassificationJobService
+            , IArchiveHistoryClassificationBySportJobService archiveHistoryClassificationBySportJobService)
         {
             this.archiveCustomerJobService = archiveCustomerJobService;
             this.archiveAssociationCustomerJobService = archiveAssociationCustomerJobService;
             this.rollbackAssociationCustomerJobService = rollbackAssociationCustomerJobService;
+            this.archiveHistoryClassificationJobService = archiveHistoryClassificationJobService;
+            this.archiveHistoryClassificationBySportJobService = archiveHistoryClassificationBySportJobService;
         }
 
         [HttpPost("ArchiveCustomer")]
@@ -39,6 +46,17 @@
         {
             return await this.rollbackAssociationCustomerJobService.Execute();
         }
-      
+
+        [HttpPost("ArchiveHistoryClassification")]
+        public async Task<bool> ArchiveHistoryClassification()
+        {
+            return await this.archiveHistoryClassificationJobService.ArchiveHistoryClassification();
+        }
+
+        [HttpPost("ArchiveHistoryClassificationBySport")]
+        public async Task<bool> ArchiveHistoryClassificationBySportJobService()
+        {
+            return await this.archiveHistoryClassificationBySportJobService.ArchiveHistoryClassificationBySport();
+        }
     }
 }
