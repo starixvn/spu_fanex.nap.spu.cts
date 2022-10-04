@@ -18,7 +18,7 @@
 		<Setting Key="CTS_DC_MatchMonitor_Rule01_Get" SpName="CTS_DC_MatchMonitor_Rule01_Get_xtest" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_Rule01_Process" SpName="CTS_DC_MatchMonitor_Rule01_Process_xtest" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_Rule01_Complete" SpName="CTS_DC_MatchMonitor_Rule01_Complete_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_Staging_Clean" SpName="CTS_DC_MatchMonitor_Staging_Clean" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_Staging_Clean" SpName="CTS_DC_MatchMonitor_Staging_Clean_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 
 		
 		<Setting Key="CTS_DC_MatchMonitor_Rule02_Get" SpName="CTS_DC_MatchMonitor_Rule02_Get" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
