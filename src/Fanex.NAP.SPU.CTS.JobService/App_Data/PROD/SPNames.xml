@@ -14,15 +14,19 @@
 		<Setting Key="CTS_Rpt_MatchMonitor_TicketDetails" SpName="CTS_Rpt_MatchMonitor_TicketDetails" DbName="SQL.bodb02.bodbSPUNet"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_Staging_Insert" SpName="CTS_DC_MatchMonitor_Staging_Insert" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 		
-		<Setting Key="CTS_DC_MatchMonitor_Rule_Get" SpName="CTS_DC_MatchMonitor_Rule_Get" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_Rule_Process" SpName="CTS_DC_MatchMonitor_Rule_Process" DbName="MySQL.CTS_DataCenter.ctsService" TimeOut="600"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_Rule_Complete" SpName="CTS_DC_MatchMonitor_Rule_Complete" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" TimeOut="600"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_Rule01_Get" SpName="CTS_DC_MatchMonitor_Rule01_Get" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_Rule01_Process" SpName="CTS_DC_MatchMonitor_Rule01_Process" DbName="MySQL.CTS_DataCenter.ctsService" TimeOut="600"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_Rule01_Complete" SpName="CTS_DC_MatchMonitor_Rule01_Complete" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" TimeOut="600"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_Staging_Clean" SpName="CTS_DC_MatchMonitor_Staging_Clean" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 
 		<Setting Key="CTS_DC_MatchMonitor_Rule02_Get" SpName="CTS_DC_MatchMonitor_Rule02_Get" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_Rule02_Process" SpName="CTS_DC_MatchMonitor_Rule02_Process" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_Rule02_Complete" SpName="CTS_DC_MatchMonitor_Rule02_Complete" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_Staging_CleanTrans" SpName="CTS_DC_MatchMonitor_Staging_CleanTrans" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
+
+		<Setting Key="CTS_DC_MatchMonitor_Rule03_Get" SpName="CTS_DC_MatchMonitor_Rule03_Get" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_Rule03_Process" SpName="CTS_DC_MatchMonitor_Rule03_Process" DbName="MySQL.CTS_DataCenter.ctsService" TimeOut="600"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_Rule03_Complete" SpName="CTS_DC_MatchMonitor_Rule03_Complete" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" TimeOut="600"></Setting>
 	</Function>
 	<Function Name="SyncUserPermisison">
 		<Setting Key="CTS_DC_Common_InsertUserPermission" SpName="CTS_DC_Common_InsertUserPermission" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />

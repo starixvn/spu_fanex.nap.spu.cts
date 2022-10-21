@@ -35,18 +35,18 @@
         /// Process Rule1 for GroupBeting, Hedging, Arbitrage
         /// </summary>
         [HttpPost("MatchMonitorInsertRuleLive")]
-        public async Task<bool> MatchMonitorRuleLive([FromForm] int size, [FromForm] int numberOfThread)
+        public async Task<bool> MatchMonitorRuleLive([FromForm] int numberOfThread)
         {
-            return await this.matchMonitorJobService.ProcessRule01(size, true, numberOfThread);
+            return await this.matchMonitorJobService.ProcessRule01(true, numberOfThread);
         }
 
         /// <summary>
         /// Process Rule1 for GroupBeting, Hedging, Arbitrage
         /// </summary>
         [HttpPost("MatchMonitorInsertRuleNonLive")]
-        public async Task<bool> MatchMonitorRuleNonLive([FromForm] int size, [FromForm] int numberOfThread)
+        public async Task<bool> MatchMonitorRuleNonLive([FromForm] int numberOfThread)
         {
-            return await this.matchMonitorJobService.ProcessRule01(size, false, numberOfThread);
+            return await this.matchMonitorJobService.ProcessRule01(false, numberOfThread);
         }
 
         /// <summary>
@@ -65,6 +65,24 @@
         public async Task<bool> MatchMonitorRule2NonLive([FromForm] int numberOfThread)
         {
             return await this.matchMonitorJobService.ProcessRule02(false, numberOfThread);
+        }
+
+        /// <summary>
+        /// Process Rule3 for Soccer Hedging
+        /// </summary>
+        [HttpPost("MatchMonitorInsertRule3Live")]
+        public async Task<bool> MatchMonitorRule3Live([FromForm] int numberOfThread)
+        {
+            return await this.matchMonitorJobService.ProcessRule03(true, numberOfThread);
+        }
+
+        /// <summary>
+        /// Process Rule3 for Soccer Hedging
+        /// </summary>
+        [HttpPost("MatchMonitorInsertRule3NonLive")]
+        public async Task<bool> MatchMonitorRule3NonLive([FromForm] int numberOfThread)
+        {
+            return await this.matchMonitorJobService.ProcessRule03(false, numberOfThread);
         }
     }
 }

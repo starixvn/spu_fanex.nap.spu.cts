@@ -3,6 +3,7 @@
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
     using System;
     using System.Collections.Generic;
+    using static Fanex.NAP.SPU.CTS.Shares.Consts;
 
     public interface IMatchMonitorServices
     {
@@ -10,19 +11,25 @@
 
         void InsertMatchMonitorStaging(string matchTransJson, bool isLive);
 
-        MatchMonitorRuleModel GetMatchMonitorRule(bool isLive, int rowSize);
+        MatchMonitorRuleModel GetMatchMonitorRule(bool isLive);
 
         MatchMonitorRule2Model GetMatchMonitorRule2(bool isLive);
+
+        MatchMonitorRuleModel GetMatchMonitorRule3(bool isLive);
 
         IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, UInt64 maxTransId, MatchStagingRuleModel matchinfo);
 
         IEnumerable<MatchRule2CompletedModel> InsertMatchMonitorRule2(bool isLive, UInt64 maxTransId, MatchStagingRule2Model matchinfo);
 
+        IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule3(bool isLive, UInt64 maxTransId, MatchStagingRuleModel matchinfo);
+
         void UpdateMatchTransComplete(MatchMonitorRuleCompleteParaModel para);
 
         void UpdateMatchMonitorRule2Complete(MatchMonitorRule2CompleteParaModel para);
+       
+        void UpdateMatchMonitorRule3Complete(MatchMonitorRuleCompleteParaModel para);
 
-        void CleanMatchStaging(bool isLive, UInt64 maxSequenceID);
+        void CleanMatchStaging(bool isLive, UInt64 maxSequenceID, MatchMonitorRuleID ruleGroupID);
 
         void CleanTransRule2(bool isLive, UInt64 maxSequenceID);
     }
@@ -46,14 +53,19 @@
             matchDataAccess.InsertMatchMonitorStaging(matchTransJson, isLive);
         }
 
-        public MatchMonitorRuleModel GetMatchMonitorRule(bool isLive, int rowSize)
+        public MatchMonitorRuleModel GetMatchMonitorRule(bool isLive)
         {
-            return matchDataAccess.GetMatchMonitorRule(isLive, rowSize);
+            return matchDataAccess.GetMatchMonitorRule(isLive);
         }
 
         public MatchMonitorRule2Model GetMatchMonitorRule2(bool isLive)
         {
             return matchDataAccess.GetMatchMonitorRule2(isLive);
+        }
+
+        public MatchMonitorRuleModel GetMatchMonitorRule3(bool isLive)
+        {
+            return matchDataAccess.GetMatchMonitorRule3(isLive);
         }
 
         public IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, UInt64 maxSequenceID, MatchStagingRuleModel matchinfo)
@@ -66,6 +78,11 @@
             return matchDataAccess.InsertMatchMonitorRule2(isLive, maxSequenceID, matchinfo);
         }
 
+        public IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule3(bool isLive, UInt64 maxSequenceID, MatchStagingRuleModel matchinfo)
+        {
+            return matchDataAccess.InsertMatchMonitorRule3(isLive, maxSequenceID, matchinfo);
+        }
+
         public void UpdateMatchTransComplete(MatchMonitorRuleCompleteParaModel para)
         {
             matchDataAccess.UpdateMatchTransComplete(para);
@@ -76,9 +93,14 @@
             matchDataAccess.UpdateMatchMonitorRule2Complete(para);
         }
 
-        public void CleanMatchStaging(bool isLive, UInt64 maxSequenceID)
+        public void UpdateMatchMonitorRule3Complete(MatchMonitorRuleCompleteParaModel para)
         {
-            matchDataAccess.CleanMatchStaging(isLive, maxSequenceID);
+            matchDataAccess.UpdateMatchMonitorRule3Complete(para);
+        }
+
+        public void CleanMatchStaging(bool isLive, UInt64 maxSequenceID, MatchMonitorRuleID ruleGroupID)
+        {
+            matchDataAccess.CleanMatchStaging(isLive, maxSequenceID, ruleGroupID);
         }
 
         public void CleanTransRule2(bool isLive, UInt64 maxSequenceID)

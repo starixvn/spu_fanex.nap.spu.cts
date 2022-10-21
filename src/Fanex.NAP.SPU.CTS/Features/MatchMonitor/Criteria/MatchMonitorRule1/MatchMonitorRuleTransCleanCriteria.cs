@@ -12,6 +12,9 @@
         [SpParam(SqlParamName = "ip_MaxSequenceID")]
         public UInt64 MaxSequenceID { get; set; }
 
+        [SpParam(SqlParamName = "ip_RuleGroupID")]
+        public int RuleGroupID { get; set; }
+
         public override string GetSettingKey()
         {
             return "CTS_DC_MatchMonitor_Staging_Clean";

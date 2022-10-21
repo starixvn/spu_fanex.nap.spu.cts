@@ -16,9 +16,11 @@
     {
         Task<bool> InsertTicketDetail(int batchSize, bool isLive);
 
-        Task<bool> ProcessRule01(int batchSize, bool isLive, int numberOfThread);
+        Task<bool> ProcessRule01(bool isLive, int numberOfThread);
 
         Task<bool> ProcessRule02(bool isLive, int numberOfThread);
+
+        Task<bool> ProcessRule03(bool isLive, int numberOfThread);
     }
 
     public class MatchMonitorJobService : IMatchMonitorJobService
@@ -63,11 +65,11 @@
         /// <summary>
         /// Process Rule for GroupBeting, Hedging, Arbitrage
         /// </summary>
-        public Task<bool> ProcessRule01(int batchSize, bool isLive, int numberOfThread)
+        public Task<bool> ProcessRule01(bool isLive, int numberOfThread)
         {
             try
             {
-                var matchMonitorRule = matchMonitorServices.GetMatchMonitorRule(isLive, batchSize);
+                var matchMonitorRule = matchMonitorServices.GetMatchMonitorRule(isLive);
 
                 if (matchMonitorRule != null && matchMonitorRule.MaxSequenceID != 0)
                 {
@@ -94,7 +96,7 @@
                         });
                 }
 
-                matchMonitorServices.CleanMatchStaging(isLive, matchMonitorRule.MaxSequenceID);
+                matchMonitorServices.CleanMatchStaging(isLive, matchMonitorRule.MaxSequenceID, MatchMonitorRuleID.Rule1);
 
                 return Task.FromResult(true);
             }
@@ -141,6 +143,52 @@
                 }
 
                 matchMonitorServices.CleanTransRule2(isLive, matchMonitorRule2.MaxSequenceID);
+
+                return Task.FromResult(true);
+            }
+            catch (Exception ex)
+            {
+                sentryClient.CaptureException(ex);
+
+                return Task.FromResult(false);
+            }
+        }
+
+        /// <summary>
+        /// Process Rule for Fixed Game
+        /// </summary>
+        public Task<bool> ProcessRule03(bool isLive, int numberOfThread)
+        {
+            try
+            {
+                var matchMonitorRule = matchMonitorServices.GetMatchMonitorRule3(isLive);
+
+                if (matchMonitorRule != null && matchMonitorRule.MaxSequenceID != 0)
+                {
+                    matchMonitorRule
+                        .MatchStagingList
+                        .AsParallel()
+                        .WithDegreeOfParallelism(numberOfThread)
+                        .ForAll(matchInfo =>
+                        {
+                            var matchRuleCompleted = matchMonitorServices.InsertMatchMonitorRule3(isLive, matchMonitorRule.MaxSequenceID, matchInfo);
+
+                            if (matchRuleCompleted != null && matchRuleCompleted.Any())
+                            {
+                                matchMonitorServices.UpdateMatchMonitorRule3Complete(new MatchMonitorRuleCompleteParaModel
+                                {
+                                    IsLive = isLive,
+                                    MatchInfo = matchInfo,
+                                    TransGroupJson = JsonConvert.SerializeObject(matchRuleCompleted),
+                                    MaxSequenceID = matchMonitorRule.MaxSequenceID
+                                });
+                            }
+
+                            Thread.Sleep(MatchMonitor_SleepTimes);
+                        });
+                }
+
+                matchMonitorServices.CleanMatchStaging(isLive, matchMonitorRule.MaxSequenceID, MatchMonitorRuleID.Rule3);
 
                 return Task.FromResult(true);
             }
