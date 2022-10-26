@@ -96,7 +96,7 @@
                         });
                 }
 
-                matchMonitorServices.CleanMatchStaging(isLive, matchMonitorRule.MaxSequenceID, MatchMonitorRuleID.Rule1);
+                matchMonitorServices.CleanTrans(isLive, matchMonitorRule.MaxSequenceID);
 
                 return Task.FromResult(true);
             }
@@ -188,7 +188,7 @@
                         });
                 }
 
-                matchMonitorServices.CleanMatchStaging(isLive, matchMonitorRule.MaxSequenceID, MatchMonitorRuleID.Rule3);
+                matchMonitorServices.CleanTransRule3(isLive, matchMonitorRule.MaxSequenceID);
 
                 return Task.FromResult(true);
             }

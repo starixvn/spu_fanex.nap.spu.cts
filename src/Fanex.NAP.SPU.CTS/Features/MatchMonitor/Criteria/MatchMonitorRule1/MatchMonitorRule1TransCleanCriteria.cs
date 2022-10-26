@@ -4,7 +4,7 @@
     using Fanex.Data.Repository;
     using System;
 
-    public class MatchMonitorRuleTransCleanCriteria : NonQueryCommand
+    public class MatchMonitorRule1TransCleanCriteria : NonQueryCommand
     {
         [SpParam(SqlParamName = "ip_LiveIndicator")]
         public bool IsLive { get; set; }
@@ -12,12 +12,9 @@
         [SpParam(SqlParamName = "ip_MaxSequenceID")]
         public UInt64 MaxSequenceID { get; set; }
 
-        [SpParam(SqlParamName = "ip_RuleGroupID")]
-        public int RuleGroupID { get; set; }
-
         public override string GetSettingKey()
         {
-            return "CTS_DC_MatchMonitor_Staging_Clean";
+            return "CTS_DC_MatchMonitor_Rule01_StagingClean";
         }
 
         public override bool IsValid()

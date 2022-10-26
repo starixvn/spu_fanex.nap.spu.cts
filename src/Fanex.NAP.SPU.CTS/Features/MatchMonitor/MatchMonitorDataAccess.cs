@@ -32,9 +32,11 @@
 
         void UpdateMatchMonitorRule3Complete(MatchMonitorRule3CompleteParaModel para);
 
-        void CleanMatchStaging(bool isLive, UInt64 maxSequenceID, MatchMonitorRuleID ruleGroupID);
+        void CleanTrans(bool isLive, UInt64 maxSequenceID);
      
         void CleanTransRule2(bool isLive, UInt64 maxSequenceID);
+
+        void CleanTransRule3(bool isLive, UInt64 maxSequenceID);
     }
 
     public class MatchMonitorDataAccess : IMatchMonitorDataAccess
@@ -217,13 +219,12 @@
             repository.Execute(criteria);
         }
 
-        public void CleanMatchStaging(bool isLive, UInt64 maxSequenceID, MatchMonitorRuleID ruleGroupID)
+        public void CleanTrans(bool isLive, UInt64 maxSequenceID)
         {
-            var criteria = new MatchMonitorRuleTransCleanCriteria
+            var criteria = new MatchMonitorRule1TransCleanCriteria
             {
                 IsLive = isLive,             
-                MaxSequenceID = maxSequenceID,
-                RuleGroupID = (int)ruleGroupID
+                MaxSequenceID = maxSequenceID
             };
 
             repository.Execute(criteria);
@@ -234,6 +235,17 @@
             var criteria = new MatchMonitorRule2TransCleanCriteria
             {
                 IsLive = isLive,              
+                MaxSequenceID = maxSequenceID
+            };
+
+            repository.Execute(criteria);
+        }
+
+        public void CleanTransRule3(bool isLive, UInt64 maxSequenceID)
+        {
+            var criteria = new MatchMonitorRule3TransCleanCriteria
+            {
+                IsLive = isLive,
                 MaxSequenceID = maxSequenceID
             };
 
