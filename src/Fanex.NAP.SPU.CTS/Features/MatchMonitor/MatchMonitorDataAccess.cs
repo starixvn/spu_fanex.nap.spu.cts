@@ -18,19 +18,19 @@
 
         MatchMonitorRule2Model GetMatchMonitorRule2(bool isLive);
 
-        MatchMonitorRuleModel GetMatchMonitorRule3(bool isLive);
+        MatchMonitorRule3Model GetMatchMonitorRule3(bool isLive);
 
         IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, UInt64 maxSequenceID, MatchStagingRuleModel matchinfo);
        
         IEnumerable<MatchRule2CompletedModel> InsertMatchMonitorRule2(bool isLive, UInt64 maxSequenceID, MatchStagingRule2Model matchinfo);
 
-        IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule3(bool isLive, UInt64 maxSequenceID, MatchStagingRuleModel matchinfo);
+        IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule3(bool isLive, UInt64 maxSequenceID, MatchStagingRule3Model matchinfo);
 
         void UpdateMatchTransComplete(MatchMonitorRuleCompleteParaModel para);
 
         void UpdateMatchMonitorRule2Complete(MatchMonitorRule2CompleteParaModel para);
 
-        void UpdateMatchMonitorRule3Complete(MatchMonitorRuleCompleteParaModel para);
+        void UpdateMatchMonitorRule3Complete(MatchMonitorRule3CompleteParaModel para);
 
         void CleanMatchStaging(bool isLive, UInt64 maxSequenceID, MatchMonitorRuleID ruleGroupID);
      
@@ -104,19 +104,19 @@
             };
         }
 
-        public MatchMonitorRuleModel GetMatchMonitorRule3(bool isLive)
+        public MatchMonitorRule3Model GetMatchMonitorRule3(bool isLive)
         {
             var criteria = new MatchMonitorRule3GetCriteria
             {
                 IsLive = isLive
             };
 
-            var result = repository.Fetch<MatchStagingRuleModel>(criteria);
+            var result = repository.Fetch<MatchStagingRule3Model>(criteria);
 
-            return new MatchMonitorRuleModel
+            return new MatchMonitorRule3Model
             {
                 MaxSequenceID = criteria.MaxSequenceID,
-                MatchStagingList = criteria.MaxSequenceID != 0 ? result : new List<MatchStagingRuleModel>()
+                MatchStagingList = criteria.MaxSequenceID != 0 ? result : new List<MatchStagingRule3Model>()
             };
         }
 
@@ -151,7 +151,7 @@
             return repository.Fetch<MatchRule2CompletedModel>(criteria);
         }
 
-        public IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule3(bool isLive, UInt64 maxSequenceID, MatchStagingRuleModel matchinfo)
+        public IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule3(bool isLive, UInt64 maxSequenceID, MatchStagingRule3Model matchinfo)
         {
             var criteria = new MatchMonitorRule3InsertCriteria()
             {
@@ -160,7 +160,8 @@
                 MatchId = matchinfo.MatchId,
                 TotalScore = matchinfo.TotalScore,
                 MaxSequenceID = maxSequenceID,
-                BetId = matchinfo.BetID
+                BetId = matchinfo.BetID,
+                Betteam = matchinfo.BetTeam
             };
 
             return repository.Fetch<MatchRuleCompletedModel>(criteria);
@@ -199,7 +200,7 @@
             repository.Execute(criteria);
         }
 
-        public void UpdateMatchMonitorRule3Complete(MatchMonitorRuleCompleteParaModel para)
+        public void UpdateMatchMonitorRule3Complete(MatchMonitorRule3CompleteParaModel para)
         {
             var criteria = new MatchMonitorRule3CompleteCriteria
             {
@@ -208,8 +209,9 @@
                 BetID = para.MatchInfo.BetID,
                 MatchId = para.MatchInfo.MatchId,
                 TotalScore = para.MatchInfo.TotalScore,
+                Betteam = para.MatchInfo.BetTeam,
                 TransGroupJson = para.TransGroupJson,
-                MaxSequenceID = para.MaxSequenceID
+                MaxSequenceID = para.MaxSequenceID             
             };
 
             repository.Execute(criteria);

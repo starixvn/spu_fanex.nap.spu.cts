@@ -175,7 +175,7 @@
 
                             if (matchRuleCompleted != null && matchRuleCompleted.Any())
                             {
-                                matchMonitorServices.UpdateMatchMonitorRule3Complete(new MatchMonitorRuleCompleteParaModel
+                                matchMonitorServices.UpdateMatchMonitorRule3Complete(new MatchMonitorRule3CompleteParaModel
                                 {
                                     IsLive = isLive,
                                     MatchInfo = matchInfo,
