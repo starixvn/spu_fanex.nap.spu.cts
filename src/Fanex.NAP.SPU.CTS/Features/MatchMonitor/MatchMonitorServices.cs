@@ -15,23 +15,25 @@
 
         MatchMonitorRule2Model GetMatchMonitorRule2(bool isLive);
 
-        MatchMonitorRuleModel GetMatchMonitorRule3(bool isLive);
+        MatchMonitorRule3Model GetMatchMonitorRule3(bool isLive);
 
         IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, UInt64 maxTransId, MatchStagingRuleModel matchinfo);
 
         IEnumerable<MatchRule2CompletedModel> InsertMatchMonitorRule2(bool isLive, UInt64 maxTransId, MatchStagingRule2Model matchinfo);
 
-        IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule3(bool isLive, UInt64 maxTransId, MatchStagingRuleModel matchinfo);
+        IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule3(bool isLive, UInt64 maxTransId, MatchStagingRule3Model matchinfo);
 
         void UpdateMatchTransComplete(MatchMonitorRuleCompleteParaModel para);
 
         void UpdateMatchMonitorRule2Complete(MatchMonitorRule2CompleteParaModel para);
        
-        void UpdateMatchMonitorRule3Complete(MatchMonitorRuleCompleteParaModel para);
+        void UpdateMatchMonitorRule3Complete(MatchMonitorRule3CompleteParaModel para);
 
-        void CleanMatchStaging(bool isLive, UInt64 maxSequenceID, MatchMonitorRuleID ruleGroupID);
+        void CleanTrans(bool isLive, UInt64 maxSequenceID);
 
         void CleanTransRule2(bool isLive, UInt64 maxSequenceID);
+
+        void CleanTransRule3(bool isLive, UInt64 maxSequenceID);
     }
 
     public class MatchMonitorServices : IMatchMonitorServices
@@ -63,7 +65,7 @@
             return matchDataAccess.GetMatchMonitorRule2(isLive);
         }
 
-        public MatchMonitorRuleModel GetMatchMonitorRule3(bool isLive)
+        public MatchMonitorRule3Model GetMatchMonitorRule3(bool isLive)
         {
             return matchDataAccess.GetMatchMonitorRule3(isLive);
         }
@@ -78,7 +80,7 @@
             return matchDataAccess.InsertMatchMonitorRule2(isLive, maxSequenceID, matchinfo);
         }
 
-        public IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule3(bool isLive, UInt64 maxSequenceID, MatchStagingRuleModel matchinfo)
+        public IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule3(bool isLive, UInt64 maxSequenceID, MatchStagingRule3Model matchinfo)
         {
             return matchDataAccess.InsertMatchMonitorRule3(isLive, maxSequenceID, matchinfo);
         }
@@ -93,19 +95,24 @@
             matchDataAccess.UpdateMatchMonitorRule2Complete(para);
         }
 
-        public void UpdateMatchMonitorRule3Complete(MatchMonitorRuleCompleteParaModel para)
+        public void UpdateMatchMonitorRule3Complete(MatchMonitorRule3CompleteParaModel para)
         {
             matchDataAccess.UpdateMatchMonitorRule3Complete(para);
         }
 
-        public void CleanMatchStaging(bool isLive, UInt64 maxSequenceID, MatchMonitorRuleID ruleGroupID)
+        public void CleanTrans(bool isLive, UInt64 maxSequenceID)
         {
-            matchDataAccess.CleanMatchStaging(isLive, maxSequenceID, ruleGroupID);
+            matchDataAccess.CleanTrans(isLive, maxSequenceID);
         }
 
         public void CleanTransRule2(bool isLive, UInt64 maxSequenceID)
         {
             matchDataAccess.CleanTransRule2(isLive, maxSequenceID);
+        }
+
+        public void CleanTransRule3(bool isLive, UInt64 maxSequenceID)
+        {
+            matchDataAccess.CleanTransRule3(isLive, maxSequenceID);
         }
     }
 }

@@ -92,11 +92,5 @@
             Credit = 0,
             Deposit = 1
         };
-
-        public enum MatchMonitorRuleID
-        {
-            Rule1 = 1,
-            Rule3 = 3
-        }
     }
 }

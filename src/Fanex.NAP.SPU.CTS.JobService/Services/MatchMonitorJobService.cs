@@ -96,7 +96,7 @@
                         });
                 }
 
-                matchMonitorServices.CleanMatchStaging(isLive, matchMonitorRule.MaxSequenceID, MatchMonitorRuleID.Rule1);
+                matchMonitorServices.CleanTrans(isLive, matchMonitorRule.MaxSequenceID);
 
                 return Task.FromResult(true);
             }
@@ -175,7 +175,7 @@
 
                             if (matchRuleCompleted != null && matchRuleCompleted.Any())
                             {
-                                matchMonitorServices.UpdateMatchMonitorRule3Complete(new MatchMonitorRuleCompleteParaModel
+                                matchMonitorServices.UpdateMatchMonitorRule3Complete(new MatchMonitorRule3CompleteParaModel
                                 {
                                     IsLive = isLive,
                                     MatchInfo = matchInfo,
@@ -188,7 +188,7 @@
                         });
                 }
 
-                matchMonitorServices.CleanMatchStaging(isLive, matchMonitorRule.MaxSequenceID, MatchMonitorRuleID.Rule3);
+                matchMonitorServices.CleanTransRule3(isLive, matchMonitorRule.MaxSequenceID);
 
                 return Task.FromResult(true);
             }

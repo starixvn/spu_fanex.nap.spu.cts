@@ -24,6 +24,9 @@
         [SpParam(SqlParamName = "ip_TransGroup")]
         public string TransGroupJson { get; set; }
 
+        [SpParam(SqlParamName = "ip_Betteam")]
+        public string Betteam { get; set; }
+
         [SpParam(SqlParamName = "ip_MaxSequenceID")]
         public UInt64 MaxSequenceID { get; set; }
 
