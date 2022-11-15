@@ -8,7 +8,6 @@
     using Fanex.NAP.SPU.CTS.Features.ArchiveData.ClassificationHistory;
     using Fanex.NAP.SPU.CTS.Features.ArchiveData.ClassificationHistoryBySport;
     using Fanex.NAP.SPU.CTS.Features.ArchiveData.Customer;
-    using Fanex.NAP.SPU.CTS.Features.AssociatedGroupMonitor;
     using Fanex.NAP.SPU.CTS.Features.ExistingCustomer;
     using Fanex.NAP.SPU.CTS.Features.InitialCustomerStatus;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
@@ -20,7 +19,6 @@
     using Fanex.NAP.SPU.CTS.Features.UserPermission;
     using Fanex.NAP.SPU.CTS.JobService.Services.ArchiveAssociationCustomer;
     using Fanex.NAP.SPU.CTS.JobService.Services.ArchiveData;
-    using Fanex.NAP.SPU.CTS.JobService.Services.AssociatedGroupMonitor;
     using Fanex.NAP.SPU.CTS.JobService.Services.ProblemCaseMonitor;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.DependencyInjection;
@@ -57,9 +55,7 @@
 
             RegisterClassifyProblemCaseMonitor(services);
             
-            RegisterArchiveAssociationCustomer(services);
-
-            RegisterAssociatedGroupMonitor(services);
+            RegisterArchiveAssociationCustomer(services);      
 
             RegisterArchiveHistoryClassificationBySport(services);
         }
@@ -170,14 +166,7 @@
             services.AddSingleton<IRollbackAssociationCustomerService, RollbackAssociationCustomerService>();
             services.AddSingleton<IArchiveAssociationCustomerJobService, ArchiveAssociationCustomerJobService>();
             services.AddSingleton<IRollbackAssociationCustomerJobService, RollbackAssociationCustomerJobService>();
-        }
-
-        private static void RegisterAssociatedGroupMonitor(this IServiceCollection services)
-        {
-            services.AddSingleton<IAssociatedGroupMonitorDataAccess, AssociatedGroupMonitorDataAccess>();
-            services.AddSingleton<IAssociatedGroupMonitorService, AssociatedGroupMonitorService>();
-            services.AddSingleton<IAssociatedGroupMonitorJobService, AssociatedGroupMonitorJobService>();
-        }
+        }       
 
         private static void RegisterArchiveHistoryClassificationBySport(this IServiceCollection services)
         {
