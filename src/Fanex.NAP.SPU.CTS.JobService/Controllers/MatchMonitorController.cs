@@ -84,5 +84,16 @@
         {
             return await this.matchMonitorJobService.ProcessRule03(false, numberOfThread);
         }
+
+        /// <summary>
+        /// Process Rule for Soccer Irrigation
+        /// </summary>
+        /// <param name="numberOfThread"></param>
+        /// <returns></returns>
+        [HttpPost("MatchMonitorRuleIrrigationNonLive")]
+        public async Task<bool> MatchMonitorRuleIrrigationNonLive([FromForm] int numberOfThread)
+        {
+            return await this.matchMonitorJobService.ProcessRuleIrrigation(false, numberOfThread);
+        }
     }
 }

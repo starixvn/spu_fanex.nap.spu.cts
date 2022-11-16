@@ -20,11 +20,15 @@
 
         MatchMonitorRule3Model GetMatchMonitorRule3(bool isLive);
 
+        MatchMonitorRuleIrrigationModel GetMatchMonitorRuleIrrigation(bool isLive);
+
         IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, UInt64 maxSequenceID, MatchStagingRuleModel matchinfo);
        
         IEnumerable<MatchRule2CompletedModel> InsertMatchMonitorRule2(bool isLive, UInt64 maxSequenceID, MatchStagingRule2Model matchinfo);
 
         IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule3(bool isLive, UInt64 maxSequenceID, MatchStagingRule3Model matchinfo);
+
+        IEnumerable<MatchRuleIrrigationCompletedModel> InsertMatchMonitorRuleIrrigation(bool isLive, UInt64 maxSequenceID, MatchStagingRuleIrrigationModel matchinfo);
 
         void UpdateMatchTransComplete(MatchMonitorRuleCompleteParaModel para);
 
@@ -32,11 +36,15 @@
 
         void UpdateMatchMonitorRule3Complete(MatchMonitorRule3CompleteParaModel para);
 
+        void UpdateMatchMonitorRuleIrrigationComplete(MatchMonitorRuleIrrigationCompleteParaModel para);
+
         void CleanTrans(bool isLive, UInt64 maxSequenceID);
      
         void CleanTransRule2(bool isLive, UInt64 maxSequenceID);
 
         void CleanTransRule3(bool isLive, UInt64 maxSequenceID);
+
+        void CleanTransRuleIrrigation(bool isLive, UInt64 maxSequenceID);
     }
 
     public class MatchMonitorDataAccess : IMatchMonitorDataAccess
@@ -122,6 +130,19 @@
             };
         }
 
+        public MatchMonitorRuleIrrigationModel GetMatchMonitorRuleIrrigation(bool isLive)
+        {
+            var criteria = new MatchMonitorRuleIrrigationGetCriteria { IsLive = isLive };
+
+            var result = repository.Fetch<MatchStagingRuleIrrigationModel>(criteria);
+
+            return new MatchMonitorRuleIrrigationModel
+            {
+                MaxSequenceID = criteria.MaxSequenceID,
+                MatchStagingList = criteria.MaxSequenceID != 0 ? result : new List<MatchStagingRuleIrrigationModel>()
+            };
+        }
+
         public IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, UInt64 maxSequenceID, MatchStagingRuleModel matchinfo)
         {
             var criteria = new MatchMonitorRuleInsertCriteria()
@@ -167,6 +188,22 @@
             };
 
             return repository.Fetch<MatchRuleCompletedModel>(criteria);
+        }
+
+        public IEnumerable<MatchRuleIrrigationCompletedModel> InsertMatchMonitorRuleIrrigation(bool isLive, UInt64 maxSequenceID, MatchStagingRuleIrrigationModel matchinfo)
+        {
+            var criteria = new MatchMonitorRuleIrrigationInsertCriteria
+            {
+                IsLive = isLive,
+                BettypeId = matchinfo.BetTypeID,
+                MatchId = matchinfo.MatchId,
+                TotalScore = matchinfo.TotalScore,
+                MaxSequenceID = maxSequenceID,
+                BetId = matchinfo.BetID,
+                Betteam = matchinfo.BetTeam
+            };
+
+            return repository.Fetch<MatchRuleIrrigationCompletedModel>(criteria);
         }
 
         public void UpdateMatchTransComplete(MatchMonitorRuleCompleteParaModel para)
@@ -219,6 +256,23 @@
             repository.Execute(criteria);
         }
 
+        public void UpdateMatchMonitorRuleIrrigationComplete(MatchMonitorRuleIrrigationCompleteParaModel para)
+        {
+            var criteria = new MatchMonitorRuleIrrigationCompleteCriteria
+            {
+                IsLive = para.IsLive,
+                BettypeId = para.MatchInfo.BetTypeID,
+                BetID = para.MatchInfo.BetID,
+                MatchId = para.MatchInfo.MatchId,
+                TotalScore = para.MatchInfo.TotalScore,
+                Betteam = para.MatchInfo.BetTeam,
+                TransGroupJson = para.TransGroupJson,
+                MaxSequenceID = para.MaxSequenceID
+            };
+
+            repository.Execute(criteria);
+        }
+
         public void CleanTrans(bool isLive, UInt64 maxSequenceID)
         {
             var criteria = new MatchMonitorRule1TransCleanCriteria
@@ -244,6 +298,17 @@
         public void CleanTransRule3(bool isLive, UInt64 maxSequenceID)
         {
             var criteria = new MatchMonitorRule3TransCleanCriteria
+            {
+                IsLive = isLive,
+                MaxSequenceID = maxSequenceID
+            };
+
+            repository.Execute(criteria);
+        }
+
+        public void CleanTransRuleIrrigation(bool isLive, UInt64 maxSequenceID)
+        {
+            var criteria = new MatchMonitorRuleIrrigationTransCleanCriteria
             {
                 IsLive = isLive,
                 MaxSequenceID = maxSequenceID

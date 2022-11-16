@@ -28,6 +28,11 @@
 		<Setting Key="CTS_DC_MatchMonitor_Rule03_Process" SpName="CTS_DC_MatchMonitor_Rule03_Process_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_Rule03_Complete" SpName="CTS_DC_MatchMonitor_Rule03_Complete_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_Rule03_StagingClean" SpName="CTS_DC_MatchMonitor_Rule03_StagingClean_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
+
+		<Setting Key="CTS_DC_MatchMonitor_Rule_Irrigation_Get" SpName="CTS_DC_MatchMonitor_Rule_Irrigation_Get" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_Rule_Irrigation_Process" SpName="CTS_DC_MatchMonitor_Rule_Irrigation_Process" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_Rule_Irrigation_Complete" SpName="CTS_DC_MatchMonitor_Rule_Irrigation_Complete" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_Rule_Irrigation_StagingClean" SpName="CTS_DC_MatchMonitor_Rule_Irrigation_StagingClean" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 	</Function>
 	<Function Name="SyncUserPermisison">
 		<Setting Key="CTS_DC_Common_InsertUserPermission" SpName="CTS_DC_Common_InsertUserPermission_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
