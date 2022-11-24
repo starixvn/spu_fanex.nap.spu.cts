@@ -14,7 +14,7 @@
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_MatchMonitor_Rule_Irrigation_Get";
+            return "CTS_DC_MatchMonitor_RuleIrrigation_Get";
         }
 
         public override bool IsValid()

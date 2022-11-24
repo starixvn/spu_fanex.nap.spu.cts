@@ -9,17 +9,20 @@
         [SpParam(SqlParamName = "ip_LiveIndicator")]
         public bool IsLive { get; set; }
 
+        [SpParam(SqlParamName = "ip_SportType")]
+        public int SportType { get; set; }
+
         [SpParam(SqlParamName = "ip_MatchID")]
-        public int MatchId { get; set; }
+        public int MatchID { get; set; }
 
         [SpParam(SqlParamName = "ip_TotalScore")]
         public int TotalScore { get; set; }
 
         [SpParam(SqlParamName = "ip_BettypeID")]
-        public int BettypeId { get; set; }
+        public int BettypeID { get; set; }
 
         [SpParam(SqlParamName = "ip_BetID")]
-        public Int64 BetId { get; set; }
+        public Int64 BetID { get; set; }
 
         [SpParam(SqlParamName = "ip_Betteam")]
         public string Betteam { get; set; }
@@ -28,7 +31,7 @@
         public UInt64 MaxSequenceID { get; set; }
 
         public override string GetSettingKey()
-                => "CTS_DC_MatchMonitor_Rule_Irrigation_Process";
+                => "CTS_DC_MatchMonitor_RuleIrrigation_Process";
 
         public override bool IsValid()
             => true;

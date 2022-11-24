@@ -195,12 +195,13 @@
             var criteria = new MatchMonitorRuleIrrigationInsertCriteria
             {
                 IsLive = isLive,
-                BettypeId = matchinfo.BetTypeID,
-                MatchId = matchinfo.MatchId,
+                SportType = matchinfo.SportType,
+                BettypeID = matchinfo.BettypeID,
+                MatchID = matchinfo.MatchID,
                 TotalScore = matchinfo.TotalScore,
                 MaxSequenceID = maxSequenceID,
-                BetId = matchinfo.BetID,
-                Betteam = matchinfo.BetTeam
+                BetID = matchinfo.BetID,
+                Betteam = matchinfo.Betteam
             };
 
             return repository.Fetch<MatchRuleIrrigationCompletedModel>(criteria);
@@ -261,11 +262,12 @@
             var criteria = new MatchMonitorRuleIrrigationCompleteCriteria
             {
                 IsLive = para.IsLive,
-                BettypeId = para.MatchInfo.BetTypeID,
+                SportType = para.MatchInfo.SportType,
+                BettypeID = para.MatchInfo.BettypeID,
                 BetID = para.MatchInfo.BetID,
-                MatchId = para.MatchInfo.MatchId,
+                MatchID = para.MatchInfo.MatchID,
                 TotalScore = para.MatchInfo.TotalScore,
-                Betteam = para.MatchInfo.BetTeam,
+                Betteam = para.MatchInfo.Betteam,
                 TransGroupJson = para.TransGroupJson,
                 MaxSequenceID = para.MaxSequenceID
             };

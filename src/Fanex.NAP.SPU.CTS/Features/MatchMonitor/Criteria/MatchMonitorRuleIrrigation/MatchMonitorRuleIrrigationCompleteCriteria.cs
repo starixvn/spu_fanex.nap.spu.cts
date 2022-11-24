@@ -6,32 +6,35 @@
 
     public class MatchMonitorRuleIrrigationCompleteCriteria : NonQueryCommand
     {
-        [SpParam(SqlParamName = "ip_MatchID")]
-        public int MatchId { get; set; }
-
         [SpParam(SqlParamName = "ip_LiveIndicator")]
         public bool IsLive { get; set; }
 
-        [SpParam(SqlParamName = "ip_BettypeID")]
-        public int BettypeId { get; set; }
-
-        [SpParam(SqlParamName = "ip_BetID")]
-        public Int64 BetID { get; set; }
-
-        [SpParam(SqlParamName = "ip_TotalScore")]
-        public int TotalScore { get; set; }
-
-        [SpParam(SqlParamName = "ip_TransGroup")]
-        public string TransGroupJson { get; set; }
-
-        [SpParam(SqlParamName = "ip_Betteam")]
-        public string Betteam { get; set; }
+        [SpParam(SqlParamName = "ip_SportType")]
+        public int SportType { get; set; }
 
         [SpParam(SqlParamName = "ip_MaxSequenceID")]
         public UInt64 MaxSequenceID { get; set; }
 
+        [SpParam(SqlParamName = "ip_MatchID")]
+        public int MatchID { get; set; }
+
+        [SpParam(SqlParamName = "ip_TotalScore")]
+        public int TotalScore { get; set; }
+
+        [SpParam(SqlParamName = "ip_BettypeID")]
+        public int BettypeID { get; set; }
+
+        [SpParam(SqlParamName = "ip_BetID")]
+        public Int64 BetID { get; set; }
+
+        [SpParam(SqlParamName = "ip_Betteam")]
+        public string Betteam { get; set; }
+
+        [SpParam(SqlParamName = "ip_TransGroup")]
+        public string TransGroupJson { get; set; }
+
         public override string GetSettingKey()
-                => "CTS_DC_MatchMonitor_Rule_Irrigation_Complete";
+                => "CTS_DC_MatchMonitor_RuleIrrigation_Complete";
 
         public override bool IsValid()
             => true;

@@ -90,7 +90,7 @@
         /// </summary>
         /// <param name="numberOfThread"></param>
         /// <returns></returns>
-        [HttpPost("MatchMonitorRuleIrrigationNonLive")]
+        [HttpPost("MatchMonitorInsertRuleIrrigationNonLive")]
         public async Task<bool> MatchMonitorRuleIrrigationNonLive([FromForm] int numberOfThread)
         {
             return await this.matchMonitorJobService.ProcessRuleIrrigation(false, numberOfThread);
