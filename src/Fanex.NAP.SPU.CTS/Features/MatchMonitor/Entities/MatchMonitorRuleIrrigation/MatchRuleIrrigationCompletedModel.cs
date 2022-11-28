@@ -5,22 +5,13 @@
     public class MatchRuleIrrigationCompletedModel
     {
 
-        [JsonProperty("GroupID")]
-        public int GroupId { get; set; }
-
-        [JsonProperty("Reason")]
-        public int Reason { get; set; }
+        [JsonProperty("CustID")]
+        public int CustID { get; set; }
 
         [JsonProperty("TransIDList")]
-        public string TransIDList { get; set; }
+        public string TransIDList { get; set; }   
 
-        [JsonProperty("HighStakeLicCustList")]
-        public string HighStakeLicCustList { get; set; }
-
-        [JsonProperty("CustIDList")]
-        public string CustIdList { get; set; }
-
-        [JsonProperty("OldGroupIDList")]
-        public string OldGroupIdList { get; set; }
+        [JsonProperty("OldGroupID")]
+        public string OldGroupID { get; set; }
     }
 }

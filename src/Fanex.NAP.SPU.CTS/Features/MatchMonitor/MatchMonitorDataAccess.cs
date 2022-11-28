@@ -1,6 +1,9 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor
 {
     using Fanex.Data.Repository;
+    using Fanex.Logging;
+    using Fanex.Logging.Extensions;
+    using Fanex.Logging.Extensions.Database;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Criteria;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
     using Fanex.NAP.SPU.CTS.Shares;
@@ -72,13 +75,26 @@
 
         public void InsertMatchMonitorStaging(string matchTransJson, bool isLive)
         {
-            var criteria = new MatchMonitorStagingInsertCriteria
+            try
             {
-                MatchTransJson = matchTransJson,
-                IsLive = isLive
-            };
+                var criteria = new MatchMonitorStagingInsertCriteria
+                {
+                    MatchTransJson = matchTransJson,
+                    IsLive = isLive
+                };
 
-            repository.Execute(criteria);
+                repository.Execute(criteria);
+            }
+            catch (Exception ex)
+            {
+                var logMessage = new LogMessage(ex.Message)
+                .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
+                .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
+
+                LogService.Error($"Insert Match Monitor Staging Json { matchTransJson } Exception { logMessage }", ex);
+
+                throw;
+            }
         }
 
         public MatchMonitorRuleModel GetMatchMonitorRule(bool isLive)
