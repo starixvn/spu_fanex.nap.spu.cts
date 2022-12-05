@@ -214,7 +214,7 @@
                 SportType = matchinfo.SportType,
                 BettypeID = matchinfo.BettypeID,
                 MatchID = matchinfo.MatchID,
-                TotalScore = matchinfo.TotalScore,
+                ScoreDiff = matchinfo.ScoreDiff,
                 MaxSequenceID = maxSequenceID,
                 BetID = matchinfo.BetID,
                 Betteam = matchinfo.Betteam
@@ -282,7 +282,7 @@
                 BettypeID = para.MatchInfo.BettypeID,
                 BetID = para.MatchInfo.BetID,
                 MatchID = para.MatchInfo.MatchID,
-                TotalScore = para.MatchInfo.TotalScore,
+                ScoreDiff = para.MatchInfo.ScoreDiff,
                 Betteam = para.MatchInfo.Betteam,
                 TransGroupJson = para.TransGroupJson,
                 MaxSequenceID = para.MaxSequenceID

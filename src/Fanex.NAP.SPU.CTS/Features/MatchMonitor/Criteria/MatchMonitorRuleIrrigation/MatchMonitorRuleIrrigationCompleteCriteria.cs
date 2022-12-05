@@ -18,8 +18,8 @@
         [SpParam(SqlParamName = "ip_MatchID")]
         public int MatchID { get; set; }
 
-        [SpParam(SqlParamName = "ip_TotalScore")]
-        public int TotalScore { get; set; }
+        [SpParam(SqlParamName = "ip_ScoreDiff")]
+        public int ScoreDiff { get; set; }
 
         [SpParam(SqlParamName = "ip_BettypeID")]
         public int BettypeID { get; set; }

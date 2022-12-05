@@ -6,7 +6,7 @@
     {
         public int MatchID { get; set; }
 
-        public int TotalScore { get; set; }
+        public int ScoreDiff { get; set; }
 
         public int BettypeID { get; set; }
 
