@@ -9,15 +9,14 @@
     using Fanex.NAP.SPU.CTS.Shares;
     using System;
     using System.Collections.Generic;
-    using static Fanex.NAP.SPU.CTS.Shares.Consts;
 
     public interface IMatchMonitorDataAccess
-    {       
+    {
         IEnumerable<TicketDetailEntity> GetMatchTrans(long lastScannedSequenceID, int batchSize, bool isLive);
 
         void InsertMatchMonitorStaging(string matchTransJson, bool isLive);
 
-        MatchMonitorRuleModel GetMatchMonitorRule(bool isLive);
+        MatchMonitorRuleGroupBettingModel GetMatchRuleGroupBetting(bool isLive);
 
         MatchMonitorRule2Model GetMatchMonitorRule2(bool isLive);
 
@@ -25,15 +24,15 @@
 
         MatchMonitorRuleIrrigationModel GetMatchMonitorRuleIrrigation(bool isLive);
 
-        IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, UInt64 maxSequenceID, MatchStagingRuleModel matchinfo);
-       
+        IEnumerable<MatchRuleCompletedModel> ProcessRuleGroupBetting(bool isLive, UInt64 maxSequenceID, MatchStagingRuleGroupBettingModel matchinfo);
+
         IEnumerable<MatchRule2CompletedModel> InsertMatchMonitorRule2(bool isLive, UInt64 maxSequenceID, MatchStagingRule2Model matchinfo);
 
         IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule3(bool isLive, UInt64 maxSequenceID, MatchStagingRule3Model matchinfo);
 
         IEnumerable<MatchRuleIrrigationCompletedModel> InsertMatchMonitorRuleIrrigation(bool isLive, UInt64 maxSequenceID, MatchStagingRuleIrrigationModel matchinfo);
 
-        void UpdateMatchTransComplete(MatchMonitorRuleCompleteParaModel para);
+        void CompleteTransRuleGroupBetting(RuleGroupBettingCompleteParameterModel para);
 
         void UpdateMatchMonitorRule2Complete(MatchMonitorRule2CompleteParaModel para);
 
@@ -41,8 +40,8 @@
 
         void UpdateMatchMonitorRuleIrrigationComplete(MatchMonitorRuleIrrigationCompleteParaModel para);
 
-        void CleanTrans(bool isLive, UInt64 maxSequenceID);
-     
+        void CleanTransRuleGroupBetting(bool isLive, UInt64 maxSequenceID);
+
         void CleanTransRule2(bool isLive, UInt64 maxSequenceID);
 
         void CleanTransRule3(bool isLive, UInt64 maxSequenceID);
@@ -58,12 +57,14 @@
         {
             repository = new DynamicRepository();
         }
-       
+
+        #region Insert trans into staging
+
         public IEnumerable<TicketDetailEntity> GetMatchTrans(long lastScannedSequenceID, int batchSize, bool isLive)
         {
             var criteria = new MatchTransGetCriteria
             {
-                QueryType = (int)Consts.MatchMonitorQueryTypes.Service,               
+                QueryType = (int)Consts.MatchMonitorQueryTypes.Service,
                 LastScannedSequenceID = lastScannedSequenceID,
                 BatchSize = batchSize,
                 EventDate = DateTime.Now,
@@ -97,19 +98,23 @@
             }
         }
 
-        public MatchMonitorRuleModel GetMatchMonitorRule(bool isLive)
+        #endregion Insert trans into staging
+
+        #region Process Rule
+
+        public MatchMonitorRuleGroupBettingModel GetMatchRuleGroupBetting(bool isLive)
         {
-            var criteria = new MatchMonitorRuleGetCriteria
+            var criteria = new MatchRuleGroupBettingGetCriteria
             {
                 IsLive = isLive
             };
 
-            var result = repository.Fetch<MatchStagingRuleModel>(criteria);
+            var result = repository.Fetch<MatchStagingRuleGroupBettingModel>(criteria);
 
-            return new MatchMonitorRuleModel
-            {               
+            return new MatchMonitorRuleGroupBettingModel
+            {
                 MaxSequenceID = criteria.MaxSequenceID,
-                MatchStagingList = criteria.MaxSequenceID != 0 ? result : new List<MatchStagingRuleModel>()
+                MatchStagingList = criteria.MaxSequenceID != 0 ? result : new List<MatchStagingRuleGroupBettingModel>()
             };
         }
 
@@ -117,14 +122,14 @@
         {
             var criteria = new MatchMonitorRule2GetCriteria
             {
-                IsLive = isLive,               
+                IsLive = isLive,
                 MaxSequenceID = 0
             };
 
             var result = repository.Fetch<MatchStagingRule2Model>(criteria);
 
             return new MatchMonitorRule2Model
-            {             
+            {
                 MaxSequenceID = criteria.MaxSequenceID,
                 MatchStagingList = criteria.MaxSequenceID != 0 ? result : new List<MatchStagingRule2Model>()
             };
@@ -159,21 +164,21 @@
             };
         }
 
-        public IEnumerable<MatchRuleCompletedModel> InsertMatchMonitorRule(bool isLive, UInt64 maxSequenceID, MatchStagingRuleModel matchinfo)
+        public IEnumerable<MatchRuleCompletedModel> ProcessRuleGroupBetting(bool isLive, UInt64 maxSequenceID, MatchStagingRuleGroupBettingModel matchinfo)
         {
-            var criteria = new MatchMonitorRuleInsertCriteria()
+            var criteria = new MatchMonitorRuleGroupBettingProcessCriteria()
             {
                 IsLive = isLive,
-                BettypeId = matchinfo.BetTypeID,
-                MatchId = matchinfo.MatchId,
-                TotalScore = matchinfo.TotalScore,           
+                BettypeId = matchinfo.BettypeID,
+                MatchId = matchinfo.MatchID,
+                TotalScore = matchinfo.ScoreDiff,
                 MaxSequenceID = maxSequenceID,
                 BetId = matchinfo.BetID
             };
 
             return repository.Fetch<MatchRuleCompletedModel>(criteria);
         }
-       
+
         public IEnumerable<MatchRule2CompletedModel> InsertMatchMonitorRule2(bool isLive, UInt64 maxSequenceID, MatchStagingRule2Model matchinfo)
         {
             var criteria = new MatchMonitorRule2InsertCriteria()
@@ -181,7 +186,7 @@
                 IsLive = isLive,
                 BettypeId = matchinfo.BetTypeID,
                 MatchId = matchinfo.MatchId,
-                TotalScore = matchinfo.TotalScore,           
+                TotalScore = matchinfo.TotalScore,
                 MaxSequenceID = maxSequenceID,
                 BetId = matchinfo.BetID,
                 BetTeam = matchinfo.Betteam
@@ -223,16 +228,16 @@
             return repository.Fetch<MatchRuleIrrigationCompletedModel>(criteria);
         }
 
-        public void UpdateMatchTransComplete(MatchMonitorRuleCompleteParaModel para)
+        public void CompleteTransRuleGroupBetting(RuleGroupBettingCompleteParameterModel para)
         {
-            var criteria = new MatchMonitorRuleCompleteCriteria
+            var criteria = new MatchMonitorRuleGroupBettingCompleteCriteria
             {
                 IsLive = para.IsLive,
-                BettypeId = para.MatchInfo.BetTypeID,
+                BettypeId = para.MatchInfo.BettypeID,
                 BetID = para.MatchInfo.BetID,
-                MatchId = para.MatchInfo.MatchId,
-                TotalScore = para.MatchInfo.TotalScore,
-                TransGroupJson = para.TransGroupJson,             
+                MatchId = para.MatchInfo.MatchID,
+                ScoreDiff = para.MatchInfo.ScoreDiff,
+                TransGroupJson = para.TransGroupJson,
                 MaxSequenceID = para.MaxSequenceID
             };
 
@@ -248,7 +253,7 @@
                 BetID = para.MatchInfo.BetID,
                 MatchId = para.MatchInfo.MatchId,
                 TotalScore = para.MatchInfo.TotalScore,
-                TransGroupJson = para.TransGroupJson,             
+                TransGroupJson = para.TransGroupJson,
                 MaxSequenceID = para.MaxSequenceID,
                 Betteam = para.MatchInfo.Betteam
             };
@@ -267,7 +272,7 @@
                 TotalScore = para.MatchInfo.TotalScore,
                 Betteam = para.MatchInfo.BetTeam,
                 TransGroupJson = para.TransGroupJson,
-                MaxSequenceID = para.MaxSequenceID             
+                MaxSequenceID = para.MaxSequenceID
             };
 
             repository.Execute(criteria);
@@ -291,22 +296,22 @@
             repository.Execute(criteria);
         }
 
-        public void CleanTrans(bool isLive, UInt64 maxSequenceID)
+        public void CleanTransRuleGroupBetting(bool isLive, UInt64 maxSequenceID)
         {
-            var criteria = new MatchMonitorRule1TransCleanCriteria
+            var criteria = new MatchMonitorRuleGroupBettingTransCleanCriteria
             {
-                IsLive = isLive,             
+                IsLive = isLive,
                 MaxSequenceID = maxSequenceID
             };
 
             repository.Execute(criteria);
         }
-  
+
         public void CleanTransRule2(bool isLive, UInt64 maxSequenceID)
         {
             var criteria = new MatchMonitorRule2TransCleanCriteria
             {
-                IsLive = isLive,              
+                IsLive = isLive,
                 MaxSequenceID = maxSequenceID
             };
 
@@ -334,5 +339,7 @@
 
             repository.Execute(criteria);
         }
+
+        #endregion Process Rule
     }
 }

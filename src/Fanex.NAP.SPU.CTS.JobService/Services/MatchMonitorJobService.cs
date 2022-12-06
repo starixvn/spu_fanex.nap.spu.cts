@@ -16,7 +16,7 @@
     {
         Task<bool> InsertTicketDetail(int batchSize, bool isLive);
 
-        Task<bool> ProcessRule01(bool isLive, int numberOfThread);
+        Task<bool> ProcessRuleGroupBetting(bool isLive, int numberOfThread);
 
         Task<bool> ProcessRule02(bool isLive, int numberOfThread);
 
@@ -65,13 +65,13 @@
         }
 
         /// <summary>
-        /// Process Rule for GroupBeting, Hedging, Arbitrage
+        /// Process Rule for GroupBeting
         /// </summary>
-        public Task<bool> ProcessRule01(bool isLive, int numberOfThread)
+        public Task<bool> ProcessRuleGroupBetting(bool isLive, int numberOfThread)
         {
             try
             {
-                var matchMonitorRule = matchMonitorServices.GetMatchMonitorRule(isLive);
+                var matchMonitorRule = matchMonitorServices.GetMatchRuleGroupBetting(isLive);
 
                 if (matchMonitorRule != null && matchMonitorRule.MaxSequenceID != 0)
                 {
@@ -81,11 +81,11 @@
                         .WithDegreeOfParallelism(numberOfThread)
                         .ForAll(matchInfo =>
                         {
-                            var matchRuleCompleted = matchMonitorServices.InsertMatchMonitorRule(isLive, matchMonitorRule.MaxSequenceID, matchInfo);
+                            var matchRuleCompleted = matchMonitorServices.ProcessRuleGroupBetting(isLive, matchMonitorRule.MaxSequenceID, matchInfo);
 
                             if (matchRuleCompleted != null && matchRuleCompleted.Any())
                             {
-                                matchMonitorServices.UpdateMatchTransComplete(new MatchMonitorRuleCompleteParaModel
+                                matchMonitorServices.CompleteTransRuleGroupBetting(new RuleGroupBettingCompleteParameterModel
                                 {
                                     IsLive = isLive,
                                     MatchInfo = matchInfo,
@@ -98,7 +98,7 @@
                         });
                 }
 
-                matchMonitorServices.CleanTrans(isLive, matchMonitorRule.MaxSequenceID);
+                matchMonitorServices.CleanTransRuleGroupBetting(isLive, matchMonitorRule.MaxSequenceID);
 
                 return Task.FromResult(true);
             }

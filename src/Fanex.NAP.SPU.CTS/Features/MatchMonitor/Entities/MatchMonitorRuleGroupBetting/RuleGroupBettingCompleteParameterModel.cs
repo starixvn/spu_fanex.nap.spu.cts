@@ -2,15 +2,14 @@
 {
     using System;
 
-    public class MatchMonitorRuleCompleteParaModel
+    public class RuleGroupBettingCompleteParameterModel
     {
         public bool IsLive { get; set; }
 
-        public MatchStagingRuleModel MatchInfo { get; set; }
+        public MatchStagingRuleGroupBettingModel MatchInfo { get; set; }
 
         public string TransGroupJson { get; set; }
 
         public UInt64 MaxSequenceID { get; set; }
-        
     }
 }

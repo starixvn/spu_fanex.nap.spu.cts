@@ -32,21 +32,21 @@
         }
 
         /// <summary>
-        /// Process Rule1 for GroupBeting, Hedging, Arbitrage
+        /// Process Rule GroupBetting
         /// </summary>
-        [HttpPost("MatchMonitorInsertRuleLive")]
+        [HttpPost("MatchMonitorProcessRuleGroupBettingLive")]
         public async Task<bool> MatchMonitorRuleLive([FromForm] int numberOfThread)
         {
-            return await this.matchMonitorJobService.ProcessRule01(true, numberOfThread);
+            return await this.matchMonitorJobService.ProcessRuleGroupBetting(true, numberOfThread);
         }
 
         /// <summary>
-        /// Process Rule1 for GroupBeting, Hedging, Arbitrage
+        /// Process Rule GroupBetting
         /// </summary>
-        [HttpPost("MatchMonitorInsertRuleNonLive")]
+        [HttpPost("MatchMonitorProcessRuleGroupBettingNonLive")]
         public async Task<bool> MatchMonitorRuleNonLive([FromForm] int numberOfThread)
         {
-            return await this.matchMonitorJobService.ProcessRule01(false, numberOfThread);
+            return await this.matchMonitorJobService.ProcessRuleGroupBetting(false, numberOfThread);
         }
 
         /// <summary>

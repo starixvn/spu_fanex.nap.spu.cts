@@ -4,7 +4,7 @@
     using Fanex.Data.Repository;
     using System;
 
-    public class MatchMonitorRuleCompleteCriteria : NonQueryCommand
+    public class MatchMonitorRuleGroupBettingCompleteCriteria : NonQueryCommand
     {
         [SpParam(SqlParamName = "ip_MatchID")]
         public int MatchId { get; set; }
@@ -18,8 +18,8 @@
         [SpParam(SqlParamName = "ip_BetID")]
         public Int64 BetID { get; set; }
 
-        [SpParam(SqlParamName = "ip_TotalScore")]
-        public int TotalScore { get; set; }
+        [SpParam(SqlParamName = "ip_ScoreDiff")]
+        public int ScoreDiff { get; set; }
 
         [SpParam(SqlParamName = "ip_TransGroup")]
         public string TransGroupJson { get; set; }
@@ -28,7 +28,7 @@
         public UInt64 MaxSequenceID { get; set; }
 
         public override string GetSettingKey()
-                => "CTS_DC_MatchMonitor_Rule01_Complete";
+                => "CTS_DC_MatchMonitor_RuleGroupBetting_Complete";
 
         public override bool IsValid()
             => true;

@@ -4,7 +4,7 @@
     using Fanex.Data.Repository;
     using System;
 
-    public class MatchMonitorRule1TransCleanCriteria : NonQueryCommand
+    public class MatchMonitorRuleGroupBettingTransCleanCriteria : NonQueryCommand
     {
         [SpParam(SqlParamName = "ip_LiveIndicator")]
         public bool IsLive { get; set; }
@@ -14,7 +14,7 @@
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_MatchMonitor_Rule01_StagingClean";
+            return "CTS_DC_MatchMonitor_RuleGroupBetting_StagingClean";
         }
 
         public override bool IsValid()
