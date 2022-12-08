@@ -50,7 +50,7 @@
         }
 
         /// <summary>
-        /// Process Rule2 for FixedGame
+        /// Process Rule FixedGame
         /// </summary>
         [HttpPost("MatchMonitorProcessRuleFixedGameLive")]
         public async Task<bool> MatchMonitorRuleFixedGameLive([FromForm] int numberOfThread)
@@ -59,7 +59,7 @@
         }
 
         /// <summary>
-        /// Insert Rule2 for FixedGame
+        /// Insert Rule FixedGame
         /// </summary>
         [HttpPost("MatchMonitorProcessRuleFixedGameNonLive")]
         public async Task<bool> MatchMonitorRuleFixedGameNonLive([FromForm] int numberOfThread)
@@ -68,21 +68,21 @@
         }
 
         /// <summary>
-        /// Process Rule3 for Soccer Hedging
+        /// Process Rule Soccer Hedging
         /// </summary>
-        [HttpPost("MatchMonitorInsertRule3Live")]
-        public async Task<bool> MatchMonitorRule3Live([FromForm] int numberOfThread)
+        [HttpPost("MatchMonitorProcessRuleHedgingLive")]
+        public async Task<bool> MatchMonitorRuleHedgingLive([FromForm] int numberOfThread)
         {
-            return await this.matchMonitorJobService.ProcessRule03(true, numberOfThread);
+            return await this.matchMonitorJobService.ProcessRuleHedging(true, numberOfThread);
         }
 
         /// <summary>
-        /// Process Rule3 for Soccer Hedging
+        /// Process Rule Soccer Hedging
         /// </summary>
-        [HttpPost("MatchMonitorInsertRule3NonLive")]
-        public async Task<bool> MatchMonitorRule3NonLive([FromForm] int numberOfThread)
+        [HttpPost("MatchMonitorProcessRuleHedgingLNonLive")]
+        public async Task<bool> MatchMonitorRuleHedgingNonLive([FromForm] int numberOfThread)
         {
-            return await this.matchMonitorJobService.ProcessRule03(false, numberOfThread);
+            return await this.matchMonitorJobService.ProcessRuleHedging(false, numberOfThread);
         }
 
         /// <summary>

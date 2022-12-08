@@ -4,7 +4,7 @@
     using Fanex.Data.Repository;
     using System;
 
-    public class MatchMonitorRule3CompleteCriteria : NonQueryCommand
+    public class MatchMonitorRuleHedgingCompleteCriteria : NonQueryCommand
     {
         [SpParam(SqlParamName = "ip_MatchID")]
         public int MatchId { get; set; }
@@ -31,7 +31,7 @@
         public UInt64 MaxSequenceID { get; set; }
 
         public override string GetSettingKey()
-                => "CTS_DC_MatchMonitor_Rule03_Complete";
+                => "CTS_DC_MatchMonitor_RuleHedging_Complete";
 
         public override bool IsValid()
             => true;

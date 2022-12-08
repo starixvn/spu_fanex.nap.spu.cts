@@ -20,7 +20,7 @@
 
         Task<bool> ProcessRuleFixedGame(bool isLive, int numberOfThread);
 
-        Task<bool> ProcessRule03(bool isLive, int numberOfThread);
+        Task<bool> ProcessRuleHedging(bool isLive, int numberOfThread);
 
         Task<bool> ProcessRuleIrrigation(bool isLive, int numberOfThread);
     }
@@ -85,7 +85,7 @@
 
                             if (matchRuleCompleted != null && matchRuleCompleted.Any())
                             {
-                                matchMonitorServices.CompleteTransRuleGroupBetting(new RuleGroupBettingCompleteParameterModel
+                                matchMonitorServices.CompleteTransRuleGroupBetting(new MatchCompleteRuleGroupBettingParameterModel
                                 {
                                     IsLive = isLive,
                                     MatchInfo = matchInfo,
@@ -131,7 +131,7 @@
 
                             if (matchRuleCompleted != null && matchRuleCompleted.Any())
                             {
-                                matchMonitorServices.CompleteTransRuleFixedGame(new RuleFixedGameCompleteParameterModel
+                                matchMonitorServices.CompleteTransRuleFixedGame(new MatchCompleteRuleFixedGameParameterModel
                                 {
                                     IsLive = isLive,
                                     MatchInfo = matchInfo,
@@ -159,11 +159,11 @@
         /// <summary>
         /// Process Rule for Fixed Game
         /// </summary>
-        public Task<bool> ProcessRule03(bool isLive, int numberOfThread)
+        public Task<bool> ProcessRuleHedging(bool isLive, int numberOfThread)
         {
             try
             {
-                var matchMonitorRule = matchMonitorServices.GetMatchMonitorRule3(isLive);
+                var matchMonitorRule = matchMonitorServices.GetMatchRuleHedging(isLive);
 
                 if (matchMonitorRule != null && matchMonitorRule.MaxSequenceID != 0)
                 {
@@ -173,11 +173,11 @@
                         .WithDegreeOfParallelism(numberOfThread)
                         .ForAll(matchInfo =>
                         {
-                            var matchRuleCompleted = matchMonitorServices.InsertMatchMonitorRule3(isLive, matchMonitorRule.MaxSequenceID, matchInfo);
+                            var matchRuleCompleted = matchMonitorServices.ProcessRuleHedging(isLive, matchMonitorRule.MaxSequenceID, matchInfo);
 
                             if (matchRuleCompleted != null && matchRuleCompleted.Any())
                             {
-                                matchMonitorServices.UpdateMatchMonitorRule3Complete(new MatchMonitorRule3CompleteParaModel
+                                matchMonitorServices.CompleteTransRuleHedging(new MatchCompleteRuleHedgingParameterModel
                                 {
                                     IsLive = isLive,
                                     MatchInfo = matchInfo,
@@ -190,7 +190,7 @@
                         });
                 }
 
-                matchMonitorServices.CleanTransRule3(isLive, matchMonitorRule.MaxSequenceID);
+                matchMonitorServices.CleanTransRuleHedging(isLive, matchMonitorRule.MaxSequenceID);
 
                 return Task.FromResult(true);
             }

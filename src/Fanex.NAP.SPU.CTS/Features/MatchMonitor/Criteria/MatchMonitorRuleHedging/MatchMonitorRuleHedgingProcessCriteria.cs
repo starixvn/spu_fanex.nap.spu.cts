@@ -4,7 +4,7 @@
     using Fanex.Data.Repository;
     using System;
 
-    public class MatchMonitorRule3InsertCriteria : NonQueryCommand
+    public class MatchMonitorRuleHedgingProcessCriteria : NonQueryCommand
     {
         [SpParam(SqlParamName = "ip_LiveIndicator")]
         public bool IsLive { get; set; }
@@ -28,7 +28,7 @@
         public UInt64 MaxSequenceID { get; set; }
 
         public override string GetSettingKey()
-                => "CTS_DC_MatchMonitor_Rule03_Process";
+                => "CTS_DC_MatchMonitor_RuleHedging_Process";
 
         public override bool IsValid()
             => true;

@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class RuleGroupBettingCompleteParameterModel
+    public class MatchCompleteRuleGroupBettingParameterModel
     {
         public bool IsLive { get; set; }
 

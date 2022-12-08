@@ -14,23 +14,23 @@
 
         MatchMonitorRuleFixedGameModel GetMatchRuleFixedGame(bool isLive);
 
-        MatchMonitorRule3Model GetMatchMonitorRule3(bool isLive);
+        MatchMonitorRuleHedgingModel GetMatchRuleHedging(bool isLive);
 
         MatchMonitorRuleIrrigationModel GetMatchMonitorRuleIrrigation(bool isLive);
 
-        IEnumerable<MatchMonitorRuleCompletedModel> ProcessRuleGroupBetting(bool isLive, UInt64 maxTransId, MatchStagingRuleGroupBettingModel matchinfo);
+        IEnumerable<MatchCompleteRuleGroupBettingModel> ProcessRuleGroupBetting(bool isLive, UInt64 maxTransId, MatchStagingRuleGroupBettingModel matchinfo);
 
-        IEnumerable<MatchRuleFixedGameCompletedModel> ProcessRuleFixedGame(bool isLive, UInt64 maxTransId, MatchStagingRuleFixedGameModel matchinfo);
+        IEnumerable<MatchCompleteRuleFixedGameModel> ProcessRuleFixedGame(bool isLive, UInt64 maxTransId, MatchStagingRuleFixedGameModel matchinfo);
 
-        IEnumerable<MatchMonitorRuleCompletedModel> InsertMatchMonitorRule3(bool isLive, UInt64 maxTransId, MatchStagingRule3Model matchinfo);
+        IEnumerable<MatchCompleteRuleHedgingModel> ProcessRuleHedging(bool isLive, UInt64 maxTransId, MatchStagingRuleHedgingModel matchinfo);
 
         IEnumerable<MatchRuleIrrigationCompletedModel> InsertMatchMonitorRuleIrrigation(bool isLive, UInt64 maxSequenceID, MatchStagingRuleIrrigationModel matchinfo);
 
-        void CompleteTransRuleGroupBetting(RuleGroupBettingCompleteParameterModel para);
+        void CompleteTransRuleGroupBetting(MatchCompleteRuleGroupBettingParameterModel para);
 
-        void CompleteTransRuleFixedGame(RuleFixedGameCompleteParameterModel para);
+        void CompleteTransRuleFixedGame(MatchCompleteRuleFixedGameParameterModel para);
 
-        void UpdateMatchMonitorRule3Complete(MatchMonitorRule3CompleteParaModel para);
+        void CompleteTransRuleHedging(MatchCompleteRuleHedgingParameterModel para);
 
         void UpdateMatchMonitorRuleIrrigationComplete(MatchMonitorRuleIrrigationCompleteParaModel para);
 
@@ -38,7 +38,7 @@
 
         void CleanTransRuleFixedGame(bool isLive, UInt64 maxSequenceID);
 
-        void CleanTransRule3(bool isLive, UInt64 maxSequenceID);
+        void CleanTransRuleHedging(bool isLive, UInt64 maxSequenceID);
 
         void CleanTransRuleIrrigation(bool isLive, UInt64 maxSequenceID);
     }
@@ -72,9 +72,9 @@
             return matchDataAccess.GetMatchRuleFixedGame(isLive);
         }
 
-        public MatchMonitorRule3Model GetMatchMonitorRule3(bool isLive)
+        public MatchMonitorRuleHedgingModel GetMatchRuleHedging(bool isLive)
         {
-            return matchDataAccess.GetMatchMonitorRule3(isLive);
+            return matchDataAccess.GetMatchRuleHedging(isLive);
         }
 
         public MatchMonitorRuleIrrigationModel GetMatchMonitorRuleIrrigation(bool isLive)
@@ -82,19 +82,19 @@
             return matchDataAccess.GetMatchMonitorRuleIrrigation(isLive);
         }
 
-        public IEnumerable<MatchMonitorRuleCompletedModel> ProcessRuleGroupBetting(bool isLive, UInt64 maxSequenceID, MatchStagingRuleGroupBettingModel matchinfo)
+        public IEnumerable<MatchCompleteRuleGroupBettingModel> ProcessRuleGroupBetting(bool isLive, UInt64 maxSequenceID, MatchStagingRuleGroupBettingModel matchinfo)
         {
             return matchDataAccess.ProcessRuleGroupBetting(isLive, maxSequenceID, matchinfo);
         }
 
-        public IEnumerable<MatchRuleFixedGameCompletedModel> ProcessRuleFixedGame(bool isLive, UInt64 maxSequenceID, MatchStagingRuleFixedGameModel matchinfo)
+        public IEnumerable<MatchCompleteRuleFixedGameModel> ProcessRuleFixedGame(bool isLive, UInt64 maxSequenceID, MatchStagingRuleFixedGameModel matchinfo)
         {
             return matchDataAccess.ProcessRuleFixedGame(isLive, maxSequenceID, matchinfo);
         }
 
-        public IEnumerable<MatchMonitorRuleCompletedModel> InsertMatchMonitorRule3(bool isLive, UInt64 maxSequenceID, MatchStagingRule3Model matchinfo)
+        public IEnumerable<MatchCompleteRuleHedgingModel> ProcessRuleHedging(bool isLive, UInt64 maxSequenceID, MatchStagingRuleHedgingModel matchinfo)
         {
-            return matchDataAccess.InsertMatchMonitorRule3(isLive, maxSequenceID, matchinfo);
+            return matchDataAccess.ProcessRuleHedging(isLive, maxSequenceID, matchinfo);
         }
 
         public IEnumerable<MatchRuleIrrigationCompletedModel> InsertMatchMonitorRuleIrrigation(bool isLive, UInt64 maxSequenceID, MatchStagingRuleIrrigationModel matchinfo)
@@ -102,19 +102,19 @@
             return matchDataAccess.InsertMatchMonitorRuleIrrigation(isLive, maxSequenceID, matchinfo);
         }
 
-        public void CompleteTransRuleGroupBetting(RuleGroupBettingCompleteParameterModel para)
+        public void CompleteTransRuleGroupBetting(MatchCompleteRuleGroupBettingParameterModel para)
         {
             matchDataAccess.CompleteTransRuleGroupBetting(para);
         }
 
-        public void CompleteTransRuleFixedGame(RuleFixedGameCompleteParameterModel para)
+        public void CompleteTransRuleFixedGame(MatchCompleteRuleFixedGameParameterModel para)
         {
             matchDataAccess.CompleteTransRuleFixedGame(para);
         }
 
-        public void UpdateMatchMonitorRule3Complete(MatchMonitorRule3CompleteParaModel para)
+        public void CompleteTransRuleHedging(MatchCompleteRuleHedgingParameterModel para)
         {
-            matchDataAccess.UpdateMatchMonitorRule3Complete(para);
+            matchDataAccess.CompleteTransRuleHedging(para);
         }
 
         public void UpdateMatchMonitorRuleIrrigationComplete(MatchMonitorRuleIrrigationCompleteParaModel para)
@@ -132,9 +132,9 @@
             matchDataAccess.CleanTransRuleFixedGame(isLive, maxSequenceID);
         }
 
-        public void CleanTransRule3(bool isLive, UInt64 maxSequenceID)
+        public void CleanTransRuleHedging(bool isLive, UInt64 maxSequenceID)
         {
-            matchDataAccess.CleanTransRule3(isLive, maxSequenceID);
+            matchDataAccess.CleanTransRuleHedging(isLive, maxSequenceID);
         }
 
         public void CleanTransRuleIrrigation(bool isLive, UInt64 maxSequenceID)

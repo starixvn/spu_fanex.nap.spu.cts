@@ -2,7 +2,7 @@
 
 namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities
 {
-    public class MatchRuleFixedGameCompletedModel
+    public class MatchCompleteRuleFixedGameModel
     {
         [JsonProperty("Reason")]
         public int Reason { get; set; }

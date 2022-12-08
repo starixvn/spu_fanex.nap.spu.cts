@@ -2,11 +2,11 @@
 {
     using System;
 
-    public class MatchMonitorRule3CompleteParaModel
+    public class MatchCompleteRuleHedgingParameterModel
     {
         public bool IsLive { get; set; }
 
-        public MatchStagingRule3Model MatchInfo { get; set; }
+        public MatchStagingRuleHedgingModel MatchInfo { get; set; }
 
         public string TransGroupJson { get; set; }
 

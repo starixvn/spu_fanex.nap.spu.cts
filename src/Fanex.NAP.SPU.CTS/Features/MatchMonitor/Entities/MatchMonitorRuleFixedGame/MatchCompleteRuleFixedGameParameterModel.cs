@@ -2,7 +2,7 @@
 
 namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities
 {
-    public class RuleFixedGameCompleteParameterModel
+    public class MatchCompleteRuleFixedGameParameterModel
     {
         public bool IsLive { get; set; }
 
