@@ -2,7 +2,7 @@
 
 namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities
 {
-    public class MatchStagingRule2Model
+    public class MatchStagingRuleFixedGameModel
     {
         public int MatchId { get; set; }
 

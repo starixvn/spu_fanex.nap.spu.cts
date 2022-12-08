@@ -35,7 +35,7 @@
         /// Process Rule GroupBetting
         /// </summary>
         [HttpPost("MatchMonitorProcessRuleGroupBettingLive")]
-        public async Task<bool> MatchMonitorRuleLive([FromForm] int numberOfThread)
+        public async Task<bool> MatchMonitorRuleGroupBettingLive([FromForm] int numberOfThread)
         {
             return await this.matchMonitorJobService.ProcessRuleGroupBetting(true, numberOfThread);
         }
@@ -44,7 +44,7 @@
         /// Process Rule GroupBetting
         /// </summary>
         [HttpPost("MatchMonitorProcessRuleGroupBettingNonLive")]
-        public async Task<bool> MatchMonitorRuleNonLive([FromForm] int numberOfThread)
+        public async Task<bool> MatchMonitorRuleGroupBettingNonLive([FromForm] int numberOfThread)
         {
             return await this.matchMonitorJobService.ProcessRuleGroupBetting(false, numberOfThread);
         }
@@ -52,19 +52,19 @@
         /// <summary>
         /// Process Rule2 for FixedGame
         /// </summary>
-        [HttpPost("MatchMonitorInsertRule2Live")]
-        public async Task<bool> MatchMonitorRule2Live([FromForm] int numberOfThread)
+        [HttpPost("MatchMonitorProcessRuleFixedGameLive")]
+        public async Task<bool> MatchMonitorRuleFixedGameLive([FromForm] int numberOfThread)
         {
-            return await this.matchMonitorJobService.ProcessRule02(true, numberOfThread);
+            return await this.matchMonitorJobService.ProcessRuleFixedGame(true, numberOfThread);
         }
 
         /// <summary>
         /// Insert Rule2 for FixedGame
         /// </summary>
-        [HttpPost("MatchMonitorInsertRule2NonLive")]
-        public async Task<bool> MatchMonitorRule2NonLive([FromForm] int numberOfThread)
+        [HttpPost("MatchMonitorProcessRuleFixedGameNonLive")]
+        public async Task<bool> MatchMonitorRuleFixedGameNonLive([FromForm] int numberOfThread)
         {
-            return await this.matchMonitorJobService.ProcessRule02(false, numberOfThread);
+            return await this.matchMonitorJobService.ProcessRuleFixedGame(false, numberOfThread);
         }
 
         /// <summary>

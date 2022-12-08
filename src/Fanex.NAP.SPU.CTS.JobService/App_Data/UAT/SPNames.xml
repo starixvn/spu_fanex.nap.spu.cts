@@ -19,10 +19,10 @@
 		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBetting_Complete" SpName="CTS_DC_MatchMonitor_RuleGroupBetting_Complete_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBetting_StagingClean" SpName="CTS_DC_MatchMonitor_RuleGroupBetting_StagingClean_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 		
-		<Setting Key="CTS_DC_MatchMonitor_Rule02_Get" SpName="CTS_DC_MatchMonitor_Rule02_Get_xtest" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_Rule02_Process" SpName="CTS_DC_MatchMonitor_Rule02_Process_xtest" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_Rule02_Complete" SpName="CTS_DC_MatchMonitor_Rule02_Complete_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_Staging_CleanTrans" SpName="CTS_DC_MatchMonitor_Staging_CleanTrans_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleFixedGame_Get" SpName="CTS_DC_MatchMonitor_RuleFixedGame_Get_xtest" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleFixedGame_Process" SpName="CTS_DC_MatchMonitor_RuleFixedGame_Process_xtest" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleFixedGame_Complete" SpName="CTS_DC_MatchMonitor_RuleFixedGame_Complete_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleFixedGame_StagingClean" SpName="CTS_DC_MatchMonitor_RuleFixedGame_StagingClean_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 
 		<Setting Key="CTS_DC_MatchMonitor_Rule03_Get" SpName="CTS_DC_MatchMonitor_Rule03_Get_xtest" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_Rule03_Process" SpName="CTS_DC_MatchMonitor_Rule03_Process_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>

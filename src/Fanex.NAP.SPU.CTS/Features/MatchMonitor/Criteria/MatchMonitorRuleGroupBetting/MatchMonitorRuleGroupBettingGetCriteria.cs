@@ -4,17 +4,17 @@
     using Fanex.Data.Repository;
     using System;
 
-    public class MatchMonitorRule2TransCleanCriteria : NonQueryCommand
+    public class MatchMonitorRuleGroupBettingGetCriteria : NonQueryCommand
     {
         [SpParam(SqlParamName = "ip_LiveIndicator")]
         public bool IsLive { get; set; }
 
-        [SpParam(SqlParamName = "ip_SequenceID")]
+        [SpParam(SqlParamName = "op_MaxSequenceID")]
         public UInt64 MaxSequenceID { get; set; }
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_MatchMonitor_Staging_CleanTrans";
+            return "CTS_DC_MatchMonitor_RuleGroupBetting_Get";
         }
 
         public override bool IsValid()

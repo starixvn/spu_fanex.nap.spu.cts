@@ -2,7 +2,7 @@
 {
     using Newtonsoft.Json;
 
-    public class MatchRuleCompletedModel
+    public class MatchMonitorRuleCompletedModel
     {
         [JsonProperty("GroupID")]
         public int GroupId { get; set; }

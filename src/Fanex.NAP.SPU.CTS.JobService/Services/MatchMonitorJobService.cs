@@ -18,7 +18,7 @@
 
         Task<bool> ProcessRuleGroupBetting(bool isLive, int numberOfThread);
 
-        Task<bool> ProcessRule02(bool isLive, int numberOfThread);
+        Task<bool> ProcessRuleFixedGame(bool isLive, int numberOfThread);
 
         Task<bool> ProcessRule03(bool isLive, int numberOfThread);
 
@@ -113,30 +113,30 @@
         /// <summary>
         /// Process Rule for Fixed Game
         /// </summary>
-        public Task<bool> ProcessRule02(bool isLive, int numberOfThread)
+        public Task<bool> ProcessRuleFixedGame(bool isLive, int numberOfThread)
         {
             try
             {
-                var matchMonitorRule2 = matchMonitorServices.GetMatchMonitorRule2(isLive);
+                var matchMonitorRule = matchMonitorServices.GetMatchRuleFixedGame(isLive);
 
-                if (matchMonitorRule2 != null && matchMonitorRule2.MaxSequenceID != 0)
+                if (matchMonitorRule != null && matchMonitorRule.MaxSequenceID != 0)
                 {
-                    matchMonitorRule2
+                    matchMonitorRule
                         .MatchStagingList
                         .AsParallel()
                         .WithDegreeOfParallelism(numberOfThread)
                         .ForAll(matchInfo =>
                         {
-                            var matchRuleCompleted = matchMonitorServices.InsertMatchMonitorRule2(isLive, matchMonitorRule2.MaxSequenceID, matchInfo);
+                            var matchRuleCompleted = matchMonitorServices.ProcessRuleFixedGame(isLive, matchMonitorRule.MaxSequenceID, matchInfo);
 
                             if (matchRuleCompleted != null && matchRuleCompleted.Any())
                             {
-                                matchMonitorServices.UpdateMatchMonitorRule2Complete(new MatchMonitorRule2CompleteParaModel
+                                matchMonitorServices.CompleteTransRuleFixedGame(new RuleFixedGameCompleteParameterModel
                                 {
                                     IsLive = isLive,
                                     MatchInfo = matchInfo,
                                     TransGroupJson = JsonConvert.SerializeObject(matchRuleCompleted),
-                                    MaxSequenceID = matchMonitorRule2.MaxSequenceID
+                                    MaxSequenceID = matchMonitorRule.MaxSequenceID
                                 });
                             }
 
@@ -144,7 +144,7 @@
                         });
                 }
 
-                matchMonitorServices.CleanTransRule2(isLive, matchMonitorRule2.MaxSequenceID);
+                matchMonitorServices.CleanTransRuleFixedGame(isLive, matchMonitorRule.MaxSequenceID);
 
                 return Task.FromResult(true);
             }

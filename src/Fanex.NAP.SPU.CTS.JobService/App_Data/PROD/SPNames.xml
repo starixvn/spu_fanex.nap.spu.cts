@@ -19,10 +19,10 @@
 		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBetting_Complete" SpName="CTS_DC_MatchMonitor_RuleGroupBetting_Complete" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" TimeOut="600"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBetting_StagingClean" SpName="CTS_DC_MatchMonitor_RuleGroupBetting_StagingClean" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" TimeOut="600"></Setting>
 
-		<Setting Key="CTS_DC_MatchMonitor_Rule02_Get" SpName="CTS_DC_MatchMonitor_Rule02_Get" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_Rule02_Process" SpName="CTS_DC_MatchMonitor_Rule02_Process" DbName="MySQL.CTS_DataCenter.ctsService" TimeOut="600"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_Rule02_Complete" SpName="CTS_DC_MatchMonitor_Rule02_Complete" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" TimeOut="600"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_Staging_CleanTrans" SpName="CTS_DC_MatchMonitor_Staging_CleanTrans" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" TimeOut="600"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleFixedGame_Get" SpName="CTS_DC_MatchMonitor_RuleFixedGame_Get" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleFixedGame_Process" SpName="CTS_DC_MatchMonitor_RuleFixedGame_Process" DbName="MySQL.CTS_DataCenter.ctsService" TimeOut="600"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleFixedGame_Complete" SpName="CTS_DC_MatchMonitor_RuleFixedGame_Complete" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" TimeOut="600"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleFixedGame_StagingClean" SpName="CTS_DC_MatchMonitor_RuleFixedGame_StagingClean" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" TimeOut="600"></Setting>
 
 		<Setting Key="CTS_DC_MatchMonitor_Rule03_Get" SpName="CTS_DC_MatchMonitor_Rule03_Get" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_Rule03_Process" SpName="CTS_DC_MatchMonitor_Rule03_Process" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" TimeOut="600"></Setting>

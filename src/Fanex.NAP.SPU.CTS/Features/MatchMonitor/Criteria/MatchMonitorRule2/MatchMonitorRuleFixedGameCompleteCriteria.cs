@@ -4,7 +4,7 @@
     using Fanex.Data.Repository;
     using System;
 
-    public class MatchMonitorRule2CompleteCriteria : NonQueryCommand
+    public class MatchMonitorRuleFixedGameCompleteCriteria : NonQueryCommand
     {
         [SpParam(SqlParamName = "ip_MatchID")]
         public int MatchId { get; set; }
@@ -31,7 +31,7 @@
         public string TransGroupJson { get; set; }
 
         public override string GetSettingKey()
-                => "CTS_DC_MatchMonitor_Rule02_Complete";
+                => "CTS_DC_MatchMonitor_RuleFixedGame_Complete";
 
         public override bool IsValid()
             => true;

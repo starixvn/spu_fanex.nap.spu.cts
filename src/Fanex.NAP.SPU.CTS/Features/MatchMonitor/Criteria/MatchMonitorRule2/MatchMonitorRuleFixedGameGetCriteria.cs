@@ -4,7 +4,7 @@
     using Fanex.Data.Repository;
     using System;
 
-    public class MatchMonitorRule2GetCriteria : NonQueryCommand
+    public class MatchMonitorRuleFixedGameGetCriteria : NonQueryCommand
     {
         [SpParam(SqlParamName = "ip_LiveIndicator")]
         public bool IsLive { get; set; }
@@ -14,7 +14,7 @@
 
         public override string GetSettingKey()
         {
-            return "CTS_DC_MatchMonitor_Rule02_Get";
+            return "CTS_DC_MatchMonitor_RuleFixedGame_Get";
         }
 
         public override bool IsValid()
