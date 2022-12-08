@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities
+﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities
 {
+    using System;
+
     using System.Collections.Generic;
 
     public class MatchMonitorRuleFixedGameModel

@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities
+﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities
 {
+    using System;
+
     public class MatchStagingRuleHedgingModel
     {
         public int MatchId { get; set; }
@@ -11,7 +11,7 @@ namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities
         public int BetTypeID { get; set; }
 
         public Int64 BetID { get; set; }
-        
+
         public string BetTeam { get; set; }
     }
 }

@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities
+﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities
 {
+    using System;
+
     public class MatchCompleteRuleFixedGameParameterModel
     {
         public bool IsLive { get; set; }

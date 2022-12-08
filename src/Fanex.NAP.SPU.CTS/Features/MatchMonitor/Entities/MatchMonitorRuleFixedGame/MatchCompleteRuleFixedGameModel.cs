@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
-
-namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities
+﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities
 {
+    using Newtonsoft.Json;
+
     public class MatchCompleteRuleFixedGameModel
     {
         [JsonProperty("Reason")]

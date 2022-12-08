@@ -11,6 +11,5 @@
         public string TransGroupJson { get; set; }
 
         public UInt64 MaxSequenceID { get; set; }
-        
     }
 }
