@@ -95,5 +95,23 @@
         {
             return await this.matchMonitorJobService.ProcessRuleIrrigation(false, numberOfThread);
         }
+
+        /// <summary>
+        /// Process Rule Soccer Hedging
+        /// </summary>
+        [HttpPost("MatchMonitorProcessRuleArbitrageLive")]
+        public async Task<bool> MatchMonitorRuleArbitrageLive([FromForm] int numberOfThread)
+        {
+            return await this.matchMonitorJobService.ProcessRuleArbitrage(true, numberOfThread);
+        }
+
+        /// <summary>
+        /// Process Rule Soccer Hedging
+        /// </summary>
+        [HttpPost("MatchMonitorProcessRuleArbitrageLNonLive")]
+        public async Task<bool> MatchMonitorRuleArbitrageNonLive([FromForm] int numberOfThread)
+        {
+            return await this.matchMonitorJobService.ProcessRuleArbitrage(false, numberOfThread);
+        }
     }
 }

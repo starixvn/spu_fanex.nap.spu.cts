@@ -33,6 +33,11 @@
 		<Setting Key="CTS_DC_MatchMonitor_RuleIrrigation_Process" SpName="CTS_DC_MatchMonitor_RuleIrrigation_Process" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_RuleIrrigation_Complete" SpName="CTS_DC_MatchMonitor_RuleIrrigation_Complete" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_RuleIrrigation_StagingClean" SpName="CTS_DC_MatchMonitor_RuleIrrigation_StagingClean" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
+
+		<Setting Key="CTS_DC_MatchMonitor_RuleArbitrage_Get" SpName="CTS_DC_MatchMonitor_RuleArbitrage_Get_xtest" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleArbitrage_Process" SpName="CTS_DC_MatchMonitor_RuleArbitrage_Process_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleArbitrage_Complete" SpName="CTS_DC_MatchMonitor_RuleArbitrage_Complete_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleArbitrage_StagingClean" SpName="CTS_DC_MatchMonitor_RuleArbitrage_StagingClean_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 	</Function>
 	<Function Name="SyncUserPermisison">
 		<Setting Key="CTS_DC_Common_InsertUserPermission" SpName="CTS_DC_Common_InsertUserPermission_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />

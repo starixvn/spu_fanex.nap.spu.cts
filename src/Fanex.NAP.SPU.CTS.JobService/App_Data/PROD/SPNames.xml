@@ -33,6 +33,11 @@
 		<Setting Key="CTS_DC_MatchMonitor_RuleIrrigation_Process" SpName="CTS_DC_MatchMonitor_RuleIrrigation_Process" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" TimeOut="600"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_RuleIrrigation_Complete" SpName="CTS_DC_MatchMonitor_RuleIrrigation_Complete" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" TimeOut="600"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_RuleIrrigation_StagingClean" SpName="CTS_DC_MatchMonitor_RuleIrrigation_StagingClean" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" TimeOut="600"></Setting>
+
+		<Setting Key="CTS_DC_MatchMonitor_RuleArbitrage_Get" SpName="CTS_DC_MatchMonitor_RuleArbitrage_Get" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleArbitrage_Process" SpName="CTS_DC_MatchMonitor_RuleArbitrage_Process" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" TimeOut="600"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleArbitrage_Complete" SpName="CTS_DC_MatchMonitor_RuleArbitrage_Complete" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" TimeOut="600"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleArbitrage_StagingClean" SpName="CTS_DC_MatchMonitor_RuleArbitrage_StagingClean" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" TimeOut="600"></Setting>
 	</Function>
 	<Function Name="SyncUserPermisison">
 		<Setting Key="CTS_DC_Common_InsertUserPermission" SpName="CTS_DC_Common_InsertUserPermission" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
