@@ -79,7 +79,7 @@
         /// <summary>
         /// Process Rule Soccer Hedging
         /// </summary>
-        [HttpPost("MatchMonitorProcessRuleHedgingLNonLive")]
+        [HttpPost("MatchMonitorProcessRuleHedgingNonLive")]
         public async Task<bool> MatchMonitorRuleHedgingNonLive([FromForm] int numberOfThread)
         {
             return await this.matchMonitorJobService.ProcessRuleHedging(false, numberOfThread);
@@ -90,7 +90,7 @@
         /// </summary>
         /// <param name="numberOfThread"></param>
         /// <returns></returns>
-        [HttpPost("MatchMonitorInsertRuleIrrigationNonLive")]
+        [HttpPost("MatchMonitorProcessRuleIrrigationNonLive")]
         public async Task<bool> MatchMonitorRuleIrrigationNonLive([FromForm] int numberOfThread)
         {
             return await this.matchMonitorJobService.ProcessRuleIrrigation(false, numberOfThread);
@@ -108,7 +108,7 @@
         /// <summary>
         /// Process Rule Soccer Hedging
         /// </summary>
-        [HttpPost("MatchMonitorProcessRuleArbitrageLNonLive")]
+        [HttpPost("MatchMonitorProcessRuleArbitrageNonLive")]
         public async Task<bool> MatchMonitorRuleArbitrageNonLive([FromForm] int numberOfThread)
         {
             return await this.matchMonitorJobService.ProcessRuleArbitrage(false, numberOfThread);
