@@ -4,13 +4,15 @@
 
     public class MatchStagingRuleFixedGameModel
     {
-        public int MatchId { get; set; }
+        public int MatchID { get; set; }
 
-        public int TotalScore { get; set; }
+        public int ScoreDiff { get; set; }
 
         public int BetTypeID { get; set; }
 
         public Int64 BetID { get; set; }
+
+        public decimal HDP { get; set; }
 
         public string Betteam { get; set; }
     }

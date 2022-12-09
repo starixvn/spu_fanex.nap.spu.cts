@@ -6,12 +6,14 @@
     {
         public int MatchId { get; set; }
 
-        public int TotalScore { get; set; }
+        public int IsMajorLeague { get; set; }
+
+        public int ScoreDiff { get; set; }
 
         public int BetTypeID { get; set; }
 
         public Int64 BetID { get; set; }
 
-        public string BetTeam { get; set; }
+        public decimal HDP { get; set; }
     }
 }

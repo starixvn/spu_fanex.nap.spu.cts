@@ -195,7 +195,7 @@
                 IsLive = isLive,
                 BettypeId = matchinfo.BettypeID,
                 MatchId = matchinfo.MatchID,
-                TotalScore = matchinfo.ScoreDiff,
+                ScoreDiff = matchinfo.ScoreDiff,
                 MaxSequenceID = maxSequenceID,
                 BetId = matchinfo.BetID
             };
@@ -209,10 +209,11 @@
             {
                 IsLive = isLive,
                 BettypeId = matchinfo.BetTypeID,
-                MatchId = matchinfo.MatchId,
-                TotalScore = matchinfo.TotalScore,
+                MatchId = matchinfo.MatchID,
+                ScoreDiff = matchinfo.ScoreDiff,
                 MaxSequenceID = maxSequenceID,
                 BetId = matchinfo.BetID,
+                HDP = matchinfo.HDP,
                 BetTeam = matchinfo.Betteam
             };
 
@@ -224,10 +225,10 @@
             var criteria = new MatchMonitorRuleHedgingProcessCriteria()
             {
                 IsLive = isLive,
-                BettypeId = matchinfo.BetTypeID,
-                MatchId = matchinfo.MatchId,
-                TotalScore = matchinfo.TotalScore,
                 MaxSequenceID = maxSequenceID,
+                MatchId = matchinfo.MatchId,
+                ScoreDiff = matchinfo.ScoreDiff,
+                BettypeId = matchinfo.BetTypeID,
                 BetId = matchinfo.BetID,
                 Betteam = matchinfo.BetTeam
             };
@@ -257,17 +258,17 @@
             var criteria = new MatchMonitorRuleArbitrageProcessCriteria()
             {
                 IsLive = isLive,
-                BettypeId = matchinfo.BetTypeID,
-                MatchId = matchinfo.MatchId,
-                TotalScore = matchinfo.TotalScore,
                 MaxSequenceID = maxSequenceID,
+                MatchId = matchinfo.MatchId,
+                IsMajorLeague = matchinfo.IsMajorLeague,
+                ScoreDiff = matchinfo.ScoreDiff,
+                BettypeId = matchinfo.BetTypeID,
                 BetId = matchinfo.BetID,
-                Betteam = matchinfo.BetTeam
+                HDP = matchinfo.HDP
             };
 
             return repository.Fetch<MatchCompleteRuleArbitrageModel>(criteria);
         }
-
 
         public void CompleteTransRuleGroupBetting(MatchCompleteRuleGroupBettingParameterModel para)
         {
@@ -290,13 +291,14 @@
             var criteria = new MatchMonitorRuleFixedGameCompleteCriteria
             {
                 IsLive = para.IsLive,
+                MaxSequenceID = para.MaxSequenceID,
+                MatchId = para.MatchInfo.MatchID,
+                ScoreDiff = para.MatchInfo.ScoreDiff,
                 BettypeId = para.MatchInfo.BetTypeID,
                 BetID = para.MatchInfo.BetID,
-                MatchId = para.MatchInfo.MatchId,
-                TotalScore = para.MatchInfo.TotalScore,
-                TransGroupJson = para.TransGroupJson,
-                MaxSequenceID = para.MaxSequenceID,
-                Betteam = para.MatchInfo.Betteam
+                HDP = para.MatchInfo.HDP,
+                Betteam = para.MatchInfo.Betteam,
+                TransGroupJson = para.TransGroupJson
             };
 
             repository.Execute(criteria);
@@ -307,13 +309,13 @@
             var criteria = new MatchMonitorRuleHedgingCompleteCriteria
             {
                 IsLive = para.IsLive,
+                MaxSequenceID = para.MaxSequenceID,
+                MatchId = para.MatchInfo.MatchId,
+                ScoreDiff = para.MatchInfo.ScoreDiff,
                 BettypeId = para.MatchInfo.BetTypeID,
                 BetID = para.MatchInfo.BetID,
-                MatchId = para.MatchInfo.MatchId,
-                TotalScore = para.MatchInfo.TotalScore,
                 Betteam = para.MatchInfo.BetTeam,
                 TransGroupJson = para.TransGroupJson,
-                MaxSequenceID = para.MaxSequenceID
             };
 
             repository.Execute(criteria);
@@ -342,13 +344,14 @@
             var criteria = new MatchMonitorRuleArbitrageCompleteCriteria
             {
                 IsLive = para.IsLive,
+                MaxSequenceID = para.MaxSequenceID,
+                MatchId = para.MatchInfo.MatchId,
+                IsMajorLeague = para.MatchInfo.IsMajorLeague,
+                ScoreDiff = para.MatchInfo.ScoreDiff,
                 BettypeId = para.MatchInfo.BetTypeID,
                 BetID = para.MatchInfo.BetID,
-                MatchId = para.MatchInfo.MatchId,
-                TotalScore = para.MatchInfo.TotalScore,
-                Betteam = para.MatchInfo.BetTeam,
+                HDP = para.MatchInfo.HDP,
                 TransGroupJson = para.TransGroupJson,
-                MaxSequenceID = para.MaxSequenceID
             };
 
             repository.Execute(criteria);
@@ -397,7 +400,6 @@
 
             repository.Execute(criteria);
         }
-
 
         public void CleanTransRuleArbitrage(bool isLive, UInt64 maxSequenceID)
         {

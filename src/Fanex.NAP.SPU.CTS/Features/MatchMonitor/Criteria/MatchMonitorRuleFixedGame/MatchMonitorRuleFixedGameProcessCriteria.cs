@@ -15,14 +15,17 @@
         [SpParam(SqlParamName = "ip_MatchID")]
         public int MatchId { get; set; }
 
-        [SpParam(SqlParamName = "ip_TotalScore")]
-        public int TotalScore { get; set; }
+        [SpParam(SqlParamName = "ip_ScoreDiff")]
+        public int ScoreDiff { get; set; }
 
         [SpParam(SqlParamName = "ip_BettypeID")]
         public int BettypeId { get; set; }
 
         [SpParam(SqlParamName = "ip_BetID")]
         public Int64 BetId { get; set; }
+
+        [SpParam(SqlParamName = "ip_HDP")]
+        public decimal HDP { get; set; }
 
         [SpParam(SqlParamName = "ip_Betteam")]
         public string BetTeam { get; set; }

@@ -159,7 +159,7 @@
         }
 
         /// <summary>
-        /// Process Rule for Fixed Game
+        /// Process Rule for Hedging
         /// </summary>
         public Task<bool> ProcessRuleHedging(bool isLive, int numberOfThread)
         {
