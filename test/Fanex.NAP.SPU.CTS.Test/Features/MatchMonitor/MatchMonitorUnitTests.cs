@@ -2,38 +2,22 @@
 {
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
-    using Fanex.NAP.SPU.CTS.Features.SystemParameter;
     using FluentAssertions;
     using Newtonsoft.Json;
     using NSubstitute;
     using System;
     using System.Collections.Generic;
     using Xunit;
-    using static Fanex.NAP.SPU.CTS.Shares.Consts;
 
     public class MatchMonitorUnitTests
     {
         private readonly IMatchMonitorDataAccess matchMonitorDataAccess;
         private readonly IMatchMonitorServices matchMonitorServices;
 
-        private readonly ISystemParameterServices commonServices;
-        private readonly SystemParameterDataAccess commonDataAccess;
-
         public MatchMonitorUnitTests()
         {
             matchMonitorDataAccess = Substitute.For<IMatchMonitorDataAccess>();
             matchMonitorServices = new MatchMonitorServices(matchMonitorDataAccess);
-
-            commonDataAccess = Substitute.For<SystemParameterDataAccess>();
-            commonServices = new SystemParameterServices(commonDataAccess);
-        }
-
-        [Fact]
-        public void GetLastScannedTransID_WhenSuccess_ReturnTransID()
-        {
-            var result = commonServices.GetLastScannedId(SystemParameters.MatchMonitorLastScannedTrans);
-
-            result.Should().NotBe(null);
         }
 
         [Theory]
@@ -41,7 +25,7 @@
         [InlineData(10, 100, true)]
         [InlineData(1, 10, false)]
         [InlineData(10, 100, false)]
-        public void GetMatchTrans_WhenSuccess_ReturnMat(long lastScannedSequenceID, int batchSize, bool isLive)
+        public void GetMatchTrans_WhenSuccess_ReturnMatch(long lastScannedSequenceID, int batchSize, bool isLive)
         {
             var output = new List<TicketDetailEntity>
             {
@@ -101,125 +85,174 @@
             result.Should().BeEquivalentTo(output);
         }
 
-        //[Theory]
-        //[InlineData(true)]
-        //[InlineData(false)]
-        //public void InsertMatchMonitorStaging_WhenSuccess_ReturnListMatchStaging(bool isLive)
-        //{
-        //    var ticketDetails = new List<TicketDetailEntity>
-        //    {
-        //        new TicketDetailEntity
-        //        {
-        //            CustId = 1,
-        //            AwayId = 1,
-        //            BetTeam = string.Empty,
-        //            BetType = 1,
-        //            Hdp1 = 1,
-        //            Hdp2 = 1,
-        //            MatchId = 1,
-        //            HomeId = 1,
-        //            LeagueId = 1,
-        //            LiveAwayScore = 1,
-        //            LiveHomeScore = 1,
-        //            LiveIndicator = true,
-        //            Odds = 1,
-        //            Stake = 1,
-        //            TransId = 1,
-        //            EventDate = DateTime.Parse("2021-07-05 22:50:55"),
-        //            EventStatus = string.Empty,
-        //            KickOffTime = DateTime.Parse("2021-07-05 22:50:55"),
-        //            TicketStatus = 1,
-        //            TransDate = DateTime.Parse("2021-07-05 22:50:55")
-        //        },
-        //        new TicketDetailEntity
-        //        {
-        //            CustId = 2,
-        //            AwayId = 2,
-        //            BetTeam = string.Empty,
-        //            BetType = 2,
-        //            Hdp1 = 2,
-        //            Hdp2 = 2,
-        //            MatchId = 2,
-        //            HomeId = 2,
-        //            LeagueId = 2,
-        //            LiveAwayScore = 2,
-        //            LiveHomeScore = 2,
-        //            LiveIndicator = true,
-        //            Odds = 2,
-        //            Stake = 2,
-        //            TransId = 2,
-        //            EventDate = DateTime.Parse("2021-07-05 22:50:55"),
-        //            EventStatus = string.Empty,
-        //            KickOffTime = DateTime.Parse("2021-07-05 22:50:55"),
-        //            TicketStatus = 2,
-        //            TransDate = DateTime.Parse("2021-07-05 22:50:55")
-        //        }
-        //    };
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void InsertMatchMonitorStaging_WhenSuccess_ReturnNonException(bool isLive)
+        {
+            var ticketDetails = new List<TicketDetailEntity>
+            {
+                new TicketDetailEntity
+                {
+                    CustId = 1,
+                    AwayId = 1,
+                    BetTeam = string.Empty,
+                    BetType = 1,
+                    Hdp1 = 1,
+                    Hdp2 = 1,
+                    MatchId = 1,
+                    HomeId = 1,
+                    LeagueId = 1,
+                    LiveAwayScore = 1,
+                    LiveHomeScore = 1,
+                    LiveIndicator = true,
+                    Odds = 1,
+                    Stake = 1,
+                    TransId = 1,
+                    EventDate = DateTime.Parse("2021-07-05 22:50:55"),
+                    EventStatus = string.Empty,
+                    KickOffTime = DateTime.Parse("2021-07-05 22:50:55"),
+                    TicketStatus = 1,
+                    TransDate = DateTime.Parse("2021-07-05 22:50:55")
+                },
+                new TicketDetailEntity
+                {
+                    CustId = 2,
+                    AwayId = 2,
+                    BetTeam = string.Empty,
+                    BetType = 2,
+                    Hdp1 = 2,
+                    Hdp2 = 2,
+                    MatchId = 2,
+                    HomeId = 2,
+                    LeagueId = 2,
+                    LiveAwayScore = 2,
+                    LiveHomeScore = 2,
+                    LiveIndicator = true,
+                    Odds = 2,
+                    Stake = 2,
+                    TransId = 2,
+                    EventDate = DateTime.Parse("2021-07-05 22:50:55"),
+                    EventStatus = string.Empty,
+                    KickOffTime = DateTime.Parse("2021-07-05 22:50:55"),
+                    TicketStatus = 2,
+                    TransDate = DateTime.Parse("2021-07-05 22:50:55")
+                }
+            };
 
-        //    var matchStagings = new List<MatchStagingModel> { 
-        //        new MatchStagingModel{ 
-        //            MatchId = 1,
-        //            BetTypeId = 1,
-        //            TotalScore = 3
-        //        },
-        //        new MatchStagingModel{
-        //            MatchId = 2,
-        //            BetTypeId = 3,
-        //            TotalScore = 2
-        //        },
-        //        new MatchStagingModel{
-        //            MatchId = 3,
-        //            BetTypeId = 7,
-        //            TotalScore = 0
-        //        },
-        //    };
+            var ticketDetailToJson = JsonConvert.SerializeObject(ticketDetails);
 
-        //    var ticketDetailToJson = JsonConvert.SerializeObject(ticketDetails);
+            matchMonitorDataAccess.InsertMatchMonitorStaging(ticketDetailToJson, isLive);
 
-        //    matchMonitorDataAccess.InsertMatchMonitorStaging(ticketDetailToJson, isLive).Returns(matchStagings);
+            Action action = () => matchMonitorServices.InsertMatchMonitorStaging(ticketDetailToJson, isLive);
 
-        //    var result = matchMonitorServices.InsertMatchMonitorStaging(ticketDetailToJson, isLive);
+            action.Should().NotThrow<Exception>();
+        }
 
-        //    result.Should().NotBeNull();
-        //    result.Should().BeEquivalentTo(matchStagings);
-        //}
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public void GetMatchRuleArbitrage_WhenSuccess_ReturnMatches(bool isLive)
+        {
+            var output = new MatchMonitorRuleArbitrageModel
+            {
+                MaxSequenceID = 1,
+                MatchStagingList = new List<MatchStagingRuleArbitrageModel>
+                {
+                    new MatchStagingRuleArbitrageModel
+                    {
+                        MatchId = 1,
+                        IsMajorLeague = true,
+                        BetTypeID = 1,
+                        BetID = 1,
+                        ScoreDiff = -1,
+                        HDP = 1.00m
+                    }
+                }
+            };
 
-        //[Theory]
-        //[InlineData(true, 1, 2, 1)]
-        //[InlineData(true, 1, 0, 3)]
-        //[InlineData(true, 1, 3, 7)]
-        //[InlineData(true, 1, 3, 8)]
-        //[InlineData(false, 1, 2, 1)]
-        //[InlineData(false, 1, 0, 3)]
-        //[InlineData(false, 1, 3, 7)]
-        //[InlineData(false, 1, 3, 8)]
-        //public void InsertMatchMonitorRule_WhenSuccess_ReturnNotException(bool isLive, int matchId, int totalScore, int bettypeId)
-        //{
-        //    var result = new List<MatchRuleCompletedModel> {
-        //        new MatchRuleCompletedModel
-        //        {
-        //            GroupId = 1,
-        //            IsHedging = false,
-        //            CustIdList = "17990615,50294551,50294551",
-        //            TransIdList = "111845019100,111845032053,111845032772",
-        //            OldGroupIdList = "0",
-        //            NoOfOldGroupIdList = 0
-        //        }
-        //    };
+            matchMonitorDataAccess.GetMatchRuleArbitrage(isLive).Returns(output);
 
-        //    matchMonitorDataAccess.InsertMatchMonitorRule(isLive, matchId, totalScore, bettypeId).Returns(result);
+            var result = matchMonitorServices.GetMatchRuleArbitrage(isLive);
 
-            
-        //}
+            result.Should().BeEquivalentTo(output);
+        }
 
-        //[Fact]
-        //public void UpdateMatchTransComplete_WhenSuccess_ReturnNotException()
-        //{
-        //    matchMonitorDataAccess.UpdateMatchTransComplete();
+        [Theory]
+        [InlineData(true, 1)]
+        [InlineData(false, 2)]
+        public void ProcessRuleArbitrage_WhenSuccess_ReturnMatchDetectionResults(bool isLive, UInt64 maxSequenceID)
+        {
+            var input = new MatchStagingRuleArbitrageModel
+            {
+                MatchId = 1,
+                IsMajorLeague = true,
+                BetTypeID = 1,
+                BetID = 1,
+                ScoreDiff = -1,
+                HDP = 1.00m
+            };
 
-        //    Action action = () => matchMonitorServices.UpdateMatchTransComplete();
+            var output = new List<MatchCompleteRuleArbitrageModel>
+            {
+                new MatchCompleteRuleArbitrageModel
+                {
+                    CustIdList = "1,2,3",
+                    TransIDList = "111,222",
+                    GroupId = 1,
+                    Reason = 1,
+                    OldGroupIdList = "1",
+                    HighStakeLicCustList = "1"
+                }
+            };
 
-        //    action.Should().NotThrow<Exception>();
-        //}
+            matchMonitorDataAccess.ProcessRuleArbitrage(isLive, maxSequenceID, input).Returns(output);
+
+            var result = matchMonitorServices.ProcessRuleArbitrage(isLive, maxSequenceID, input);
+
+            result.Should().BeEquivalentTo(output);
+        }
+
+        [Theory]
+        [InlineData(true, 1)]
+        [InlineData(false, 2)]
+        public void CompleteTransRuleArbitrage_WhenSuccess_ReturnNonException(bool isLive, UInt64 maxSequenceID)
+        {
+            var matchInfo = new MatchStagingRuleArbitrageModel
+            {
+                MatchId = 1,
+                IsMajorLeague = true,
+                BetTypeID = 1,
+                BetID = 1,
+                ScoreDiff = -1,
+                HDP = 1.00m
+            };
+
+            var input = new MatchCompleteRuleArbitrageParameterModel
+            {
+                IsLive = isLive,
+                MatchInfo = matchInfo,
+                TransGroupJson = JsonConvert.SerializeObject(""),
+                MaxSequenceID = maxSequenceID
+            };
+
+            matchMonitorDataAccess.CompleteTransRuleArbitrage(input);
+
+            Action action = () => matchMonitorServices.CompleteTransRuleArbitrage(input);
+
+            action.Should().NotThrow<Exception>();
+        }
+
+        [Theory]
+        [InlineData(true, 1)]
+        [InlineData(false, 2)]
+        public void CleanTransRuleArbitrage_WhenSuccess_ReturnNonException(bool isLive, UInt64 maxSequenceID)
+        {
+            matchMonitorDataAccess.CleanTransRuleArbitrage(isLive, maxSequenceID);
+
+            Action action = () => matchMonitorServices.CleanTransRuleArbitrage(isLive, maxSequenceID);
+
+            action.Should().NotThrow<Exception>();
+        }
     }
 }

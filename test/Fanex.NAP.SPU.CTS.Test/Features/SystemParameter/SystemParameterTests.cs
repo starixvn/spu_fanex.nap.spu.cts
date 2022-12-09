@@ -9,12 +9,12 @@
 
     public class SystemParameterTests
     {
-        private readonly SystemParameterDataAccess systemParameterDataAccess;
+        private readonly ISystemParameterDataAccess systemParameterDataAccess;
         private readonly ISystemParameterServices systemParameterServices;
 
         public SystemParameterTests()
         {
-            systemParameterDataAccess = Substitute.For<SystemParameterDataAccess>();
+            systemParameterDataAccess = Substitute.For<ISystemParameterDataAccess>();
 
             systemParameterServices = new SystemParameterServices(systemParameterDataAccess);
         }
