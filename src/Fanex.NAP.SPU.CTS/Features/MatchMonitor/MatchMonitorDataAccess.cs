@@ -84,26 +84,13 @@
 
         public void InsertMatchMonitorStaging(string matchTransJson, bool isLive)
         {
-            try
+            var criteria = new MatchMonitorStagingInsertCriteria
             {
-                var criteria = new MatchMonitorStagingInsertCriteria
-                {
-                    MatchTransJson = matchTransJson,
-                    IsLive = isLive
-                };
+                MatchTransJson = matchTransJson,
+                IsLive = isLive
+            };
 
-                repository.Execute(criteria);
-            }
-            catch (Exception ex)
-            {
-                var logMessage = new LogMessage(ex.Message)
-                .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex)).ToString();
-
-                LogService.Error($"Insert Match Monitor Staging Json { matchTransJson } Exception { logMessage }", ex);
-
-                throw;
-            }
+            repository.Execute(criteria);
         }
 
         #endregion Insert trans into staging

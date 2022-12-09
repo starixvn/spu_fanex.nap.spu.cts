@@ -6,7 +6,7 @@
     {
         public int MatchId { get; set; }
 
-        public int IsMajorLeague { get; set; }
+        public bool IsMajorLeague { get; set; }
 
         public int ScoreDiff { get; set; }
 
