@@ -126,7 +126,7 @@
         private static void RegisterDataAccesLayer(this IServiceCollection services)
         {
             services.AddSingleton<ISystemParameterServices, SystemParameterServices>();
-            services.AddSingleton<SystemParameterDataAccess, SystemParameterDataAccess>();
+            services.AddSingleton<ISystemParameterDataAccess, SystemParameterDataAccess>();
         }
 
         private static void RegisterInitialCustomerStatus(this IServiceCollection services)

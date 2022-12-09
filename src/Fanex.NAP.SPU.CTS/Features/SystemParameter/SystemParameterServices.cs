@@ -16,9 +16,9 @@
 
     public class SystemParameterServices : ISystemParameterServices
     {
-        private readonly SystemParameterDataAccess systemParameterDataAccess;
+        private readonly ISystemParameterDataAccess systemParameterDataAccess;
 
-        public SystemParameterServices(SystemParameterDataAccess systemParameterDataAccess)
+        public SystemParameterServices(ISystemParameterDataAccess systemParameterDataAccess)
         {
             this.systemParameterDataAccess = systemParameterDataAccess;
         }
