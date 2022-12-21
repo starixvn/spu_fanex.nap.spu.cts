@@ -1,7 +1,6 @@
 ﻿namespace Fanex.NAP.SPU.CTS.JobService.Controllers
 {
     using Fanex.NAP.SPU.CTS.JobService.Services;
-    using Fanex.NAP.SPU.CTS.JobService.Services.AssociatedGroupMonitor;
     using Microsoft.AspNetCore.Mvc;
     using Sentry;
     using System.Threading.Tasks;
@@ -13,18 +12,14 @@
         private readonly ISentryClient sentryClient;
         private readonly ICustomerStatusJobService customerStatusJobService;
         private readonly IAffectedEvidenceFromQueueJobService affectedEvidenceFromQueueJobService;
-        private readonly IAssociatedGroupMonitorJobService associatedGroupMonitorJobService;
-
+       
         public JobController(ISentryClient sentryClient,
             ICustomerStatusJobService customerStatusJobService,
-            IAffectedEvidenceFromQueueJobService affectedEvidenceFromQueueJobService,
-            IAssociatedGroupMonitorJobService associatedGroupMonitorJobService)
+            IAffectedEvidenceFromQueueJobService affectedEvidenceFromQueueJobService)
         {
             this.sentryClient = sentryClient;
             this.customerStatusJobService = customerStatusJobService;
             this.affectedEvidenceFromQueueJobService = affectedEvidenceFromQueueJobService;
-
-            this.associatedGroupMonitorJobService = associatedGroupMonitorJobService;
         }
 
         [HttpPost("initialcustomerstatus")]
@@ -43,13 +38,7 @@
         public async Task<bool> RemoveAffectedEvidenceFromQueue()
         {
             return await this.affectedEvidenceFromQueueJobService.RemoveAffectedEvidences();
-        }
-
-        [HttpPost("ScanAssociatedAccount")]
-        public async Task<bool> ScanAssociatedAccount()
-        {
-            return await this.associatedGroupMonitorJobService.ScanAssociatedAccount();
-        }
+        }       
 
         //[HttpPost("updatewritelog")]
         //public async Task<bool> UpdateWriteLog([FromForm] string serviceName, [FromForm] bool isWriteLog)
