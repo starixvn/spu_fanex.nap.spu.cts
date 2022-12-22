@@ -13,9 +13,6 @@
         [JsonProperty("TransIDList")]
         public string TransIDList { get; set; }
 
-        [JsonProperty("HighStakeLicCustList")]
-        public string HighStakeLicCustList { get; set; }
-
         [JsonProperty("CustIDList")]
         public string CustIdList { get; set; }
 
