@@ -333,7 +333,6 @@
                 IsLive = para.IsLive,
                 MaxSequenceID = para.MaxSequenceID,
                 MatchId = para.MatchInfo.MatchId,
-                IsMajorLeague = para.MatchInfo.IsMajorLeague,
                 ScoreDiff = para.MatchInfo.ScoreDiff,
                 BettypeId = para.MatchInfo.BetTypeID,
                 BetID = para.MatchInfo.BetID,

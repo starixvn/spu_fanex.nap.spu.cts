@@ -15,9 +15,6 @@
         [SpParam(SqlParamName = "ip_MatchID")]
         public int MatchId { get; set; }
 
-        [SpParam(SqlParamName = "ip_IsMajorLeague")]
-        public bool IsMajorLeague { get; set; }
-
         [SpParam(SqlParamName = "ip_ScoreDiff")]
         public int ScoreDiff { get; set; }
 
