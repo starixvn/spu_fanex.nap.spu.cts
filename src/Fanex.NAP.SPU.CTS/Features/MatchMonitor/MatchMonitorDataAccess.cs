@@ -234,7 +234,8 @@
                 ScoreDiff = matchinfo.ScoreDiff,
                 MaxSequenceID = maxSequenceID,
                 BetID = matchinfo.BetID,
-                Betteam = matchinfo.Betteam
+                Betteam = matchinfo.Betteam,
+                HDP = matchinfo.HDP
             };
 
             return repository.Fetch<MatchRuleIrrigationCompletedModel>(criteria);
@@ -320,7 +321,8 @@
                 ScoreDiff = para.MatchInfo.ScoreDiff,
                 Betteam = para.MatchInfo.Betteam,
                 TransGroupJson = para.TransGroupJson,
-                MaxSequenceID = para.MaxSequenceID
+                MaxSequenceID = para.MaxSequenceID,
+                HDP = para.MatchInfo.HDP
             };
 
             repository.Execute(criteria);

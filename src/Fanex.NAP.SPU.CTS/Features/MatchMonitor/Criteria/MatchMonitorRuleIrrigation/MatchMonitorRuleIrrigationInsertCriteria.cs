@@ -27,6 +27,9 @@
         [SpParam(SqlParamName = "ip_Betteam")]
         public string Betteam { get; set; }
 
+        [SpParam(SqlParamName = "ip_HDP")]
+        public decimal HDP { get; set; }
+
         [SpParam(SqlParamName = "ip_MaxSequenceID")]
         public UInt64 MaxSequenceID { get; set; }
 
