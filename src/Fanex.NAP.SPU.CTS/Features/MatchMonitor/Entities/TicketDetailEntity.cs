@@ -53,10 +53,10 @@
         [JsonProperty("Odds")]
         public Decimal Odds { get; set; }
 
-        [JsonIgnore]
+        [JsonProperty("Hdp1")]
         public Decimal Hdp1 { get; set; }
 
-        [JsonIgnore]
+        [JsonProperty("Hdp2")]
         public Decimal Hdp2 { get; set; }
 
         [JsonProperty("LiveHomeScore")]
