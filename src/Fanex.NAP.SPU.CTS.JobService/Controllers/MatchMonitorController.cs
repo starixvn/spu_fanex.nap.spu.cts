@@ -97,16 +97,7 @@
         }
 
         /// <summary>
-        /// Process Rule Soccer Hedging
-        /// </summary>
-        [HttpPost("MatchMonitorProcessRuleArbitrageLive")]
-        public async Task<bool> MatchMonitorRuleArbitrageLive([FromForm] int numberOfThread)
-        {
-            return await this.matchMonitorJobService.ProcessRuleArbitrage(true, numberOfThread);
-        }
-
-        /// <summary>
-        /// Process Rule Soccer Hedging
+        /// Process Rule Soccer Arbitrage
         /// </summary>
         [HttpPost("MatchMonitorProcessRuleArbitrageNonLive")]
         public async Task<bool> MatchMonitorRuleArbitrageNonLive([FromForm] int numberOfThread)
