@@ -12,6 +12,8 @@
 
         public Int64 BetID { get; set; }
 
+        public decimal HDP { get; set; }
+
         public string Betteam { get; set; }
 
         public int SportType { get; set; }
