@@ -14,9 +14,9 @@
 		<Setting Key="CTS_Rpt_MatchMonitor_TicketDetails" SpName="CTS_Rpt_MatchMonitor_TicketDetails" DbName="SQL.bodb02.bodbSPUNet"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_Staging_Insert" SpName="CTS_DC_MatchMonitor_Staging_Insert" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 		
-		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBetting_Get" SpName="CTS_DC_MatchMonitor_RuleGroupBetting_Get" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBetting_Process" SpName="CTS_DC_MatchMonitor_RuleGroupBetting_Process" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBetting_Complete" SpName="CTS_DC_MatchMonitor_RuleGroupBetting_Complete" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBetting_Get" SpName="CTS_DC_MatchMonitor_RuleGroupBetting_Get_xpre" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBetting_Process" SpName="CTS_DC_MatchMonitor_RuleGroupBetting_Process_xpre" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBetting_Complete" SpName="CTS_DC_MatchMonitor_RuleGroupBetting_Complete_xpre" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBetting_StagingClean" SpName="CTS_DC_MatchMonitor_RuleGroupBetting_StagingClean" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 				
 		<Setting Key="CTS_DC_MatchMonitor_RuleFixedGame_Get" SpName="CTS_DC_MatchMonitor_RuleFixedGame_Get" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
