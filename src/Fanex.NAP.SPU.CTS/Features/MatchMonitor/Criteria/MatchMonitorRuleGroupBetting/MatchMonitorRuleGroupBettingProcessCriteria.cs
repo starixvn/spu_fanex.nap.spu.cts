@@ -24,6 +24,9 @@
         [SpParam(SqlParamName = "ip_BetID")]
         public Int64 BetId { get; set; }
 
+        [SpParam(SqlParamName = "ip_Betteam")]
+        public string Betteam { get; set; }
+
         public override string GetSettingKey()
                 => "CTS_DC_MatchMonitor_RuleGroupBetting_Process";
 

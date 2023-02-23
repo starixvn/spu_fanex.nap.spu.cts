@@ -184,7 +184,8 @@
                 MatchId = matchinfo.MatchID,
                 ScoreDiff = matchinfo.ScoreDiff,
                 MaxSequenceID = maxSequenceID,
-                BetId = matchinfo.BetID
+                BetId = matchinfo.BetID,
+                Betteam = matchinfo.Betteam
             };
 
             return repository.Fetch<MatchCompleteRuleGroupBettingModel>(criteria);
@@ -267,6 +268,7 @@
                 BetID = para.MatchInfo.BetID,
                 MatchId = para.MatchInfo.MatchID,
                 ScoreDiff = para.MatchInfo.ScoreDiff,
+                Betteam = para.MatchInfo.Betteam,
                 TransGroupJson = para.TransGroupJson,
                 MaxSequenceID = para.MaxSequenceID
             };
