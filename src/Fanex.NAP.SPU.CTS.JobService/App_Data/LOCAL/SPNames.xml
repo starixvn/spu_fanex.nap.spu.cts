@@ -62,8 +62,8 @@
 		<Setting Key="CTS_Customer_GetInfoByCustIdList" SpName="CTS_Customer_GetInfoByCustIdList" DbName="SQL.bodb02.bodbSPUNet" />
 	</Function>
 	<Function name="ArchiveCustClassificationHistory">
-		<Setting Key="CTS_DC_CustClassification_History_Archive" SpName="CTS_DC_CustClassification_History_Archive" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
-		<Setting Key="CTS_Archive_CustClassification_History_Insert" SpName="CTS_Archive_CustClassification_History_Insert" DbName="MySQL.CTS_Archive.ctsServiceAdmin" />
+		<Setting Key="CTS_DC_CustClassification_History_Archive" SpName="CTS_DC_CustClassification_History_Archive_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
+		<Setting Key="CTS_Archive_CustClassification_History_Insert" SpName="CTS_Archive_CustClassification_History_Insert_xtest" DbName="MySQL.CTS_Archive.ctsServiceAdmin" />
 	</Function>
 	<Function name="ArchiveHistoryCCBySport">
 		<Setting Key="CTS_DC_CustClassification_BySport_History_Archive" SpName="CTS_DC_CustClassification_BySport_History_Archive" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />

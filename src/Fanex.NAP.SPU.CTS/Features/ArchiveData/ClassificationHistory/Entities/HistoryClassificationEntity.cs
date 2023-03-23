@@ -75,5 +75,7 @@
         public bool IsFromCTS { get; set; }
 
         public bool IsFromAI { get; set; }
+
+        public bool IsFromImperva { get; set; }
     }
 }
