@@ -22,6 +22,8 @@
 
         public int ActiveDays { get; set; }
 
+        public int RobotCounter { get; set; }
+
         public decimal LastXDaysMargin { get; set; }
 
         public decimal ProbationPeriodWinloss { get; set; }
