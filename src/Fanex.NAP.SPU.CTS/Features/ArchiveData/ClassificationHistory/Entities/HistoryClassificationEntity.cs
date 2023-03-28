@@ -22,6 +22,8 @@
 
         public int ActiveDays { get; set; }
 
+        public int RobotCounter { get; set; }
+
         public decimal LastXDaysMargin { get; set; }
 
         public decimal ProbationPeriodWinloss { get; set; }
@@ -75,5 +77,7 @@
         public bool IsFromCTS { get; set; }
 
         public bool IsFromAI { get; set; }
+
+        public bool IsFromImperva { get; set; }
     }
 }
