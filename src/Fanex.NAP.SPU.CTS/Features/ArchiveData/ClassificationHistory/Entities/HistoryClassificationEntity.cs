@@ -79,5 +79,11 @@
         public bool IsFromAI { get; set; }
 
         public bool IsFromImperva { get; set; }
+
+        public bool? IsParlay { get; set; }
+
+        public int? SportType { get; set; }
+
+        public int IssueTypeID { get; set; }
     }
 }
