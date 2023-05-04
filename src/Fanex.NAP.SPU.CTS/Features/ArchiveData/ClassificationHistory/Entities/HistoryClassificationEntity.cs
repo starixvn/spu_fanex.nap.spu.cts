@@ -85,5 +85,7 @@
         public int? SportType { get; set; }
 
         public int IssueTypeID { get; set; }
+
+        public DateTime PerformanceTime { get; set; }
     }
 }
