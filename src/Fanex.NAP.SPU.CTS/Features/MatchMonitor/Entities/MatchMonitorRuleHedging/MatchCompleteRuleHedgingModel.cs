@@ -21,5 +21,8 @@
 
         [JsonProperty("HighStakeLicCustList")]
         public string HighStakeLicCustList { get; set; }
+
+        [JsonProperty("LogInfo")]
+        public string LogInfo { get; set; }
     }
 }
