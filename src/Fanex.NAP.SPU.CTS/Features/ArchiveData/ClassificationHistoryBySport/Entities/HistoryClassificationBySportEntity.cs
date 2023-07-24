@@ -31,5 +31,7 @@
         public int LastModifiedBy { get; set; }
 
         public DateTime InsertDate { get; set; }
+
+        public DateTime PerformanceTime { get; set; }
     }
 }
