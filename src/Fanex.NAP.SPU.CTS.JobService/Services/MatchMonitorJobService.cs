@@ -108,6 +108,12 @@
 
                 return Task.FromResult(true);
             }
+            catch (AggregateException ex)
+            {
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
+
+                return Task.FromResult(false);
+            }
             catch (Exception ex)
             {
                 Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
@@ -154,6 +160,12 @@
 
                 return Task.FromResult(true);
             }
+            catch (AggregateException ex)
+            {
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
+
+                return Task.FromResult(false);
+            }
             catch (Exception ex)
             {
                 Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
@@ -199,6 +211,12 @@
                 matchMonitorServices.CleanTransRuleHedging(isLive, matchMonitorRule.MaxSequenceID);
 
                 return Task.FromResult(true);
+            }
+            catch (AggregateException ex)
+            {
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
+
+                return Task.FromResult(false);
             }
             catch (Exception ex)
             {
@@ -247,6 +265,12 @@
 
                 return Task.FromResult(true);
             }
+            catch (AggregateException ex)
+            {
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
+
+                return Task.FromResult(false);
+            }
             catch (Exception ex)
             {
                 Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
@@ -293,10 +317,16 @@
 
                 return Task.FromResult(true);
             }
-            catch (Exception ex)
+            catch (AggregateException ex)
             {
                 Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
                 
+                return Task.FromResult(false);
+            }
+            catch (Exception ex)
+            {
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
+
                 return Task.FromResult(false);
             }
         }
