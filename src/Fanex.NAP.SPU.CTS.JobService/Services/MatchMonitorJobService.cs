@@ -3,6 +3,7 @@
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
     using Fanex.NAP.SPU.CTS.Features.SystemParameter;
+    using Fanex.NAP.SPU.CTS.Shares;
     using Newtonsoft.Json;
     using Sentry;
     using System;
@@ -32,6 +33,7 @@
         private readonly ISentryClient sentryClient;
         private readonly IMatchMonitorServices matchMonitorServices;
         private readonly ISystemParameterServices systemParameterServices;
+        private readonly string serviceName;
 
         public MatchMonitorJobService(
             ISentryClient sentryClient,
@@ -42,6 +44,7 @@
             this.sentryClient = sentryClient;
             this.matchMonitorServices = matchMonitorServices;
             this.systemParameterServices = commonServices;
+            this.serviceName = "MatchMonitor Service";
         }
 
         public Task<bool> InsertTicketDetail(int batchSize, bool isLive)
@@ -59,7 +62,8 @@
             }
             catch (Exception ex)
             {
-                sentryClient.CaptureException(ex);
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
+
                 return Task.FromResult(false);
             }
 
@@ -104,9 +108,15 @@
 
                 return Task.FromResult(true);
             }
+            catch (AggregateException ex)
+            {
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
+
+                return Task.FromResult(false);
+            }
             catch (Exception ex)
             {
-                sentryClient.CaptureException(ex);
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
 
                 return Task.FromResult(false);
             }
@@ -150,9 +160,15 @@
 
                 return Task.FromResult(true);
             }
+            catch (AggregateException ex)
+            {
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
+
+                return Task.FromResult(false);
+            }
             catch (Exception ex)
             {
-                sentryClient.CaptureException(ex);
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
 
                 return Task.FromResult(false);
             }
@@ -196,9 +212,15 @@
 
                 return Task.FromResult(true);
             }
+            catch (AggregateException ex)
+            {
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
+
+                return Task.FromResult(false);
+            }
             catch (Exception ex)
             {
-                sentryClient.CaptureException(ex);
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
 
                 return Task.FromResult(false);
             }
@@ -243,9 +265,15 @@
 
                 return Task.FromResult(true);
             }
+            catch (AggregateException ex)
+            {
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
+
+                return Task.FromResult(false);
+            }
             catch (Exception ex)
             {
-                sentryClient.CaptureException(ex);
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
 
                 return Task.FromResult(false);
             }
@@ -289,9 +317,15 @@
 
                 return Task.FromResult(true);
             }
+            catch (AggregateException ex)
+            {
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
+                
+                return Task.FromResult(false);
+            }
             catch (Exception ex)
             {
-                sentryClient.CaptureException(ex);
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
 
                 return Task.FromResult(false);
             }
