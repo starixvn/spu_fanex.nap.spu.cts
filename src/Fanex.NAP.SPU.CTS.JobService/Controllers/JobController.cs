@@ -2,7 +2,9 @@
 {
     using Fanex.NAP.SPU.CTS.JobService.Services;
     using Microsoft.AspNetCore.Mvc;
+    using Newtonsoft.Json;
     using Sentry;
+    using System;
     using System.Threading.Tasks;
 
     [ApiController]
@@ -20,6 +22,13 @@
             this.sentryClient = sentryClient;
             this.customerStatusJobService = customerStatusJobService;
             this.affectedEvidenceFromQueueJobService = affectedEvidenceFromQueueJobService;
+        }
+
+        [HttpGet("health")]
+        public string CheckHealth()
+        {
+            sentryClient.CaptureMessage($"Check health CTS service {DateTime.Now}", Sentry.Protocol.SentryLevel.Info);
+            return JsonConvert.SerializeObject(DateTime.Now.ToString());
         }
 
         [HttpPost("initialcustomerstatus")]
