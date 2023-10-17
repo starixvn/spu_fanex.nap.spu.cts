@@ -92,5 +92,13 @@
             Credit = 0,
             Deposit = 1
         };
+
+        public enum DetectAssociation_QueryType
+        {
+            DetectAss = 1,
+            GetTicketDetail = 2,
+            GetAssByGroup = 3,
+            GetTicketDetailByListCust = 4
+        }
     }
 }

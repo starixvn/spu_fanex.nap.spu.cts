@@ -27,6 +27,9 @@
         [SpParam(SqlParamName = "ip_Betteam")]
         public string Betteam { get; set; }
 
+        [SpParam(SqlParamName = "ip_SharedMatches")]
+        public string JsonSharedMatches { get; set; }
+
         public override string GetSettingKey()
                 => "CTS_DC_MatchMonitor_RuleGroupBetting_Process";
 

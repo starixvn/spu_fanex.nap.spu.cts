@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor
 {
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleGroupBetting;
     using System;
     using System.Collections.Generic;
 
@@ -20,7 +21,7 @@
 
         MatchMonitorRuleArbitrageModel GetMatchRuleArbitrage(bool isLive);
 
-        IEnumerable<MatchCompleteRuleGroupBettingModel> ProcessRuleGroupBetting(bool isLive, UInt64 maxTransId, MatchStagingRuleGroupBettingModel matchinfo);
+        public IEnumerable<MatchCompleteRuleGroupBettingModel> ProcessRuleGroupBetting(MMPrepareDataProcessRuleGBModel prepareData);
 
         IEnumerable<MatchCompleteRuleFixedGameModel> ProcessRuleFixedGame(bool isLive, UInt64 maxTransId, MatchStagingRuleFixedGameModel matchinfo);
 
@@ -95,9 +96,9 @@
             return matchDataAccess.GetMatchRuleArbitrage(isLive);
         }
 
-        public IEnumerable<MatchCompleteRuleGroupBettingModel> ProcessRuleGroupBetting(bool isLive, UInt64 maxSequenceID, MatchStagingRuleGroupBettingModel matchinfo)
+        public IEnumerable<MatchCompleteRuleGroupBettingModel> ProcessRuleGroupBetting(MMPrepareDataProcessRuleGBModel prepareData)
         {
-            return matchDataAccess.ProcessRuleGroupBetting(isLive, maxSequenceID, matchinfo);
+            return matchDataAccess.ProcessRuleGroupBetting(prepareData);
         }
 
         public IEnumerable<MatchCompleteRuleFixedGameModel> ProcessRuleFixedGame(bool isLive, UInt64 maxSequenceID, MatchStagingRuleFixedGameModel matchinfo)

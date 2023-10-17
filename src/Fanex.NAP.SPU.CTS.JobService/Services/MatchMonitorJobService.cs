@@ -1,7 +1,9 @@
 ﻿namespace Fanex.NAP.SPU.CTS.JobService.Services
 {
+    using Fanex.NAP.SPU.CTS.Features.AssociationDetection;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleGroupBetting;
     using Fanex.NAP.SPU.CTS.Features.SystemParameter;
     using Fanex.NAP.SPU.CTS.Shares;
     using Newtonsoft.Json;
@@ -32,6 +34,7 @@
     {
         private readonly ISentryClient sentryClient;
         private readonly IMatchMonitorServices matchMonitorServices;
+        private readonly IAssociationDetectionService associationDetectionService;
         private readonly ISystemParameterServices systemParameterServices;
         private readonly string serviceName;
 
@@ -39,12 +42,14 @@
             ISentryClient sentryClient,
             IMatchMonitorServices matchMonitorServices,
             ISystemParameterServices commonServices,
-            IAppSettings appSettings)
+            IAppSettings appSettings,
+            IAssociationDetectionService associationDetectionService)
         {
             this.sentryClient = sentryClient;
             this.matchMonitorServices = matchMonitorServices;
             this.systemParameterServices = commonServices;
             this.serviceName = "MatchMonitor Service";
+            this.associationDetectionService = associationDetectionService;
         }
 
         public Task<bool> InsertTicketDetail(int batchSize, bool isLive)
@@ -87,7 +92,9 @@
                         .WithDegreeOfParallelism(numberOfThread)
                         .ForAll(matchInfo =>
                         {
-                            var matchRuleCompleted = matchMonitorServices.ProcessRuleGroupBetting(isLive, matchMonitorRule.MaxSequenceID, matchInfo);
+                            var prepareData = PrepareDataProcessRuleGroupBetting(isLive, matchMonitorRule.MaxSequenceID, matchInfo);
+
+                            var matchRuleCompleted = matchMonitorServices.ProcessRuleGroupBetting(prepareData);
 
                             if (matchRuleCompleted != null && matchRuleCompleted.Any())
                             {
@@ -320,7 +327,7 @@
             catch (AggregateException ex)
             {
                 Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
-                
+
                 return Task.FromResult(false);
             }
             catch (Exception ex)
@@ -348,6 +355,19 @@
             }
 
             return Enumerable.Empty<TicketDetailEntity>(); ;
+        }
+
+        private MMPrepareDataProcessRuleGBModel PrepareDataProcessRuleGroupBetting(bool isLive, UInt64 maxTransId, MatchStagingRuleGroupBettingModel matchinfo)
+        {
+            var assByShared3MatchesLast7Days = this.associationDetectionService.DetectAssociationBySharedMatches(matchinfo.CustIDList);
+
+            return new MMPrepareDataProcessRuleGBModel
+            {
+                IsLive = isLive,
+                MaxSequenceID = maxTransId,
+                MatchInfo = matchinfo,
+                JsonSharedMatches = JsonConvert.SerializeObject(assByShared3MatchesLast7Days)
+            };
         }
 
         #endregion Private Methods

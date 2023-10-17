@@ -82,5 +82,9 @@
 		<Setting Key="CTS_Arc_CustomerAssociation_Rollback" SpName="CTS_Arc_CustomerAssociation_Rollback" DbName="MySQL.MASTER.CTS_Archive.ctsServiceAdmin" />
 		<Setting Key="CTS_CustomerUpdDanger" SpName="CTS_CustomerUpdDanger" DbName="SQL.CustDB.bodbAdminNet" TimeOut="300" />
 	</Function>
+
+	<Function Name="AssociationDetection">
+		<Setting Key="CTS_Association_GetBySharedMatches" SpName="CTS_Association_GetBySharedMatches" DbName="SQL.bodb02.bodbSPUNet" />
+	</Function>
  
 </Functions>

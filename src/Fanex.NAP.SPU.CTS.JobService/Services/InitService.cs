@@ -8,6 +8,7 @@
     using Fanex.NAP.SPU.CTS.Features.ArchiveData.ClassificationHistory;
     using Fanex.NAP.SPU.CTS.Features.ArchiveData.ClassificationHistoryBySport;
     using Fanex.NAP.SPU.CTS.Features.ArchiveData.Customer;
+    using Fanex.NAP.SPU.CTS.Features.AssociationDetection;
     using Fanex.NAP.SPU.CTS.Features.ExistingCustomer;
     using Fanex.NAP.SPU.CTS.Features.InitialCustomerStatus;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
@@ -22,6 +23,7 @@
     using Fanex.NAP.SPU.CTS.JobService.Services.ProblemCaseMonitor;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.DependencyInjection;
+    using System;
 
     public static class InitService
     {
@@ -58,6 +60,14 @@
             RegisterArchiveAssociationCustomer(services);      
 
             RegisterArchiveHistoryClassificationBySport(services);
+
+            RegisterAssociationDetection(services);
+        }
+
+        private static void RegisterAssociationDetection(IServiceCollection services)
+        {
+            services.AddSingleton<IAssociationDetectionDataAccess, AssociationDetectionDataAccess>();
+            services.AddSingleton<IAssociationDetectionService, AssociationDetectionService>();
         }
 
         private static void RegisterArchiveDataService(this IServiceCollection services)

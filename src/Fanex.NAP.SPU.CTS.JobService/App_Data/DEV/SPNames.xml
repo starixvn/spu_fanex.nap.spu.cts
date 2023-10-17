@@ -14,8 +14,8 @@
 		<Setting Key="CTS_Rpt_MatchMonitor_TicketDetails" SpName="CTS_Rpt_MatchMonitor_TicketDetails" DbName="SQL.bodb02.bodbSPUNet"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_Staging_Insert" SpName="CTS_DC_MatchMonitor_Staging_Insert" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 		
-		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBetting_Get" SpName="CTS_DC_MatchMonitor_RuleGroupBetting_Get" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBetting_Process" SpName="CTS_DC_MatchMonitor_RuleGroupBetting_Process" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBetting_Get" SpName="CTS_DC_MatchMonitor_RuleGroupBetting_Get_xtest" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBetting_Process" SpName="CTS_DC_MatchMonitor_RuleGroupBetting_Process_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBetting_Complete" SpName="CTS_DC_MatchMonitor_RuleGroupBetting_Complete" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBetting_StagingClean" SpName="CTS_DC_MatchMonitor_RuleGroupBetting_StagingClean" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 				
@@ -85,6 +85,10 @@
 	<Function name="ArchiveAssociationCustomer">
 		<Setting Key="CTS_Arc_CustomerAssociation_Archive" SpName="CTS_Arc_CustomerAssociation_Archive" DbName="MySQL.CTS_Archive.ctsServiceAdmin" />
 		<Setting Key="CTS_Arc_CustomerAssociation_Rollback" SpName="CTS_Arc_CustomerAssociation_Rollback" DbName="MySQL.CTS_Archive.ctsServiceAdmin" />		
+	</Function>
+
+	<Function Name="AssociationDetection">
+		<Setting Key="CTS_Association_GetBySharedMatches" SpName="CTS_Association_GetBySharedMatches" DbName="SQL.bodb02.bodbSPUNet" />
 	</Function>
 	
 </Functions>
