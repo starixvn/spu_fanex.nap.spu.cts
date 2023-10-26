@@ -13,5 +13,7 @@
         public Int64 BetID { get; set; }
 
         public string Betteam { get; set; }
+
+        public string CustIDList { get; set; }
     }
 }

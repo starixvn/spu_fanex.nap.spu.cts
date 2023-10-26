@@ -6,6 +6,7 @@
     using Fanex.Logging.Extensions.Database;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Criteria;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleGroupBetting;
     using Fanex.NAP.SPU.CTS.Shares;
     using System;
     using System.Collections.Generic;
@@ -26,7 +27,7 @@
 
         MatchMonitorRuleArbitrageModel GetMatchRuleArbitrage(bool isLive);
 
-        IEnumerable<MatchCompleteRuleGroupBettingModel> ProcessRuleGroupBetting(bool isLive, UInt64 maxSequenceID, MatchStagingRuleGroupBettingModel matchinfo);
+        public IEnumerable<MatchCompleteRuleGroupBettingModel> ProcessRuleGroupBetting(MMPrepareDataProcessRuleGBModel prepareData);
 
         IEnumerable<MatchCompleteRuleFixedGameModel> ProcessRuleFixedGame(bool isLive, UInt64 maxSequenceID, MatchStagingRuleFixedGameModel matchinfo);
 
@@ -175,17 +176,18 @@
             };
         }
 
-        public IEnumerable<MatchCompleteRuleGroupBettingModel> ProcessRuleGroupBetting(bool isLive, UInt64 maxSequenceID, MatchStagingRuleGroupBettingModel matchinfo)
+        public IEnumerable<MatchCompleteRuleGroupBettingModel> ProcessRuleGroupBetting(MMPrepareDataProcessRuleGBModel prepareData)
         {
             var criteria = new MatchMonitorRuleGroupBettingProcessCriteria()
             {
-                IsLive = isLive,
-                BettypeId = matchinfo.BettypeID,
-                MatchId = matchinfo.MatchID,
-                ScoreDiff = matchinfo.ScoreDiff,
-                MaxSequenceID = maxSequenceID,
-                BetId = matchinfo.BetID,
-                Betteam = matchinfo.Betteam
+                IsLive = prepareData.IsLive,
+                MaxSequenceID = prepareData.MaxSequenceID,
+                JsonSharedMatches = prepareData.JsonSharedMatches,
+                BettypeId = prepareData.MatchInfo.BettypeID,
+                MatchId = prepareData.MatchInfo.MatchID,
+                ScoreDiff = prepareData.MatchInfo.ScoreDiff,
+                BetId = prepareData.MatchInfo.BetID,
+                Betteam = prepareData.MatchInfo.Betteam
             };
 
             return repository.Fetch<MatchCompleteRuleGroupBettingModel>(criteria);
