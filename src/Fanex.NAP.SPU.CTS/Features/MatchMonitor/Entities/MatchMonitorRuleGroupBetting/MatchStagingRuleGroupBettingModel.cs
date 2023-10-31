@@ -15,5 +15,7 @@
         public string Betteam { get; set; }
 
         public string CustIDList { get; set; }
+
+        public int SportType { get; set; }
     }
 }

@@ -8,7 +8,7 @@
 
     public interface IAssociationDetectionDataAccess
     {
-        public IEnumerable<DetectAssociationBySharedIPMatchesModel> DetectAssociationBySharedMatches(string custIDList);
+        public IEnumerable<DetectAssBySharedIPMatchesModel> DetectAssociationBySharedMatches(string custIDList);
     }
 
     public class AssociationDetectionDataAccess : IAssociationDetectionDataAccess
@@ -20,7 +20,7 @@
             _repository = new DynamicRepository();
         }
 
-        public IEnumerable<DetectAssociationBySharedIPMatchesModel> DetectAssociationBySharedMatches(string custIDList)
+        public IEnumerable<DetectAssBySharedIPMatchesModel> DetectAssociationBySharedMatches(string custIDList)
         {
             var criteria = new DetectAssociationBySharedMatchesCriteria
             {
@@ -28,7 +28,7 @@
                 QueryType = (int)DetectAssociation_QueryType.DetectAss
             };
 
-            return _repository.Fetch<DetectAssociationBySharedIPMatchesModel>(criteria);
+            return _repository.Fetch<DetectAssBySharedIPMatchesModel>(criteria);
         }
     }
 }
