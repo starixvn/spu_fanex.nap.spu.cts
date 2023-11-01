@@ -100,5 +100,12 @@
             GetAssByGroup = 3,
             GetTicketDetailByListCust = 4
         }
+
+        public enum MatchMonitor_SportType
+        {
+            Soccer = 1,
+            Basketball = 2,
+            Esport = 3
+        }
     }
 }

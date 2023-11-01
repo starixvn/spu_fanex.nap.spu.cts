@@ -2,11 +2,10 @@
 {
     using Fanex.NAP.SPU.CTS.Features.AssociationDetection.Entities;
     using System.Collections.Generic;
-    using System.Linq;
 
     public interface IAssociationDetectionService
     {
-        public IEnumerable<DetectAssociationBySharedIPMatchesModel> DetectAssociationBySharedMatches(string custIDList);
+        public IEnumerable<DetectAssBySharedIPMatchesModel> DetectAssociationBySharedMatches(string custIDList);
     }
 
     public class AssociationDetectionService : IAssociationDetectionService
@@ -18,11 +17,11 @@
             _associationDetectionDataAccess = associationDetectionDataAccess;
         }
 
-        public IEnumerable<DetectAssociationBySharedIPMatchesModel> DetectAssociationBySharedMatches(string custIDList)
+        public IEnumerable<DetectAssBySharedIPMatchesModel> DetectAssociationBySharedMatches(string custIDList)
         {
             if (string.IsNullOrWhiteSpace(custIDList))
             {
-                return new List<DetectAssociationBySharedIPMatchesModel>();
+                return new List<DetectAssBySharedIPMatchesModel>();
             }
 
             return _associationDetectionDataAccess.DetectAssociationBySharedMatches(custIDList);

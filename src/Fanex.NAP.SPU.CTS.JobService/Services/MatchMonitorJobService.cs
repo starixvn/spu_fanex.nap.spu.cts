@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.SPU.CTS.JobService.Services
 {
     using Fanex.NAP.SPU.CTS.Features.AssociationDetection;
+    using Fanex.NAP.SPU.CTS.Features.AssociationDetection.Entities;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleGroupBetting;
@@ -359,14 +360,24 @@
 
         private MMPrepareDataProcessRuleGBModel PrepareDataProcessRuleGroupBetting(bool isLive, UInt64 maxTransId, MatchStagingRuleGroupBettingModel matchinfo)
         {
-            var assByShared3MatchesLast7Days = this.associationDetectionService.DetectAssociationBySharedMatches(matchinfo.CustIDList);
+            string assByShared3MatchesLast7Days = null;
+
+            if (matchinfo.SportType == (int)MatchMonitor_SportType.Basketball)
+            {
+                var assBySharedMatches = this.associationDetectionService.DetectAssociationBySharedMatches(matchinfo.CustIDList);
+
+                if (assBySharedMatches != null && assBySharedMatches.Any())
+                {
+                    assByShared3MatchesLast7Days = JsonConvert.SerializeObject(assBySharedMatches);
+                }    
+            }
 
             return new MMPrepareDataProcessRuleGBModel
             {
                 IsLive = isLive,
                 MaxSequenceID = maxTransId,
                 MatchInfo = matchinfo,
-                JsonSharedMatches = JsonConvert.SerializeObject(assByShared3MatchesLast7Days)
+                JsonSharedMatches = assByShared3MatchesLast7Days
             };
         }
 
