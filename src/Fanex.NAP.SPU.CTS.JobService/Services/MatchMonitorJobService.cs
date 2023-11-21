@@ -362,7 +362,8 @@
         {
             string assByShared3MatchesLast7Days = null;
 
-            if (matchinfo.SportType == (int)MatchMonitor_SportType.Basketball)
+            if (matchinfo.SportType == (int)MatchMonitor_SportType.Basketball
+                || matchinfo.SportType == (int)MatchMonitor_SportType.Esport)
             {
                 var assBySharedMatches = this.associationDetectionService.DetectAssociationBySharedMatches(matchinfo.CustIDList);
 
