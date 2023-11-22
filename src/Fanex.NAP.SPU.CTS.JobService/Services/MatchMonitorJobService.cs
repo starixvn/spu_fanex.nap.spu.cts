@@ -352,7 +352,11 @@
         {
             if (batchSize > 0)
             {
-                return matchMonitorServices.GetMatchTrans(lastScannedSequenceID, batchSize, isLive);
+                var bettypeList = matchMonitorServices.GetBetTypeSettings();
+
+                var betTypeInfos = JsonConvert.SerializeObject(bettypeList);
+
+                return matchMonitorServices.GetMatchTrans(lastScannedSequenceID, batchSize, isLive, betTypeInfos);
             }
 
             return Enumerable.Empty<TicketDetailEntity>(); ;

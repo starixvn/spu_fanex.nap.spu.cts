@@ -13,7 +13,9 @@
 
     public interface IMatchMonitorDataAccess
     {
-        IEnumerable<TicketDetailEntity> GetMatchTrans(long lastScannedSequenceID, int batchSize, bool isLive);
+        IEnumerable<MatchBetTypeSettingEntity> GetBetTypeSettings();
+
+        IEnumerable<TicketDetailEntity> GetMatchTrans(long lastScannedSequenceID, int batchSize, bool isLive, string betTypeInfos);
 
         void InsertMatchMonitorStaging(string matchTransJson, bool isLive);
 
@@ -69,7 +71,20 @@
 
         #region Insert trans into staging
 
-        public IEnumerable<TicketDetailEntity> GetMatchTrans(long lastScannedSequenceID, int batchSize, bool isLive)
+        public IEnumerable<MatchBetTypeSettingEntity> GetBetTypeSettings()
+        {
+            var criteria = new CommonBetTypeSettingGetCriteria
+            {
+                FunctionID = 1,
+                BettypeIDList = null,
+                SportTypeIDList = null,
+                IsShowDetailsX = true
+            };
+
+            return repository.Fetch<MatchBetTypeSettingEntity>(criteria);
+        }
+
+        public IEnumerable<TicketDetailEntity> GetMatchTrans(long lastScannedSequenceID, int batchSize, bool isLive, string betTypeInfos)
         {
             var criteria = new MatchTransGetCriteria
             {
@@ -77,7 +92,8 @@
                 LastScannedSequenceID = lastScannedSequenceID,
                 BatchSize = batchSize,
                 EventDate = DateTime.Now,
-                IsLive = isLive
+                IsLive = isLive,
+                BetTypeInfos = betTypeInfos
             };
 
             return repository.Fetch<TicketDetailEntity>(criteria);

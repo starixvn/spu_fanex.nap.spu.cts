@@ -21,6 +21,9 @@
         [SpParam(SqlParamName = "EventDate")]
         public DateTime EventDate { get; set; }
 
+        [SpParam(SqlParamName = "BetTypeInfos")]
+        public string BetTypeInfos { get; set; }
+
         public bool IsLive { get; set; }
 
         public override string GetSettingKey()
