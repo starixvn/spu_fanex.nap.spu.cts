@@ -62,6 +62,8 @@
 
         public long TWBetCount { get; set; }
 
+        public short? First5TWGBTicketCount { get; set; }
+
         public decimal TWDesktopUsageRate { get; set; }
 
         public string Remark { get; set; }
