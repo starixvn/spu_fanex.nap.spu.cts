@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.SystemParameter
 {
     using System;
+    using System.Collections.Generic;
     using static Fanex.NAP.SPU.CTS.Shares.Consts;
 
     public interface ISystemParameterServices
@@ -12,6 +13,8 @@
         bool UpdateValueForSystemParamById(string paraValue, SystemParameters paramId);
 
         T GetSystemParamById<T>(SystemParameters paraID);
+
+        IEnumerable<BetTypeSettingEntity> GetBetTypeSettings(BetTypeSettingParaModel infos);
     }
 
     public class SystemParameterServices : ISystemParameterServices
@@ -52,6 +55,11 @@
             var systemParam = systemParameterDataAccess.GetSystemParameterByID(paraID);
 
             return (T)Convert.ChangeType(systemParam.ParameterValue, typeof(T));
+        }
+
+        public IEnumerable<BetTypeSettingEntity> GetBetTypeSettings(BetTypeSettingParaModel infos)
+        {
+            return systemParameterDataAccess.GetBetTypeSettings(infos);
         }
     }
 }

@@ -107,5 +107,10 @@
             Basketball = 2,
             Esport = 3
         }
+
+        public enum BetTypeSettingsFunctionID
+        {
+            MMBetType = 1
+        }
     }
 }

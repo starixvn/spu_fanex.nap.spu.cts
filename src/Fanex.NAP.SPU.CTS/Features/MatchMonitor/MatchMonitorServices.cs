@@ -7,8 +7,6 @@
 
     public interface IMatchMonitorServices
     {
-        IEnumerable<MatchBetTypeSettingEntity> GetBetTypeSettings();
-
         IEnumerable<TicketDetailEntity> GetMatchTrans(long lastScannedSequenceID, int batchSize, bool isLive, string betTypeInfos);
 
         void InsertMatchMonitorStaging(string matchTransJson, bool isLive);
@@ -61,12 +59,7 @@
         public MatchMonitorServices(IMatchMonitorDataAccess matchDataAccess)
         {
             this.matchDataAccess = matchDataAccess;
-        }
-
-        public IEnumerable<MatchBetTypeSettingEntity> GetBetTypeSettings()
-        {
-            return matchDataAccess.GetBetTypeSettings();
-        }
+        }        
 
         public IEnumerable<TicketDetailEntity> GetMatchTrans(long lastScannedSequenceID, int batchSize, bool isLive, string betTypeInfos)
         {

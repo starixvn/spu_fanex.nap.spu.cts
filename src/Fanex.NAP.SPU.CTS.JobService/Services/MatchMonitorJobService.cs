@@ -352,7 +352,22 @@
         {
             if (batchSize > 0)
             {
-                var bettypeList = matchMonitorServices.GetBetTypeSettings();
+                var paras = new BetTypeSettingParaModel
+                {
+                    FunctionID = (int)BetTypeSettingsFunctionID.MMBetType,
+                    BettypeIDList = null,
+                    SportTypeIDList = null,
+                    IsFilterMMDetection = true,
+                    IsShowDetailsX = false,
+                    Status = 1
+                };
+
+                var bettypeList = systemParameterServices.GetBetTypeSettings(paras).Select(x => new MatchBetTypeSettingModel
+                {
+                    BetTypeID = x.BetTypeID,
+                    BetChoiceHome = x.BetChoiceHome,
+                    BetChoiceAway = x.BetChoiceAway
+                });
 
                 var betTypeInfos = JsonConvert.SerializeObject(bettypeList);
 

@@ -1,9 +1,6 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor
 {
     using Fanex.Data.Repository;
-    using Fanex.Logging;
-    using Fanex.Logging.Extensions;
-    using Fanex.Logging.Extensions.Database;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Criteria;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleGroupBetting;
@@ -13,8 +10,6 @@
 
     public interface IMatchMonitorDataAccess
     {
-        IEnumerable<MatchBetTypeSettingEntity> GetBetTypeSettings();
-
         IEnumerable<TicketDetailEntity> GetMatchTrans(long lastScannedSequenceID, int batchSize, bool isLive, string betTypeInfos);
 
         void InsertMatchMonitorStaging(string matchTransJson, bool isLive);
@@ -69,20 +64,7 @@
             repository = new DynamicRepository();
         }
 
-        #region Insert trans into staging
-
-        public IEnumerable<MatchBetTypeSettingEntity> GetBetTypeSettings()
-        {
-            var criteria = new CommonBetTypeSettingGetCriteria
-            {
-                FunctionID = 1,
-                BettypeIDList = null,
-                SportTypeIDList = null,
-                IsShowDetailsX = true
-            };
-
-            return repository.Fetch<MatchBetTypeSettingEntity>(criteria);
-        }
+        #region Insert trans into staging      
 
         public IEnumerable<TicketDetailEntity> GetMatchTrans(long lastScannedSequenceID, int batchSize, bool isLive, string betTypeInfos)
         {
