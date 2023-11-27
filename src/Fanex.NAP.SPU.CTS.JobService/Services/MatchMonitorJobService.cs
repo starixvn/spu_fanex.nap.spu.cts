@@ -364,17 +364,18 @@
 
                 var bettypeList = systemParameterServices.GetBetTypeSettings(paras).Select(x => new MatchBetTypeSettingModel
                 {
+                    SportTypeID = x.SportTypeID,
                     BetTypeID = x.BetTypeID,
-                    BetChoiceHome = x.BetChoiceHome,
-                    BetChoiceAway = x.BetChoiceAway
-                });
+                    BetChoiceType = x.BetChoiceType,
+                    BetIDPattern = x.BetIDPattern
+                });                
 
                 var betTypeInfos = JsonConvert.SerializeObject(bettypeList);
 
                 return matchMonitorServices.GetMatchTrans(lastScannedSequenceID, batchSize, isLive, betTypeInfos);
             }
 
-            return Enumerable.Empty<TicketDetailEntity>(); ;
+            return Enumerable.Empty<TicketDetailEntity>();
         }
 
         private MMPrepareDataProcessRuleGBModel PrepareDataProcessRuleGroupBetting(bool isLive, UInt64 maxTransId, MatchStagingRuleGroupBettingModel matchinfo)

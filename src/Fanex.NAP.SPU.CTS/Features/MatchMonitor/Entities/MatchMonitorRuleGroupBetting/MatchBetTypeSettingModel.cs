@@ -10,7 +10,7 @@
 
         public string BetIDPattern { get; set; }
 
-        public int BetID { get; set; }     
+        public long BetID { get; set; }     
 
     }
 }

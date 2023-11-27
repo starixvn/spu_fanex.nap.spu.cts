@@ -75,7 +75,7 @@
                 BatchSize = batchSize,
                 EventDate = DateTime.Now,
                 IsLive = isLive,
-                BetTypeInfos = betTypeInfos
+                ListSportBettype = betTypeInfos
             };
 
             return repository.Fetch<TicketDetailEntity>(criteria);
