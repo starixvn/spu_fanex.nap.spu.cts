@@ -12,7 +12,7 @@
 	<Function Name="MatchMonitor">
 		<Setting Key="CTS_DC_SystemParameter_Get" SpName="CTS_DC_SystemParameter_Get" DbName="MySQL.CTS_DataCenter.ctsService" />
 		<Setting Key="CTS_Rpt_MatchMonitor_TicketDetails" SpName="CTS_Rpt_MatchMonitor_TicketDetails_UAT1" DbName="SQL.bodb02.bodbSPUNet"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_Staging_Insert" SpName="CTS_DC_MatchMonitor_Staging_Insert" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_Staging_Insert" SpName="CTS_DC_MatchMonitor_Staging_Insert_UAT1" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 
 		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBetting_Get" SpName="CTS_DC_MatchMonitor_RuleGroupBetting_Get" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBetting_Process" SpName="CTS_DC_MatchMonitor_RuleGroupBetting_Process_UAT1" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
@@ -90,7 +90,7 @@
 	</Function>
 
 	<Function Name="Common">
-		<Setting Key="CTS_DC_Common_BettypeSetting_Get" SpName="CTS_DC_Common_BettypeSetting_Get_xtest" DbName="MySQL.CTS_DataCenter.ctsService" />
+		<Setting Key="CTS_DC_Common_BettypeSetting_Get" SpName="CTS_DC_Common_BettypeSetting_Get_UAT1" DbName="MySQL.CTS_DataCenter.ctsService" />
 	</Function>
 
 </Functions>
