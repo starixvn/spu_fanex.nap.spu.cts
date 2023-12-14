@@ -77,9 +77,9 @@
                 }
             };
 
-            matchMonitorDataAccess.GetMatchTrans(lastScannedSequenceID, batchSize, isLive).Returns(output);
+            matchMonitorDataAccess.GetMatchTrans(lastScannedSequenceID, batchSize, isLive, string.Empty).Returns(output);
 
-            var result = matchMonitorServices.GetMatchTrans(lastScannedSequenceID, batchSize, isLive);
+            var result = matchMonitorServices.GetMatchTrans(lastScannedSequenceID, batchSize, isLive, string.Empty);
 
             result.Should().NotBeNull();
             result.Should().BeEquivalentTo(output);

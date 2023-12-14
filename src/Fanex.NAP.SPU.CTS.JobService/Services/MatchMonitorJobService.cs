@@ -352,17 +352,38 @@
         {
             if (batchSize > 0)
             {
-                return matchMonitorServices.GetMatchTrans(lastScannedSequenceID, batchSize, isLive);
+                var paras = new BetTypeSettingParaModel
+                {
+                    FunctionID = (int)BetTypeSettingsFunctionID.MMBetType,
+                    BettypeIDList = null,
+                    SportTypeIDList = null,
+                    IsFilterMMDetection = true,
+                    IsShowDetailsX = false,
+                    Status = 1
+                };
+
+                var bettypeList = systemParameterServices.GetBetTypeSettings(paras).Select(x => new MatchBetTypeSettingModel
+                {
+                    SportTypeID = x.SportTypeID,
+                    BetTypeID = x.BetTypeID,
+                    BetChoiceType = x.BetChoiceType,
+                    BetIDPattern = x.BetIDPattern
+                });                
+
+                var betTypeInfos = JsonConvert.SerializeObject(bettypeList);
+
+                return matchMonitorServices.GetMatchTrans(lastScannedSequenceID, batchSize, isLive, betTypeInfos);
             }
 
-            return Enumerable.Empty<TicketDetailEntity>(); ;
+            return Enumerable.Empty<TicketDetailEntity>();
         }
 
         private MMPrepareDataProcessRuleGBModel PrepareDataProcessRuleGroupBetting(bool isLive, UInt64 maxTransId, MatchStagingRuleGroupBettingModel matchinfo)
         {
             string assByShared3MatchesLast7Days = null;
 
-            if (matchinfo.SportType == (int)MatchMonitor_SportType.Basketball)
+            if (matchinfo.SportType == (int)MatchMonitor_SportType.Basketball
+                || matchinfo.SportType == (int)MatchMonitor_SportType.Esport)
             {
                 var assBySharedMatches = this.associationDetectionService.DetectAssociationBySharedMatches(matchinfo.CustIDList);
 

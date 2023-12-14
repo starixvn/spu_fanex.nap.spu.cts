@@ -105,7 +105,12 @@
         {
             Soccer = 1,
             Basketball = 2,
-            Esport = 3
+            Esport = 43
+        }
+
+        public enum BetTypeSettingsFunctionID
+        {
+            MMBetType = 1
         }
     }
 }
