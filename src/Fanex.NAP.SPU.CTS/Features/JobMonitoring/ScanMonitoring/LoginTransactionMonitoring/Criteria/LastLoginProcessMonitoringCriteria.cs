@@ -1,10 +1,12 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.MonitorJobs.CustomerJobMonitor
 {
+    using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class LastLoginProcessMonitoringCriteria : NonQueryCommand
     {
-        public long ProcessNumber { get; set; }
+        [SpParam(SqlParamName = "op_RecordNumber")]
+        public long RecordNumber { get; set; }
 
         public override string GetSettingKey()
         {

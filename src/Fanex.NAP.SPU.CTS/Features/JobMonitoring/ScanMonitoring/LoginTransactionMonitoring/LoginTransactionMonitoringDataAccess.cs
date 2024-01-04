@@ -22,7 +22,7 @@
 
             repository.Execute(criteria);
 
-            return criteria.ProcessNumber;
+            return criteria.RecordNumber;
         }
     }
 }

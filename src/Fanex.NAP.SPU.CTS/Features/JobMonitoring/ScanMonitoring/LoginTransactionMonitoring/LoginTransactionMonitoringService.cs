@@ -34,7 +34,7 @@
         {
             if (excessiveNumber > 0)
             {
-                var data = new List<InsertMonitoringEntity> { new InsertMonitoringEntity { TrackingInfo = $"{excessiveNumber} records" } };
+                var data = new List<InsertMonitoringEntity> { new InsertMonitoringEntity { TrackingInfo = $"{excessiveNumber}" } };
                 incorrectDataMonitoringService.InsertIncorrectDataMonitoring(data, JobMonitor_IssueType.DCSTransaction_LastLoginProcessStatus, batchSize);
             }
         }
