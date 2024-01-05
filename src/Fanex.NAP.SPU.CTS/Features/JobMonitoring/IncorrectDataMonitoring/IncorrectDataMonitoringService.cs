@@ -10,8 +10,6 @@
     public interface IIncorrectDataMonitoringService
     {
         void InsertIncorrectDataMonitoring(IEnumerable<InsertMonitoringEntity> incorrectList, JobMonitor_IssueType issueType, int batchSize);
-
-        void InsertIncorrectDataMonitoring(IEnumerable<long> incorrectList, JobMonitor_IssueType issueType, int batchSize);
     }
 
     public class IncorrectDataMonitoringService : IIncorrectDataMonitoringService
@@ -26,20 +24,6 @@
         }
 
         public void InsertIncorrectDataMonitoring(IEnumerable<InsertMonitoringEntity> incorrectList, JobMonitor_IssueType issueType, int batchSize)
-        {
-            if (incorrectList != null && incorrectList.Any())
-            {
-                var dataChunks = incorrectList.Chunk(batchSize);
-
-                foreach (var logDataBatch in dataChunks)
-                {
-                    var dataJson = JsonConvert.SerializeObject(logDataBatch);
-                    incorrectDataMonitoringDataAccess.InsertIncorrectDataMonitoring(dataJson, issueType);
-                }
-            }
-        }
-
-        public void InsertIncorrectDataMonitoring(IEnumerable<long> incorrectList, JobMonitor_IssueType issueType, int batchSize)
         {
             if (incorrectList != null && incorrectList.Any())
             {

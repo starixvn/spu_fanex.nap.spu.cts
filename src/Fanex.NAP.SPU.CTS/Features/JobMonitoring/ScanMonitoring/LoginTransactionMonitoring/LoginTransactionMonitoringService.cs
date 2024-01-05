@@ -8,7 +8,7 @@
     {
         long GetLastLoginProcessMonitoring();
 
-        void NotifyExcessiveLoginProcess(long excessiveNumber, int batchSize);
+        void NotifyExcessiveLoginProcess(long excessiveNumber, int batchSize, int thresHold);
     }
 
     public class LoginTransactionMonitoringService : ILoginTransactionMonitoringService
@@ -30,11 +30,11 @@
             return loginTransactionMonitoringDataAccess.GetLastLoginTransactionProcessMonitoring();
         }
 
-        public void NotifyExcessiveLoginProcess(long excessiveNumber, int batchSize)
+        public void NotifyExcessiveLoginProcess(long excessiveNumber, int batchSize, int thresHold)
         {
             if (excessiveNumber > 0)
             {
-                var data = new List<InsertMonitoringEntity> { new InsertMonitoringEntity { TrackingInfo = $"{excessiveNumber}" } };
+                var data = new List<InsertMonitoringEntity> { new InsertMonitoringEntity { Value = excessiveNumber, TrackingInfo = $"thresHold = {thresHold}" } };
                 incorrectDataMonitoringService.InsertIncorrectDataMonitoring(data, JobMonitor_IssueType.DCSTransaction_LastLoginProcessStatus, batchSize);
             }
         }

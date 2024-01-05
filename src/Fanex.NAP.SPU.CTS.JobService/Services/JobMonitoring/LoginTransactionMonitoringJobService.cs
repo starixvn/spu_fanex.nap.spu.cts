@@ -35,7 +35,7 @@
 
                 if (records > thresHold)
                 {
-                    loginTransactionMonitoringService.NotifyExcessiveLoginProcess(records, 500);
+                    loginTransactionMonitoringService.NotifyExcessiveLoginProcess(records, 500, thresHold);
                 }
             }
             catch (Exception ex)

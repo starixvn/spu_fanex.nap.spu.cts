@@ -4,6 +4,8 @@
     {
         public long CustID { get; set; }
 
+        public long Value { get; set; }
+
         public string TrackingInfo { get; set; }
     }
 }
