@@ -10,7 +10,7 @@
 
         public override string GetSettingKey()
         {
-            return "DCS_DC_Monitoring_LastLoginProcess_Get";
+            return "DCS_DC_Monitoring_LoginTransactionProcess_Get";
         }
 
         public override bool IsValid()
