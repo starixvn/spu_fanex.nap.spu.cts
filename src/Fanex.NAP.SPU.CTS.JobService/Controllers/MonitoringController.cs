@@ -17,16 +17,19 @@ namespace Fanex.NAP.SPU.CTS.JobService.Controllers
         private readonly IExistingCustomerJobService existingCustomerJobService;
         private readonly IProblemCaseMonitorClassificationJobService problemCaseMonitorClassificationJobService;
         private readonly IProblemCaseMonitorAssociationJobService problemCaseMonitorAssociationJobService;
+        private readonly ILoginTransactionMonitoringJobService loginTransactionMonitoringJobService;
 
         public MonitoringController(ISentryClient sentryClient
             , IExistingCustomerJobService existingCustomerJobService
             , IProblemCaseMonitorClassificationJobService problemCaseMonitorClassificationJobService
-            , IProblemCaseMonitorAssociationJobService problemCaseMonitorAssociationJobService)
+            , IProblemCaseMonitorAssociationJobService problemCaseMonitorAssociationJobService
+            , ILoginTransactionMonitoringJobService loginTransactionMonitoringJobService)
         {
             this.sentryClient = sentryClient;
             this.existingCustomerJobService = existingCustomerJobService;
             this.problemCaseMonitorClassificationJobService = problemCaseMonitorClassificationJobService;
             this.problemCaseMonitorAssociationJobService = problemCaseMonitorAssociationJobService;           
+            this.loginTransactionMonitoringJobService = loginTransactionMonitoringJobService;           
         }
 
         [HttpPost("existingcustomer")]
@@ -69,6 +72,11 @@ namespace Fanex.NAP.SPU.CTS.JobService.Controllers
         {
             return await this.problemCaseMonitorAssociationJobService.Execute();
         }
-      
+
+        [HttpPost("LastLoginTransactionMonitoring")]
+        public async Task<bool> LastLoginTransactionMonitoring([FromForm] int thresHold)
+        {
+            return await this.loginTransactionMonitoringJobService.LastLoginProcessMonitoring(thresHold);
+        }
     }
 }

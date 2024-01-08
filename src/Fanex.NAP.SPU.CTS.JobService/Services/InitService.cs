@@ -11,7 +11,9 @@
     using Fanex.NAP.SPU.CTS.Features.AssociationDetection;
     using Fanex.NAP.SPU.CTS.Features.ExistingCustomer;
     using Fanex.NAP.SPU.CTS.Features.InitialCustomerStatus;
+    using Fanex.NAP.SPU.CTS.Features.JobMonitoring.IncorrectDataMonitoring;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
+    using Fanex.NAP.SPU.CTS.Features.MonitorJobs.CustomerJobMonitor;
     using Fanex.NAP.SPU.CTS.Features.ProblemCaseMonitor;
     using Fanex.NAP.SPU.CTS.Features.SystemParameter;
     using Fanex.NAP.SPU.CTS.Features.Transform.Accounts;
@@ -62,6 +64,8 @@
             RegisterArchiveHistoryClassificationBySport(services);
 
             RegisterAssociationDetection(services);
+            
+            RegisterJobMonitoring(services);
         }
 
         private static void RegisterAssociationDetection(IServiceCollection services)
@@ -183,6 +187,16 @@
             services.AddSingleton<IArchiveHistoryClassificationBySportDataAccess, ArchiveHistoryClassifcationBySportDataAccess>();
             services.AddSingleton<IArchiveHistoryClassificationBySportServices, ArchiveHistoryClassificationBySportServices>();
             services.AddSingleton<IArchiveHistoryClassificationBySportJobService, ArchiveHistoryClassificationBySportJobService>();
+        }
+
+        private static void RegisterJobMonitoring(this IServiceCollection services)
+        {
+            services.AddSingleton<IIncorrectDataMonitoringDataAccess, IncorrectDataMonitoringDataAccess>();
+            services.AddSingleton<IIncorrectDataMonitoringService, IncorrectDataMonitoringService>();
+
+            services.AddSingleton<ILoginTransactionMonitoringDataAccess, LoginTransactionMonitoringDataAccess>();
+            services.AddSingleton<ILoginTransactionMonitoringService, LoginTransactionMonitoringService>();
+            services.AddSingleton<ILoginTransactionMonitoringJobService, LoginTransactionMonitoringJobService>();
         }
     }
 }

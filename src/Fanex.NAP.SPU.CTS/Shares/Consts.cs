@@ -112,5 +112,17 @@
         {
             MMBetType = 1
         }
+
+        public enum JobMonitor_IssueType
+        {
+            NewCustomer_NullCategory = 1,
+            NewCustomer_Missing = 2,
+            Realtime_NewPlaceBetInactiveCategory = 100,
+            Realtime_NullCategory = 101,
+            Classification_GeneralPoolStatus = 200,
+            Classification_BySportPoolStatus = 201,
+            DCSTransaction_LastLoginProcessStatus = 500
+        };
+
     }
 }
