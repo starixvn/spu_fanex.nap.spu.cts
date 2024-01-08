@@ -34,7 +34,7 @@
         {
             if (excessiveNumber > 0)
             {
-                var data = new List<InsertMonitoringEntity> { new InsertMonitoringEntity { Value = excessiveNumber, TrackingInfo = $"thresHold = {thresHold}" } };
+                var data = new List<InsertMonitoringEntity> { new InsertMonitoringEntity { Value = excessiveNumber, TrackingInfo = $"threshold = {thresHold}" } };
                 incorrectDataMonitoringService.InsertIncorrectDataMonitoring(data, JobMonitor_IssueType.DCSTransaction_LastLoginProcessStatus, batchSize);
             }
         }
