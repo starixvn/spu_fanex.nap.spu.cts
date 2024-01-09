@@ -34,7 +34,9 @@
             {
                 if (!string.IsNullOrEmpty(CustList))
                 {
-                    return JsonConvert.DeserializeObject<IEnumerable<DetectAssociationCustInfoModel>>(CustList);
+                    string json = "[" + CustList + "]";
+
+                    return JsonConvert.DeserializeObject<IEnumerable<DetectAssociationCustInfoModel>>(json);
                 }
 
                 return Enumerable.Empty<DetectAssociationCustInfoModel>();
