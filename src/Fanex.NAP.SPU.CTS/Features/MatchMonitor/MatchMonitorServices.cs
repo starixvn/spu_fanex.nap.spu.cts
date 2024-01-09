@@ -195,9 +195,7 @@
                        .WithDegreeOfParallelism(numberOfThread)
                        .ForAll(matchInfo =>
                        {
-                           var ctsCustIds = matchInfo.CustomerInfo.Select(c => c.CTSCustID).Distinct();
-
-                           var assDetection = associationDetectionService.DetectAssociationRuleHedging(ctsCustIds, matchInfo.DetectAgentAssCustIDList);
+                           var assDetection = associationDetectionService.DetectAssociationRuleHedging(matchInfo.CTSCustIDList, matchInfo.AgentDetect_CTSCustIDList);
 
                            var assDetectionToJson = assDetection.Any() ? JsonConvert.SerializeObject(assDetection) : "[]";
 

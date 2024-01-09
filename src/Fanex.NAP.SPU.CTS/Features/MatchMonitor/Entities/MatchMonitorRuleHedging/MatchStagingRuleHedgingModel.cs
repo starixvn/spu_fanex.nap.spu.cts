@@ -22,25 +22,10 @@
 
         public int OldGroup { get; set; }
 
-        public string CustList { get; set; }
+        public string CTSCustIDList { get; set; }
 
-        public string DetectAgentAssCustIDList { get; set; }
+        public string AgentDetect_CTSCustIDList { get; set; }
 
         public string SequenceIDList { get; set; }
-
-        public IEnumerable<DetectAssociationCustInfoModel> CustomerInfo 
-        {
-            get
-            {
-                if (!string.IsNullOrEmpty(CustList))
-                {
-                    string json = "[" + CustList + "]";
-
-                    return JsonConvert.DeserializeObject<IEnumerable<DetectAssociationCustInfoModel>>(json);
-                }
-
-                return Enumerable.Empty<DetectAssociationCustInfoModel>();
-            }
-        }
     }
 }
