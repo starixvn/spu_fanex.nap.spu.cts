@@ -3,12 +3,10 @@
     using Fanex.NAP.SPU.CTS.Features.AssociationDetection;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleGroupBetting;
-    using Fanex.NAP.SPU.CTS.Shares;
     using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Threading;
 
     public interface IMatchMonitorServices
     {
@@ -51,7 +49,7 @@
 
         MatchStagingRuleHedgingProcessModel GetMatchRuleHedging(bool isLive);
 
-        void ProcessRuleHedgingParallel(MatchStagingRuleHedgingGroupModel matchStaging, UInt64 maxSequenceID, int numberOfThread, bool isLive);
+        void ProcessRuleHedging(MatchStagingRuleHedgingGroupModel matchStaging, UInt64 maxSequenceID, bool isLive);
 
         void CleanTransRuleHedging(bool isLive, UInt64 maxSequenceID);
 
@@ -176,7 +174,7 @@
                                                              BetTypeID = y.Key.BetTypeID,
                                                              BetID = y.Key.BetID,
                                                              BetTeam = y.Key.BetTeam,
-                                                             MatchStagingList = y.ToList()
+                                                             MatchGroupStagingList = y.ToList()
                                                          });
 
                 return new MatchStagingRuleHedgingProcessModel { MaxSequenceID = result.MaxSequenceID, MatchStagingList = finalResult };
@@ -185,35 +183,30 @@
             return new MatchStagingRuleHedgingProcessModel();
         }
 
-        public void ProcessRuleHedgingParallel(MatchStagingRuleHedgingGroupModel matchStaging, UInt64 maxSequenceID, int numberOfThread, bool isLive)
+        public void ProcessRuleHedging(MatchStagingRuleHedgingGroupModel matchStaging, UInt64 maxSequenceID, bool isLive)
         {
-            if (matchStaging != null && matchStaging.MatchStagingList.Any())
+            if (matchStaging != null && matchStaging.MatchGroupStagingList.Any())
             {
-                matchStaging
-                       .MatchStagingList
-                       .AsParallel()
-                       .WithDegreeOfParallelism(numberOfThread)
-                       .ForAll(matchInfo =>
-                       {
-                           var assDetection = associationDetectionService.DetectAssociationRuleHedging(matchInfo.CTSCustIDList, matchInfo.AgentDetect_CTSCustIDList);
+                matchStaging.MatchGroupStagingList.OrderBy(c => c.OldGroup).ToList().ForEach(matchInfo =>
+                {
+                    var assDetection = associationDetectionService.DetectAssociationRuleHedging(matchInfo.CTSCustIDList, matchInfo.AgentDetect_CTSCustIDList);
 
-                           var assDetectionToJson = assDetection.Any() ? JsonConvert.SerializeObject(assDetection) : "[]";
+                    var assDetectionToJson = assDetection.Any() ? JsonConvert.SerializeObject(assDetection) : "[]";
 
-                           var matchRuleCompleted = ProcessRuleHedging(isLive, matchInfo, assDetectionToJson);
+                    var matchRuleCompleted = ProcessRuleHedging(isLive, matchInfo, assDetectionToJson);
 
-                           if (matchRuleCompleted != null && matchRuleCompleted.Any())
-                           {
-                               CompleteTransRuleHedging(new MatchCompleteRuleHedgingParameterModel
-                               {
-                                   IsLive = isLive,
-                                   MatchInfo = matchInfo,
-                                   TransGroupJson = JsonConvert.SerializeObject(matchRuleCompleted),
-                                   MaxSequenceID = maxSequenceID
-                               });
-                           }
+                    if (matchRuleCompleted != null && matchRuleCompleted.Any())
+                    {
+                        CompleteTransRuleHedging(new MatchCompleteRuleHedgingParameterModel
+                        {
+                            IsLive = isLive,
+                            MatchInfo = matchInfo,
+                            TransGroupJson = JsonConvert.SerializeObject(matchRuleCompleted),
+                            MaxSequenceID = maxSequenceID
+                        });
+                    }
 
-                           Thread.Sleep(Consts.MatchMonitor_SleepTimes);
-                       });
+                });
             }
         }
 

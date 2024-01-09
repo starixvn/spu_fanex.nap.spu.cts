@@ -16,6 +16,6 @@
 
         public string BetTeam { get; set; }
 
-        public IEnumerable<MatchStagingRuleHedgingModel> MatchStagingList { get; set; }
+        public IEnumerable<MatchStagingRuleHedgingModel> MatchGroupStagingList { get; set; }
     }
 }

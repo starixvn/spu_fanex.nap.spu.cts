@@ -71,18 +71,18 @@
         /// Process Rule Soccer Hedging
         /// </summary>
         [HttpPost("MatchMonitorProcessRuleHedgingLive")]
-        public async Task<bool> MatchMonitorRuleHedgingLive([FromForm] int numberOfThread, [FromForm] int numberOfThread2)
+        public async Task<bool> MatchMonitorRuleHedgingLive([FromForm] int numberOfThread)
         {
-            return await this.matchMonitorJobService.ProcessRuleHedging(true, numberOfThread, numberOfThread2);
+            return await this.matchMonitorJobService.ProcessRuleHedging(true, numberOfThread);
         }
 
         /// <summary>
         /// Process Rule Soccer Hedging
         /// </summary>
         [HttpPost("MatchMonitorProcessRuleHedgingNonLive")]
-        public async Task<bool> MatchMonitorRuleHedgingNonLive([FromForm] int numberOfThread, [FromForm] int numberOfThread2)
+        public async Task<bool> MatchMonitorRuleHedgingNonLive([FromForm] int numberOfThread)
         {
-            return await this.matchMonitorJobService.ProcessRuleHedging(false, numberOfThread, numberOfThread2);
+            return await this.matchMonitorJobService.ProcessRuleHedging(false, numberOfThread);
         }
 
         /// <summary>
