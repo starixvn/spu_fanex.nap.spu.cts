@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Tests.Features.Monitor
 {
+    using Fanex.NAP.SPU.CTS.Features.AssociationDetection;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
     using FluentAssertions;
@@ -13,11 +14,13 @@
     {
         private readonly IMatchMonitorDataAccess matchMonitorDataAccess;
         private readonly IMatchMonitorServices matchMonitorServices;
+        private readonly IAssociationDetectionService associationDetectionService;
 
         public MatchMonitorUnitTests()
         {
             matchMonitorDataAccess = Substitute.For<IMatchMonitorDataAccess>();
-            matchMonitorServices = new MatchMonitorServices(matchMonitorDataAccess);
+            associationDetectionService = Substitute.For<IAssociationDetectionService>();
+            matchMonitorServices = new MatchMonitorServices(matchMonitorDataAccess, associationDetectionService);
         }
 
         [Theory]

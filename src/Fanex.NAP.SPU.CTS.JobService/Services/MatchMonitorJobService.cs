@@ -24,7 +24,7 @@
 
         Task<bool> ProcessRuleFixedGame(bool isLive, int numberOfThread);
 
-        Task<bool> ProcessRuleHedging(bool isLive, int numberOfThread);
+        Task<bool> ProcessRuleHedging(bool isLive, int numberOfThread, int numberOfThread2);
 
         Task<bool> ProcessRuleIrrigation(bool isLive, int numberOfThread);
 
@@ -185,7 +185,7 @@
         /// <summary>
         /// Process Rule for Hedging
         /// </summary>
-        public Task<bool> ProcessRuleHedging(bool isLive, int numberOfThread)
+        public Task<bool> ProcessRuleHedging(bool isLive, int numberOfThread, int numberOfThread2)
         {
             try
             {
@@ -199,18 +199,7 @@
                         .WithDegreeOfParallelism(numberOfThread)
                         .ForAll(matchInfo =>
                         {
-                            var matchRuleCompleted = matchMonitorServices.ProcessRuleHedging(isLive, matchMonitorRule.MaxSequenceID, matchInfo);
-
-                            if (matchRuleCompleted != null && matchRuleCompleted.Any())
-                            {
-                                matchMonitorServices.CompleteTransRuleHedging(new MatchCompleteRuleHedgingParameterModel
-                                {
-                                    IsLive = isLive,
-                                    MatchInfo = matchInfo,
-                                    TransGroupJson = JsonConvert.SerializeObject(matchRuleCompleted),
-                                    MaxSequenceID = matchMonitorRule.MaxSequenceID
-                                });
-                            }
+                            matchMonitorServices.ProcessRuleHedgingParallel(matchInfo, matchMonitorRule.MaxSequenceID, numberOfThread2, isLive);
 
                             Thread.Sleep(MatchMonitor_SleepTimes);
                         });

@@ -1,21 +1,23 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor
 {
+    using Fanex.NAP.SPU.CTS.Features.AssociationDetection;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleGroupBetting;
+    using Fanex.NAP.SPU.CTS.Shares;
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
 
     public interface IMatchMonitorServices
     {
         IEnumerable<TicketDetailEntity> GetMatchTrans(long lastScannedSequenceID, int batchSize, bool isLive, string betTypeInfos);
 
         void InsertMatchMonitorStaging(string matchTransJson, bool isLive);
-
         MatchMonitorRuleGroupBettingModel GetMatchRuleGroupBetting(bool isLive);
 
         MatchMonitorRuleFixedGameModel GetMatchRuleFixedGame(bool isLive);
-
-        MatchMonitorRuleHedgingModel GetMatchRuleHedging(bool isLive);
 
         MatchMonitorRuleIrrigationModel GetMatchMonitorRuleIrrigation(bool isLive);
 
@@ -25,8 +27,6 @@
 
         IEnumerable<MatchCompleteRuleFixedGameModel> ProcessRuleFixedGame(bool isLive, UInt64 maxTransId, MatchStagingRuleFixedGameModel matchinfo);
 
-        IEnumerable<MatchCompleteRuleHedgingModel> ProcessRuleHedging(bool isLive, UInt64 maxTransId, MatchStagingRuleHedgingModel matchinfo);
-
         IEnumerable<MatchRuleIrrigationCompletedModel> InsertMatchMonitorRuleIrrigation(bool isLive, UInt64 maxSequenceID, MatchStagingRuleIrrigationModel matchinfo);
 
         IEnumerable<MatchCompleteRuleArbitrageModel> ProcessRuleArbitrage(bool isLive, UInt64 maxTransId, MatchStagingRuleArbitrageModel matchinfo);
@@ -34,8 +34,6 @@
         void CompleteTransRuleGroupBetting(MatchCompleteRuleGroupBettingParameterModel para);
 
         void CompleteTransRuleFixedGame(MatchCompleteRuleFixedGameParameterModel para);
-
-        void CompleteTransRuleHedging(MatchCompleteRuleHedgingParameterModel para);
 
         void UpdateMatchMonitorRuleIrrigationComplete(MatchMonitorRuleIrrigationCompleteParaModel para);
 
@@ -45,21 +43,32 @@
 
         void CleanTransRuleFixedGame(bool isLive, UInt64 maxSequenceID);
 
-        void CleanTransRuleHedging(bool isLive, UInt64 maxSequenceID);
-
         void CleanTransRuleIrrigation(bool isLive, UInt64 maxSequenceID);
 
         void CleanTransRuleArbitrage(bool isLive, UInt64 maxSequenceID);
+
+        #region Rule Hedging
+
+        MatchStagingRuleHedgingProcessModel GetMatchRuleHedging(bool isLive);
+
+        void ProcessRuleHedgingParallel(MatchStagingRuleHedgingGroupModel matchStaging, UInt64 maxSequenceID, int numberOfThread, bool isLive);
+
+        void CleanTransRuleHedging(bool isLive, UInt64 maxSequenceID);
+
+        #endregion
     }
 
     public class MatchMonitorServices : IMatchMonitorServices
     {
         private readonly IMatchMonitorDataAccess matchDataAccess;
+        private readonly IAssociationDetectionService associationDetectionService;
 
-        public MatchMonitorServices(IMatchMonitorDataAccess matchDataAccess)
+        public MatchMonitorServices(IMatchMonitorDataAccess matchDataAccess,
+                                    IAssociationDetectionService associationDetectionService)
         {
             this.matchDataAccess = matchDataAccess;
-        }        
+            this.associationDetectionService = associationDetectionService;
+        }
 
         public IEnumerable<TicketDetailEntity> GetMatchTrans(long lastScannedSequenceID, int batchSize, bool isLive, string betTypeInfos)
         {
@@ -79,11 +88,6 @@
         public MatchMonitorRuleFixedGameModel GetMatchRuleFixedGame(bool isLive)
         {
             return matchDataAccess.GetMatchRuleFixedGame(isLive);
-        }
-
-        public MatchMonitorRuleHedgingModel GetMatchRuleHedging(bool isLive)
-        {
-            return matchDataAccess.GetMatchRuleHedging(isLive);
         }
 
         public MatchMonitorRuleIrrigationModel GetMatchMonitorRuleIrrigation(bool isLive)
@@ -106,11 +110,6 @@
             return matchDataAccess.ProcessRuleFixedGame(isLive, maxSequenceID, matchinfo);
         }
 
-        public IEnumerable<MatchCompleteRuleHedgingModel> ProcessRuleHedging(bool isLive, UInt64 maxSequenceID, MatchStagingRuleHedgingModel matchinfo)
-        {
-            return matchDataAccess.ProcessRuleHedging(isLive, maxSequenceID, matchinfo);
-        }
-
         public IEnumerable<MatchRuleIrrigationCompletedModel> InsertMatchMonitorRuleIrrigation(bool isLive, UInt64 maxSequenceID, MatchStagingRuleIrrigationModel matchinfo)
         {
             return matchDataAccess.InsertMatchMonitorRuleIrrigation(isLive, maxSequenceID, matchinfo);
@@ -129,11 +128,6 @@
         public void CompleteTransRuleFixedGame(MatchCompleteRuleFixedGameParameterModel para)
         {
             matchDataAccess.CompleteTransRuleFixedGame(para);
-        }
-
-        public void CompleteTransRuleHedging(MatchCompleteRuleHedgingParameterModel para)
-        {
-            matchDataAccess.CompleteTransRuleHedging(para);
         }
 
         public void UpdateMatchMonitorRuleIrrigationComplete(MatchMonitorRuleIrrigationCompleteParaModel para)
@@ -156,11 +150,6 @@
             matchDataAccess.CleanTransRuleFixedGame(isLive, maxSequenceID);
         }
 
-        public void CleanTransRuleHedging(bool isLive, UInt64 maxSequenceID)
-        {
-            matchDataAccess.CleanTransRuleHedging(isLive, maxSequenceID);
-        }
-
         public void CleanTransRuleIrrigation(bool isLive, UInt64 maxSequenceID)
         {
             matchDataAccess.CleanTransRuleIrrigation(isLive, maxSequenceID);
@@ -170,5 +159,81 @@
         {
             matchDataAccess.CleanTransRuleArbitrage(isLive, maxSequenceID);
         }
+
+        #region Rule Hedging
+
+        public MatchStagingRuleHedgingProcessModel GetMatchRuleHedging(bool isLive)
+        {
+            var result = matchDataAccess.GetMatchRuleHedging(isLive);
+
+            if (result != null && result.MatchStagingList != null && result.MatchStagingList.Any())
+            {
+                var finalResult = result.MatchStagingList.GroupBy(x => new { x.MatchId, x.ScoreDiff, x.BetTypeID, x.BetID, x.BetTeam })
+                                                         .Select(y => new MatchStagingRuleHedgingGroupModel()
+                                                         {
+                                                             MatchId = y.Key.MatchId,
+                                                             ScoreDiff = y.Key.ScoreDiff,
+                                                             BetTypeID = y.Key.BetTypeID,
+                                                             BetID = y.Key.BetID,
+                                                             BetTeam = y.Key.BetTeam,
+                                                             MatchStagingList = y.ToList()
+                                                         });
+
+                return new MatchStagingRuleHedgingProcessModel { MaxSequenceID = result.MaxSequenceID, MatchStagingList = finalResult };
+            }
+
+            return new MatchStagingRuleHedgingProcessModel();
+        }
+
+        public void ProcessRuleHedgingParallel(MatchStagingRuleHedgingGroupModel matchStaging, UInt64 maxSequenceID, int numberOfThread, bool isLive)
+        {
+            if (matchStaging != null && matchStaging.MatchStagingList.Any())
+            {
+                matchStaging
+                       .MatchStagingList
+                       .AsParallel()
+                       .WithDegreeOfParallelism(numberOfThread)
+                       .ForAll(matchInfo =>
+                       {
+                           var ctsCustIds = matchInfo.CustomerInfo.Select(c => c.CTSCustID).Distinct();
+
+                           var assDetection = associationDetectionService.DetectAssociationRuleHedging(ctsCustIds, matchInfo.DetectAgentAssCustIDList);
+
+                           var assDetectionToJson = assDetection.Any() ? JsonConvert.SerializeObject(assDetection) : "[]";
+
+                           var matchRuleCompleted = ProcessRuleHedging(isLive, matchInfo, assDetectionToJson);
+
+                           if (matchRuleCompleted != null && matchRuleCompleted.Any())
+                           {
+                               CompleteTransRuleHedging(new MatchCompleteRuleHedgingParameterModel
+                               {
+                                   IsLive = isLive,
+                                   MatchInfo = matchInfo,
+                                   TransGroupJson = JsonConvert.SerializeObject(matchRuleCompleted),
+                                   MaxSequenceID = maxSequenceID
+                               });
+                           }
+
+                           Thread.Sleep(Consts.MatchMonitor_SleepTimes);
+                       });
+            }
+        }
+
+        private IEnumerable<MatchCompleteRuleHedgingModel> ProcessRuleHedging(bool isLive, MatchStagingRuleHedgingModel matchinfo, string groupDetection)
+        {
+            return matchDataAccess.ProcessRuleHedging(isLive, matchinfo, groupDetection);
+        }
+
+        private void CompleteTransRuleHedging(MatchCompleteRuleHedgingParameterModel para)
+        {
+            matchDataAccess.CompleteTransRuleHedging(para);
+        }
+
+        public void CleanTransRuleHedging(bool isLive, UInt64 maxSequenceID)
+        {
+            matchDataAccess.CleanTransRuleHedging(isLive, maxSequenceID);
+        }
+
+        #endregion
     }
 }
