@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.AssociationDetection
 {
     using Fanex.NAP.SPU.CTS.Features.AssociationDetection.Entities;
+    using Fanex.NAP.SPU.CTS.Shares;
     using Newtonsoft.Json;
     using System.Collections.Generic;
     using System.Linq;
@@ -48,7 +49,7 @@
                 A = c.AssociationType
             });
 
-            return input.Any() ? JsonConvert.SerializeObject(input) : "[]";
+            return input.Any() ? Utilities.RenderExcessiveJson(input, 900000) : "[]";
         }
 
         private string GetAssociationCustByPrimary(DetectAssociationByPrimaryFilterModel custAssType)
@@ -62,7 +63,7 @@
                 A = c.AssociationType
             });
 
-            return input.Any() ? JsonConvert.SerializeObject(input) : "[]";
+            return input.Any() ? Utilities.RenderExcessiveJson(input, 900000) : "[]";
         }
 
         #endregion
