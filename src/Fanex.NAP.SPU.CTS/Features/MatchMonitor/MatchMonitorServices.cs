@@ -191,7 +191,7 @@
                 {
                     var assDetection = associationDetectionService.DetectAssociationRuleHedging(matchInfo.CTSCustIDList, matchInfo.AgentDetect_CTSCustIDList);
 
-                    var assDetectionToJson = assDetection.Any() ? JsonConvert.SerializeObject(assDetection) : "[]";
+                    var assDetectionToJson = assDetection.Any() ? JsonConvert.SerializeObject(assDetection.Where(c=>c.GroupID != null)) : "[]";
 
                     var matchRuleCompleted = ProcessRuleHedging(isLive, matchInfo, assDetectionToJson);
 
