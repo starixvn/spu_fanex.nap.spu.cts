@@ -6,7 +6,7 @@
 
     public class MatchStagingRuleHedgingProcessModel
     {
-        public UInt64 MaxSequenceID { get; set; }
+        public UInt64? MaxSequenceID { get; set; }
 
         public IEnumerable<MatchStagingRuleHedgingGroupModel> MatchStagingList { get; set; }
     }

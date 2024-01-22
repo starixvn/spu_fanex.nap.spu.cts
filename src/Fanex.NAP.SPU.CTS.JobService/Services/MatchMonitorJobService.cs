@@ -191,7 +191,9 @@
             {
                 var matchMonitorRule = matchMonitorServices.GetMatchRuleHedging(isLive);
 
-                if (matchMonitorRule != null && matchMonitorRule.MaxSequenceID != 0)
+                if (matchMonitorRule != null
+                        && matchMonitorRule.MaxSequenceID != null
+                        && matchMonitorRule.MaxSequenceID != 0)
                 {
                     matchMonitorRule
                         .MatchStagingList
@@ -199,13 +201,16 @@
                         .WithDegreeOfParallelism(numberOfThread)
                         .ForAll(matchInfo =>
                         {
-                            matchMonitorServices.ProcessRuleHedging(matchInfo, matchMonitorRule.MaxSequenceID, isLive);
+                            matchMonitorServices.ProcessRuleHedging(matchInfo, matchMonitorRule.MaxSequenceID.Value, isLive);
 
                             Thread.Sleep(MatchMonitor_SleepTimes);
                         });
                 }
 
-                matchMonitorServices.CleanTransRuleHedging(isLive, matchMonitorRule.MaxSequenceID);
+                if (matchMonitorRule.MaxSequenceID != null)
+                {
+                    matchMonitorServices.CleanTransRuleHedging(isLive, matchMonitorRule.MaxSequenceID.Value);
+                }
 
                 return Task.FromResult(true);
             }
