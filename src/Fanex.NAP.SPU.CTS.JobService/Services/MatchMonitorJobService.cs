@@ -1,7 +1,6 @@
 ﻿namespace Fanex.NAP.SPU.CTS.JobService.Services
 {
     using Fanex.NAP.SPU.CTS.Features.AssociationDetection;
-    using Fanex.NAP.SPU.CTS.Features.AssociationDetection.Entities;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleGroupBetting;
@@ -191,24 +190,22 @@
             {
                 var matchMonitorRule = matchMonitorServices.GetMatchRuleHedging(isLive);
 
-                if (matchMonitorRule != null
-                        && matchMonitorRule.MaxSequenceID != null
-                        && matchMonitorRule.MaxSequenceID != 0)
+                if (matchMonitorRule != null && matchMonitorRule.MaxSequenceID != null)
                 {
-                    matchMonitorRule
-                        .MatchStagingList
-                        .AsParallel()
-                        .WithDegreeOfParallelism(numberOfThread)
-                        .ForAll(matchInfo =>
-                        {
-                            matchMonitorServices.ProcessRuleHedging(matchInfo, matchMonitorRule.MaxSequenceID.Value, isLive);
+                    if (matchMonitorRule.MatchStagingList != null && matchMonitorRule.MatchStagingList.Any())
+                    {
+                        matchMonitorRule
+                            .MatchStagingList
+                            .AsParallel()
+                            .WithDegreeOfParallelism(numberOfThread)
+                            .ForAll(matchInfo =>
+                            {
+                                matchMonitorServices.ProcessRuleHedging(matchInfo, matchMonitorRule.MaxSequenceID.Value, isLive);
 
-                            Thread.Sleep(MatchMonitor_SleepTimes);
-                        });
-                }
+                                Thread.Sleep(MatchMonitor_SleepTimes);
+                            });
+                    }
 
-                if (matchMonitorRule.MaxSequenceID != null)
-                {
                     matchMonitorServices.CleanTransRuleHedging(isLive, matchMonitorRule.MaxSequenceID.Value);
                 }
 
@@ -362,7 +359,7 @@
                     BetTypeID = x.BetTypeID,
                     BetChoiceType = x.BetChoiceType,
                     BetIDPattern = x.BetIDPattern
-                });                
+                });
 
                 var betTypeInfos = JsonConvert.SerializeObject(bettypeList);
 
@@ -384,7 +381,7 @@
                 if (assBySharedMatches != null && assBySharedMatches.Any())
                 {
                     assByShared3MatchesLast7Days = JsonConvert.SerializeObject(assBySharedMatches);
-                }    
+                }
             }
 
             return new MMPrepareDataProcessRuleGBModel

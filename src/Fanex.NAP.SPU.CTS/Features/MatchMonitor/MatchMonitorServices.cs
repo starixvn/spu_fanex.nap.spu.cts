@@ -162,25 +162,32 @@
 
         public MatchStagingRuleHedgingProcessModel GetMatchRuleHedging(bool isLive)
         {
-            var result = matchDataAccess.GetMatchRuleHedging(isLive);
+            var matches = matchDataAccess.GetMatchRuleHedging(isLive);
 
-            if (result != null && result.MatchStagingList != null && result.MatchStagingList.Any())
+            var result = new MatchStagingRuleHedgingProcessModel();
+
+            if (matches != null)
             {
-                var finalResult = result.MatchStagingList.GroupBy(x => new { x.MatchId, x.ScoreDiff, x.BetTypeID, x.BetID, x.BetTeam })
-                                                         .Select(y => new MatchStagingRuleHedgingGroupModel()
-                                                         {
-                                                             MatchId = y.Key.MatchId,
-                                                             ScoreDiff = y.Key.ScoreDiff,
-                                                             BetTypeID = y.Key.BetTypeID,
-                                                             BetID = y.Key.BetID,
-                                                             BetTeam = y.Key.BetTeam,
-                                                             MatchGroupStagingList = y.ToList()
-                                                         });
+                result.MaxSequenceID = matches.MaxSequenceID;
 
-                return new MatchStagingRuleHedgingProcessModel { MaxSequenceID = result.MaxSequenceID, MatchStagingList = finalResult };
+                if (matches.MatchStagingList != null && matches.MatchStagingList.Any())
+                {
+                    var finalResult = matches.MatchStagingList.GroupBy(x => new { x.MatchId, x.ScoreDiff, x.BetTypeID, x.BetID, x.BetTeam })
+                                                             .Select(y => new MatchStagingRuleHedgingGroupModel()
+                                                             {
+                                                                 MatchId = y.Key.MatchId,
+                                                                 ScoreDiff = y.Key.ScoreDiff,
+                                                                 BetTypeID = y.Key.BetTypeID,
+                                                                 BetID = y.Key.BetID,
+                                                                 BetTeam = y.Key.BetTeam,
+                                                                 MatchGroupStagingList = y.ToList()
+                                                             });
+
+                    result.MatchStagingList = finalResult;
+                }
             }
 
-            return new MatchStagingRuleHedgingProcessModel();
+            return result;
         }
 
         public void ProcessRuleHedging(MatchStagingRuleHedgingGroupModel matchStaging, UInt64 maxSequenceID, bool isLive)
