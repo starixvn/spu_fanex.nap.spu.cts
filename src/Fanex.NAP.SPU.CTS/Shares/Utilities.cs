@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Fanex.NAP.SPU.CTS.Shares
@@ -115,6 +116,27 @@ namespace Fanex.NAP.SPU.CTS.Shares
             }
 
             return false;
+        }
+
+        public static string RenderExcessiveJson(IEnumerable<object> obj, int batchSize)
+        {
+            StringBuilder result = new StringBuilder();
+
+            if (obj != null && obj.Any())
+            {
+                var chunk = obj.Chunk(batchSize);
+
+                chunk.ToList().ForEach(c =>
+                {
+                    var json = JsonConvert.SerializeObject(c).TrimStart('[').TrimEnd(']');
+                    result.Append(json);
+                });
+
+                result.Insert(0, "[");
+                result.Insert(result.Length, "]");
+            }
+
+            return result.Length == 0 ? "[]" : result.ToString();
         }
     }
 }

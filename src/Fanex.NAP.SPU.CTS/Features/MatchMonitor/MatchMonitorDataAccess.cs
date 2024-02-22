@@ -1,10 +1,12 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor
 {
     using Fanex.Data.Repository;
+    using Fanex.NAP.SPU.CTS.Features.AssociationDetection.Entities;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Criteria;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleGroupBetting;
     using Fanex.NAP.SPU.CTS.Shares;
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
 
@@ -28,7 +30,7 @@
 
         IEnumerable<MatchCompleteRuleFixedGameModel> ProcessRuleFixedGame(bool isLive, UInt64 maxSequenceID, MatchStagingRuleFixedGameModel matchinfo);
 
-        IEnumerable<MatchCompleteRuleHedgingModel> ProcessRuleHedging(bool isLive, UInt64 maxSequenceID, MatchStagingRuleHedgingModel matchinfo);
+        IEnumerable<MatchCompleteRuleHedgingModel> ProcessRuleHedging(bool isLive, MatchStagingRuleHedgingModel matchinfo, string groupDetection);
 
         IEnumerable<MatchRuleIrrigationCompletedModel> InsertMatchMonitorRuleIrrigation(bool isLive, UInt64 maxSequenceID, MatchStagingRuleIrrigationModel matchinfo);
 
@@ -208,17 +210,19 @@
             return repository.Fetch<MatchCompleteRuleFixedGameModel>(criteria);
         }
 
-        public IEnumerable<MatchCompleteRuleHedgingModel> ProcessRuleHedging(bool isLive, UInt64 maxSequenceID, MatchStagingRuleHedgingModel matchinfo)
+        public IEnumerable<MatchCompleteRuleHedgingModel> ProcessRuleHedging(bool isLive, MatchStagingRuleHedgingModel matchinfo, string groupDetection)
         {
             var criteria = new MatchMonitorRuleHedgingProcessCriteria()
             {
                 IsLive = isLive,
-                MaxSequenceID = maxSequenceID,
                 MatchId = matchinfo.MatchId,
                 ScoreDiff = matchinfo.ScoreDiff,
                 BettypeId = matchinfo.BetTypeID,
                 BetId = matchinfo.BetID,
-                Betteam = matchinfo.BetTeam
+                Betteam = matchinfo.BetTeam,
+                SportType = matchinfo.SportType,
+                SequenceIDList = matchinfo.SequenceIDList,
+                CustGroup = groupDetection
             };
 
             return repository.Fetch<MatchCompleteRuleHedgingModel>(criteria);

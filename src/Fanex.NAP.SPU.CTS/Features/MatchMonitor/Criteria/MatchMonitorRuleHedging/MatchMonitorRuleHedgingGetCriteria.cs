@@ -10,7 +10,7 @@
         public bool IsLive { get; set; }
 
         [SpParam(SqlParamName = "op_MaxSequenceID")]
-        public UInt64 MaxSequenceID { get; set; }
+        public UInt64? MaxSequenceID { get; set; }
 
         public override string GetSettingKey()
         {

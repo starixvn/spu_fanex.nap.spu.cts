@@ -124,5 +124,12 @@
             DCSTransaction_LastLoginProcessStatus = 500
         };
 
+        public enum AssociationDetectionType
+        {
+            Device = 1,
+            AI = 2,
+            IP = 4
+        }
+
     }
 }
