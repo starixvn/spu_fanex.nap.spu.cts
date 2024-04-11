@@ -52,7 +52,6 @@
                     EventDate = DateTime.Parse("2021-07-05 22:50:55"),
                     EventStatus = string.Empty,
                     KickOffTime = DateTime.Parse("2021-07-05 22:50:55"),
-                    TicketStatus = 1,
                     TransDate = DateTime.Parse("2021-07-05 22:50:55")
                 },
                 new TicketDetailEntity
@@ -75,7 +74,6 @@
                     EventDate = DateTime.Parse("2021-07-05 22:50:55"),
                     EventStatus = string.Empty,
                     KickOffTime = DateTime.Parse("2021-07-05 22:50:55"),
-                    TicketStatus = 2,
                     TransDate = DateTime.Parse("2021-07-05 22:50:55")
                 }
             };
@@ -115,7 +113,6 @@
                     EventDate = DateTime.Parse("2021-07-05 22:50:55"),
                     EventStatus = string.Empty,
                     KickOffTime = DateTime.Parse("2021-07-05 22:50:55"),
-                    TicketStatus = 1,
                     TransDate = DateTime.Parse("2021-07-05 22:50:55")
                 },
                 new TicketDetailEntity
@@ -138,7 +135,6 @@
                     EventDate = DateTime.Parse("2021-07-05 22:50:55"),
                     EventStatus = string.Empty,
                     KickOffTime = DateTime.Parse("2021-07-05 22:50:55"),
-                    TicketStatus = 2,
                     TransDate = DateTime.Parse("2021-07-05 22:50:55")
                 }
             };
