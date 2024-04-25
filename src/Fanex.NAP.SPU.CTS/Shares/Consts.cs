@@ -26,8 +26,7 @@
 
         public enum MatchMonitorQueryTypes
         {
-            Service = 1,
-            Report = 2,
+            Service = 1
         };
 
         public enum SystemParameters

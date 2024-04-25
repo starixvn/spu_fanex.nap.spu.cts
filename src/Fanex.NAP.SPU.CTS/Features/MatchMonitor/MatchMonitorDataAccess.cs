@@ -75,7 +75,6 @@
                 QueryType = (int)Consts.MatchMonitorQueryTypes.Service,
                 LastScannedSequenceID = lastScannedSequenceID,
                 BatchSize = batchSize,
-                EventDate = DateTime.Now,
                 IsLive = isLive,
                 ListSportBettype = betTypeInfos
             };

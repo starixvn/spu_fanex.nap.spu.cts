@@ -68,9 +68,6 @@
         [JsonIgnore]
         public bool LiveIndicator { get; set; }
 
-        [JsonIgnore]
-        public int TicketStatus { get; set; }
-
         [JsonProperty("BetID")]
         public int BetId { get; set; }
 
