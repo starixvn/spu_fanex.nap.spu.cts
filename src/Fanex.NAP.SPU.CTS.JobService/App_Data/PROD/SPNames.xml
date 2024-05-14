@@ -74,6 +74,7 @@
       <Setting Key="CTS_DC_ArchiveCustomer" SpName="CTS_DC_ArchiveCustomer" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" TimeOut="600"/>
       <Setting Key="CTS_DC_SystemParameter_Update" SpName="CTS_DC_SystemParameter_Update" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
       <Setting Key="CTS_ArchiveCustomer_Get" SpName="CTS_ArchiveCustomer_Get" DbName="DBARCCUST.bodb_Customer.bodbSPUNet" />
+	  <Setting Key="CTS_ArchivedCustomerMissing_Get" SpName="CTS_ArchivedCustomerMissing_Get" DbName="DBARCCUST.bodb_Customer.bodbSPUNet" />
 	  <Setting Key="CTS_DC_ArchiveCustomer_CorrectData" SpName="CTS_DC_ArchiveCustomer_CorrectData" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
   </Function>
 
