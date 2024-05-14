@@ -15,24 +15,39 @@
         private readonly IRollbackAssociationCustomerJobService rollbackAssociationCustomerJobService;
         private readonly IArchiveHistoryClassificationJobService archiveHistoryClassificationJobService;
         private readonly IArchiveHistoryClassificationBySportJobService archiveHistoryClassificationBySportJobService;
+        private readonly IArchiveCustomerMissingJobService archiveCustomerMissingJobService;
 
         public ArchiveDataController(IArchiveCustomerJobService archiveCustomerJobService
             , IArchiveAssociationCustomerJobService archiveAssociationCustomerJobService
             , IRollbackAssociationCustomerJobService rollbackAssociationCustomerJobService
             , IArchiveHistoryClassificationJobService archiveHistoryClassificationJobService
-            , IArchiveHistoryClassificationBySportJobService archiveHistoryClassificationBySportJobService)
+            , IArchiveHistoryClassificationBySportJobService archiveHistoryClassificationBySportJobService
+            , IArchiveCustomerMissingJobService archiveCustomerMissingJobService)
         {
             this.archiveCustomerJobService = archiveCustomerJobService;
             this.archiveAssociationCustomerJobService = archiveAssociationCustomerJobService;
             this.rollbackAssociationCustomerJobService = rollbackAssociationCustomerJobService;
             this.archiveHistoryClassificationJobService = archiveHistoryClassificationJobService;
             this.archiveHistoryClassificationBySportJobService = archiveHistoryClassificationBySportJobService;
+            this.archiveCustomerMissingJobService = archiveCustomerMissingJobService;
         }
 
         [HttpPost("ArchiveCustomer")]
         public async Task<bool> ArchiveCustomer([FromForm] int batchSize)
         {
             return await archiveCustomerJobService.ArchiveCTSCustomer(batchSize);
+        }
+
+        [HttpPost("ArchiveCreditCustMissing")]
+        public async Task<bool> ArchiveCreditCustMissing([FromForm] int batchSize)
+        {
+            return await archiveCustomerMissingJobService.ArchiveCreditCustomer(batchSize);
+        }
+
+        [HttpPost("ArchiveDepositCustMissing")]
+        public async Task<bool> ArchiveDepositCustMissing([FromForm] int batchSize)
+        {
+            return await archiveCustomerMissingJobService.ArchiveDepositCustomer(batchSize);
         }
 
         [HttpPost("ArchiveAssociationCustomer")]
