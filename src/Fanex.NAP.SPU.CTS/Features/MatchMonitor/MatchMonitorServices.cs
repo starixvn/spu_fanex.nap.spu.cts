@@ -3,6 +3,8 @@
     using Fanex.NAP.SPU.CTS.Features.AssociationDetection;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleGroupBetting;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleHedging;
+    using Fanex.NAP.SPU.CTS.Shares;
     using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
@@ -49,7 +51,9 @@
 
         MatchStagingRuleHedgingProcessModel GetMatchRuleHedging(bool isLive);
 
-        void ProcessRuleHedging(MatchStagingRuleHedgingGroupModel matchStaging, UInt64 maxSequenceID, bool isLive);
+        IEnumerable<MatchProcessRuleHedgingViewModel> ProcessRuleHedgingPharse(MatchStagingRuleHedgingGroupModel matchStaging, bool isLive, int numberInternalOfThread);
+
+        void CompleteTransRuleHedging(MatchCompleteRuleHedgingParameterModel para);
 
         void CleanTransRuleHedging(bool isLive, UInt64 maxSequenceID);
 
@@ -190,39 +194,62 @@
             return result;
         }
 
-        public void ProcessRuleHedging(MatchStagingRuleHedgingGroupModel matchStaging, UInt64 maxSequenceID, bool isLive)
+        public IEnumerable<MatchProcessRuleHedgingViewModel> ProcessRuleHedgingPharse(MatchStagingRuleHedgingGroupModel matchStaging, bool isLive, int numberInternalOfThread)
         {
-            if (matchStaging != null && matchStaging.MatchGroupStagingList.Any())
+            if (matchStaging != null && matchStaging.MatchGroupStagingList.IsNotNullOrEmpty())
             {
-                matchStaging.MatchGroupStagingList.OrderBy(c => c.OldGroup).ToList().ForEach(matchInfo =>
+                foreach (var matchInfo in matchStaging.MatchGroupStagingList.AsParallel().WithDegreeOfParallelism(numberInternalOfThread))
                 {
-                    var assDetection = associationDetectionService.DetectAssociationRuleHedging(matchInfo.CTSCustIDList, matchInfo.AgentDetect_CTSCustIDList);
+                    var mmPharse1 = ProcessRuleHedging(matchInfo, matchInfo.CTSCustIDList, matchInfo.AgentDetect_CTSCustIDList, isLive);
 
-                    var assDetectionToJson = assDetection.Any() ? JsonConvert.SerializeObject(assDetection.Where(c=>c.GroupID != null)) : "[]";
-
-                    var matchRuleCompleted = ProcessRuleHedging(isLive, matchInfo, assDetectionToJson);
-
-                    if (matchRuleCompleted != null && matchRuleCompleted.Any())
+                    if (mmPharse1 != null && mmPharse1.CompleteMatches.IsNotNullOrEmpty())
                     {
-                        CompleteTransRuleHedging(new MatchCompleteRuleHedgingParameterModel
-                        {
-                            IsLive = isLive,
-                            MatchInfo = matchInfo,
-                            TransGroupJson = JsonConvert.SerializeObject(matchRuleCompleted),
-                            MaxSequenceID = maxSequenceID
-                        });
+                        mmPharse1.PharseNumber = 1;
+                        yield return mmPharse1;
                     }
 
-                });
+                    if (mmPharse1 != null && mmPharse1.ReprocessMatches.IsNotNullOrEmpty())
+                    {
+                        foreach (var mmPharse2 in ProcessRuleHedgingPharse2(mmPharse1, isLive))
+                        {
+                            yield return mmPharse2;
+                        }
+                    }
+                }
             }
         }
 
-        private IEnumerable<MatchCompleteRuleHedgingModel> ProcessRuleHedging(bool isLive, MatchStagingRuleHedgingModel matchinfo, string groupDetection)
+        private IEnumerable<MatchProcessRuleHedgingViewModel> ProcessRuleHedgingPharse2(MatchProcessRuleHedgingViewModel matchProcess, bool isLive)
+        {
+            if (matchProcess != null && matchProcess.ReprocessMatches.IsNotNullOrEmpty())
+            {
+                foreach (var matchPharse2 in matchProcess.ReprocessMatches)
+                {
+                    var mmPharse2 = ProcessRuleHedging(matchProcess.MatchInfo, matchPharse2.CTSCustIDList, matchPharse2.AgentDetect_CTSCustIDList, isLive);
+                    if (mmPharse2 != null && mmPharse2.CompleteMatches.IsNotNullOrEmpty())
+                    {
+                        mmPharse2.PharseNumber = 2;
+                        yield return mmPharse2;
+                    }
+                }
+            }
+        }
+
+        private MatchProcessRuleHedgingViewModel ProcessRuleHedging(MatchStagingRuleHedgingModel matchInfo, string ctsCustIDList, string agentDetect_CTSCustIDList, bool isLive)
+        {
+            var assDetection = associationDetectionService.DetectAssociationRuleHedging(ctsCustIDList, agentDetect_CTSCustIDList);
+
+            var assDetectionToJson = assDetection.Any() ? JsonConvert.SerializeObject(assDetection.Where(c => c.GroupID != null)) : "[]";
+
+            return ProcessRuleHedging(isLive, matchInfo, assDetectionToJson);
+        }
+
+        private MatchProcessRuleHedgingViewModel ProcessRuleHedging(bool isLive, MatchStagingRuleHedgingModel matchinfo, string groupDetection)
         {
             return matchDataAccess.ProcessRuleHedging(isLive, matchinfo, groupDetection);
         }
 
-        private void CompleteTransRuleHedging(MatchCompleteRuleHedgingParameterModel para)
+        public void CompleteTransRuleHedging(MatchCompleteRuleHedgingParameterModel para)
         {
             matchDataAccess.CompleteTransRuleHedging(para);
         }

@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.SPU.CTS.JobService.Services
 {
+    using Fanex.Logging.Extensions;
     using Fanex.NAP.SPU.CTS.Features.AssociationDetection;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
@@ -23,7 +24,7 @@
 
         Task<bool> ProcessRuleFixedGame(bool isLive, int numberOfThread);
 
-        Task<bool> ProcessRuleHedging(bool isLive, int numberOfThread);
+        Task<bool> ProcessRuleHedging(bool isLive, int numberInternalOfThread, int numberExternalOfThread);
 
         Task<bool> ProcessRuleIrrigation(bool isLive, int numberOfThread);
 
@@ -184,7 +185,7 @@
         /// <summary>
         /// Process Rule for Hedging
         /// </summary>
-        public Task<bool> ProcessRuleHedging(bool isLive, int numberOfThread)
+        public Task<bool> ProcessRuleHedging(bool isLive, int numberInternalOfThread, int numberExternalOfThread)
         {
             try
             {
@@ -197,10 +198,31 @@
                         matchMonitorRule
                             .MatchStagingList
                             .AsParallel()
-                            .WithDegreeOfParallelism(numberOfThread)
+                            .WithDegreeOfParallelism(numberExternalOfThread)
                             .ForAll(matchInfo =>
                             {
-                                matchMonitorServices.ProcessRuleHedging(matchInfo, matchMonitorRule.MaxSequenceID.Value, isLive);
+                                var mmProcess = matchMonitorServices.ProcessRuleHedgingPharse(matchInfo, isLive, numberInternalOfThread).ToList();
+
+                                if (mmProcess.IsNotNullOrEmpty())
+                                {
+                                    matchMonitorServices.CompleteTransRuleHedging(new MatchCompleteRuleHedgingParameterModel
+                                    {
+                                        IsLive = isLive,
+                                        MatchInfo = matchInfo,
+                                        TransGroupJson = JsonConvert.SerializeObject(mmProcess.Select(x => x.CompleteMatches)),
+                                        MaxSequenceID = matchMonitorRule.MaxSequenceID.Value
+                                    });
+
+                                    var mmProcessPharse2 = mmProcess.Where(x => x.PharseNumber == 2).Select(x => x.ReprocessMatches);
+                                    if (mmProcessPharse2.IsNotNullOrEmpty())
+                                    {
+                                        var logMessage = new LogMessage("MMHedging")
+                                            .AddMessage($"{serviceName}")
+                                            .AddMessage($"Data {JsonConvert.SerializeObject(mmProcessPharse2)} - { DateTime.Now}").ToString();
+
+                                        sentryClient.CaptureMessage(logMessage, Sentry.Protocol.SentryLevel.Error);
+                                    }
+                                }
 
                                 Thread.Sleep(MatchMonitor_SleepTimes);
                             });

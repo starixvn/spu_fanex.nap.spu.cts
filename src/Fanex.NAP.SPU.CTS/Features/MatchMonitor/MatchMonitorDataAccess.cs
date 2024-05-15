@@ -5,6 +5,7 @@
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Criteria;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleGroupBetting;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleHedging;
     using Fanex.NAP.SPU.CTS.Shares;
     using Newtonsoft.Json;
     using System;
@@ -30,7 +31,7 @@
 
         IEnumerable<MatchCompleteRuleFixedGameModel> ProcessRuleFixedGame(bool isLive, UInt64 maxSequenceID, MatchStagingRuleFixedGameModel matchinfo);
 
-        IEnumerable<MatchCompleteRuleHedgingModel> ProcessRuleHedging(bool isLive, MatchStagingRuleHedgingModel matchinfo, string groupDetection);
+        MatchProcessRuleHedgingViewModel ProcessRuleHedging(bool isLive, MatchStagingRuleHedgingModel matchinfo, string groupDetection);
 
         IEnumerable<MatchRuleIrrigationCompletedModel> InsertMatchMonitorRuleIrrigation(bool isLive, UInt64 maxSequenceID, MatchStagingRuleIrrigationModel matchinfo);
 
@@ -209,7 +210,7 @@
             return repository.Fetch<MatchCompleteRuleFixedGameModel>(criteria);
         }
 
-        public IEnumerable<MatchCompleteRuleHedgingModel> ProcessRuleHedging(bool isLive, MatchStagingRuleHedgingModel matchinfo, string groupDetection)
+        public MatchProcessRuleHedgingViewModel ProcessRuleHedging(bool isLive, MatchStagingRuleHedgingModel matchinfo, string groupDetection)
         {
             var criteria = new MatchMonitorRuleHedgingProcessCriteria()
             {
@@ -224,7 +225,14 @@
                 CustGroup = groupDetection
             };
 
-            return repository.Fetch<MatchCompleteRuleHedgingModel>(criteria);
+            var result = repository.FetchMultiple<MatchCompleteRuleHedgingModel, MatchProcessRuleHedgingReprocessViewModel>(criteria);
+
+            return new MatchProcessRuleHedgingViewModel
+            {
+                MatchInfo = matchinfo,
+                CompleteMatches = result.firstResultSet,
+                ReprocessMatches = result.secondResultSet
+            };
         }
 
         public IEnumerable<MatchRuleIrrigationCompletedModel> InsertMatchMonitorRuleIrrigation(bool isLive, UInt64 maxSequenceID, MatchStagingRuleIrrigationModel matchinfo)
