@@ -209,7 +209,7 @@
                                     {
                                         IsLive = isLive,
                                         MatchInfo = matchInfo,
-                                        TransGroupJson = JsonConvert.SerializeObject(mmProcess.Select(x => x.CompleteMatches)),
+                                        TransGroupJson = JsonConvert.SerializeObject(mmProcess.SelectMany(x => x.CompleteMatches)),
                                         MaxSequenceID = matchMonitorRule.MaxSequenceID.Value
                                     });
 
