@@ -237,15 +237,19 @@
 
         private MatchProcessRuleHedgingViewModel ProcessRuleHedging(MatchStagingRuleHedgingModel matchInfo, string ctsCustIDList, string agentDetect_CTSCustIDList, bool isLive)
         {
-            var assDetection = associationDetectionService.DetectAssociationRuleHedging(ctsCustIDList, agentDetect_CTSCustIDList);
+            var assDetectionHasGroupID = associationDetectionService
+                                .DetectAssociationRuleHedging(ctsCustIDList, agentDetect_CTSCustIDList)?
+                                .Where(c => c.GroupID != null);
 
-            var assDetectionToJson = assDetection.Any() ? JsonConvert.SerializeObject(assDetection.Where(c => c.GroupID != null)) : "[]";
+            var assDetectionToJson = assDetectionHasGroupID.IsNotNullOrEmpty() ? JsonConvert.SerializeObject(assDetectionHasGroupID) : string.Empty;
 
             return ProcessRuleHedging(isLive, matchInfo, assDetectionToJson);
         }
 
         private MatchProcessRuleHedgingViewModel ProcessRuleHedging(bool isLive, MatchStagingRuleHedgingModel matchinfo, string groupDetection)
         {
+            if (string.IsNullOrEmpty(groupDetection)) return null;
+
             return matchDataAccess.ProcessRuleHedging(isLive, matchinfo, groupDetection);
         }
 
