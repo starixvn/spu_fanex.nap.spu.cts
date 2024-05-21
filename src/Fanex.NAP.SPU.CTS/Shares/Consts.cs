@@ -42,7 +42,13 @@
             ArchiveCustomerLastTime_Deposit = 26,
             ArchiveCustomerLastCustID_Deposit = 27,
             AssociatedGroupLastGroupID = 98,
-            AssociatedGroupLastCTSCustID = 99
+            AssociatedGroupLastCTSCustID = 99,
+            CorrectArchiveCustomer_LastArchiveDate_Credit = 1001,
+            CorrectArchiveCustomer_LastCustID_Credit = 1002,
+            CorrectArchiveCustomer_MaxArchiveDate_Credit = 1003,
+            CorrectArchiveCustomer_LastArchiveDate_Deposit = 1004,
+            CorrectArchiveCustomer_LastCustID_Deposit = 1005,
+            CorrectArchiveCustomer_MaxArchiveDate_Deposit = 1006,
         };
 
         public enum DangerLevel
@@ -81,6 +87,7 @@
 
         public enum UpdateCustomer
         {
+            ForNewCustomer = 0,
             FromCustomer = 1,
             FromCustInfo = 2,
             FromProductStatus = 3

@@ -79,6 +79,10 @@
             services.AddSingleton<IArchiveCustomerService, ArchiveCustomerService>();
             services.AddSingleton<IArchiveCustomerDataAccess, ArchiveCustomerDataAccess>();
             services.AddSingleton<IArchiveCustomerJobService, ArchiveCustomerJobService>();
+
+            services.AddSingleton<IArchiveCustomerMissingDataAccess, ArchiveCustomerMissingDataAccess>();
+            services.AddSingleton<IArchiveCustomerMissingService, ArchiveCustomerMissingService>();
+            services.AddSingleton<IArchiveCustomerMissingJobService, ArchiveCustomerMissingJobService>();
         }
 
         private static void RegisterNAPService(this IServiceCollection services)

@@ -70,9 +70,11 @@
 		<Setting Key="CTS_Archive_CustClassification_BySport_History_Insert" SpName="CTS_Archive_CustClassification_BySport_History_Insert" DbName="MySQL.CTS_Archive.ctsServiceAdmin" />
 	</Function>
   <Function name="ArchiveCTSCustomer">
-    <Setting Key="CTS_DC_ArchiveCustomer" SpName="CTS_DC_ArchiveCustomer" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
-    <Setting Key="CTS_DC_SystemParameter_Update" SpName="CTS_DC_SystemParameter_Update" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
-    <Setting Key="CTS_ArchiveCustomer_Get" SpName="CTS_ArchiveCustomer_Get" DbName="DBARCCUST.bodb_Customer.bodbSPUNet" />
+      <Setting Key="CTS_DC_ArchiveCustomer" SpName="CTS_DC_ArchiveCustomer" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
+      <Setting Key="CTS_DC_SystemParameter_Update" SpName="CTS_DC_SystemParameter_Update" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
+	  <Setting Key="CTS_ArchiveCustomer_Get" SpName="CTS_ArchiveCustomer_Get" DbName="DBARCCUST.bodb_Customer.bodbSPUNet" />
+	  <Setting Key="CTS_ArchivedCustomerMissing_Get" SpName="CTS_ArchivedCustomerMissing_Get" DbName="DBARCCUST.bodb_Customer.bodbSPUNet" />
+	  <Setting Key="CTS_DC_ArchiveCustomer_CorrectData" SpName="CTS_DC_ArchiveCustomer_CorrectData" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
   </Function>
 	<Function name="ProblemCaseMonitor">
 		<Setting Key="CTS_DC_ProblemCaseMonitor_Classification_Get" SpName="CTS_DC_ProblemCaseMonitor_Classification_Get" DbName="MySQL.SLAVE.CTS_DataCenter.ctsService" />
