@@ -306,28 +306,13 @@
         public void ProcessRuleHedging_WhenSuccess(bool isLive)
         {
             // Arrange
-            var processRuleHedgingMethod = TestExtension.GetPrivateMethod(typeof(MatchMonitorServices), MMConsts.PrivateMethodName.ProcessRuleHedging, pos: 1);
+            var processRuleHedgingMethod = TestExtension.GetPrivateMethod(typeof(MatchMonitorServices), MMConsts.PrivateMethodName.ProcessRuleHedging);
 
             // Act
-            processRuleHedgingMethod.Invoke(_service, new object[] { isLive, new MatchStagingRuleHedgingModel(), "asd" });
+            processRuleHedgingMethod.Invoke(_service, new object[] { isLive, new MatchStagingRuleHedgingModel(), "asd", "asd" });
 
             // Assert
-            _dataAccess.Received(1).ProcessRuleHedging(isLive, Arg.Any<MatchStagingRuleHedgingModel>(), Arg.Any<string>());
-        }
-
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public void ProcessRuleHedging_ThrowException(bool isLive)
-        {
-            // Arrange
-            var processRuleHedgingMethod = TestExtension.GetPrivateMethod(typeof(MatchMonitorServices), MMConsts.PrivateMethodName.ProcessRuleHedging, pos: 1);
-
-            // Act
-            processRuleHedgingMethod.Invoke(_service, new object[] { isLive, new MatchStagingRuleHedgingModel(), "asd" });
-
-            // Assert
-            _dataAccess.Received(1).ProcessRuleHedging(isLive, Arg.Any<MatchStagingRuleHedgingModel>(), Arg.Any<string>());
+            _dataAccess.Received(1).ProcessRuleHedging(isLive, Arg.Any<MatchStagingRuleHedgingModel>(), Arg.Any<string>(), Arg.Any<string>());
         }
 
         [Fact]
@@ -370,7 +355,7 @@
             // Assert
             _dataAccess.Received(1).CleanTransRuleHedging(Arg.Any<bool>(), Arg.Any<UInt64>());
         }
-        
+
         [Theory]
         [InlineData(true)]
         [InlineData(false)]

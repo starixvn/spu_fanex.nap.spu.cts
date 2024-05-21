@@ -31,7 +31,7 @@
 
         IEnumerable<MatchCompleteRuleFixedGameModel> ProcessRuleFixedGame(bool isLive, UInt64 maxSequenceID, MatchStagingRuleFixedGameModel matchinfo);
 
-        MatchProcessRuleHedgingViewModel ProcessRuleHedging(bool isLive, MatchStagingRuleHedgingModel matchinfo, string groupDetection);
+        MatchProcessRuleHedgingViewModel ProcessRuleHedging(bool isLive, MatchStagingRuleHedgingModel matchinfo, string sequenceIDList, string groupDetection);
 
         IEnumerable<MatchRuleIrrigationCompletedModel> InsertMatchMonitorRuleIrrigation(bool isLive, UInt64 maxSequenceID, MatchStagingRuleIrrigationModel matchinfo);
 
@@ -210,7 +210,7 @@
             return repository.Fetch<MatchCompleteRuleFixedGameModel>(criteria);
         }
 
-        public MatchProcessRuleHedgingViewModel ProcessRuleHedging(bool isLive, MatchStagingRuleHedgingModel matchinfo, string groupDetection)
+        public MatchProcessRuleHedgingViewModel ProcessRuleHedging(bool isLive, MatchStagingRuleHedgingModel matchinfo, string sequenceIDList, string groupDetection)
         {
             var criteria = new MatchMonitorRuleHedgingProcessCriteria()
             {
@@ -221,11 +221,11 @@
                 BetId = matchinfo.BetID,
                 Betteam = matchinfo.BetTeam,
                 SportType = matchinfo.SportType,
-                SequenceIDList = matchinfo.SequenceIDList,
+                SequenceIDList = sequenceIDList,
                 CustGroup = groupDetection
             };
 
-            var result = repository.FetchMultiple<MatchCompleteRuleHedgingModel, MatchProcessRuleHedgingReprocessViewModel>(criteria);
+            var result = repository.FetchMultiple<MatchCompleteRuleHedgingModel, MatchProcessRuleHedgingReprocessModel>(criteria);
 
             return new MatchProcessRuleHedgingViewModel
             {

@@ -1,6 +1,6 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleHedging
 {
-    public class MatchProcessRuleHedgingReprocessViewModel
+    public class MatchProcessRuleHedgingReprocessModel
     {
         public string CTSCustIDList { get; set; }
 

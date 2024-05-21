@@ -8,7 +8,7 @@
 
         public IEnumerable<MatchCompleteRuleHedgingModel> CompleteMatches { get; set; }
 
-        public IEnumerable<MatchProcessRuleHedgingReprocessViewModel> ReprocessMatches { get; set; }
+        public IEnumerable<MatchProcessRuleHedgingReprocessModel> ReprocessMatches { get; set; }
 
         public int PharseNumber { get; set; }
     }

@@ -200,7 +200,7 @@
             {
                 foreach (var matchInfo in matchStaging.MatchGroupStagingList.AsParallel().WithDegreeOfParallelism(numberInternalOfThread))
                 {
-                    var mmPharse1 = ProcessRuleHedging(matchInfo, matchInfo.CTSCustIDList, matchInfo.AgentDetect_CTSCustIDList, isLive);
+                    var mmPharse1 = ProcessRuleHedgingWithAssociation(matchInfo, isLive);
 
                     if (mmPharse1 != null && mmPharse1.CompleteMatches.IsNotNullOrEmpty())
                     {
@@ -225,7 +225,7 @@
             {
                 foreach (var matchPharse2 in matchProcess.ReprocessMatches)
                 {
-                    var mmPharse2 = ProcessRuleHedging(matchProcess.MatchInfo, matchPharse2.CTSCustIDList, matchPharse2.AgentDetect_CTSCustIDList, isLive);
+                    var mmPharse2 = ProcessRuleHedgingWithAssociation(matchProcess.MatchInfo, matchPharse2, isLive);
                     if (mmPharse2 != null && mmPharse2.CompleteMatches.IsNotNullOrEmpty())
                     {
                         mmPharse2.PharseNumber = 2;
@@ -235,22 +235,27 @@
             }
         }
 
-        private MatchProcessRuleHedgingViewModel ProcessRuleHedging(MatchStagingRuleHedgingModel matchInfo, string ctsCustIDList, string agentDetect_CTSCustIDList, bool isLive)
+        private MatchProcessRuleHedgingViewModel ProcessRuleHedgingWithAssociation(MatchStagingRuleHedgingModel matchInfo, bool isLive)
+        {
+            return ProcessRuleHedgingWithAssociation(matchInfo, matchInfo, isLive);
+        }
+
+        private MatchProcessRuleHedgingViewModel ProcessRuleHedgingWithAssociation(MatchStagingRuleHedgingModel matchInfo, MatchProcessRuleHedgingReprocessModel reprocessModel, bool isLive)
         {
             var assDetectionHasGroupID = associationDetectionService
-                                .DetectAssociationRuleHedging(ctsCustIDList, agentDetect_CTSCustIDList)?
+                                .DetectAssociationRuleHedging(reprocessModel.CTSCustIDList, reprocessModel.AgentDetect_CTSCustIDList)?
                                 .Where(c => c.GroupID != null);
 
             var assDetectionToJson = assDetectionHasGroupID.IsNotNullOrEmpty() ? JsonConvert.SerializeObject(assDetectionHasGroupID) : string.Empty;
 
-            return ProcessRuleHedging(isLive, matchInfo, assDetectionToJson);
+            return ProcessRuleHedging(isLive, matchInfo, reprocessModel.SequenceIDList, assDetectionToJson);
         }
 
-        private MatchProcessRuleHedgingViewModel ProcessRuleHedging(bool isLive, MatchStagingRuleHedgingModel matchinfo, string groupDetection)
+        private MatchProcessRuleHedgingViewModel ProcessRuleHedging(bool isLive, MatchStagingRuleHedgingModel matchinfo, string sequenceIDList, string groupDetection)
         {
             if (string.IsNullOrEmpty(groupDetection)) return null;
 
-            return matchDataAccess.ProcessRuleHedging(isLive, matchinfo, groupDetection);
+            return matchDataAccess.ProcessRuleHedging(isLive, matchinfo, sequenceIDList, groupDetection);
         }
 
         public void CompleteTransRuleHedging(MatchCompleteRuleHedgingParameterModel para)
