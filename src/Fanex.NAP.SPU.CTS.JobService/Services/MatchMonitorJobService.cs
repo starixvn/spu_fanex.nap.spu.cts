@@ -202,6 +202,11 @@
                             .ForAll(matchInfo =>
                             {
                                 var mmProcess = matchMonitorServices.ProcessRuleHedgingPharse(matchInfo, isLive, numberInternalOfThread).ToList();
+                                var mergeCompleteMatches = mmProcess.SelectMany(x => x.CompleteMatches).Select((item, index) =>
+                                {
+                                    item.GroupId = index + 1;
+                                    return item;
+                                });
 
                                 if (mmProcess.IsNotNullOrEmpty())
                                 {
@@ -209,7 +214,7 @@
                                     {
                                         IsLive = isLive,
                                         MatchInfo = matchInfo,
-                                        TransGroupJson = JsonConvert.SerializeObject(mmProcess.SelectMany(x => x.CompleteMatches)),
+                                        TransGroupJson = JsonConvert.SerializeObject(mergeCompleteMatches),
                                         MaxSequenceID = matchMonitorRule.MaxSequenceID.Value
                                     });
 
