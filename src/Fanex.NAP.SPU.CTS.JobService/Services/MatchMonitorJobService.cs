@@ -5,6 +5,7 @@
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleGroupBetting;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleHedging;
     using Fanex.NAP.SPU.CTS.Features.SystemParameter;
     using Fanex.NAP.SPU.CTS.Shares;
     using Newtonsoft.Json;
@@ -182,6 +183,7 @@
             }
         }
 
+        #region Hedging
         /// <summary>
         /// Process Rule for Hedging
         /// </summary>
@@ -202,11 +204,6 @@
                             .ForAll(matchInfo =>
                             {
                                 var mmProcess = matchMonitorServices.ProcessRuleHedgingPharse(matchInfo, isLive, numberInternalOfThread).ToList();
-                                var mergeCompleteMatches = mmProcess.SelectMany(x => x.CompleteMatches).Select((item, index) =>
-                                {
-                                    item.GroupId = index + 1;
-                                    return item;
-                                });
 
                                 if (mmProcess.IsNotNullOrEmpty())
                                 {
@@ -214,19 +211,11 @@
                                     {
                                         IsLive = isLive,
                                         MatchInfo = matchInfo,
-                                        TransGroupJson = JsonConvert.SerializeObject(mergeCompleteMatches),
+                                        TransGroupJson = JsonConvert.SerializeObject(MergeMatchCompleteRuleHedging(mmProcess)),
                                         MaxSequenceID = matchMonitorRule.MaxSequenceID.Value
                                     });
 
-                                    var mmProcessPharse2 = mmProcess.Where(x => x.PharseNumber == 2).Select(x => x.ReprocessMatches);
-                                    if (mmProcessPharse2.IsNotNullOrEmpty())
-                                    {
-                                        var logMessage = new LogMessage("MMHedging")
-                                            .AddMessage($"{serviceName}")
-                                            .AddMessage($"Data {JsonConvert.SerializeObject(mmProcessPharse2)} - { DateTime.Now}").ToString();
-
-                                        sentryClient.CaptureMessage(logMessage, Sentry.Protocol.SentryLevel.Error);
-                                    }
+                                    WriteLogSentryErrorCaseHedging(mmProcess);
                                 }
 
                                 Thread.Sleep(MatchMonitor_SleepTimes);
@@ -251,6 +240,33 @@
                 return Task.FromResult(false);
             }
         }
+
+        private IEnumerable<MatchCompleteRuleHedgingModel> MergeMatchCompleteRuleHedging(IEnumerable<MatchProcessRuleHedgingViewModel> matches)
+        {
+            return matches
+                .SelectMany(x => x.CompleteMatches)
+                .GroupBy(item => item.TransIDList)
+                .Select((group, index) =>
+                {
+                    var result = group.First();
+                    result.GroupId = index + 1;
+                    return result;
+                });
+        }
+
+        private void WriteLogSentryErrorCaseHedging(IEnumerable<MatchProcessRuleHedgingViewModel> matches)
+        {
+            var mmProcessPharse2 = matches.Where(x => x.PharseNumber == 2).Select(x => x.ReprocessMatches);
+            if (mmProcessPharse2.IsNotNullOrEmpty())
+            {
+                var logMessage = new LogMessage("MMHedging")
+                    .AddMessage($"{serviceName}")
+                    .AddMessage($"Data {JsonConvert.SerializeObject(mmProcessPharse2)} - { DateTime.Now}").ToString();
+
+                sentryClient.CaptureMessage(logMessage, Sentry.Protocol.SentryLevel.Error);
+            }
+        }
+        #endregion
 
         /// <summary>
         /// Process Rule for Irrigation
