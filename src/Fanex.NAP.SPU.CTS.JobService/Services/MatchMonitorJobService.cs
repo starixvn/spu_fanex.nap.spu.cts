@@ -256,10 +256,11 @@
 
         private void WriteLogSentryErrorCaseHedging(IEnumerable<MatchProcessRuleHedgingViewModel> matches)
         {
-            var mmProcessPharse2 = matches.Where(x => x.PharseNumber == 2).Select(x => x.ReprocessMatches);
+            var mmProcessPharse2 = matches.Where(x => x.PharseNumber == 2 && x.ReprocessMatches.IsNotNullOrEmpty());
+
             if (mmProcessPharse2.IsNotNullOrEmpty())
             {
-                var logMessage = new LogMessage("MMHedging")
+                var logMessage = new LogMessage("MMHedging Error")
                     .AddMessage($"{serviceName}")
                     .AddMessage($"Data {JsonConvert.SerializeObject(mmProcessPharse2)} - { DateTime.Now}").ToString();
 
