@@ -11,6 +11,9 @@
         [SpParam(SqlParamName = "ip_LiveIndicator")]
         public bool IsLive { get; set; }
 
+        [SpParam(SqlParamName = "ip_PoolType")]
+        public int PoolType { get; set; }
+
         public override string GetSettingKey()
                 => "CTS_DC_MatchMonitor_Staging_Insert";
 

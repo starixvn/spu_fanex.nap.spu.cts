@@ -9,7 +9,6 @@
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleSabaGB;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleHedging;
     using Fanex.NAP.SPU.CTS.Shares;
-    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
 
@@ -17,7 +16,7 @@
     {
         IEnumerable<TicketDetailEntity> GetMatchTrans(long lastScannedSequenceID, int batchSize, bool isLive, string betTypeInfos);
 
-        void InsertMatchMonitorStaging(string matchTransJson, bool isLive);
+        void InsertMatchMonitorStaging(string matchTransJson, bool isLive, int poolType);
 
         MatchMonitorRuleGroupBettingModel GetMatchRuleGroupBetting(bool isLive);
 
@@ -93,12 +92,13 @@
             return repository.Fetch<TicketDetailEntity>(criteria);
         }
 
-        public void InsertMatchMonitorStaging(string matchTransJson, bool isLive)
+        public void InsertMatchMonitorStaging(string matchTransJson, bool isLive, int poolType)
         {
             var criteria = new MatchMonitorStagingInsertCriteria
             {
                 MatchTransJson = matchTransJson,
-                IsLive = isLive
+                IsLive = isLive,
+                PoolType = poolType
             };
 
             repository.Execute(criteria);

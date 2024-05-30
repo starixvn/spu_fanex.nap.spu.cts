@@ -65,9 +65,13 @@
 
                 var matchTrans = GetMatchTrans(lastScannedSequenceID, batchSize, isLive);
 
-                if (matchTrans != null && matchTrans.Any())
+                if (matchTrans.IsNotNullOrEmpty())
                 {
                     matchMonitorServices.InsertMatchMonitorStaging(JsonConvert.SerializeObject(matchTrans), isLive);
+
+                    systemParameterServices.UpdateValueForSystemParamById(
+                                                matchTrans.Max(x => x.SequenceID).ToString(),
+                                                isLive ? SystemParameters.MatchMonitorLastScannedTrans : SystemParameters.MatchMonitorLastScannedTransNoneLive);
                 }
             }
             catch (Exception ex)

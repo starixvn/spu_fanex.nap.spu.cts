@@ -145,7 +145,7 @@
 
             var ticketDetailToJson = JsonConvert.SerializeObject(ticketDetails);
 
-            _dataAccess.InsertMatchMonitorStaging(ticketDetailToJson, isLive);
+            _dataAccess.InsertMatchMonitorStaging(ticketDetailToJson, isLive, Arg.Any<int>());
 
             Action action = () => _service.InsertMatchMonitorStaging(ticketDetailToJson, isLive);
 

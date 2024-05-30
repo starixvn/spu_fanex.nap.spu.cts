@@ -10,6 +10,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using static Fanex.NAP.SPU.CTS.Shares.Consts;
 
     public interface IMatchMonitorServices
     {
@@ -91,7 +92,12 @@
 
         public void InsertMatchMonitorStaging(string matchTransJson, bool isLive)
         {
-            matchDataAccess.InsertMatchMonitorStaging(matchTransJson, isLive);
+            var arrInsertType = isLive ? typeof(MatchMonitorStagingLiveInsertType) : typeof(MatchMonitorStagingNonLiveInsertType);
+
+            Enum.GetValues(arrInsertType).Cast<int>().AsParallel().ForAll(poolType =>
+            {
+                matchDataAccess.InsertMatchMonitorStaging(matchTransJson, isLive, poolType);
+            });
         }
 
         public MatchMonitorRuleFixedGameModel GetMatchRuleFixedGame(bool isLive)

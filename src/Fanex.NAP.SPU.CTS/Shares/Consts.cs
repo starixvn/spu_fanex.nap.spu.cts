@@ -92,7 +92,7 @@
             FromCustInfo = 2,
             FromProductStatus = 3
         };
-        
+
         public enum SubscriberType
         {
             Credit = 0,
@@ -137,5 +137,22 @@
             IP = 4
         }
 
+        public enum MatchMonitorStagingLiveInsertType
+        {
+            MatchMonitorStagingGroupBettingLive         = 1001,
+            MatchMonitorStagingGroupBettingSabaLive     = 1002,
+            MatchMonitorStagingHedgingLive              = 1003,
+            MatchMonitorStagingFixedGameLive            = 1004
+        }
+
+        public enum MatchMonitorStagingNonLiveInsertType
+        {
+            MatchMonitorStagingGroupBettingNonLive      = 2001,
+            MatchMonitorStagingGroupBettingSabaNonLive  = 2002,
+            MatchMonitorStagingHedgingNonLive           = 2003,
+            MatchMonitorStagingArbitrageNonLive         = 2004,
+            MatchMonitorStagingFixedGameNonLive         = 2005,
+            MatchMonitorStagingIrrigationNonLive        = 2006
+        }
     }
 }
