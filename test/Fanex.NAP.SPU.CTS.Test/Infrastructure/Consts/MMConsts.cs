@@ -8,6 +8,8 @@
 
         public struct PrivateMethodName
         {
+            public const string ProcessRuleSabaGB = "ProcessRuleSabaGB";
+
             public const string ProcessRuleHedging = "ProcessRuleHedging";
         }
     }

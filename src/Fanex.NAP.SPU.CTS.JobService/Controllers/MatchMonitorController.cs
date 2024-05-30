@@ -50,6 +50,24 @@
         }
 
         /// <summary>
+        /// Process Rule Saba GroupBetting
+        /// </summary>
+        [HttpPost("MatchMonitorProcessRuleSabaGroupBettingLive")]
+        public async Task<bool> MatchMonitorRuleSabaGroupBettingLive([FromForm] int numberOfThread)
+        {
+            return await this.matchMonitorJobService.ProcessRuleSabaGroupBetting(true, numberOfThread);
+        }
+
+        /// <summary>
+        /// Process Rule Saba GroupBetting
+        /// </summary>
+        [HttpPost("MatchMonitorProcessRuleSabaGroupBettingNonLive")]
+        public async Task<bool> MatchMonitorRuleSabaGroupBettingNonLive([FromForm] int numberOfThread)
+        {
+            return await this.matchMonitorJobService.ProcessRuleSabaGroupBetting(false, numberOfThread);
+        }
+
+        /// <summary>
         /// Process Rule FixedGame
         /// </summary>
         [HttpPost("MatchMonitorProcessRuleFixedGameLive")]

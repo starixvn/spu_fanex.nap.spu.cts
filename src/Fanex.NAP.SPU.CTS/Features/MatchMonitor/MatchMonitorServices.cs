@@ -3,6 +3,7 @@
     using Fanex.NAP.SPU.CTS.Features.AssociationDetection;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleGroupBetting;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleSabaGB;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleHedging;
     using Fanex.NAP.SPU.CTS.Shares;
     using Newtonsoft.Json;
@@ -15,7 +16,6 @@
         IEnumerable<TicketDetailEntity> GetMatchTrans(long lastScannedSequenceID, int batchSize, bool isLive, string betTypeInfos);
 
         void InsertMatchMonitorStaging(string matchTransJson, bool isLive);
-        MatchMonitorRuleGroupBettingModel GetMatchRuleGroupBetting(bool isLive);
 
         MatchMonitorRuleFixedGameModel GetMatchRuleFixedGame(bool isLive);
 
@@ -23,23 +23,17 @@
 
         MatchMonitorRuleArbitrageModel GetMatchRuleArbitrage(bool isLive);
 
-        IEnumerable<MatchCompleteRuleGroupBettingModel> ProcessRuleGroupBetting(MMPrepareDataProcessRuleGBModel prepareData);
-
         IEnumerable<MatchCompleteRuleFixedGameModel> ProcessRuleFixedGame(bool isLive, UInt64 maxTransId, MatchStagingRuleFixedGameModel matchinfo);
 
         IEnumerable<MatchRuleIrrigationCompletedModel> InsertMatchMonitorRuleIrrigation(bool isLive, UInt64 maxSequenceID, MatchStagingRuleIrrigationModel matchinfo);
 
         IEnumerable<MatchCompleteRuleArbitrageModel> ProcessRuleArbitrage(bool isLive, UInt64 maxTransId, MatchStagingRuleArbitrageModel matchinfo);
 
-        void CompleteTransRuleGroupBetting(MatchCompleteRuleGroupBettingParameterModel para);
-
         void CompleteTransRuleFixedGame(MatchCompleteRuleFixedGameParameterModel para);
 
         void UpdateMatchMonitorRuleIrrigationComplete(MatchMonitorRuleIrrigationCompleteParaModel para);
 
         void CompleteTransRuleArbitrage(MatchCompleteRuleArbitrageParameterModel para);
-
-        void CleanTransRuleGroupBetting(bool isLive, UInt64 maxSequenceID);
 
         void CleanTransRuleFixedGame(bool isLive, UInt64 maxSequenceID);
 
@@ -57,6 +51,24 @@
 
         void CleanTransRuleHedging(bool isLive, UInt64 maxSequenceID);
 
+        #endregion
+
+        #region Rule GroupBetting
+        MatchMonitorRuleGroupBettingModel GetMatchRuleGroupBetting(bool isLive);
+
+        IEnumerable<MatchCompleteRuleGroupBettingModel> ProcessRuleGroupBetting(MMPrepareDataProcessRuleGBModel prepareData);
+
+        void CompleteTransRuleGroupBetting(MatchCompleteRuleGroupBettingParameterModel para);
+
+        void CleanTransRuleGroupBetting(bool isLive, UInt64 maxSequenceID);
+
+        MatchStagingRuleSabaGBProcessModel GetMatchRuleSabaGB(bool isLive);
+
+        IEnumerable<MatchProcessRuleSabaGBViewModel> ProcessRuleSabGBPharse(MatchStagingRuleSabaGBGroupModel matchStaging, bool isLive);
+
+        void CompleteTransRuleSabaGB(MatchCompleteRuleSabaGBParameterModel para);
+
+        void CleanTransRuleSabaGB(bool isLive, UInt64 maxSequenceID);
         #endregion
     }
 
@@ -82,11 +94,6 @@
             matchDataAccess.InsertMatchMonitorStaging(matchTransJson, isLive);
         }
 
-        public MatchMonitorRuleGroupBettingModel GetMatchRuleGroupBetting(bool isLive)
-        {
-            return matchDataAccess.GetMatchRuleGroupBetting(isLive);
-        }
-
         public MatchMonitorRuleFixedGameModel GetMatchRuleFixedGame(bool isLive)
         {
             return matchDataAccess.GetMatchRuleFixedGame(isLive);
@@ -100,11 +107,6 @@
         public MatchMonitorRuleArbitrageModel GetMatchRuleArbitrage(bool isLive)
         {
             return matchDataAccess.GetMatchRuleArbitrage(isLive);
-        }
-
-        public IEnumerable<MatchCompleteRuleGroupBettingModel> ProcessRuleGroupBetting(MMPrepareDataProcessRuleGBModel prepareData)
-        {
-            return matchDataAccess.ProcessRuleGroupBetting(prepareData);
         }
 
         public IEnumerable<MatchCompleteRuleFixedGameModel> ProcessRuleFixedGame(bool isLive, UInt64 maxSequenceID, MatchStagingRuleFixedGameModel matchinfo)
@@ -122,11 +124,6 @@
             return matchDataAccess.ProcessRuleArbitrage(isLive, maxSequenceID, matchinfo);
         }
 
-        public void CompleteTransRuleGroupBetting(MatchCompleteRuleGroupBettingParameterModel para)
-        {
-            matchDataAccess.CompleteTransRuleGroupBetting(para);
-        }
-
         public void CompleteTransRuleFixedGame(MatchCompleteRuleFixedGameParameterModel para)
         {
             matchDataAccess.CompleteTransRuleFixedGame(para);
@@ -140,11 +137,6 @@
         public void CompleteTransRuleArbitrage(MatchCompleteRuleArbitrageParameterModel para)
         {
             matchDataAccess.CompleteTransRuleArbitrage(para);
-        }
-
-        public void CleanTransRuleGroupBetting(bool isLive, UInt64 maxSequenceID)
-        {
-            matchDataAccess.CleanTransRuleGroupBetting(isLive, maxSequenceID);
         }
 
         public void CleanTransRuleFixedGame(bool isLive, UInt64 maxSequenceID)
@@ -161,6 +153,132 @@
         {
             matchDataAccess.CleanTransRuleArbitrage(isLive, maxSequenceID);
         }
+
+        #region Rule GroupBetting
+        public MatchMonitorRuleGroupBettingModel GetMatchRuleGroupBetting(bool isLive)
+        {
+            return matchDataAccess.GetMatchRuleGroupBetting(isLive);
+        }
+
+        public IEnumerable<MatchCompleteRuleGroupBettingModel> ProcessRuleGroupBetting(MMPrepareDataProcessRuleGBModel prepareData)
+        {
+            return matchDataAccess.ProcessRuleGroupBetting(prepareData);
+        }
+
+        public void CompleteTransRuleGroupBetting(MatchCompleteRuleGroupBettingParameterModel para)
+        {
+            matchDataAccess.CompleteTransRuleGroupBetting(para);
+        }
+
+        public void CleanTransRuleGroupBetting(bool isLive, UInt64 maxSequenceID)
+        {
+            matchDataAccess.CleanTransRuleGroupBetting(isLive, maxSequenceID);
+        }
+
+
+        public MatchStagingRuleSabaGBProcessModel GetMatchRuleSabaGB(bool isLive)
+        {
+            var matches = matchDataAccess.GetMatchRuleSabaGB(isLive);
+
+            var result = new MatchStagingRuleSabaGBProcessModel();
+
+            if (matches != null)
+            {
+                result.MaxSequenceID = matches.MaxSequenceID;
+
+                if (matches.MatchStagingList.IsNotNullOrEmpty())
+                {
+                    result.MatchStagingList = matches.MatchStagingList.GroupBy(x => new { x.MatchId, x.ScoreDiff, x.BetTypeID, x.BetID, x.BetTeam, x.LeagueGroupId })
+                                                        .Select(y => new MatchStagingRuleSabaGBGroupModel()
+                                                        {
+                                                            MatchId = y.Key.MatchId,
+                                                            ScoreDiff = y.Key.ScoreDiff,
+                                                            BetTypeID = y.Key.BetTypeID,
+                                                            BetID = y.Key.BetID,
+                                                            BetTeam = y.Key.BetTeam,
+                                                            LeagueGroupId = y.Key.LeagueGroupId,
+                                                            MatchGroupStagingList = y.ToList()
+                                                        });
+                }
+            }
+
+            return result;
+        }
+
+        public IEnumerable<MatchProcessRuleSabaGBViewModel> ProcessRuleSabGBPharse(MatchStagingRuleSabaGBGroupModel matchStaging, bool isLive)
+        {
+            if (matchStaging != null && matchStaging.MatchGroupStagingList.IsNotNullOrEmpty())
+            {
+                foreach (var matchInfo in matchStaging.MatchGroupStagingList)
+                {
+                    var mmPharse1 = ProcessRuleSabaGBWithAssociation(matchInfo, isLive);
+
+                    if (mmPharse1 != null && mmPharse1.CompleteMatches.IsNotNullOrEmpty())
+                    {
+                        mmPharse1.PharseNumber = 1;
+                        yield return mmPharse1;
+                    }
+
+                    if (mmPharse1 != null && mmPharse1.ReprocessMatches.IsNotNullOrEmpty())
+                    {
+                        foreach (var mmPharse2 in ProcessRuleSabaGBPharse2(mmPharse1, isLive))
+                        {
+                            yield return mmPharse2;
+                        }
+                    }
+                }
+            }
+        }
+
+        private IEnumerable<MatchProcessRuleSabaGBViewModel> ProcessRuleSabaGBPharse2(MatchProcessRuleSabaGBViewModel matchProcess, bool isLive)
+        {
+            if (matchProcess != null && matchProcess.ReprocessMatches.IsNotNullOrEmpty())
+            {
+                foreach (var matchPharse2 in matchProcess.ReprocessMatches)
+                {
+                    var mmPharse2 = ProcessRuleSabaGBWithAssociation(matchProcess.MatchInfo, matchPharse2, isLive);
+                    if (mmPharse2 != null && mmPharse2.CompleteMatches.IsNotNullOrEmpty())
+                    {
+                        mmPharse2.PharseNumber = 2;
+                        yield return mmPharse2;
+                    }
+                }
+            }
+        }
+
+        private MatchProcessRuleSabaGBViewModel ProcessRuleSabaGBWithAssociation(MatchStagingRuleSabaGBModel matchInfo, bool isLive)
+        {
+            return ProcessRuleSabaGBWithAssociation(matchInfo, matchInfo, isLive);
+        }
+
+        private MatchProcessRuleSabaGBViewModel ProcessRuleSabaGBWithAssociation(MatchStagingRuleSabaGBModel matchInfo, MatchProcessRuleSabaGBReprocessModel reprocessModel, bool isLive)
+        {
+            var assDetectionHasGroupID = associationDetectionService
+                                .DetectAssociationRuleSabaGB(reprocessModel.CTSCustIDList)?
+                                .Where(c => c.GroupID != null);
+
+            var assDetectionToJson = assDetectionHasGroupID.IsNotNullOrEmpty() ? JsonConvert.SerializeObject(assDetectionHasGroupID) : string.Empty;
+
+            return ProcessRuleSabaGB(isLive, matchInfo, reprocessModel.SequenceIDList, assDetectionToJson);
+        }
+
+        private MatchProcessRuleSabaGBViewModel ProcessRuleSabaGB(bool isLive, MatchStagingRuleSabaGBModel matchinfo, string sequenceIDList, string groupDetection)
+        {
+            if (string.IsNullOrEmpty(groupDetection)) return null;
+
+            return matchDataAccess.ProcessRuleSabaGB(isLive, matchinfo, sequenceIDList, groupDetection);
+        }
+
+        public void CompleteTransRuleSabaGB(MatchCompleteRuleSabaGBParameterModel para)
+        {
+            matchDataAccess.CompleteTransRuleSabaGB(para);
+        }
+
+        public void CleanTransRuleSabaGB(bool isLive, UInt64 maxSequenceID)
+        {
+            matchDataAccess.CleanTransRuleSabaGB(isLive, maxSequenceID);
+        }
+        #endregion
 
         #region Rule Hedging
 

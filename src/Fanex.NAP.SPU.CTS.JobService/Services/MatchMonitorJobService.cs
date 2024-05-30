@@ -5,6 +5,7 @@
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleGroupBetting;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleSabaGB;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleHedging;
     using Fanex.NAP.SPU.CTS.Features.SystemParameter;
     using Fanex.NAP.SPU.CTS.Shares;
@@ -22,6 +23,8 @@
         Task<bool> InsertTicketDetail(int batchSize, bool isLive);
 
         Task<bool> ProcessRuleGroupBetting(bool isLive, int numberOfThread);
+
+        Task<bool> ProcessRuleSabaGroupBetting(bool isLive, int numberOfThread);
 
         Task<bool> ProcessRuleFixedGame(bool isLive, int numberOfThread);
 
@@ -77,6 +80,7 @@
             return Task.FromResult(true);
         }
 
+        #region GroupBetting
         /// <summary>
         /// Process Rule for GroupBeting
         /// </summary>
@@ -130,6 +134,76 @@
                 return Task.FromResult(false);
             }
         }
+
+        /// <summary>
+        /// Process Rule Saba Group Betting
+        /// </summary>
+        public Task<bool> ProcessRuleSabaGroupBetting(bool isLive, int numberOfThread)
+        {
+            try
+            {
+                var matchMonitorRule = matchMonitorServices.GetMatchRuleSabaGB(isLive);
+
+                if (matchMonitorRule != null && matchMonitorRule.MaxSequenceID != null)
+                {
+                    if (matchMonitorRule.MatchStagingList.IsNotNullOrEmpty())
+                    {
+                        matchMonitorRule.MatchStagingList
+                            .AsParallel()
+                            .WithDegreeOfParallelism(numberOfThread)
+                            .ForAll(matchInfo =>
+                            {
+                                var mmProcess = matchMonitorServices.ProcessRuleSabGBPharse(matchInfo, isLive).ToList();
+
+                                if (mmProcess.IsNotNullOrEmpty())
+                                {
+                                    matchMonitorServices.CompleteTransRuleSabaGB(new MatchCompleteRuleSabaGBParameterModel
+                                    {
+                                        IsLive = isLive,
+                                        MatchInfo = matchInfo,
+                                        TransGroupJson = JsonConvert.SerializeObject(MergeMatchCompleteRuleSabaGB(mmProcess)),
+                                        MaxSequenceID = matchMonitorRule.MaxSequenceID.Value
+                                    });
+
+                                    WriteLogSentryError(mmProcess.Where(x => x.PharseNumber == 2 && x.ReprocessMatches.IsNotNullOrEmpty()));
+                                }
+
+                                Thread.Sleep(MatchMonitor_SleepTimes);
+                            });
+                    }
+
+                    matchMonitorServices.CleanTransRuleSabaGB(isLive, matchMonitorRule.MaxSequenceID.Value);
+                }
+
+                return Task.FromResult(true);
+            }
+            catch (AggregateException ex)
+            {
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
+
+                return Task.FromResult(false);
+            }
+            catch (Exception ex)
+            {
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
+
+                return Task.FromResult(false);
+            }
+        }
+
+        private IEnumerable<MatchCompleteRuleSabaGBModel> MergeMatchCompleteRuleSabaGB(IEnumerable<MatchProcessRuleSabaGBViewModel> matches)
+        {
+            return matches
+                .SelectMany(x => x.CompleteMatches)
+                .GroupBy(item => item.TransIDList)
+                .Select((group, index) =>
+                {
+                    var result = group.First();
+                    result.GroupId = index + 1;
+                    return result;
+                });
+        }
+        #endregion
 
         /// <summary>
         /// Process Rule for Fixed Game
@@ -437,6 +511,17 @@
             };
         }
 
+        private void WriteLogSentryError<T>(IEnumerable<T> matches)
+        {
+            if (matches.IsNotNullOrEmpty())
+            {
+                var logMessage = new LogMessage("MMHedging Error")
+                    .AddMessage($"{serviceName}")
+                    .AddMessage($"Data {JsonConvert.SerializeObject(matches)} - { DateTime.Now}").ToString();
+
+                sentryClient.CaptureMessage(logMessage, Sentry.Protocol.SentryLevel.Error);
+            }
+        }
         #endregion Private Methods
     }
 }

@@ -13,6 +13,8 @@
         public IEnumerable<DetectAssBySharedIPMatchesModel> DetectAssociationBySharedMatches(string custIDList);
 
         IEnumerable<DetectAssociationMergeGroupModel> DetectAssociationRuleHedging(string ctsCustIds, string agentCTSCustIds);
+
+        IEnumerable<DetectAssociationMergeGroupModel> DetectAssociationRuleSabaGB(string ctsCustIds);
     }
 
     public class AssociationDetectionService : IAssociationDetectionService
@@ -33,6 +35,13 @@
             }
 
             return _associationDetectionDataAccess.DetectAssociationBySharedMatches(custIDList);
+        }
+
+        private string GetAssociationBySharedMatches(string custIDList)
+        {
+            var result = DetectAssociationBySharedMatches(custIDList);
+
+            return JsonConvert.SerializeObject(result);
         }
         #endregion
 
@@ -101,6 +110,39 @@
             return Enumerable.Empty<DetectAssociationMergeGroupModel>();
         }
 
+        #endregion
+
+        #region MM GroupBetting
+        public IEnumerable<DetectAssociationMergeGroupModel> DetectAssociationRuleSabaGB(string ctsCustIds)
+        {
+            if (!string.IsNullOrEmpty(ctsCustIds))
+            {
+                var mergeGroupInfo = new MergeGroupAssociationFilterModel { CTSCustIDs = ctsCustIds, IsGetLogTransInfo = false };
+
+                Parallel.Invoke(() =>
+                {
+                    mergeGroupInfo.AssociationByDeviceJson = GetAssociationCustByPrimary(new DetectAssociationByPrimaryFilterModel(ctsCustIds, AssociationDetectionType.Device));
+                }, () =>
+                {
+
+                    mergeGroupInfo.AssociationByAIJson = GetAssociationCustByPrimary(new DetectAssociationByPrimaryFilterModel(ctsCustIds, AssociationDetectionType.AI));
+                }, () =>
+                {
+
+                    mergeGroupInfo.AssociationByIPJson = GetAssociationCustByPrimary(new DetectAssociationByPrimaryFilterModel(ctsCustIds, AssociationDetectionType.IP));
+                }, () =>
+                {
+
+                    mergeGroupInfo.AssociationBySharedMatchesJson = GetAssociationBySharedMatches(ctsCustIds);
+                });
+
+                var assMergeGroup = _associationDetectionDataAccess.DetectGroupDetectAssociation(mergeGroupInfo);
+
+                return assMergeGroup;
+            }
+
+            return Enumerable.Empty<DetectAssociationMergeGroupModel>();
+        }
         #endregion
     }
 }

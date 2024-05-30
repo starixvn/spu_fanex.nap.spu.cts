@@ -3,6 +3,7 @@
     using Fanex.NAP.SPU.CTS.Features.AssociationDetection;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleSabaGB;
     using Fanex.NAP.SPU.CTS.Tests.Infrastructure;
     using Fanex.NAP.SPU.CTS.Tests.Infrastructure.Extensions;
     using FluentAssertions;
@@ -257,6 +258,122 @@
 
             action.Should().NotThrow<Exception>();
         }
+        #endregion
+
+        #region Rule GroupBetting
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void GetMatchRuleSabaGB_WhenSuccess(bool isLive)
+        {
+            // Arrange
+            var output = new MatchMonitorRuleSabaGBModel
+            {
+                MaxSequenceID = 123123,
+                MatchStagingList = new List<MatchStagingRuleSabaGBModel>
+                {
+                   new MatchStagingRuleSabaGBModel { MatchId = 1, ScoreDiff = 2, BetTypeID = 3, BetID = 4, BetTeam = "a", OldGroup = 1  },
+                   new MatchStagingRuleSabaGBModel { MatchId = 1, ScoreDiff = 2, BetTypeID = 3, BetID = 4, BetTeam = "a", OldGroup = 2  },
+                   new MatchStagingRuleSabaGBModel { MatchId = 1, ScoreDiff = 2, BetTypeID = 3, BetID = 4, BetTeam = "h", OldGroup = 1  }
+                }
+            };
+
+            // Act
+            _dataAccess.GetMatchRuleSabaGB(isLive).Returns(output);
+
+            var result = _service.GetMatchRuleSabaGB(isLive);
+            // Assert
+            Assert.NotNull(result);
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void GetMatchRuleSabaGB_ThrowException(bool isLive)
+        {
+            // Arrange
+
+            // Act
+            _dataAccess.GetMatchRuleSabaGB(isLive).Throws<Exception>();
+
+            Action action = () => _service.GetMatchRuleSabaGB(isLive);
+            // Assert
+            Assert.Throws<Exception>(action);
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void ProcessRuleSabaGB_WhenSuccess(bool isLive)
+        {
+            // Arrange
+            var processRuleSabaGBMethod = TestExtension.GetPrivateMethod(typeof(MatchMonitorServices), MMConsts.PrivateMethodName.ProcessRuleSabaGB);
+
+            // Act
+            processRuleSabaGBMethod.Invoke(_service, new object[] { isLive, new MatchStagingRuleSabaGBModel(), "asd", "asd" });
+
+            // Assert
+            _dataAccess.Received(1).ProcessRuleSabaGB(isLive, Arg.Any<MatchStagingRuleSabaGBModel>(), Arg.Any<string>(), Arg.Any<string>());
+        }
+
+        [Fact]
+        public void CompleteTransRuleSabaGB_WhenSuccess()
+        {
+            // Arrange
+
+            // Act
+            _dataAccess.CompleteTransRuleSabaGB(Arg.Any<MatchCompleteRuleSabaGBParameterModel>());
+
+            _service.CompleteTransRuleSabaGB(new MatchCompleteRuleSabaGBParameterModel());
+            // Assert
+            _dataAccess.Received(1).CompleteTransRuleSabaGB(Arg.Any<MatchCompleteRuleSabaGBParameterModel>());
+        }
+
+        [Fact]
+        public void CompleteTransRuleSabaGB_ThrowException()
+        {
+            // Arrange
+
+            // Act
+            _dataAccess.When(it => it.CompleteTransRuleSabaGB(Arg.Any<MatchCompleteRuleSabaGBParameterModel>())).Throw<Exception>();
+
+            Action action = () => _service.CompleteTransRuleSabaGB(new MatchCompleteRuleSabaGBParameterModel());
+            // Assert
+            Assert.Throws<Exception>(action);
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void CleanTransRuleSabaGB_WhenSuccess(bool isLive)
+        {
+            // Arrange
+
+            // Act
+            _dataAccess.CleanTransRuleSabaGB(Arg.Any<bool>(), Arg.Any<UInt64>());
+
+            _service.CleanTransRuleSabaGB(isLive, 123);
+            // Assert
+            _dataAccess.Received(1).CleanTransRuleSabaGB(Arg.Any<bool>(), Arg.Any<UInt64>());
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void CleanTransRuleSabaGB_ThrowException(bool isLive)
+        {
+            // Arrange
+
+            // Act
+            _dataAccess.When(it => it.CleanTransRuleSabaGB(Arg.Any<bool>(), Arg.Any<UInt64>())).Throw<Exception>();
+
+            Action action = () => _service.CleanTransRuleSabaGB(isLive, 123);
+
+            // Assert
+            Assert.Throws<Exception>(action);
+        }
+        #endregion
+
         #endregion
 
         #region Rule Hedging
