@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class MatchStagingRuleSabaGBModel : MatchProcessRuleSabaGBReprocessModel
+    public class MatchStagingRuleSabaGBEntity : MatchProcessRuleSabaGBInfoEntity
     {
         public int MatchId { get; set; }
 

@@ -1,6 +1,6 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleSabaGB
 {
-    public class MatchProcessRuleSabaGBReprocessModel
+    public class MatchProcessRuleSabaGBInfoEntity
     {
         public string CTSCustIDList { get; set; }
 

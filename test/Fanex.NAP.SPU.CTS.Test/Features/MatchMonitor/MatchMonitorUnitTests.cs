@@ -270,11 +270,11 @@
             var output = new MatchMonitorRuleSabaGBModel
             {
                 MaxSequenceID = 123123,
-                MatchStagingList = new List<MatchStagingRuleSabaGBModel>
+                MatchStagingList = new List<MatchStagingRuleSabaGBEntity>
                 {
-                   new MatchStagingRuleSabaGBModel { MatchId = 1, ScoreDiff = 2, BetTypeID = 3, BetID = 4, BetTeam = "a", OldGroup = 1  },
-                   new MatchStagingRuleSabaGBModel { MatchId = 1, ScoreDiff = 2, BetTypeID = 3, BetID = 4, BetTeam = "a", OldGroup = 2  },
-                   new MatchStagingRuleSabaGBModel { MatchId = 1, ScoreDiff = 2, BetTypeID = 3, BetID = 4, BetTeam = "h", OldGroup = 1  }
+                   new MatchStagingRuleSabaGBEntity { MatchId = 1, ScoreDiff = 2, BetTypeID = 3, BetID = 4, BetTeam = "a", OldGroup = 1  },
+                   new MatchStagingRuleSabaGBEntity { MatchId = 1, ScoreDiff = 2, BetTypeID = 3, BetID = 4, BetTeam = "a", OldGroup = 2  },
+                   new MatchStagingRuleSabaGBEntity { MatchId = 1, ScoreDiff = 2, BetTypeID = 3, BetID = 4, BetTeam = "h", OldGroup = 1  }
                 }
             };
 
@@ -310,10 +310,10 @@
             var processRuleSabaGBMethod = TestExtension.GetPrivateMethod(typeof(MatchMonitorServices), MMConsts.PrivateMethodName.ProcessRuleSabaGB);
 
             // Act
-            processRuleSabaGBMethod.Invoke(_service, new object[] { isLive, new MatchStagingRuleSabaGBModel(), "asd", "asd" });
+            processRuleSabaGBMethod.Invoke(_service, new object[] { isLive, new MatchStagingRuleSabaGBEntity(), "asd", "asd" });
 
             // Assert
-            _dataAccess.Received(1).ProcessRuleSabaGB(isLive, Arg.Any<MatchStagingRuleSabaGBModel>(), Arg.Any<string>(), Arg.Any<string>());
+            _dataAccess.Received(1).ProcessRuleSabaGB(isLive, Arg.Any<MatchStagingRuleSabaGBEntity>(), Arg.Any<string>(), Arg.Any<string>());
         }
 
         [Fact]

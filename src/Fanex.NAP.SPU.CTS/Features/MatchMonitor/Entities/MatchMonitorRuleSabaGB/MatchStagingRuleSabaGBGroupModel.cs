@@ -17,6 +17,6 @@
 
         public int LeagueGroupId { get; set; }
 
-        public IEnumerable<MatchStagingRuleSabaGBModel> MatchGroupStagingList { get; set; }
+        public IEnumerable<MatchStagingRuleSabaGBEntity> MatchGroupStagingList { get; set; }
     }
 }

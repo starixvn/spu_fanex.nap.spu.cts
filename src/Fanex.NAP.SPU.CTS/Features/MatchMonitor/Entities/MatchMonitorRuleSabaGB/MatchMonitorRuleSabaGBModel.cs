@@ -7,6 +7,6 @@
     {
         public UInt64? MaxSequenceID { get; set; }
 
-        public IEnumerable<MatchStagingRuleSabaGBModel> MatchStagingList { get; set; }
+        public IEnumerable<MatchStagingRuleSabaGBEntity> MatchStagingList { get; set; }
     }
 }

@@ -32,7 +32,7 @@
 
         IEnumerable<MatchCompleteRuleGroupBettingModel> ProcessRuleGroupBetting(MMPrepareDataProcessRuleGBModel prepareData);
 
-        MatchProcessRuleSabaGBViewModel ProcessRuleSabaGB(bool isLive, MatchStagingRuleSabaGBModel matchInfo, string sequenceIDList, string groupDetection);
+        MatchProcessRuleSabaGBModel ProcessRuleSabaGB(bool isLive, MatchStagingRuleSabaGBEntity matchInfo, string sequenceIDList, string groupDetection);
 
         IEnumerable<MatchCompleteRuleFixedGameModel> ProcessRuleFixedGame(bool isLive, UInt64 maxSequenceID, MatchStagingRuleFixedGameModel matchinfo);
 
@@ -131,12 +131,12 @@
                 IsLive = isLive
             };
 
-            var result = repository.Fetch<MatchStagingRuleSabaGBModel>(criteria);
+            var result = repository.Fetch<MatchStagingRuleSabaGBEntity>(criteria);
 
             return new MatchMonitorRuleSabaGBModel
             {
                 MaxSequenceID = criteria.MaxSequenceID,
-                MatchStagingList = criteria.MaxSequenceID != 0 ? result : new List<MatchStagingRuleSabaGBModel>()
+                MatchStagingList = criteria.MaxSequenceID != 0 ? result : new List<MatchStagingRuleSabaGBEntity>()
             };
         }
 
@@ -219,7 +219,7 @@
             return repository.Fetch<MatchCompleteRuleGroupBettingModel>(criteria);
         }
 
-        public MatchProcessRuleSabaGBViewModel ProcessRuleSabaGB(bool isLive, MatchStagingRuleSabaGBModel matchInfo, string sequenceIDList, string groupDetection)
+        public MatchProcessRuleSabaGBModel ProcessRuleSabaGB(bool isLive, MatchStagingRuleSabaGBEntity matchInfo, string sequenceIDList, string groupDetection)
         {
             var criteria = new MatchMonitorRuleSabaGBProcessCriteria
             {
@@ -235,9 +235,9 @@
                 CustGroup = groupDetection
             };
 
-            var result = repository.FetchMultiple<MatchCompleteRuleSabaGBModel, MatchProcessRuleSabaGBReprocessModel>(criteria);
+            var result = repository.FetchMultiple<MatchCompleteRuleSabaGBEntity, MatchProcessRuleSabaGBInfoEntity>(criteria);
 
-            return new MatchProcessRuleSabaGBViewModel
+            return new MatchProcessRuleSabaGBModel
             {
                 MatchInfo = matchInfo,
                 CompleteMatches = result.firstResultSet,

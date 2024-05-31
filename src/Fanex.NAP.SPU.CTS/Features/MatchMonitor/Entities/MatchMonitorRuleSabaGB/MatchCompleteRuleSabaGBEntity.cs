@@ -2,7 +2,7 @@
 {
     using Newtonsoft.Json;
 
-    public class MatchCompleteRuleSabaGBModel
+    public class MatchCompleteRuleSabaGBEntity
     {
         [JsonProperty("GroupID")]
         public int GroupId { get; set; }

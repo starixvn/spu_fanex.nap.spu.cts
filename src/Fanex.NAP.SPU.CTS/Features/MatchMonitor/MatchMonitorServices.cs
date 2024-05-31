@@ -65,7 +65,7 @@
 
         MatchStagingRuleSabaGBProcessModel GetMatchRuleSabaGB(bool isLive);
 
-        IEnumerable<MatchProcessRuleSabaGBViewModel> ProcessRuleSabGBPharse(MatchStagingRuleSabaGBGroupModel matchStaging, bool isLive);
+        IEnumerable<MatchProcessRuleSabaGBModel> ProcessRuleSabGBWithRound(MatchStagingRuleSabaGBGroupModel matchStaging, bool isLive);
 
         void CompleteTransRuleSabaGB(MatchCompleteRuleSabaGBParameterModel para);
 
@@ -211,67 +211,68 @@
             return result;
         }
 
-        public IEnumerable<MatchProcessRuleSabaGBViewModel> ProcessRuleSabGBPharse(MatchStagingRuleSabaGBGroupModel matchStaging, bool isLive)
+        public IEnumerable<MatchProcessRuleSabaGBModel> ProcessRuleSabGBWithRound(MatchStagingRuleSabaGBGroupModel matchStaging, bool isLive)
         {
             if (matchStaging != null && matchStaging.MatchGroupStagingList.IsNotNullOrEmpty())
             {
                 foreach (var matchInfo in matchStaging.MatchGroupStagingList)
                 {
-                    var mmPharse1 = ProcessRuleSabaGBWithAssociation(matchInfo, isLive);
+                    var mmRound1 = ProcessRuleSabaGBWithAssociation(matchInfo, isLive);
 
-                    if (mmPharse1 != null && mmPharse1.CompleteMatches.IsNotNullOrEmpty())
+                    if (mmRound1 != null && mmRound1.CompleteMatches.IsNotNullOrEmpty())
                     {
-                        mmPharse1.PharseNumber = 1;
-                        yield return mmPharse1;
+                        mmRound1.RoundNumber = 1;
+                        yield return mmRound1;
                     }
 
-                    if (mmPharse1 != null && mmPharse1.ReprocessMatches.IsNotNullOrEmpty())
+                    if (mmRound1 != null && mmRound1.ReprocessMatches.IsNotNullOrEmpty())
                     {
-                        foreach (var mmPharse2 in ProcessRuleSabaGBPharse2(mmPharse1, isLive))
+                        foreach (var mmRound2 in ProcessRuleSabaGBR2(mmRound1, isLive))
                         {
-                            yield return mmPharse2;
+                            yield return mmRound2;
                         }
                     }
                 }
             }
         }
 
-        private IEnumerable<MatchProcessRuleSabaGBViewModel> ProcessRuleSabaGBPharse2(MatchProcessRuleSabaGBViewModel matchProcess, bool isLive)
+        private IEnumerable<MatchProcessRuleSabaGBModel> ProcessRuleSabaGBR2(MatchProcessRuleSabaGBModel matchProcess, bool isLive)
         {
             if (matchProcess != null && matchProcess.ReprocessMatches.IsNotNullOrEmpty())
             {
                 foreach (var matchPharse2 in matchProcess.ReprocessMatches)
                 {
-                    var mmPharse2 = ProcessRuleSabaGBWithAssociation(matchProcess.MatchInfo, matchPharse2, isLive);
-                    if (mmPharse2 != null && mmPharse2.CompleteMatches.IsNotNullOrEmpty())
+                    var mmRound2 = ProcessRuleSabaGBWithAssociation(matchProcess.MatchInfo, matchPharse2, isLive);
+                    if (mmRound2 != null && mmRound2.CompleteMatches.IsNotNullOrEmpty())
                     {
-                        mmPharse2.PharseNumber = 2;
-                        yield return mmPharse2;
+                        mmRound2.RoundNumber = 2;
+                        yield return mmRound2;
                     }
                 }
             }
         }
 
-        private MatchProcessRuleSabaGBViewModel ProcessRuleSabaGBWithAssociation(MatchStagingRuleSabaGBModel matchInfo, bool isLive)
+        private MatchProcessRuleSabaGBModel ProcessRuleSabaGBWithAssociation(MatchStagingRuleSabaGBEntity matchInfo, bool isLive)
         {
             return ProcessRuleSabaGBWithAssociation(matchInfo, matchInfo, isLive);
         }
 
-        private MatchProcessRuleSabaGBViewModel ProcessRuleSabaGBWithAssociation(MatchStagingRuleSabaGBModel matchInfo, MatchProcessRuleSabaGBReprocessModel reprocessModel, bool isLive)
+        private MatchProcessRuleSabaGBModel ProcessRuleSabaGBWithAssociation(MatchStagingRuleSabaGBEntity matchInfo, MatchProcessRuleSabaGBInfoEntity reprocessModel, bool isLive)
         {
             var assDetectionHasGroupID = associationDetectionService
                                 .DetectAssociationRuleSabaGB(reprocessModel.CTSCustIDList)?
                                 .Where(c => c.GroupID != null);
 
-            var assDetectionToJson = assDetectionHasGroupID.IsNotNullOrEmpty() ? JsonConvert.SerializeObject(assDetectionHasGroupID) : string.Empty;
+            if (assDetectionHasGroupID.IsNotNullOrEmpty())
+            {
+                return ProcessRuleSabaGB(isLive, matchInfo, reprocessModel.SequenceIDList, JsonConvert.SerializeObject(assDetectionHasGroupID));
+            }    
 
-            return ProcessRuleSabaGB(isLive, matchInfo, reprocessModel.SequenceIDList, assDetectionToJson);
+            return null;
         }
 
-        private MatchProcessRuleSabaGBViewModel ProcessRuleSabaGB(bool isLive, MatchStagingRuleSabaGBModel matchinfo, string sequenceIDList, string groupDetection)
+        private MatchProcessRuleSabaGBModel ProcessRuleSabaGB(bool isLive, MatchStagingRuleSabaGBEntity matchinfo, string sequenceIDList, string groupDetection)
         {
-            if (string.IsNullOrEmpty(groupDetection)) return null;
-
             return matchDataAccess.ProcessRuleSabaGB(isLive, matchinfo, sequenceIDList, groupDetection);
         }
 

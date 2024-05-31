@@ -157,19 +157,21 @@
                             .WithDegreeOfParallelism(numberOfThread)
                             .ForAll(matchInfo =>
                             {
-                                var mmProcess = matchMonitorServices.ProcessRuleSabGBPharse(matchInfo, isLive).ToList();
+                                var mmProcess = matchMonitorServices.ProcessRuleSabGBWithRound(matchInfo, isLive).ToList();
 
                                 if (mmProcess.IsNotNullOrEmpty())
                                 {
+                                    var mergeMatchComplete = MergeMatchCompleteRuleSabaGB(mmProcess);
+
                                     matchMonitorServices.CompleteTransRuleSabaGB(new MatchCompleteRuleSabaGBParameterModel
                                     {
                                         IsLive = isLive,
                                         MatchInfo = matchInfo,
-                                        TransGroupJson = JsonConvert.SerializeObject(MergeMatchCompleteRuleSabaGB(mmProcess)),
+                                        TransGroupJson = JsonConvert.SerializeObject(mergeMatchComplete),
                                         MaxSequenceID = matchMonitorRule.MaxSequenceID.Value
                                     });
 
-                                    WriteLogSentryError(mmProcess.Where(x => x.PharseNumber == 2 && x.ReprocessMatches.IsNotNullOrEmpty()));
+                                    WriteLogSentryError(mmProcess.Where(x => x.RoundNumber == 2 && x.ReprocessMatches.IsNotNullOrEmpty()), nameof(ProcessRuleSabaGroupBetting));
                                 }
 
                                 Thread.Sleep(MatchMonitor_SleepTimes);
@@ -195,7 +197,7 @@
             }
         }
 
-        private IEnumerable<MatchCompleteRuleSabaGBModel> MergeMatchCompleteRuleSabaGB(IEnumerable<MatchProcessRuleSabaGBViewModel> matches)
+        private IEnumerable<MatchCompleteRuleSabaGBEntity> MergeMatchCompleteRuleSabaGB(IEnumerable<MatchProcessRuleSabaGBModel> matches)
         {
             return matches
                 .SelectMany(x => x.CompleteMatches)
@@ -515,11 +517,11 @@
             };
         }
 
-        private void WriteLogSentryError<T>(IEnumerable<T> matches)
+        private void WriteLogSentryError<T>(IEnumerable<T> matches, string functionName)
         {
             if (matches.IsNotNullOrEmpty())
             {
-                var logMessage = new LogMessage("MMHedging Error")
+                var logMessage = new LogMessage($"{functionName} Error")
                     .AddMessage($"{serviceName}")
                     .AddMessage($"Data {JsonConvert.SerializeObject(matches)} - { DateTime.Now}").ToString();
 
