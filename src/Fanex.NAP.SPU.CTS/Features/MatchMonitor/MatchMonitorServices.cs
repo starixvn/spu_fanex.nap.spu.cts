@@ -51,7 +51,7 @@
 
         MatchStagingRuleHedgingProcessModel GetMatchRuleHedging(bool isLive);
 
-        IEnumerable<MatchProcessRuleHedgingViewModel> ProcessRuleHedgingPharse(MatchStagingRuleHedgingGroupModel matchStaging, bool isLive, int numberInternalOfThread);
+        IEnumerable<MatchProcessRuleHedgingModel> ProcessRuleHedgingWithRound(MatchStagingRuleHedgingGroupModel matchStaging, bool isLive, int numberInternalOfThread);
 
         void CompleteTransRuleHedging(MatchCompleteRuleHedgingParameterModel para);
 
@@ -194,53 +194,53 @@
             return result;
         }
 
-        public IEnumerable<MatchProcessRuleHedgingViewModel> ProcessRuleHedgingPharse(MatchStagingRuleHedgingGroupModel matchStaging, bool isLive, int numberInternalOfThread)
+        public IEnumerable<MatchProcessRuleHedgingModel> ProcessRuleHedgingWithRound(MatchStagingRuleHedgingGroupModel matchStaging, bool isLive, int numberInternalOfThread)
         {
             if (matchStaging != null && matchStaging.MatchGroupStagingList.IsNotNullOrEmpty())
             {
-                foreach (var matchInfo in matchStaging.MatchGroupStagingList.AsParallel().WithDegreeOfParallelism(numberInternalOfThread))
+                foreach (var matchInfoR1 in matchStaging.MatchGroupStagingList.AsParallel().WithDegreeOfParallelism(numberInternalOfThread))
                 {
-                    var mmPharse1 = ProcessRuleHedgingWithAssociation(matchInfo, isLive);
+                    var mmRound1 = ProcessRuleHedgingWithAssociation(matchInfoR1, isLive);
 
-                    if (mmPharse1 != null && mmPharse1.CompleteMatches.IsNotNullOrEmpty())
+                    if (mmRound1 != null && mmRound1.CompleteMatches.IsNotNullOrEmpty())
                     {
-                        mmPharse1.PharseNumber = 1;
-                        yield return mmPharse1;
+                        mmRound1.RoundNumber = 1;
+                        yield return mmRound1;
                     }
 
-                    if (mmPharse1 != null && mmPharse1.ReprocessMatches.IsNotNullOrEmpty())
+                    if (mmRound1 != null && mmRound1.ReprocessMatches.IsNotNullOrEmpty())
                     {
-                        foreach (var mmPharse2 in ProcessRuleHedgingPharse2(mmPharse1, isLive))
+                        foreach (var mmRound2 in ProcessRuleHedgingRound2(mmRound1, isLive))
                         {
-                            yield return mmPharse2;
+                            yield return mmRound2;
                         }
                     }
                 }
             }
         }
 
-        private IEnumerable<MatchProcessRuleHedgingViewModel> ProcessRuleHedgingPharse2(MatchProcessRuleHedgingViewModel matchProcess, bool isLive)
+        private IEnumerable<MatchProcessRuleHedgingModel> ProcessRuleHedgingRound2(MatchProcessRuleHedgingModel mmRound1, bool isLive)
         {
-            if (matchProcess != null && matchProcess.ReprocessMatches.IsNotNullOrEmpty())
+            if (mmRound1 != null && mmRound1.ReprocessMatches.IsNotNullOrEmpty())
             {
-                foreach (var matchPharse2 in matchProcess.ReprocessMatches)
+                foreach (var matchInfoR2 in mmRound1.ReprocessMatches)
                 {
-                    var mmPharse2 = ProcessRuleHedgingWithAssociation(matchProcess.MatchInfo, matchPharse2, isLive);
-                    if (mmPharse2 != null && mmPharse2.CompleteMatches.IsNotNullOrEmpty())
+                    var mmRound2 = ProcessRuleHedgingWithAssociation(mmRound1.MatchInfo, matchInfoR2, isLive);
+                    if (mmRound2 != null && mmRound2.CompleteMatches.IsNotNullOrEmpty())
                     {
-                        mmPharse2.PharseNumber = 2;
-                        yield return mmPharse2;
+                        mmRound2.RoundNumber = 2;
+                        yield return mmRound2;
                     }
                 }
             }
         }
 
-        private MatchProcessRuleHedgingViewModel ProcessRuleHedgingWithAssociation(MatchStagingRuleHedgingModel matchInfo, bool isLive)
+        private MatchProcessRuleHedgingModel ProcessRuleHedgingWithAssociation(MatchStagingRuleHedgingEntity matchInfo, bool isLive)
         {
             return ProcessRuleHedgingWithAssociation(matchInfo, matchInfo, isLive);
         }
 
-        private MatchProcessRuleHedgingViewModel ProcessRuleHedgingWithAssociation(MatchStagingRuleHedgingModel matchInfo, MatchProcessRuleHedgingReprocessModel reprocessModel, bool isLive)
+        private MatchProcessRuleHedgingModel ProcessRuleHedgingWithAssociation(MatchStagingRuleHedgingEntity matchInfo, MatchProcessRuleHedgingInfoEntity reprocessModel, bool isLive)
         {
             var assDetectionHasGroupID = associationDetectionService
                                 .DetectAssociationRuleHedging(reprocessModel.CTSCustIDList, reprocessModel.AgentDetect_CTSCustIDList)?
@@ -251,7 +251,7 @@
             return ProcessRuleHedging(isLive, matchInfo, reprocessModel.SequenceIDList, assDetectionToJson);
         }
 
-        private MatchProcessRuleHedgingViewModel ProcessRuleHedging(bool isLive, MatchStagingRuleHedgingModel matchinfo, string sequenceIDList, string groupDetection)
+        private MatchProcessRuleHedgingModel ProcessRuleHedging(bool isLive, MatchStagingRuleHedgingEntity matchinfo, string sequenceIDList, string groupDetection)
         {
             if (string.IsNullOrEmpty(groupDetection)) return null;
 

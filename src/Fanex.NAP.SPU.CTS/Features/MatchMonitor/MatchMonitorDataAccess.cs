@@ -31,7 +31,7 @@
 
         IEnumerable<MatchCompleteRuleFixedGameModel> ProcessRuleFixedGame(bool isLive, UInt64 maxSequenceID, MatchStagingRuleFixedGameModel matchinfo);
 
-        MatchProcessRuleHedgingViewModel ProcessRuleHedging(bool isLive, MatchStagingRuleHedgingModel matchinfo, string sequenceIDList, string groupDetection);
+        MatchProcessRuleHedgingModel ProcessRuleHedging(bool isLive, MatchStagingRuleHedgingEntity matchinfo, string sequenceIDList, string groupDetection);
 
         IEnumerable<MatchRuleIrrigationCompletedModel> InsertMatchMonitorRuleIrrigation(bool isLive, UInt64 maxSequenceID, MatchStagingRuleIrrigationModel matchinfo);
 
@@ -138,12 +138,12 @@
                 IsLive = isLive
             };
 
-            var result = repository.Fetch<MatchStagingRuleHedgingModel>(criteria);
+            var result = repository.Fetch<MatchStagingRuleHedgingEntity>(criteria);
 
             return new MatchMonitorRuleHedgingModel
             {
                 MaxSequenceID = criteria.MaxSequenceID,
-                MatchStagingList = criteria.MaxSequenceID != 0 ? result : new List<MatchStagingRuleHedgingModel>()
+                MatchStagingList = criteria.MaxSequenceID != 0 ? result : new List<MatchStagingRuleHedgingEntity>()
             };
         }
 
@@ -210,7 +210,7 @@
             return repository.Fetch<MatchCompleteRuleFixedGameModel>(criteria);
         }
 
-        public MatchProcessRuleHedgingViewModel ProcessRuleHedging(bool isLive, MatchStagingRuleHedgingModel matchinfo, string sequenceIDList, string groupDetection)
+        public MatchProcessRuleHedgingModel ProcessRuleHedging(bool isLive, MatchStagingRuleHedgingEntity matchinfo, string sequenceIDList, string groupDetection)
         {
             var criteria = new MatchMonitorRuleHedgingProcessCriteria()
             {
@@ -225,9 +225,9 @@
                 CustGroup = groupDetection
             };
 
-            var result = repository.FetchMultiple<MatchCompleteRuleHedgingModel, MatchProcessRuleHedgingReprocessModel>(criteria);
+            var result = repository.FetchMultiple<MatchCompleteRuleHedgingEntity, MatchProcessRuleHedgingInfoEntity>(criteria);
 
-            return new MatchProcessRuleHedgingViewModel
+            return new MatchProcessRuleHedgingModel
             {
                 MatchInfo = matchinfo,
                 CompleteMatches = result.firstResultSet,

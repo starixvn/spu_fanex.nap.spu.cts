@@ -203,7 +203,7 @@
                             .WithDegreeOfParallelism(numberExternalOfThread)
                             .ForAll(matchInfo =>
                             {
-                                var mmProcess = matchMonitorServices.ProcessRuleHedgingPharse(matchInfo, isLive, numberInternalOfThread).ToList();
+                                var mmProcess = matchMonitorServices.ProcessRuleHedgingWithRound(matchInfo, isLive, numberInternalOfThread).ToList();
 
                                 if (mmProcess.IsNotNullOrEmpty())
                                 {
@@ -241,7 +241,7 @@
             }
         }
 
-        private IEnumerable<MatchCompleteRuleHedgingModel> MergeMatchCompleteRuleHedging(IEnumerable<MatchProcessRuleHedgingViewModel> matches)
+        private IEnumerable<MatchCompleteRuleHedgingEntity> MergeMatchCompleteRuleHedging(IEnumerable<MatchProcessRuleHedgingModel> matches)
         {
             return matches
                 .SelectMany(x => x.CompleteMatches)
@@ -254,15 +254,15 @@
                 });
         }
 
-        private void WriteLogSentryErrorCaseHedging(IEnumerable<MatchProcessRuleHedgingViewModel> matches)
+        private void WriteLogSentryErrorCaseHedging(IEnumerable<MatchProcessRuleHedgingModel> matches)
         {
-            var mmProcessPharse2 = matches.Where(x => x.PharseNumber == 2 && x.ReprocessMatches.IsNotNullOrEmpty());
+            var mmProcessR2 = matches.Where(x => x.RoundNumber == 2 && x.ReprocessMatches.IsNotNullOrEmpty());
 
-            if (mmProcessPharse2.IsNotNullOrEmpty())
+            if (mmProcessR2.IsNotNullOrEmpty())
             {
                 var logMessage = new LogMessage("MMHedging Error")
                     .AddMessage($"{serviceName}")
-                    .AddMessage($"Data {JsonConvert.SerializeObject(mmProcessPharse2)} - { DateTime.Now}").ToString();
+                    .AddMessage($"Data {JsonConvert.SerializeObject(mmProcessR2)} - { DateTime.Now}").ToString();
 
                 sentryClient.CaptureMessage(logMessage, Sentry.Protocol.SentryLevel.Error);
             }

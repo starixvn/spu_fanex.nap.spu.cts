@@ -269,11 +269,11 @@
             var output = new MatchMonitorRuleHedgingModel
             {
                 MaxSequenceID = 123123,
-                MatchStagingList = new List<MatchStagingRuleHedgingModel>
+                MatchStagingList = new List<MatchStagingRuleHedgingEntity>
                 {
-                   new MatchStagingRuleHedgingModel { MatchId = 1, ScoreDiff = 2, BetTypeID = 3, BetID = 4, BetTeam = "a", OldGroup = 1  },
-                   new MatchStagingRuleHedgingModel { MatchId = 1, ScoreDiff = 2, BetTypeID = 3, BetID = 4, BetTeam = "a", OldGroup = 2  },
-                   new MatchStagingRuleHedgingModel { MatchId = 1, ScoreDiff = 2, BetTypeID = 3, BetID = 4, BetTeam = "h", OldGroup = 1  }
+                   new MatchStagingRuleHedgingEntity { MatchId = 1, ScoreDiff = 2, BetTypeID = 3, BetID = 4, BetTeam = "a", OldGroup = 1  },
+                   new MatchStagingRuleHedgingEntity { MatchId = 1, ScoreDiff = 2, BetTypeID = 3, BetID = 4, BetTeam = "a", OldGroup = 2  },
+                   new MatchStagingRuleHedgingEntity { MatchId = 1, ScoreDiff = 2, BetTypeID = 3, BetID = 4, BetTeam = "h", OldGroup = 1  }
                 }
             };
 
@@ -309,10 +309,10 @@
             var processRuleHedgingMethod = TestExtension.GetPrivateMethod(typeof(MatchMonitorServices), MMConsts.PrivateMethodName.ProcessRuleHedging);
 
             // Act
-            processRuleHedgingMethod.Invoke(_service, new object[] { isLive, new MatchStagingRuleHedgingModel(), "asd", "asd" });
+            processRuleHedgingMethod.Invoke(_service, new object[] { isLive, new MatchStagingRuleHedgingEntity(), "asd", "asd" });
 
             // Assert
-            _dataAccess.Received(1).ProcessRuleHedging(isLive, Arg.Any<MatchStagingRuleHedgingModel>(), Arg.Any<string>(), Arg.Any<string>());
+            _dataAccess.Received(1).ProcessRuleHedging(isLive, Arg.Any<MatchStagingRuleHedgingEntity>(), Arg.Any<string>(), Arg.Any<string>());
         }
 
         [Fact]

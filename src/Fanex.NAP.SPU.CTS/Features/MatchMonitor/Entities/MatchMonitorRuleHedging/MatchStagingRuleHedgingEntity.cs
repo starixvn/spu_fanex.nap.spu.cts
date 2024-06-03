@@ -3,7 +3,7 @@
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleHedging;
     using System;
 
-    public class MatchStagingRuleHedgingModel : MatchProcessRuleHedgingReprocessModel
+    public class MatchStagingRuleHedgingEntity : MatchProcessRuleHedgingInfoEntity
     {
         public int MatchId { get; set; }
 
