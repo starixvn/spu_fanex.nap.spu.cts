@@ -76,5 +76,7 @@
 
         [JsonProperty("IsMajorLeague")]
         public bool IsMajorLeague { get; set; }
+
+        public long? LeagueGroupID { get; set; }
     }
 }
