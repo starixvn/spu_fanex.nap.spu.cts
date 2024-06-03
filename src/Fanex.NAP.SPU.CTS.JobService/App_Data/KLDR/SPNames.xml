@@ -12,7 +12,7 @@
 	<Function Name="MatchMonitor">
 		<Setting Key="CTS_DC_SystemParameter_Get" SpName="CTS_DC_SystemParameter_Get" DbName="MySQL.CTS_DataCenter.ctsService" />
 		<Setting Key="CTS_Rpt_MatchMonitor_GetTicketInfo" SpName="CTS_Rpt_MatchMonitor_GetTicketInfo" DbName="SQL.bodb02.bodbSPUNet"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_Staging_Insert" SpName="CTS_DC_MatchMonitor_Staging_Insert_xpre" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_Staging_Insert" SpName="CTS_DC_MatchMonitor_Staging_Insert" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 		
 		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBetting_Get" SpName="CTS_DC_MatchMonitor_RuleGroupBetting_Get" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBetting_Process" SpName="CTS_DC_MatchMonitor_RuleGroupBetting_Process" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" TimeOut="600"></Setting>
@@ -24,9 +24,9 @@
 		<Setting Key="CTS_DC_MatchMonitor_RuleFixedGame_Complete" SpName="CTS_DC_MatchMonitor_RuleFixedGame_Complete" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" TimeOut="600"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_RuleFixedGame_StagingClean" SpName="CTS_DC_MatchMonitor_RuleFixedGame_StagingClean" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" TimeOut="600"></Setting>
 
-		<Setting Key="CTS_DC_MatchMonitor_RuleHedging_Get" SpName="CTS_DC_MatchMonitor_RuleHedging_Get_xpre" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_RuleHedging_Process" SpName="CTS_DC_MatchMonitor_RuleHedging_Process_xpre" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" TimeOut="600"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_RuleHedging_Complete" SpName="CTS_DC_MatchMonitor_RuleHedging_Complete_xpre" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" TimeOut="600"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleHedging_Get" SpName="CTS_DC_MatchMonitor_RuleHedging_Get" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleHedging_Process" SpName="CTS_DC_MatchMonitor_RuleHedging_Process" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" TimeOut="600"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleHedging_Complete" SpName="CTS_DC_MatchMonitor_RuleHedging_Complete" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" TimeOut="600"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_RuleHedging_StagingClean" SpName="CTS_DC_MatchMonitor_RuleHedging_StagingClean" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" TimeOut="600"></Setting>
 
 		<Setting Key="CTS_DC_MatchMonitor_RuleIrrigation_Get" SpName="CTS_DC_MatchMonitor_RuleIrrigation_Get" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
