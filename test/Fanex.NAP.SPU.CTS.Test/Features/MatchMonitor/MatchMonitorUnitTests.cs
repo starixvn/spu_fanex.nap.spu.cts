@@ -134,8 +134,6 @@
         }
         #endregion
 
-        #endregion
-
         #region Rule Hedging
         [Theory]
         [InlineData(true)]
