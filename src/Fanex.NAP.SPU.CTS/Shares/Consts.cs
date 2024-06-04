@@ -137,7 +137,7 @@
             IP = 4
         }
 
-        public enum MatchMonitorStagingLiveInsertType
+        public enum MatchMonitorStagingLivePoolType
         {
             MatchMonitorStagingGroupBettingLive         = 1001,
             MatchMonitorStagingGroupBettingSabaLive     = 1002,
@@ -145,7 +145,7 @@
             MatchMonitorStagingFixedGameLive            = 1004
         }
 
-        public enum MatchMonitorStagingNonLiveInsertType
+        public enum MatchMonitorStagingNonLivePoolType
         {
             MatchMonitorStagingGroupBettingNonLive      = 2001,
             MatchMonitorStagingGroupBettingSabaNonLive  = 2002,

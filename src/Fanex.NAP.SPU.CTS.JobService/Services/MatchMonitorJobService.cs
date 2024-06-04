@@ -1,6 +1,5 @@
 ﻿namespace Fanex.NAP.SPU.CTS.JobService.Services
 {
-    using Fanex.Logging.Extensions;
     using Fanex.NAP.SPU.CTS.Features.AssociationDetection;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
@@ -8,12 +7,11 @@
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleSabaGB;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleHedging;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleSabaGroupBetting;
-    using Fanex.NAP.SPU.CTS.Features.SystemParameter;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorStaging;
     using Fanex.NAP.SPU.CTS.Shares;
     using Newtonsoft.Json;
     using Sentry;
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
@@ -41,41 +39,37 @@
         private readonly ISentryClient sentryClient;
         private readonly IMatchMonitorServices matchMonitorServices;
         private readonly IAssociationDetectionService associationDetectionService;
-        private readonly ISystemParameterServices systemParameterServices;
+
+        private readonly IMatchMonitorStagingService _stagingService;
         private readonly IMMRuleSabaGBService _ruleSabaGBService;
+
         private readonly string serviceName;
 
         public MatchMonitorJobService(
             ISentryClient sentryClient,
             IMatchMonitorServices matchMonitorServices,
-            ISystemParameterServices commonServices,
             IAssociationDetectionService associationDetectionService,
-            IMMRuleSabaGBService ruleSabaGBService)
+            IMMRuleSabaGBService ruleSabaGBService,
+            IMatchMonitorStagingService stagingService)
         {
             this.sentryClient = sentryClient;
             this.matchMonitorServices = matchMonitorServices;
-            this.systemParameterServices = commonServices;
             this.serviceName = "MatchMonitor Service";
             this.associationDetectionService = associationDetectionService;
             _ruleSabaGBService = ruleSabaGBService;
+            _stagingService = stagingService;
         }
 
         public Task<bool> InsertTicketDetail(int batchSize, bool isLive)
         {
             try
             {
-                var lastScannedSequenceID = GetLastScannedSequenceID(isLive);
-
-                var matchTrans = GetMatchTrans(lastScannedSequenceID, batchSize, isLive);
-
-                if (matchTrans.IsNotNullOrEmpty())
-                {
-                    matchMonitorServices.InsertMatchMonitorStaging(JsonConvert.SerializeObject(matchTrans), isLive);
-
-                    systemParameterServices.UpdateValueForSystemParamById(
-                                                matchTrans.Max(x => x.SequenceID).ToString(),
-                                                isLive ? SystemParameters.MatchMonitorLastScannedTrans : SystemParameters.MatchMonitorLastScannedTransNoneLive);
-                }
+                _stagingService
+                    .Start(batchSize, isLive)
+                    .GetLastScannedSequenceID()
+                    .GetMatchTrans()
+                    .InsertMatchMonitorStagingWithParallel()
+                    .UpdateLastScannedSequenceID();
             }
             catch (Exception ex)
             {
@@ -153,23 +147,20 @@
 
                 if (matchMonitorRule != null && matchMonitorRule.MaxSequenceID.HasValue)
                 {
-                    if (matchMonitorRule.MatchStagingList.IsNotNullOrEmpty())
-                    {
-                        matchMonitorRule.MatchStagingList
-                            .AsParallel()
-                            .WithDegreeOfParallelism(numberOfThread)
-                            .ForAll(matchInfo =>
-                            {
-                                _ruleSabaGBService.ProcessRuleSabaGB()?
-                                    .Start(matchInfo, isLive)
-                                    .ProcessRound1()
-                                    .ProcessRound2()
-                                    .Complete(matchMonitorRule.MaxSequenceID.Value)
-                                    .WriteLogSentryIfError(nameof(ProcessRuleSabaGroupBetting), sentryClient);
+                    matchMonitorRule.MatchStagingList?
+                        .AsParallel()
+                        .WithDegreeOfParallelism(numberOfThread)
+                        .ForAll(matchInfo =>
+                        {
+                            _ruleSabaGBService.ProcessRuleSabaGB()?
+                                .Start(matchInfo, isLive)
+                                .ProcessRound1()
+                                .ProcessRound2()
+                                .Complete(matchMonitorRule.MaxSequenceID.Value)
+                                .WriteLogSentryIfError(nameof(ProcessRuleSabaGroupBetting), sentryClient);
 
-                                Thread.Sleep(MatchMonitor_SleepTimes);
-                            });
-                    }
+                            Thread.Sleep(MatchMonitor_SleepTimes);
+                        });
 
                     _ruleSabaGBService.CleanTransRuleSabaGB(isLive, matchMonitorRule.MaxSequenceID.Value);
                 }
@@ -435,44 +426,6 @@
         }
 
         #region Private Methods
-
-        private Int64 GetLastScannedSequenceID(bool isLive)
-        {
-            var matchMonitorLastScannedSequenceIDLive = isLive ? SystemParameters.MatchMonitorLastScannedTrans : SystemParameters.MatchMonitorLastScannedTransNoneLive;
-
-            return systemParameterServices.GetLastScannedId(matchMonitorLastScannedSequenceIDLive);
-        }
-
-        private IEnumerable<TicketDetailEntity> GetMatchTrans(long lastScannedSequenceID, int batchSize, bool isLive)
-        {
-            if (batchSize > 0)
-            {
-                var paras = new BetTypeSettingParaModel
-                {
-                    FunctionID = (int)BetTypeSettingsFunctionID.MMBetType,
-                    BettypeIDList = null,
-                    SportTypeIDList = null,
-                    IsFilterMMDetection = true,
-                    IsShowDetailsX = false,
-                    Status = 1
-                };
-
-                var bettypeList = systemParameterServices.GetBetTypeSettings(paras).Select(x => new MatchBetTypeSettingModel
-                {
-                    SportTypeID = x.SportTypeID,
-                    BetTypeID = x.BetTypeID,
-                    BetChoiceType = x.BetChoiceType,
-                    BetIDPattern = x.BetIDPattern
-                });
-
-                var betTypeInfos = JsonConvert.SerializeObject(bettypeList);
-
-                return matchMonitorServices.GetMatchTrans(lastScannedSequenceID, batchSize, isLive, betTypeInfos);
-            }
-
-            return Enumerable.Empty<TicketDetailEntity>();
-        }
-
         private MMPrepareDataProcessRuleGBModel PrepareDataProcessRuleGroupBetting(bool isLive, UInt64 maxTransId, MatchStagingRuleGroupBettingModel matchinfo)
         {
             string assByShared3MatchesLast7Days = null;

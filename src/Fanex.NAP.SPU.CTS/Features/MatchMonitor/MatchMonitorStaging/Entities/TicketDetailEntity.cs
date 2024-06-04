@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities
+﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorStaging.Entities
 {
     using Newtonsoft.Json;
     using System;

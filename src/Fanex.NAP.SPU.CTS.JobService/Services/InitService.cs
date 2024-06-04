@@ -14,6 +14,7 @@
     using Fanex.NAP.SPU.CTS.Features.JobMonitoring.IncorrectDataMonitoring;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleSabaGroupBetting;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorStaging;
     using Fanex.NAP.SPU.CTS.Features.MonitorJobs.CustomerJobMonitor;
     using Fanex.NAP.SPU.CTS.Features.ProblemCaseMonitor;
     using Fanex.NAP.SPU.CTS.Features.SystemParameter;
@@ -111,6 +112,10 @@
             services.AddSingleton<IMatchMonitorDataAccess, MatchMonitorDataAccess>();
             services.AddSingleton<IMatchMonitorServices, MatchMonitorServices>();
             services.AddSingleton<IMatchMonitorJobService, MatchMonitorJobService>();
+
+            // Staging
+            services.AddSingleton<IMatchMonitorStagingDataAccess, MatchMonitorStagingDataAccess>();
+            services.AddSingleton<IMatchMonitorStagingService, MatchMonitorStagingService>();
 
             // Rule Saba GB
             services.AddSingleton<IMMRuleSabaGBDataAccess, MMRuleSabaGBDataAccess>();

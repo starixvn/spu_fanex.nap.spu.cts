@@ -1,5 +1,9 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor
 {
+    using System;
+    using System.Linq;
+    using System.Collections.Generic;
+    using Newtonsoft.Json;
     using Fanex.NAP.SPU.CTS.Features.AssociationDetection;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleGroupBetting;
@@ -14,10 +18,6 @@
 
     public interface IMatchMonitorServices
     {
-        IEnumerable<TicketDetailEntity> GetMatchTrans(long lastScannedSequenceID, int batchSize, bool isLive, string betTypeInfos);
-
-        void InsertMatchMonitorStaging(string matchTransJson, bool isLive);
-
         MatchMonitorRuleFixedGameModel GetMatchRuleFixedGame(bool isLive);
 
         MatchMonitorRuleIrrigationModel GetMatchMonitorRuleIrrigation(bool isLive);
@@ -75,21 +75,6 @@
         {
             this.matchDataAccess = matchDataAccess;
             this.associationDetectionService = associationDetectionService;
-        }
-
-        public IEnumerable<TicketDetailEntity> GetMatchTrans(long lastScannedSequenceID, int batchSize, bool isLive, string betTypeInfos)
-        {
-            return matchDataAccess.GetMatchTrans(lastScannedSequenceID, batchSize, isLive, betTypeInfos);
-        }
-
-        public void InsertMatchMonitorStaging(string matchTransJson, bool isLive)
-        {
-            var arrInsertType = isLive ? typeof(MatchMonitorStagingLiveInsertType) : typeof(MatchMonitorStagingNonLiveInsertType);
-
-            Enum.GetValues(arrInsertType).Cast<int>().AsParallel().ForAll(poolType =>
-            {
-                matchDataAccess.InsertMatchMonitorStaging(matchTransJson, isLive, poolType);
-            });
         }
 
         public MatchMonitorRuleFixedGameModel GetMatchRuleFixedGame(bool isLive)

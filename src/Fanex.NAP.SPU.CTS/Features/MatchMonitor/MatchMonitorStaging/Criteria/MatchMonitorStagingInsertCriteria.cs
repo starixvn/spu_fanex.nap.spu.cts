@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Criteria
+﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorStaging.Criteria
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
