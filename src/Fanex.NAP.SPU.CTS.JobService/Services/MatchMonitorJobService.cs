@@ -7,6 +7,7 @@
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleGroupBetting;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleSabaGB;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleHedging;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleSabaGroupBetting;
     using Fanex.NAP.SPU.CTS.Features.SystemParameter;
     using Fanex.NAP.SPU.CTS.Shares;
     using Newtonsoft.Json;
@@ -41,20 +42,22 @@
         private readonly IMatchMonitorServices matchMonitorServices;
         private readonly IAssociationDetectionService associationDetectionService;
         private readonly ISystemParameterServices systemParameterServices;
+        private readonly IMMRuleSabaGBService _ruleSabaGBService;
         private readonly string serviceName;
 
         public MatchMonitorJobService(
             ISentryClient sentryClient,
             IMatchMonitorServices matchMonitorServices,
             ISystemParameterServices commonServices,
-            IAppSettings appSettings,
-            IAssociationDetectionService associationDetectionService)
+            IAssociationDetectionService associationDetectionService,
+            IMMRuleSabaGBService ruleSabaGBService)
         {
             this.sentryClient = sentryClient;
             this.matchMonitorServices = matchMonitorServices;
             this.systemParameterServices = commonServices;
             this.serviceName = "MatchMonitor Service";
             this.associationDetectionService = associationDetectionService;
+            _ruleSabaGBService = ruleSabaGBService;
         }
 
         public Task<bool> InsertTicketDetail(int batchSize, bool isLive)
@@ -146,9 +149,9 @@
         {
             try
             {
-                var matchMonitorRule = matchMonitorServices.GetMatchRuleSabaGB(isLive);
+                var matchMonitorRule = _ruleSabaGBService.GetMatchRuleSabaGB(isLive);
 
-                if (matchMonitorRule != null && matchMonitorRule.MaxSequenceID != null)
+                if (matchMonitorRule != null && matchMonitorRule.MaxSequenceID.HasValue)
                 {
                     if (matchMonitorRule.MatchStagingList.IsNotNullOrEmpty())
                     {
@@ -157,28 +160,18 @@
                             .WithDegreeOfParallelism(numberOfThread)
                             .ForAll(matchInfo =>
                             {
-                                var mmProcess = matchMonitorServices.ProcessRuleSabGBWithRound(matchInfo, isLive).ToList();
-
-                                if (mmProcess.IsNotNullOrEmpty())
-                                {
-                                    var mergeMatchComplete = MergeMatchCompleteRuleSabaGB(mmProcess);
-
-                                    matchMonitorServices.CompleteTransRuleSabaGB(new MatchCompleteRuleSabaGBParameterModel
-                                    {
-                                        IsLive = isLive,
-                                        MatchInfo = matchInfo,
-                                        TransGroupJson = JsonConvert.SerializeObject(mergeMatchComplete),
-                                        MaxSequenceID = matchMonitorRule.MaxSequenceID.Value
-                                    });
-
-                                    WriteLogSentryError(mmProcess.Where(x => x.RoundNumber == 2 && x.ReprocessMatches.IsNotNullOrEmpty()), nameof(ProcessRuleSabaGroupBetting));
-                                }
+                                _ruleSabaGBService.ProcessRuleSabaGB()?
+                                    .Start(matchInfo, isLive)
+                                    .ProcessRound1()
+                                    .ProcessRound2()
+                                    .Complete(matchMonitorRule.MaxSequenceID.Value)
+                                    .WriteLogSentryIfError(nameof(ProcessRuleSabaGroupBetting), sentryClient);
 
                                 Thread.Sleep(MatchMonitor_SleepTimes);
                             });
                     }
 
-                    matchMonitorServices.CleanTransRuleSabaGB(isLive, matchMonitorRule.MaxSequenceID.Value);
+                    _ruleSabaGBService.CleanTransRuleSabaGB(isLive, matchMonitorRule.MaxSequenceID.Value);
                 }
 
                 return Task.FromResult(true);
@@ -195,19 +188,6 @@
 
                 return Task.FromResult(false);
             }
-        }
-
-        private IEnumerable<MatchCompleteRuleSabaGBEntity> MergeMatchCompleteRuleSabaGB(IEnumerable<MatchProcessRuleSabaGBModel> matches)
-        {
-            return matches
-                .SelectMany(x => x.CompleteMatches)
-                .GroupBy(item => item.TransIDList)
-                .Select((group, index) =>
-                {
-                    var result = group.First();
-                    result.GroupId = index + 1;
-                    return result;
-                });
         }
         #endregion
 
@@ -515,18 +495,6 @@
                 MatchInfo = matchinfo,
                 JsonSharedMatches = assByShared3MatchesLast7Days
             };
-        }
-
-        private void WriteLogSentryError<T>(IEnumerable<T> matches, string functionName)
-        {
-            if (matches.IsNotNullOrEmpty())
-            {
-                var logMessage = new LogMessage($"{functionName} Error")
-                    .AddMessage($"{serviceName}")
-                    .AddMessage($"Data {JsonConvert.SerializeObject(matches)} - { DateTime.Now}").ToString();
-
-                sentryClient.CaptureMessage(logMessage, Sentry.Protocol.SentryLevel.Error);
-            }
         }
         #endregion Private Methods
     }

@@ -30,6 +30,7 @@
     <Folder Include="Features\ArchiveAssociationCustomer\Entities\" />
     <Folder Include="Features\ArchiveData\ArchivedCustomerMissing\Entities\" />
     <Folder Include="Features\JobMonitoring\ScanMonitoring\LoginTransactionMonitoring\Entities\" />
+    <Folder Include="Features\MatchMonitor\MatchMonitorStaging\" />
   </ItemGroup>
 
 </Project>

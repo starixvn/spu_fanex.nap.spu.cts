@@ -1,9 +1,7 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor
 {
     using Fanex.Data.Repository;
-    using Fanex.NAP.SPU.CTS.Features.AssociationDetection.Entities;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Criteria;
-    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Criteria.MatchMonitorRuleSabaGB;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleGroupBetting;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleSabaGB;
@@ -20,8 +18,6 @@
 
         MatchMonitorRuleGroupBettingModel GetMatchRuleGroupBetting(bool isLive);
 
-        MatchMonitorRuleSabaGBModel GetMatchRuleSabaGB(bool isLive);
-
         MatchMonitorRuleFixedGameModel GetMatchRuleFixedGame(bool isLive);
 
         MatchMonitorRuleHedgingModel GetMatchRuleHedging(bool isLive);
@@ -31,8 +27,6 @@
         MatchMonitorRuleArbitrageModel GetMatchRuleArbitrage(bool isLive);
 
         IEnumerable<MatchCompleteRuleGroupBettingModel> ProcessRuleGroupBetting(MMPrepareDataProcessRuleGBModel prepareData);
-
-        MatchProcessRuleSabaGBModel ProcessRuleSabaGB(bool isLive, MatchStagingRuleSabaGBEntity matchInfo, string sequenceIDList, string groupDetection);
 
         IEnumerable<MatchCompleteRuleFixedGameModel> ProcessRuleFixedGame(bool isLive, UInt64 maxSequenceID, MatchStagingRuleFixedGameModel matchinfo);
 
@@ -44,8 +38,6 @@
 
         void CompleteTransRuleGroupBetting(MatchCompleteRuleGroupBettingParameterModel para);
 
-        void CompleteTransRuleSabaGB(MatchCompleteRuleSabaGBParameterModel para);
-
         void CompleteTransRuleFixedGame(MatchCompleteRuleFixedGameParameterModel para);
 
         void CompleteTransRuleHedging(MatchCompleteRuleHedgingParameterModel para);
@@ -55,8 +47,6 @@
         void CompleteTransRuleArbitrage(MatchCompleteRuleArbitrageParameterModel para);
 
         void CleanTransRuleGroupBetting(bool isLive, UInt64 maxSequenceID);
-
-        void CleanTransRuleSabaGB(bool isLive, UInt64 maxSequenceID);
 
         void CleanTransRuleFixedGame(bool isLive, UInt64 maxSequenceID);
 
@@ -121,22 +111,6 @@
             {
                 MaxSequenceID = criteria.MaxSequenceID,
                 MatchStagingList = criteria.MaxSequenceID != 0 ? result : new List<MatchStagingRuleGroupBettingModel>()
-            };
-        }
-
-        public MatchMonitorRuleSabaGBModel GetMatchRuleSabaGB(bool isLive)
-        {
-            var criteria = new MatchMonitorRuleSabaGBGetCriteria
-            {
-                IsLive = isLive
-            };
-
-            var result = repository.Fetch<MatchStagingRuleSabaGBEntity>(criteria);
-
-            return new MatchMonitorRuleSabaGBModel
-            {
-                MaxSequenceID = criteria.MaxSequenceID,
-                MatchStagingList = criteria.MaxSequenceID != 0 ? result : new List<MatchStagingRuleSabaGBEntity>()
             };
         }
 
@@ -217,32 +191,6 @@
             };
 
             return repository.Fetch<MatchCompleteRuleGroupBettingModel>(criteria);
-        }
-
-        public MatchProcessRuleSabaGBModel ProcessRuleSabaGB(bool isLive, MatchStagingRuleSabaGBEntity matchInfo, string sequenceIDList, string groupDetection)
-        {
-            var criteria = new MatchMonitorRuleSabaGBProcessCriteria
-            {
-                IsLive = isLive,
-                MatchId = matchInfo.MatchId,
-                ScoreDiff = matchInfo.ScoreDiff,
-                BettypeId = matchInfo.BetTypeID,
-                BetId = matchInfo.BetID,
-                Betteam = matchInfo.BetTeam,
-                SportType = matchInfo.SportType,
-                LeagueGroupId = matchInfo.LeagueGroupId,
-                SequenceIDList = sequenceIDList,
-                CustGroup = groupDetection
-            };
-
-            var result = repository.FetchMultiple<MatchCompleteRuleSabaGBEntity, MatchProcessRuleSabaGBInfoEntity>(criteria);
-
-            return new MatchProcessRuleSabaGBModel
-            {
-                MatchInfo = matchInfo,
-                CompleteMatches = result.firstResultSet,
-                ReprocessMatches = result.secondResultSet
-            };
         }
 
         public IEnumerable<MatchCompleteRuleFixedGameModel> ProcessRuleFixedGame(bool isLive, UInt64 maxSequenceID, MatchStagingRuleFixedGameModel matchinfo)
@@ -339,24 +287,6 @@
             repository.Execute(criteria);
         }
 
-        public void CompleteTransRuleSabaGB(MatchCompleteRuleSabaGBParameterModel para)
-        {
-            var criteria = new MatchMonitorRuleSabaGBCompleteCriteria
-            {
-                IsLive = para.IsLive,
-                BettypeId = para.MatchInfo.BetTypeID,
-                BetID = para.MatchInfo.BetID,
-                MatchId = para.MatchInfo.MatchId,
-                ScoreDiff = para.MatchInfo.ScoreDiff,
-                Betteam = para.MatchInfo.BetTeam,
-                LeagueGroupId = para.MatchInfo.LeagueGroupId,
-                TransGroupJson = para.TransGroupJson,
-                MaxSequenceID = para.MaxSequenceID
-            };
-
-            repository.Execute(criteria);
-        }
-
         public void CompleteTransRuleFixedGame(MatchCompleteRuleFixedGameParameterModel para)
         {
             var criteria = new MatchMonitorRuleFixedGameCompleteCriteria
@@ -431,17 +361,6 @@
         public void CleanTransRuleGroupBetting(bool isLive, UInt64 maxSequenceID)
         {
             var criteria = new MatchMonitorRuleGroupBettingTransCleanCriteria
-            {
-                IsLive = isLive,
-                MaxSequenceID = maxSequenceID
-            };
-
-            repository.Execute(criteria);
-        }
-
-        public void CleanTransRuleSabaGB(bool isLive, UInt64 maxSequenceID)
-        {
-            var criteria = new MatchMonitorRuleSabaGBTransCleanCriteria
             {
                 IsLive = isLive,
                 MaxSequenceID = maxSequenceID

@@ -1,6 +1,7 @@
-﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleSabaGB
+﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleSabaGroupBetting.Models
 {
     using System.Collections.Generic;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleSabaGroupBetting.Entities;
 
     public class MatchProcessRuleSabaGBModel
     {
@@ -10,6 +11,6 @@
 
         public IEnumerable<MatchProcessRuleSabaGBInfoEntity> ReprocessMatches { get; set; }
 
-        public int RoundNumber { get; set; }
+        public int RoundNumber { get; set; } = 1;
     }
 }

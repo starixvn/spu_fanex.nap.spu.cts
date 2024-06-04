@@ -1,7 +1,11 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Shares
 {
-    using System.Collections.Generic;
+    using Sentry;
+    using System;
     using System.Linq;
+    using Newtonsoft.Json;
+    using System.Collections.Generic;
+    using Fanex.Logging.Extensions;
 
     public static class IEnumerableExtension
     {

@@ -10,6 +10,8 @@
         {
             public const string ProcessRuleSabaGB = "ProcessRuleSabaGB";
 
+            public const string CompleteTransRuleSabaGB = "CompleteTransRuleSabaGB";
+
             public const string ProcessRuleHedging = "ProcessRuleHedging";
         }
     }

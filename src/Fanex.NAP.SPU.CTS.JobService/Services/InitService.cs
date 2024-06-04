@@ -13,6 +13,7 @@
     using Fanex.NAP.SPU.CTS.Features.InitialCustomerStatus;
     using Fanex.NAP.SPU.CTS.Features.JobMonitoring.IncorrectDataMonitoring;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleSabaGroupBetting;
     using Fanex.NAP.SPU.CTS.Features.MonitorJobs.CustomerJobMonitor;
     using Fanex.NAP.SPU.CTS.Features.ProblemCaseMonitor;
     using Fanex.NAP.SPU.CTS.Features.SystemParameter;
@@ -25,7 +26,6 @@
     using Fanex.NAP.SPU.CTS.JobService.Services.ProblemCaseMonitor;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.DependencyInjection;
-    using System;
 
     public static class InitService
     {
@@ -111,6 +111,11 @@
             services.AddSingleton<IMatchMonitorDataAccess, MatchMonitorDataAccess>();
             services.AddSingleton<IMatchMonitorServices, MatchMonitorServices>();
             services.AddSingleton<IMatchMonitorJobService, MatchMonitorJobService>();
+
+            // Rule Saba GB
+            services.AddSingleton<IMMRuleSabaGBDataAccess, MMRuleSabaGBDataAccess>();
+            services.AddSingleton<IMMRuleSabaGBService, MMRuleSabaGBService>();
+            services.AddTransient<IMMRuleSabaGBProcessService, MMRuleSabaGBProcessService>();
         }
 
         private static void RegisterUserPermission(this IServiceCollection services)
