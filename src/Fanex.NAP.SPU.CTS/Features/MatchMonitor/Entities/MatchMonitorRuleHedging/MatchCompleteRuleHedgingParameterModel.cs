@@ -6,7 +6,7 @@
     {
         public bool IsLive { get; set; }
 
-        public MatchStagingRuleHedgingModel MatchInfo { get; set; }
+        public MatchStagingRuleHedgingGroupModel MatchInfo { get; set; }
 
         public string TransGroupJson { get; set; }
 

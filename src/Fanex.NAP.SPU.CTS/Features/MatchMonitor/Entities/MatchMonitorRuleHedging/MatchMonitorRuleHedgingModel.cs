@@ -8,6 +8,6 @@
     {
         public UInt64? MaxSequenceID { get; set; }
 
-        public IEnumerable<MatchStagingRuleHedgingModel> MatchStagingList { get; set; }
+        public IEnumerable<MatchStagingRuleHedgingEntity> MatchStagingList { get; set; }
     }
 }

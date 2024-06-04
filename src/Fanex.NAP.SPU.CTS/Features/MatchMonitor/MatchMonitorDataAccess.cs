@@ -5,6 +5,7 @@
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Criteria;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleGroupBetting;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleHedging;
     using Fanex.NAP.SPU.CTS.Shares;
     using Newtonsoft.Json;
     using System;
@@ -30,7 +31,7 @@
 
         IEnumerable<MatchCompleteRuleFixedGameModel> ProcessRuleFixedGame(bool isLive, UInt64 maxSequenceID, MatchStagingRuleFixedGameModel matchinfo);
 
-        IEnumerable<MatchCompleteRuleHedgingModel> ProcessRuleHedging(bool isLive, MatchStagingRuleHedgingModel matchinfo, string groupDetection);
+        MatchProcessRuleHedgingModel ProcessRuleHedging(bool isLive, MatchStagingRuleHedgingEntity matchinfo, string sequenceIDList, string groupDetection);
 
         IEnumerable<MatchRuleIrrigationCompletedModel> InsertMatchMonitorRuleIrrigation(bool isLive, UInt64 maxSequenceID, MatchStagingRuleIrrigationModel matchinfo);
 
@@ -137,12 +138,12 @@
                 IsLive = isLive
             };
 
-            var result = repository.Fetch<MatchStagingRuleHedgingModel>(criteria);
+            var result = repository.Fetch<MatchStagingRuleHedgingEntity>(criteria);
 
             return new MatchMonitorRuleHedgingModel
             {
                 MaxSequenceID = criteria.MaxSequenceID,
-                MatchStagingList = criteria.MaxSequenceID != 0 ? result : new List<MatchStagingRuleHedgingModel>()
+                MatchStagingList = criteria.MaxSequenceID != 0 ? result : new List<MatchStagingRuleHedgingEntity>()
             };
         }
 
@@ -209,7 +210,7 @@
             return repository.Fetch<MatchCompleteRuleFixedGameModel>(criteria);
         }
 
-        public IEnumerable<MatchCompleteRuleHedgingModel> ProcessRuleHedging(bool isLive, MatchStagingRuleHedgingModel matchinfo, string groupDetection)
+        public MatchProcessRuleHedgingModel ProcessRuleHedging(bool isLive, MatchStagingRuleHedgingEntity matchinfo, string sequenceIDList, string groupDetection)
         {
             var criteria = new MatchMonitorRuleHedgingProcessCriteria()
             {
@@ -220,11 +221,18 @@
                 BetId = matchinfo.BetID,
                 Betteam = matchinfo.BetTeam,
                 SportType = matchinfo.SportType,
-                SequenceIDList = matchinfo.SequenceIDList,
+                SequenceIDList = sequenceIDList,
                 CustGroup = groupDetection
             };
 
-            return repository.Fetch<MatchCompleteRuleHedgingModel>(criteria);
+            var result = repository.FetchMultiple<MatchCompleteRuleHedgingEntity, MatchProcessRuleHedgingInfoEntity>(criteria);
+
+            return new MatchProcessRuleHedgingModel
+            {
+                MatchInfo = matchinfo,
+                CompleteMatches = result.firstResultSet,
+                ReprocessMatches = result.secondResultSet
+            };
         }
 
         public IEnumerable<MatchRuleIrrigationCompletedModel> InsertMatchMonitorRuleIrrigation(bool isLive, UInt64 maxSequenceID, MatchStagingRuleIrrigationModel matchinfo)

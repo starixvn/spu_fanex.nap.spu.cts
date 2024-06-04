@@ -1,9 +1,11 @@
 ﻿namespace Fanex.NAP.SPU.CTS.JobService.Services
 {
+    using Fanex.Logging.Extensions;
     using Fanex.NAP.SPU.CTS.Features.AssociationDetection;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleGroupBetting;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleHedging;
     using Fanex.NAP.SPU.CTS.Features.SystemParameter;
     using Fanex.NAP.SPU.CTS.Shares;
     using Newtonsoft.Json;
@@ -23,7 +25,7 @@
 
         Task<bool> ProcessRuleFixedGame(bool isLive, int numberOfThread);
 
-        Task<bool> ProcessRuleHedging(bool isLive, int numberOfThread);
+        Task<bool> ProcessRuleHedging(bool isLive, int numberInternalOfThread, int numberExternalOfThread);
 
         Task<bool> ProcessRuleIrrigation(bool isLive, int numberOfThread);
 
@@ -181,10 +183,11 @@
             }
         }
 
+        #region Hedging
         /// <summary>
         /// Process Rule for Hedging
         /// </summary>
-        public Task<bool> ProcessRuleHedging(bool isLive, int numberOfThread)
+        public Task<bool> ProcessRuleHedging(bool isLive, int numberInternalOfThread, int numberExternalOfThread)
         {
             try
             {
@@ -197,10 +200,23 @@
                         matchMonitorRule
                             .MatchStagingList
                             .AsParallel()
-                            .WithDegreeOfParallelism(numberOfThread)
+                            .WithDegreeOfParallelism(numberExternalOfThread)
                             .ForAll(matchInfo =>
                             {
-                                matchMonitorServices.ProcessRuleHedging(matchInfo, matchMonitorRule.MaxSequenceID.Value, isLive);
+                                var mmProcess = matchMonitorServices.ProcessRuleHedgingWithRound(matchInfo, isLive, numberInternalOfThread).ToList();
+
+                                if (mmProcess.IsNotNullOrEmpty())
+                                {
+                                    matchMonitorServices.CompleteTransRuleHedging(new MatchCompleteRuleHedgingParameterModel
+                                    {
+                                        IsLive = isLive,
+                                        MatchInfo = matchInfo,
+                                        TransGroupJson = JsonConvert.SerializeObject(MergeMatchCompleteRuleHedging(mmProcess)),
+                                        MaxSequenceID = matchMonitorRule.MaxSequenceID.Value
+                                    });
+
+                                    WriteLogSentryErrorCaseHedging(mmProcess);
+                                }
 
                                 Thread.Sleep(MatchMonitor_SleepTimes);
                             });
@@ -224,6 +240,34 @@
                 return Task.FromResult(false);
             }
         }
+
+        private IEnumerable<MatchCompleteRuleHedgingEntity> MergeMatchCompleteRuleHedging(IEnumerable<MatchProcessRuleHedgingModel> matches)
+        {
+            return matches
+                .SelectMany(x => x.CompleteMatches)
+                .GroupBy(item => item.TransIDList)
+                .Select((group, index) =>
+                {
+                    var result = group.First();
+                    result.GroupId = index + 1;
+                    return result;
+                });
+        }
+
+        private void WriteLogSentryErrorCaseHedging(IEnumerable<MatchProcessRuleHedgingModel> matches)
+        {
+            var mmProcessR2 = matches.Where(x => x.RoundNumber == 2 && x.ReprocessMatches.IsNotNullOrEmpty());
+
+            if (mmProcessR2.IsNotNullOrEmpty())
+            {
+                var logMessage = new LogMessage("MMHedging Error")
+                    .AddMessage($"{serviceName}")
+                    .AddMessage($"Data {JsonConvert.SerializeObject(mmProcessR2)} - { DateTime.Now}").ToString();
+
+                sentryClient.CaptureMessage(logMessage, Sentry.Protocol.SentryLevel.Error);
+            }
+        }
+        #endregion
 
         /// <summary>
         /// Process Rule for Irrigation

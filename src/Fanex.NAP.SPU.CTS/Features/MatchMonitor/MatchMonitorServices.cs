@@ -3,6 +3,8 @@
     using Fanex.NAP.SPU.CTS.Features.AssociationDetection;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleGroupBetting;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleHedging;
+    using Fanex.NAP.SPU.CTS.Shares;
     using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
@@ -49,7 +51,9 @@
 
         MatchStagingRuleHedgingProcessModel GetMatchRuleHedging(bool isLive);
 
-        void ProcessRuleHedging(MatchStagingRuleHedgingGroupModel matchStaging, UInt64 maxSequenceID, bool isLive);
+        IEnumerable<MatchProcessRuleHedgingModel> ProcessRuleHedgingWithRound(MatchStagingRuleHedgingGroupModel matchStaging, bool isLive, int numberInternalOfThread);
+
+        void CompleteTransRuleHedging(MatchCompleteRuleHedgingParameterModel para);
 
         void CleanTransRuleHedging(bool isLive, UInt64 maxSequenceID);
 
@@ -190,39 +194,71 @@
             return result;
         }
 
-        public void ProcessRuleHedging(MatchStagingRuleHedgingGroupModel matchStaging, UInt64 maxSequenceID, bool isLive)
+        public IEnumerable<MatchProcessRuleHedgingModel> ProcessRuleHedgingWithRound(MatchStagingRuleHedgingGroupModel matchStaging, bool isLive, int numberInternalOfThread)
         {
-            if (matchStaging != null && matchStaging.MatchGroupStagingList.Any())
+            if (matchStaging != null && matchStaging.MatchGroupStagingList.IsNotNullOrEmpty())
             {
-                matchStaging.MatchGroupStagingList.OrderBy(c => c.OldGroup).ToList().ForEach(matchInfo =>
+                foreach (var matchInfoR1 in matchStaging.MatchGroupStagingList.AsParallel().WithDegreeOfParallelism(numberInternalOfThread))
                 {
-                    var assDetection = associationDetectionService.DetectAssociationRuleHedging(matchInfo.CTSCustIDList, matchInfo.AgentDetect_CTSCustIDList);
+                    var mmRound1 = ProcessRuleHedgingWithAssociation(matchInfoR1, isLive);
 
-                    var assDetectionToJson = assDetection.Any() ? JsonConvert.SerializeObject(assDetection.Where(c=>c.GroupID != null)) : "[]";
-
-                    var matchRuleCompleted = ProcessRuleHedging(isLive, matchInfo, assDetectionToJson);
-
-                    if (matchRuleCompleted != null && matchRuleCompleted.Any())
+                    if (mmRound1 != null && mmRound1.CompleteMatches.IsNotNullOrEmpty())
                     {
-                        CompleteTransRuleHedging(new MatchCompleteRuleHedgingParameterModel
-                        {
-                            IsLive = isLive,
-                            MatchInfo = matchInfo,
-                            TransGroupJson = JsonConvert.SerializeObject(matchRuleCompleted),
-                            MaxSequenceID = maxSequenceID
-                        });
+                        mmRound1.RoundNumber = 1;
+                        yield return mmRound1;
                     }
 
-                });
+                    if (mmRound1 != null && mmRound1.ReprocessMatches.IsNotNullOrEmpty())
+                    {
+                        foreach (var mmRound2 in ProcessRuleHedgingRound2(mmRound1, isLive))
+                        {
+                            yield return mmRound2;
+                        }
+                    }
+                }
             }
         }
 
-        private IEnumerable<MatchCompleteRuleHedgingModel> ProcessRuleHedging(bool isLive, MatchStagingRuleHedgingModel matchinfo, string groupDetection)
+        private IEnumerable<MatchProcessRuleHedgingModel> ProcessRuleHedgingRound2(MatchProcessRuleHedgingModel mmRound1, bool isLive)
         {
-            return matchDataAccess.ProcessRuleHedging(isLive, matchinfo, groupDetection);
+            if (mmRound1 != null && mmRound1.ReprocessMatches.IsNotNullOrEmpty())
+            {
+                foreach (var matchInfoR2 in mmRound1.ReprocessMatches)
+                {
+                    var mmRound2 = ProcessRuleHedgingWithAssociation(mmRound1.MatchInfo, matchInfoR2, isLive);
+                    if (mmRound2 != null && mmRound2.CompleteMatches.IsNotNullOrEmpty())
+                    {
+                        mmRound2.RoundNumber = 2;
+                        yield return mmRound2;
+                    }
+                }
+            }
         }
 
-        private void CompleteTransRuleHedging(MatchCompleteRuleHedgingParameterModel para)
+        private MatchProcessRuleHedgingModel ProcessRuleHedgingWithAssociation(MatchStagingRuleHedgingEntity matchInfo, bool isLive)
+        {
+            return ProcessRuleHedgingWithAssociation(matchInfo, matchInfo, isLive);
+        }
+
+        private MatchProcessRuleHedgingModel ProcessRuleHedgingWithAssociation(MatchStagingRuleHedgingEntity matchInfo, MatchProcessRuleHedgingInfoEntity reprocessModel, bool isLive)
+        {
+            var assDetectionHasGroupID = associationDetectionService
+                                .DetectAssociationRuleHedging(reprocessModel.CTSCustIDList, reprocessModel.AgentDetect_CTSCustIDList)?
+                                .Where(c => c.GroupID != null);
+
+            var assDetectionToJson = assDetectionHasGroupID.IsNotNullOrEmpty() ? JsonConvert.SerializeObject(assDetectionHasGroupID) : string.Empty;
+
+            return ProcessRuleHedging(isLive, matchInfo, reprocessModel.SequenceIDList, assDetectionToJson);
+        }
+
+        private MatchProcessRuleHedgingModel ProcessRuleHedging(bool isLive, MatchStagingRuleHedgingEntity matchinfo, string sequenceIDList, string groupDetection)
+        {
+            if (string.IsNullOrEmpty(groupDetection)) return null;
+
+            return matchDataAccess.ProcessRuleHedging(isLive, matchinfo, sequenceIDList, groupDetection);
+        }
+
+        public void CompleteTransRuleHedging(MatchCompleteRuleHedgingParameterModel para)
         {
             matchDataAccess.CompleteTransRuleHedging(para);
         }
