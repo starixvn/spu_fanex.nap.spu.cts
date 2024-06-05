@@ -13,10 +13,7 @@
         public UInt64? MaxSequenceID { get; set; }
 
 
-        public override string GetSettingKey()
-        {
-            throw new System.NotImplementedException(); // modify
-        }
+        public override string GetSettingKey() => "CTS_DC_MatchMonitor_RuleGroupBettingSaba_Get";
 
         public override bool IsValid() => true;
     }

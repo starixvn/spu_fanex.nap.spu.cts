@@ -54,7 +54,6 @@
                 BetId = matchInfo.BetID,
                 Betteam = matchInfo.BetTeam,
                 SportType = matchInfo.SportType,
-                LeagueGroupId = matchInfo.LeagueGroupId,
                 SequenceIDList = sequenceIDList,
                 CustGroup = groupDetection
             };
@@ -79,7 +78,6 @@
                 MatchId = para.MatchInfo.MatchId,
                 ScoreDiff = para.MatchInfo.ScoreDiff,
                 Betteam = para.MatchInfo.BetTeam,
-                LeagueGroupId = para.MatchInfo.LeagueGroupId,
                 TransGroupJson = para.TransGroupJson,
                 MaxSequenceID = para.MaxSequenceID
             };

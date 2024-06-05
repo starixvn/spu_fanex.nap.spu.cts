@@ -27,19 +27,13 @@
         [SpParam(SqlParamName = "ip_SportType")]
         public int SportType { get; set; }
 
-        [SpParam(SqlParamName = "ip_LeagueGroupId")]
-        public int LeagueGroupId { get; set; }
-
         [SpParam(SqlParamName = "ip_SequenceIDList")]
         public string SequenceIDList { get; set; }
 
         [SpParam(SqlParamName = "ip_CustGroup")]
         public string CustGroup { get; set; }
 
-        public override string GetSettingKey()
-        {
-            throw new System.NotImplementedException(); // modify
-        }
+        public override string GetSettingKey() => "CTS_DC_MatchMonitor_RuleGroupBettingSaba_Process";
 
         public override bool IsValid() => true;
     }

@@ -16,8 +16,6 @@
 
         public string BetTeam { get; set; }
 
-        public int LeagueGroupId { get; set; }
-
         public IEnumerable<MatchStagingRuleSabaGBEntity> MatchGroupStagingList { get; set; }
     }
 }

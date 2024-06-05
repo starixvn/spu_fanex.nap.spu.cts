@@ -142,7 +142,7 @@
         /// </summary>
         public Task<bool> ProcessRuleSabaGroupBetting(bool isLive, int numberOfThread)
         {
-            try
+            try 
             {
                 var matchMonitorRule = _ruleSabaGBService.GetMatchRuleSabaGB(isLive);
 

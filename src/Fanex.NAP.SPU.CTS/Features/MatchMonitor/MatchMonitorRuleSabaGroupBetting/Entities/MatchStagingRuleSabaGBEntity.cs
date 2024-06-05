@@ -17,7 +17,5 @@
         public int SportType { get; set; }
 
         public int OldGroup { get; set; }
-
-        public int LeagueGroupId { get; set; }
     }
 }

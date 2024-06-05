@@ -37,7 +37,7 @@ namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleSabaGroupBetti
 
                 if (matches.MatchStagingList.IsNotNullOrEmpty())
                 {
-                    result.MatchStagingList = matches.MatchStagingList.GroupBy(x => new { x.MatchId, x.ScoreDiff, x.BetTypeID, x.BetID, x.BetTeam, x.LeagueGroupId })
+                    result.MatchStagingList = matches.MatchStagingList.GroupBy(x => new { x.MatchId, x.ScoreDiff, x.BetTypeID, x.BetID, x.BetTeam })
                                                         .Select(y => new MatchStagingRuleSabaGBGroupModel()
                                                         {
                                                             MatchId = y.Key.MatchId,
@@ -45,7 +45,6 @@ namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleSabaGroupBetti
                                                             BetTypeID = y.Key.BetTypeID,
                                                             BetID = y.Key.BetID,
                                                             BetTeam = y.Key.BetTeam,
-                                                            LeagueGroupId = y.Key.LeagueGroupId,
                                                             MatchGroupStagingList = y.ToList()
                                                         });
                 }

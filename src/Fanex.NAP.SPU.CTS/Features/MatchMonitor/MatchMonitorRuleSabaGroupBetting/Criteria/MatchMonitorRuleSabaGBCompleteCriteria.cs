@@ -27,16 +27,10 @@
         [SpParam(SqlParamName = "ip_Betteam")]
         public string Betteam { get; set; }
 
-        [SpParam(SqlParamName = "ip_LeagueGroupId")]
-        public int LeagueGroupId { get; set; }
-
         [SpParam(SqlParamName = "ip_TransGroup")]
         public string TransGroupJson { get; set; }
 
-        public override string GetSettingKey()
-        {
-            throw new System.NotImplementedException(); // modify
-        }
+        public override string GetSettingKey() => "CTS_DC_MatchMonitor_RuleGroupBettingSaba_Complete";
 
         public override bool IsValid() => true;
     }
