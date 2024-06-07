@@ -44,9 +44,9 @@ namespace Fanex.NAP.SPU.CTS.Tests.Features.MatchMonitor
                 MaxSequenceID = 123123,
                 MatchStagingList = new List<MatchStagingRuleSabaGBEntity>
                 {
-                   new MatchStagingRuleSabaGBEntity { MatchId = 1, ScoreDiff = 2, BetTypeID = 3, BetID = 4, BetTeam = "a", OldGroup = 1  },
-                   new MatchStagingRuleSabaGBEntity { MatchId = 1, ScoreDiff = 2, BetTypeID = 3, BetID = 4, BetTeam = "a", OldGroup = 2  },
-                   new MatchStagingRuleSabaGBEntity { MatchId = 1, ScoreDiff = 2, BetTypeID = 3, BetID = 4, BetTeam = "h", OldGroup = 1  }
+                   new MatchStagingRuleSabaGBEntity { MatchId = 1, ScoreDiff = 2, BetTypeID = 3, BetID = 4, BetTeam = "a"  },
+                   new MatchStagingRuleSabaGBEntity { MatchId = 1, ScoreDiff = 2, BetTypeID = 3, BetID = 4, BetTeam = "a"  },
+                   new MatchStagingRuleSabaGBEntity { MatchId = 1, ScoreDiff = 2, BetTypeID = 3, BetID = 4, BetTeam = "h"  }
                 }
             };
 
