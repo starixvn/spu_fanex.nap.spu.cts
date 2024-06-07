@@ -8,22 +8,8 @@
     using Fanex.NAP.SPU.CTS.Features.AssociationDetection;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleSabaGroupBetting.Models;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleSabaGroupBetting.Entities;
-    using System;
 
-    public interface IMMRuleSabaGBProcessService
-    {
-        IMMRuleSabaGBProcessService Start(MatchStagingRuleSabaGBGroupModel matchStaging, bool isLive);
-
-        IMMRuleSabaGBProcessService ProcessRound1();
-
-        IMMRuleSabaGBProcessService ProcessRound2();
-
-        IMMRuleSabaGBProcessService Complete(ulong maxSequenceID);
-
-        void WriteLogSentryIfError(string functionName, ISentryClient sentryClient);
-    }
-
-    public class MMRuleSabaGBProcessService : IMMRuleSabaGBProcessService
+    public class MMRuleSabaGBProcessService : IMatchMonitorRuleProcessService<MatchStagingRuleSabaGBGroupModel>
     {
         private readonly IMMRuleSabaGBDataAccess _dataAccess;
         private readonly IAssociationDetectionService _assDetectService;
@@ -41,7 +27,7 @@
         }
 
         #region Process
-        public IMMRuleSabaGBProcessService Start(MatchStagingRuleSabaGBGroupModel matchStaging, bool isLive)
+        public IMatchMonitorRuleProcessService Start(MatchStagingRuleSabaGBGroupModel matchStaging, bool isLive)
         {
             MatchStaging = matchStaging;
             IsLive = isLive;
@@ -51,13 +37,13 @@
             return this;
         }
 
-        public IMMRuleSabaGBProcessService ProcessRound1()
+        public IMatchMonitorRuleProcessService ProcessRound1()
         {
             if (MatchStaging != null && MatchStaging.MatchGroupStagingList.IsNotNullOrEmpty())
             {
                 var matchProcessesRound1 =
                     MatchStaging.MatchGroupStagingList
-                        .Select(matchInfo => ProcessWithAssociation(matchInfo, IsLive))
+                        .Select(matchInfo => ProcessWithAssociationRound1(matchInfo, IsLive))
                         .Where(matchInfo => matchInfo != null && matchInfo.CompleteMatches.IsNotNullOrEmpty());
 
                 MatchProcesses.AddRange(matchProcessesRound1);
@@ -66,22 +52,15 @@
             return this;
         }
 
-        public IMMRuleSabaGBProcessService ProcessRound2()
+        public IMatchMonitorRuleProcessService ProcessRound2()
         {
             if (MatchProcesses.IsNotNullOrEmpty())
             {
                 var matchProcessesRound2 =
                     MatchProcesses
                         .SelectMany(matchProcessRound1 =>
-                            matchProcessRound1.ReprocessMatches.Select(matchInfo =>
-                            {
-                                var matchProcessRound2 = ProcessWithAssociation(matchProcessRound1.MatchInfo, matchInfo, IsLive);
-                                if (matchProcessRound2 != null && matchProcessRound2.CompleteMatches.IsNotNullOrEmpty())
-                                {
-                                    matchProcessRound2.RoundNumber = 2;
-                                }
-                                return matchProcessRound2;
-                            })
+                            matchProcessRound1.ReprocessMatches.Select(
+                                reprocessInfoRound2 => ProcessWithAssociationRound2(matchProcessRound1.MatchInfo, reprocessInfoRound2, IsLive))
                         )
                         .Where(matchInfo => matchInfo != null && matchInfo.CompleteMatches.IsNotNullOrEmpty());
 
@@ -91,12 +70,21 @@
             return this;
         }
 
-        private MatchProcessRuleSabaGBModel ProcessWithAssociation(MatchStagingRuleSabaGBEntity matchInfo, bool isLive)
+        private MatchProcessRuleSabaGBModel ProcessWithAssociationRound1(MatchStagingRuleSabaGBEntity matchInfo, bool isLive)
         {
-            return ProcessWithAssociation(matchInfo, matchInfo, isLive);
+            var assDetectionHasGroupID = _assDetectService
+                                            .DetectAssociationRuleSabaGB(matchInfo.CTSCustIDList)?
+                                            .Where(c => c.GroupID != null);
+
+            if (assDetectionHasGroupID.IsNotNullOrEmpty())
+            {
+                return ProcessRuleSabaGB(isLive, matchInfo, matchInfo.SequenceIDList, JsonConvert.SerializeObject(assDetectionHasGroupID));
+            }
+
+            return null;
         }
 
-        private MatchProcessRuleSabaGBModel ProcessWithAssociation(MatchStagingRuleSabaGBEntity matchInfo, MatchProcessRuleSabaGBInfoEntity reprocessModel, bool isLive)
+        private MatchProcessRuleSabaGBModel ProcessWithAssociationRound2(MatchStagingRuleSabaGBEntity matchInfo, MatchProcessRuleSabaGBInfoEntity reprocessModel, bool isLive)
         {
             var assDetectionHasGroupID = _assDetectService
                                             .DetectAssociationRuleSabaGB(reprocessModel.CTSCustIDList)?
@@ -104,7 +92,10 @@
 
             if (assDetectionHasGroupID.IsNotNullOrEmpty())
             {
-                return ProcessRuleSabaGB(isLive, matchInfo, reprocessModel.SequenceIDList, JsonConvert.SerializeObject(assDetectionHasGroupID));
+                var matchProcessRound2 = ProcessRuleSabaGB(isLive, matchInfo, reprocessModel.SequenceIDList, JsonConvert.SerializeObject(assDetectionHasGroupID));
+                matchProcessRound2.RoundNumber = 2;
+
+                return matchProcessRound2;
             }
 
             return null;
@@ -117,11 +108,19 @@
         #endregion
 
         #region Complete
-        public IMMRuleSabaGBProcessService Complete(ulong maxSequenceID)
+        public IMatchMonitorRuleProcessService Complete(ulong maxSequenceID)
         {
             if (MatchProcesses.IsNotNullOrEmpty())
             {
-                var mergeMatchComplete = MergeMatchCompleteRuleSabaGB(MatchProcesses);
+                var mergeMatchComplete = MatchProcesses
+                                            .SelectMany(x => x.CompleteMatches)
+                                            .GroupBy(item => item.TransIDList)
+                                            .Select((group, index) =>
+                                            {
+                                                var result = group.First();
+                                                result.GroupId = index + 1;
+                                                return result;
+                                            });
 
                 var para = new MatchCompleteRuleSabaGBParameterModel
                 {
@@ -131,28 +130,10 @@
                     MaxSequenceID = maxSequenceID
                 };
 
-                CompleteTransRuleSabaGB(para);
+                _dataAccess.CompleteTransRuleSabaGB(para);
             }
 
             return this;
-        }
-
-        private IEnumerable<MatchCompleteRuleSabaGBEntity> MergeMatchCompleteRuleSabaGB(IEnumerable<MatchProcessRuleSabaGBModel> matches)
-        {
-            return matches
-                .SelectMany(x => x.CompleteMatches)
-                .GroupBy(item => item.TransIDList)
-                .Select((group, index) =>
-                {
-                    var result = group.First();
-                    result.GroupId = index + 1;
-                    return result;
-                });
-        }
-
-        private void CompleteTransRuleSabaGB(MatchCompleteRuleSabaGBParameterModel para)
-        {
-            _dataAccess.CompleteTransRuleSabaGB(para);
         }
         #endregion
 

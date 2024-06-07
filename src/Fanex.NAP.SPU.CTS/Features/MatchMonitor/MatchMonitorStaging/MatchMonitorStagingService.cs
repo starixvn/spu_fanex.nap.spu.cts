@@ -3,12 +3,12 @@
     using System;
     using System.Linq;
     using System.Collections.Generic;
+    using Newtonsoft.Json;
+    using Fanex.NAP.SPU.CTS.Shares;
+    using Fanex.NAP.SPU.CTS.Features.SystemParameter;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorStaging.Entities;
     using static Fanex.NAP.SPU.CTS.Shares.Consts;
-    using Fanex.NAP.SPU.CTS.Features.SystemParameter;
-    using Newtonsoft.Json;
-    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
-    using Fanex.NAP.SPU.CTS.Shares;
 
     public interface IMatchMonitorStagingService
     {
@@ -34,7 +34,7 @@
         private long LastScannedSequenceID;
         private IEnumerable<TicketDetailEntity> TicketStagings;
         private SystemParameters LastScannedSequenceID_ParameterID;
-        private Type PoolType;
+        private Type PoolEnumType;
 
         public MatchMonitorStagingService(IMatchMonitorStagingDataAccess dataAccess, ISystemParameterServices systemParameter)
         {
@@ -49,7 +49,7 @@
 
             TicketStagings = Enumerable.Empty<TicketDetailEntity>();
             LastScannedSequenceID_ParameterID = IsLive ? SystemParameters.MatchMonitorLastScannedTrans : SystemParameters.MatchMonitorLastScannedTransNoneLive;
-            PoolType = IsLive ? typeof(MatchMonitorStagingLivePoolType) : typeof(MatchMonitorStagingNonLivePoolType);
+            PoolEnumType = IsLive ? typeof(MatchMonitorStagingLivePoolType) : typeof(MatchMonitorStagingNonLivePoolType);
 
             return this;
         }
@@ -79,7 +79,7 @@
             {
                 var ticketStagingJson = JsonConvert.SerializeObject(TicketStagings);
 
-                Enum.GetValues(PoolType)
+                Enum.GetValues(PoolEnumType)
                     .Cast<int>()
                     .AsParallel()
                     .ForAll(poolType => InsertMatchMonitorStaging(ticketStagingJson, IsLive, poolType));

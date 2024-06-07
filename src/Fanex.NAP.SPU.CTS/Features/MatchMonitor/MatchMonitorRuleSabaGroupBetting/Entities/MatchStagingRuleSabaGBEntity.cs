@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class MatchStagingRuleSabaGBEntity : MatchProcessRuleSabaGBInfoEntity
+    public class MatchStagingRuleSabaGBEntity
     {
         public int MatchId { get; set; }
 
@@ -17,5 +17,9 @@
         public int SportType { get; set; }
 
         public int OldGroup { get; set; }
+
+        public string CTSCustIDList { get; set; }
+
+        public string SequenceIDList { get; set; }
     }
 }

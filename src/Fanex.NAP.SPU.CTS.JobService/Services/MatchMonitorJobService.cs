@@ -153,7 +153,7 @@
                         .WithDegreeOfParallelism(numberOfThread)
                         .ForAll(matchInfo =>
                         {
-                            _ruleSabaGBService.ProcessRuleSabaGB()?
+                            _ruleSabaGBService.GetInstanceProcessSabaGBService()?
                                 .Start(matchInfo, isLive)
                                 .ProcessRound1()
                                 .ProcessRound2()

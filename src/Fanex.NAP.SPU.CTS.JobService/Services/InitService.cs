@@ -14,6 +14,7 @@
     using Fanex.NAP.SPU.CTS.Features.JobMonitoring.IncorrectDataMonitoring;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleSabaGroupBetting;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleSabaGroupBetting.Models;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorStaging;
     using Fanex.NAP.SPU.CTS.Features.MonitorJobs.CustomerJobMonitor;
     using Fanex.NAP.SPU.CTS.Features.ProblemCaseMonitor;
@@ -120,7 +121,7 @@
             // Rule Saba GB
             services.AddSingleton<IMMRuleSabaGBDataAccess, MMRuleSabaGBDataAccess>();
             services.AddSingleton<IMMRuleSabaGBService, MMRuleSabaGBService>();
-            services.AddTransient<IMMRuleSabaGBProcessService, MMRuleSabaGBProcessService>();
+            services.AddTransient<MMRuleSabaGBProcessService>();
         }
 
         private static void RegisterUserPermission(this IServiceCollection services)

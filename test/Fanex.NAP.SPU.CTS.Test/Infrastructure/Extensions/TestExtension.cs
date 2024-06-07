@@ -18,5 +18,18 @@
 
             return method;
         }
+
+        public static FieldInfo GetPrivateFieldInfo(Type type, string fieldName, int pos = 0)
+        {
+            var fieldInfo = type.GetFields(BindingFlags.NonPublic | BindingFlags.Instance)
+                                .Where(x => x.Name == fieldName && x.IsPrivate);
+
+            if (fieldInfo is null || !fieldInfo.Any())
+                throw new EntryPointNotFoundException();
+
+            var field = fieldInfo.ElementAt(pos);
+
+            return field;
+        }
     }
 }

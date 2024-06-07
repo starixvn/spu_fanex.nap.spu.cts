@@ -10,7 +10,7 @@ namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleSabaGroupBetti
     {
         MatchStagingRuleSabaGBProcessModel GetMatchRuleSabaGB(bool isLive);
 
-        IMMRuleSabaGBProcessService ProcessRuleSabaGB();
+        IMatchMonitorRuleProcessService<MatchStagingRuleSabaGBGroupModel> GetInstanceProcessSabaGBService();
 
         void CleanTransRuleSabaGB(bool isLive, UInt64 maxSequenceID);
     }
@@ -53,9 +53,9 @@ namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleSabaGroupBetti
             return result;
         }
 
-        public IMMRuleSabaGBProcessService ProcessRuleSabaGB()
+        public IMatchMonitorRuleProcessService<MatchStagingRuleSabaGBGroupModel> GetInstanceProcessSabaGBService()
         {
-            return (IMMRuleSabaGBProcessService)_serviceProvider.GetService(typeof(IMMRuleSabaGBProcessService));
+            return (MMRuleSabaGBProcessService)_serviceProvider.GetService(typeof(MMRuleSabaGBProcessService));
         }
 
         public void CleanTransRuleSabaGB(bool isLive, UInt64 maxSequenceID)
