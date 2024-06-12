@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.SPU.CTS.Features.AssociationDetection.Entities
+﻿namespace Fanex.NAP.SPU.CTS.Features.AssociationDetection.Models
 {
     using Newtonsoft.Json;
 

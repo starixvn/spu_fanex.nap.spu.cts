@@ -11,11 +11,13 @@
 
     public interface IAssociationDetectionService
     {
-        public IEnumerable<DetectAssBySharedIPMatchesModel> DetectAssociationBySharedMatches(string custIDList);
+        IEnumerable<DetectAssBySharedIPMatchesEntity> DetectAssociationBySharedMatches(string custIDList);
 
-        IEnumerable<DetectAssociationMergeGroupModel> DetectAssociationRuleHedging(string ctsCustIds, string agentCTSCustIds);
+        IEnumerable<DetectAssociationMergeGroupEntity> DetectAssociationRuleHedging(string ctsCustIds, string agentCTSCustIds);
 
-        IEnumerable<DetectAssociationMergeGroupModel> DetectAssociation(DetectAssociationParamModel model);
+        IEnumerable<DetectAssociationMergeGroupEntity> DetectAssociation(DetectAssociationParamModel model);
+
+        IEnumerable<DetectAssociationMergeGroupLv1Entity> DetectAssociationLv1(DetectAssociationParamModel model);
     }
 
     public class AssociationDetectionService : IAssociationDetectionService
@@ -27,27 +29,52 @@
             _associationDetectionDataAccess = associationDetectionDataAccess;
         }
 
-        #region 
-        public IEnumerable<DetectAssBySharedIPMatchesModel> DetectAssociationBySharedMatches(string custIDList)
+        #region New core Associated Detection
+        public IEnumerable<DetectAssBySharedIPMatchesEntity> DetectAssociationBySharedMatches(string custIDList)
         {
             if (string.IsNullOrWhiteSpace(custIDList))
             {
-                return new List<DetectAssBySharedIPMatchesModel>();
+                return new List<DetectAssBySharedIPMatchesEntity>();
             }
 
             return _associationDetectionDataAccess.DetectAssociationBySharedMatches(custIDList);
         }
 
+        private string GetAssociationCustByAgent(string ctsCustIDs)
+        {
+            var assByAgent = _associationDetectionDataAccess.DetectAssociationByAgent(ctsCustIDs);
+            var mapperAssByAgent = MapperInputFromAssociationCust(assByAgent);
+
+            return RenderExcessiveJsonFromIEnumerable(mapperAssByAgent);
+        }
+
+        private string GetAssociationCustByPrimary(DetectAssociationByPrimaryFilterModel custAssType)
+        {
+            var assByPrimary = _associationDetectionDataAccess.DetectAssociationByPrimary(custAssType);
+            var mapperAssByPrimary = MapperInputFromAssociationCust(assByPrimary);
+
+            return RenderExcessiveJsonFromIEnumerable(mapperAssByPrimary);
+        }
+
+        private string GetAssociationCustByPrimaryLv1(string ctsCustIds, AssociationDetectionType associationType)
+        {
+            var requestModel = new DetectAssociationByPrimaryFilterModel(ctsCustIds, associationType);
+            var assByPrimary = _associationDetectionDataAccess.DetectAssociationByPrimaryLv1(requestModel);
+            var mapperAssByPrimary = MapperInputFromAssociationCust(assByPrimary);
+
+            return RenderExcessiveJsonFromIEnumerable(mapperAssByPrimary);
+        }
+
         private string GetAssociationBySharedMatches(string custIDList, IReadOnlyDictionary<int, int> mappingCustDictionary)
         {
-            var assDetectShareMatches = DetectAssociationBySharedMatches(custIDList);
+            var assDetectShareMatches = _associationDetectionDataAccess.DetectAssociationBySharedMatches(custIDList);
 
             var mappingCustIdToCTSCustId = assDetectShareMatches.Select(x =>
             {
                 mappingCustDictionary.TryGetValue(x.CustID1, out var ctsCustID1);
                 mappingCustDictionary.TryGetValue(x.CustID2, out var ctsCustID2);
 
-                return new DetectAssBySharedIPMatchesModel
+                return new DetectAssBySharedIPMatchesEntity
                 {
                     CustID1 = ctsCustID1,
                     CustID2 = ctsCustID2
@@ -56,43 +83,26 @@
 
             return JsonConvert.SerializeObject(mappingCustIdToCTSCustId);
         }
-        #endregion
 
-        #region New core Associated Detection
-
-        private string GetAssociationCustByAgent(string ctsCustIDs)
+        private IEnumerable<object> MapperInputFromAssociationCust(IEnumerable<DetectAssociationByPrimaryEntity> assList)
         {
-            var assByAgent = _associationDetectionDataAccess.DetectAssociationByAgent(ctsCustIDs);
-
-            var input = assByAgent.Select(c => new
+            return assList.Select(c => new
             {
                 O = c.OrigID,
                 D = c.DestID,
                 A = c.AssociationType
             });
-
-            return input.Any() ? Utilities.RenderExcessiveJson(input, 900000) : "[]";
         }
 
-        private string GetAssociationCustByPrimary(DetectAssociationByPrimaryFilterModel custAssType)
+        private string RenderExcessiveJsonFromIEnumerable<T>(IEnumerable<T> input) where T : class
         {
-            var assByPrimary = _associationDetectionDataAccess.DetectAssociationByPrimary(custAssType);
-
-            var input = assByPrimary.Select(c => new
-            {
-                O = c.OrigID,
-                D = c.DestID,
-                A = c.AssociationType
-            });
-
             return input.Any() ? Utilities.RenderExcessiveJson(input, 900000) : "[]";
         }
-
         #endregion
 
         #region MM Hedging
 
-        public IEnumerable<DetectAssociationMergeGroupModel> DetectAssociationRuleHedging(string ctsCustIds, string agentCTSCustIds)
+        public IEnumerable<DetectAssociationMergeGroupEntity> DetectAssociationRuleHedging(string ctsCustIds, string agentCTSCustIds)
         {
             if (!string.IsNullOrEmpty(ctsCustIds))
             {
@@ -119,13 +129,13 @@
                 return assMergeGroup;
             }
 
-            return Enumerable.Empty<DetectAssociationMergeGroupModel>();
+            return Enumerable.Empty<DetectAssociationMergeGroupEntity>();
         }
 
         #endregion
 
-        #region MM GroupBetting
-        public IEnumerable<DetectAssociationMergeGroupModel> DetectAssociation(DetectAssociationParamModel model)
+        #region Detect Association
+        public IEnumerable<DetectAssociationMergeGroupEntity> DetectAssociation(DetectAssociationParamModel model)
         {
             if ((model?.CTSCustIds).IsNotNullOrEmpty())
             {
@@ -160,7 +170,41 @@
                 return assMergeGroup;
             }
 
-            return Enumerable.Empty<DetectAssociationMergeGroupModel>();
+            return Enumerable.Empty<DetectAssociationMergeGroupEntity>();
+        }
+
+        public IEnumerable<DetectAssociationMergeGroupLv1Entity> DetectAssociationLv1(DetectAssociationParamModel model)
+        {
+            if (!string.IsNullOrEmpty(model?.CTSCustIds))
+            {
+                var mergeGroupInfo = new MergeGroupAssociationFilterLv1Model();
+
+                Parallel.Invoke(() =>
+                {
+                    mergeGroupInfo.AssociationByDeviceJson =
+                        model.IsDevice ? GetAssociationCustByPrimaryLv1(model.CTSCustIds, AssociationDetectionType.Device) : "[]";
+                }, () =>
+                {
+                    mergeGroupInfo.AssociationByAIJson =
+                        model.IsAI ? GetAssociationCustByPrimaryLv1(model.CTSCustIds, AssociationDetectionType.AI) : "[]";
+                }, () =>
+                {
+                    mergeGroupInfo.AssociationByIPJson =
+                        model.IsIP ? GetAssociationCustByPrimaryLv1(model.CTSCustIds, AssociationDetectionType.IP) : "[]";
+                }, () =>
+                {
+                    if (model.Is3MatchesLast7Days && model.CustIds.IsNotNullOrEmpty() && model.MappingCustDictionary.IsNotNullOrEmpty())
+                    {
+                        mergeGroupInfo.AssociationBySharedMatchesJson = GetAssociationBySharedMatches(model.CustIds, model.MappingCustDictionary);
+                    }
+                });
+
+                var assMergeGroup = _associationDetectionDataAccess.DetectGroupDetectAssociationLv1(mergeGroupInfo);
+
+                return assMergeGroup;
+            }
+
+            return Enumerable.Empty<DetectAssociationMergeGroupLv1Entity>();
         }
         #endregion
     }

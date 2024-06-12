@@ -2,7 +2,7 @@
 {
     using Newtonsoft.Json;
 
-    public class DetectAssociationByPrimaryModel
+    public class DetectAssociationByPrimaryEntity
     {
         [JsonProperty(PropertyName = "O")]
         public long OrigID { get; set; }

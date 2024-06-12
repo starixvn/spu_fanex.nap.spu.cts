@@ -105,7 +105,7 @@
             return null;
         }
 
-        private IEnumerable<DetectAssociationMergeGroupModel> DetectAssociation(string ctsCustIDList, string custIDList)
+        private IEnumerable<DetectAssociationMergeGroupEntity> DetectAssociation(string ctsCustIDList, string custIDList)
         {
             var param = new DetectAssociationParamModel
             {
