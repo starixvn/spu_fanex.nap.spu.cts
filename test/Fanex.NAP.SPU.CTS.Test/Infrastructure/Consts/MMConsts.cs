@@ -18,6 +18,8 @@
 
             public const string ProcessRuleHedging = "ProcessRuleHedging";
 
+            public const string ProcessRuleGroupBetting = "ProcessRuleGroupBetting";
+
             public const string ProcessRuleArbitrage = "ProcessRuleArbitrage";
         }
 

@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Criteria
+﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleGroupBetting.Criteria
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
@@ -10,7 +10,7 @@
         public bool IsLive { get; set; }
 
         [SpParam(SqlParamName = "op_MaxSequenceID")]
-        public UInt64 MaxSequenceID { get; set; }
+        public UInt64? MaxSequenceID { get; set; }
 
         public override string GetSettingKey()
         {

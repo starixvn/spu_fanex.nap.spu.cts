@@ -1,8 +1,8 @@
-﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities
+﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleGroupBetting.Entities
 {
     using System;
 
-    public class MatchStagingRuleGroupBettingModel
+    public class MatchStagingRuleGroupBettingEntity
     {
         public int MatchID { get; set; }
 
@@ -14,8 +14,10 @@
 
         public string Betteam { get; set; }
 
-        public string CustIDList { get; set; }
-
         public int SportType { get; set; }
+
+        public string CTSCustIDList { get; set; }
+
+        public string SequenceIDList { get; set; }
     }
 }

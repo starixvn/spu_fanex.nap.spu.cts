@@ -1,25 +1,21 @@
 ﻿namespace Fanex.NAP.SPU.CTS.JobService.Services
 {
-    using Fanex.Logging.Extensions;
-    using Fanex.NAP.SPU.CTS.Features.AssociationDetection;
-    using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
-    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
-    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleGroupBetting;
-    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleHedging;
-    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorArbitrage;
-    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorArbitrage.Entities;
-    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorArbitrage.Models;
-    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleSabaGroupBetting;
-    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorStaging;
-    using Fanex.NAP.SPU.CTS.Shares;
-    using Newtonsoft.Json;
     using Sentry;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
+    using Newtonsoft.Json;
+    using Fanex.Logging.Extensions;
+    using Fanex.NAP.SPU.CTS.Shares;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleHedging;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleSabaGroupBetting;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorStaging;
     using static Fanex.NAP.SPU.CTS.Shares.Consts;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleGroupBetting;
 
     public interface IMatchMonitorJobService
     {
@@ -40,12 +36,12 @@
 
     public class MatchMonitorJobService : IMatchMonitorJobService
     {
-        private readonly ISentryClient sentryClient;
-        private readonly IMatchMonitorServices matchMonitorServices;
-        private readonly IAssociationDetectionService associationDetectionService;
+        private readonly ISentryClient _sentryClient;
+        private readonly IMatchMonitorServices _matchMonitorServices;
 
         private readonly IServiceProvider _serviceProvider;
         private readonly IMMRuleSabaGBService _ruleSabaGBService;
+        private readonly IMatchMonitorRuleGroupBettingService _ruleGBService;
         private readonly IMatchMonitorRuleArbitrageService _ruleArbitrageService;
 
         private readonly string serviceName;
@@ -53,18 +49,18 @@
         public MatchMonitorJobService(
             ISentryClient sentryClient,
             IMatchMonitorServices matchMonitorServices,
-            IAssociationDetectionService associationDetectionService,
             IServiceProvider serviceProvider,
             IMMRuleSabaGBService ruleSabaGBService,
+            IMatchMonitorRuleGroupBettingService ruleGBService)
             IMatchMonitorRuleArbitrageService ruleArbitrageService)
         {
-            this.sentryClient = sentryClient;
-            this.matchMonitorServices = matchMonitorServices;
-            this.serviceName = "MatchMonitor Service";
-            this.associationDetectionService = associationDetectionService;
+            _sentryClient = sentryClient;
+            _matchMonitorServices = matchMonitorServices;
+            serviceName = "MatchMonitor Service";
 
             _serviceProvider = serviceProvider;
             _ruleSabaGBService = ruleSabaGBService;
+            _ruleGBService = ruleGBService;
             _ruleArbitrageService = ruleArbitrageService;
         }
 
@@ -81,7 +77,7 @@
             }
             catch (Exception ex)
             {
-                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, _sentryClient);
 
                 return Task.FromResult(false);
             }
@@ -97,9 +93,9 @@
         {
             try
             {
-                var matchMonitorRule = matchMonitorServices.GetMatchRuleGroupBetting(isLive);
+                var matchMonitorRule = _ruleGBService.GetMatchRuleGroupBetting(isLive);
 
-                if (matchMonitorRule != null && matchMonitorRule.MaxSequenceID != 0)
+                if (matchMonitorRule != null && matchMonitorRule.MaxSequenceID.HasValue)
                 {
                     matchMonitorRule
                         .MatchStagingList
@@ -107,38 +103,30 @@
                         .WithDegreeOfParallelism(numberOfThread)
                         .ForAll(matchInfo =>
                         {
-                            var prepareData = PrepareDataProcessRuleGroupBetting(isLive, matchMonitorRule.MaxSequenceID, matchInfo);
-
-                            var matchRuleCompleted = matchMonitorServices.ProcessRuleGroupBetting(prepareData);
-
-                            if (matchRuleCompleted != null && matchRuleCompleted.Any())
-                            {
-                                matchMonitorServices.CompleteTransRuleGroupBetting(new MatchCompleteRuleGroupBettingParameterModel
-                                {
-                                    IsLive = isLive,
-                                    MatchInfo = matchInfo,
-                                    TransGroupJson = JsonConvert.SerializeObject(matchRuleCompleted),
-                                    MaxSequenceID = matchMonitorRule.MaxSequenceID
-                                });
-                            }
+                            _ruleGBService.GetInstanceProcessGroupBettingService()
+                                .Start(matchInfo, isLive)
+                                .ProcessRound1()
+                                .ProcessRound2()
+                                .Complete(matchMonitorRule.MaxSequenceID.Value)
+                                .WriteLogSentryIfError(nameof(ProcessRuleGroupBetting), _sentryClient);
 
                             Thread.Sleep(MatchMonitor_SleepTimes);
                         });
-                }
 
-                matchMonitorServices.CleanTransRuleGroupBetting(isLive, matchMonitorRule.MaxSequenceID);
+                    _ruleGBService.CleanTransRuleGroupBetting(isLive, matchMonitorRule.MaxSequenceID.Value);
+                }
 
                 return Task.FromResult(true);
             }
             catch (AggregateException ex)
             {
-                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, _sentryClient);
 
                 return Task.FromResult(false);
             }
             catch (Exception ex)
             {
-                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, _sentryClient);
 
                 return Task.FromResult(false);
             }
@@ -165,7 +153,7 @@
                                 .ProcessRound1()
                                 .ProcessRound2()
                                 .Complete(matchMonitorRule.MaxSequenceID.Value)
-                                .WriteLogSentryIfError(nameof(ProcessRuleSabaGroupBetting), sentryClient);
+                                .WriteLogSentryIfError(nameof(ProcessRuleSabaGroupBetting), _sentryClient);
 
                             Thread.Sleep(MatchMonitor_SleepTimes);
                         });
@@ -177,13 +165,13 @@
             }
             catch (AggregateException ex)
             {
-                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, _sentryClient);
 
                 return Task.FromResult(false);
             }
             catch (Exception ex)
             {
-                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, _sentryClient);
 
                 return Task.FromResult(false);
             }
@@ -197,7 +185,7 @@
         {
             try
             {
-                var matchMonitorRule = matchMonitorServices.GetMatchRuleFixedGame(isLive);
+                var matchMonitorRule = _matchMonitorServices.GetMatchRuleFixedGame(isLive);
 
                 if (matchMonitorRule != null && matchMonitorRule.MaxSequenceID != 0)
                 {
@@ -207,11 +195,11 @@
                         .WithDegreeOfParallelism(numberOfThread)
                         .ForAll(matchInfo =>
                         {
-                            var matchRuleCompleted = matchMonitorServices.ProcessRuleFixedGame(isLive, matchMonitorRule.MaxSequenceID, matchInfo);
+                            var matchRuleCompleted = _matchMonitorServices.ProcessRuleFixedGame(isLive, matchMonitorRule.MaxSequenceID, matchInfo);
 
                             if (matchRuleCompleted != null && matchRuleCompleted.Any())
                             {
-                                matchMonitorServices.CompleteTransRuleFixedGame(new MatchCompleteRuleFixedGameParameterModel
+                                _matchMonitorServices.CompleteTransRuleFixedGame(new MatchCompleteRuleFixedGameParameterModel
                                 {
                                     IsLive = isLive,
                                     MatchInfo = matchInfo,
@@ -224,19 +212,19 @@
                         });
                 }
 
-                matchMonitorServices.CleanTransRuleFixedGame(isLive, matchMonitorRule.MaxSequenceID);
+                _matchMonitorServices.CleanTransRuleFixedGame(isLive, matchMonitorRule.MaxSequenceID);
 
                 return Task.FromResult(true);
             }
             catch (AggregateException ex)
             {
-                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, _sentryClient);
 
                 return Task.FromResult(false);
             }
             catch (Exception ex)
             {
-                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, _sentryClient);
 
                 return Task.FromResult(false);
             }
@@ -250,7 +238,7 @@
         {
             try
             {
-                var matchMonitorRule = matchMonitorServices.GetMatchRuleHedging(isLive);
+                var matchMonitorRule = _matchMonitorServices.GetMatchRuleHedging(isLive);
 
                 if (matchMonitorRule != null && matchMonitorRule.MaxSequenceID != null)
                 {
@@ -262,11 +250,11 @@
                             .WithDegreeOfParallelism(numberExternalOfThread)
                             .ForAll(matchInfo =>
                             {
-                                var mmProcess = matchMonitorServices.ProcessRuleHedgingWithRound(matchInfo, isLive, numberInternalOfThread).ToList();
+                                var mmProcess = _matchMonitorServices.ProcessRuleHedgingWithRound(matchInfo, isLive, numberInternalOfThread).ToList();
 
                                 if (mmProcess.IsNotNullOrEmpty())
                                 {
-                                    matchMonitorServices.CompleteTransRuleHedging(new MatchCompleteRuleHedgingParameterModel
+                                    _matchMonitorServices.CompleteTransRuleHedging(new MatchCompleteRuleHedgingParameterModel
                                     {
                                         IsLive = isLive,
                                         MatchInfo = matchInfo,
@@ -281,20 +269,20 @@
                             });
                     }
 
-                    matchMonitorServices.CleanTransRuleHedging(isLive, matchMonitorRule.MaxSequenceID.Value);
+                    _matchMonitorServices.CleanTransRuleHedging(isLive, matchMonitorRule.MaxSequenceID.Value);
                 }
 
                 return Task.FromResult(true);
             }
             catch (AggregateException ex)
             {
-                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, _sentryClient);
 
                 return Task.FromResult(false);
             }
             catch (Exception ex)
             {
-                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, _sentryClient);
 
                 return Task.FromResult(false);
             }
@@ -323,7 +311,7 @@
                     .AddMessage($"{serviceName}")
                     .AddMessage($"Data {JsonConvert.SerializeObject(mmProcessR2)} - { DateTime.Now}").ToString();
 
-                sentryClient.CaptureMessage(logMessage, Sentry.Protocol.SentryLevel.Error);
+                _sentryClient.CaptureMessage(logMessage, Sentry.Protocol.SentryLevel.Error);
             }
         }
         #endregion
@@ -336,7 +324,7 @@
         {
             try
             {
-                var matchMonitorRule = matchMonitorServices.GetMatchMonitorRuleIrrigation(isLive);
+                var matchMonitorRule = _matchMonitorServices.GetMatchMonitorRuleIrrigation(isLive);
 
                 if (matchMonitorRule != null && matchMonitorRule.MaxSequenceID != 0)
                 {
@@ -346,11 +334,11 @@
                         .WithDegreeOfParallelism(numberOfThread)
                         .ForAll(matchInfo =>
                         {
-                            var matchRuleCompleted = matchMonitorServices.InsertMatchMonitorRuleIrrigation(isLive, matchMonitorRule.MaxSequenceID, matchInfo);
+                            var matchRuleCompleted = _matchMonitorServices.InsertMatchMonitorRuleIrrigation(isLive, matchMonitorRule.MaxSequenceID, matchInfo);
 
                             if (matchRuleCompleted != null && matchRuleCompleted.Any())
                             {
-                                matchMonitorServices.UpdateMatchMonitorRuleIrrigationComplete(new MatchMonitorRuleIrrigationCompleteParaModel
+                                _matchMonitorServices.UpdateMatchMonitorRuleIrrigationComplete(new MatchMonitorRuleIrrigationCompleteParaModel
                                 {
                                     IsLive = isLive,
                                     MatchInfo = matchInfo,
@@ -363,19 +351,19 @@
                         });
                 }
 
-                matchMonitorServices.CleanTransRuleIrrigation(isLive, matchMonitorRule.MaxSequenceID);
+                _matchMonitorServices.CleanTransRuleIrrigation(isLive, matchMonitorRule.MaxSequenceID);
 
                 return Task.FromResult(true);
             }
             catch (AggregateException ex)
             {
-                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, _sentryClient);
 
                 return Task.FromResult(false);
             }
             catch (Exception ex)
             {
-                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, _sentryClient);
 
                 return Task.FromResult(false);
             }
@@ -415,42 +403,16 @@
             }
             catch (AggregateException ex)
             {
-                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, _sentryClient);
 
                 return Task.FromResult(false);
             }
             catch (Exception ex)
             {
-                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, _sentryClient);
 
                 return Task.FromResult(false);
             }
         }
-
-        #region Private Methods
-        private MMPrepareDataProcessRuleGBModel PrepareDataProcessRuleGroupBetting(bool isLive, UInt64 maxTransId, MatchStagingRuleGroupBettingModel matchinfo)
-        {
-            string assByShared3MatchesLast7Days = null;
-
-            if (matchinfo.SportType == (int)MatchMonitor_SportType.Basketball
-                || matchinfo.SportType == (int)MatchMonitor_SportType.Esport)
-            {
-                var assBySharedMatches = this.associationDetectionService.DetectAssociationBySharedMatches(matchinfo.CustIDList);
-
-                if (assBySharedMatches != null && assBySharedMatches.Any())
-                {
-                    assByShared3MatchesLast7Days = JsonConvert.SerializeObject(assBySharedMatches);
-                }
-            }
-
-            return new MMPrepareDataProcessRuleGBModel
-            {
-                IsLive = isLive,
-                MaxSequenceID = maxTransId,
-                MatchInfo = matchinfo,
-                JsonSharedMatches = assByShared3MatchesLast7Days
-            };
-        }
-        #endregion Private Methods
     }
 }
