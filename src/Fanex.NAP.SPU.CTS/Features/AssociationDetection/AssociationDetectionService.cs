@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.AssociationDetection
 {
     using Fanex.NAP.SPU.CTS.Features.AssociationDetection.Entities;
+    using Fanex.NAP.SPU.CTS.Features.AssociationDetection.Models;
     using Fanex.NAP.SPU.CTS.Shares;
     using Newtonsoft.Json;
     using System.Collections.Generic;
@@ -14,7 +15,7 @@
 
         IEnumerable<DetectAssociationMergeGroupModel> DetectAssociationRuleHedging(string ctsCustIds, string agentCTSCustIds);
 
-        IEnumerable<DetectAssociationMergeGroupModel> DetectAssociationRuleSabaGB(string ctsCustIds);
+        IEnumerable<DetectAssociationMergeGroupModel> DetectAssociation(DetectAssociationParamModel model);
     }
 
     public class AssociationDetectionService : IAssociationDetectionService
@@ -113,27 +114,29 @@
         #endregion
 
         #region MM GroupBetting
-        public IEnumerable<DetectAssociationMergeGroupModel> DetectAssociationRuleSabaGB(string ctsCustIds)
+        public IEnumerable<DetectAssociationMergeGroupModel> DetectAssociation(DetectAssociationParamModel model)
         {
-            if (!string.IsNullOrEmpty(ctsCustIds))
+            if (!string.IsNullOrEmpty(model?.CTSCustIds))
             {
-                var mergeGroupInfo = new MergeGroupAssociationFilterModel { CTSCustIDs = ctsCustIds, IsGetLogTransInfo = false };
+                var mergeGroupInfo = new MergeGroupAssociationFilterModel { CTSCustIDs = model.CTSCustIds, IsGetLogTransInfo = false };
 
                 Parallel.Invoke(() =>
                 {
-                    mergeGroupInfo.AssociationByDeviceJson = GetAssociationCustByPrimary(new DetectAssociationByPrimaryFilterModel(ctsCustIds, AssociationDetectionType.Device));
+                    mergeGroupInfo.AssociationByDeviceJson =
+                        model.IsDevice ? GetAssociationCustByPrimary(new DetectAssociationByPrimaryFilterModel(model.CTSCustIds, AssociationDetectionType.Device)) : "[]";
                 }, () =>
                 {
 
-                    mergeGroupInfo.AssociationByAIJson = GetAssociationCustByPrimary(new DetectAssociationByPrimaryFilterModel(ctsCustIds, AssociationDetectionType.AI));
+                    mergeGroupInfo.AssociationByAIJson =
+                        model.IsAI ? GetAssociationCustByPrimary(new DetectAssociationByPrimaryFilterModel(model.CTSCustIds, AssociationDetectionType.AI)) : "[]";
                 }, () =>
                 {
-
-                    mergeGroupInfo.AssociationByIPJson = GetAssociationCustByPrimary(new DetectAssociationByPrimaryFilterModel(ctsCustIds, AssociationDetectionType.IP));
+                    mergeGroupInfo.AssociationByIPJson =
+                        model.IsIP ? GetAssociationCustByPrimary(new DetectAssociationByPrimaryFilterModel(model.CTSCustIds, AssociationDetectionType.IP)) : "[]";
                 }, () =>
                 {
-
-                    mergeGroupInfo.AssociationBySharedMatchesJson = GetAssociationBySharedMatches(ctsCustIds);
+                    mergeGroupInfo.AssociationBySharedMatchesJson =
+                        model.Is3MatchesLast7Days ? GetAssociationBySharedMatches(model.CTSCustIds) : "[]";
                 });
 
                 var assMergeGroup = _associationDetectionDataAccess.DetectGroupDetectAssociation(mergeGroupInfo);

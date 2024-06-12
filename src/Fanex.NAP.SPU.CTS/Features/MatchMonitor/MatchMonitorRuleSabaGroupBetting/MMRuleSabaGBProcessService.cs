@@ -8,6 +8,8 @@
     using Fanex.NAP.SPU.CTS.Features.AssociationDetection;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleSabaGroupBetting.Models;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleSabaGroupBetting.Entities;
+    using Fanex.NAP.SPU.CTS.Features.AssociationDetection.Entities;
+    using Fanex.NAP.SPU.CTS.Features.AssociationDetection.Models;
 
     public class MMRuleSabaGBProcessService : IMatchMonitorRuleProcessService<MatchStagingRuleSabaGBGroupModel>
     {
@@ -72,8 +74,7 @@
 
         private MatchProcessRuleSabaGBModel ProcessWithAssociationRound1(MatchStagingRuleSabaGBEntity matchInfo, bool isLive)
         {
-            var assDetectionHasGroupID = _assDetectService
-                                            .DetectAssociationRuleSabaGB(matchInfo.CTSCustIDList)?
+            var assDetectionHasGroupID = DetectAssociation(matchInfo.CTSCustIDList)?
                                             .Where(c => c.GroupID != null);
 
             if (assDetectionHasGroupID.IsNotNullOrEmpty())
@@ -86,8 +87,7 @@
 
         private MatchProcessRuleSabaGBModel ProcessWithAssociationRound2(MatchStagingRuleSabaGBEntity matchInfo, MatchProcessRuleSabaGBInfoEntity reprocessModel, bool isLive)
         {
-            var assDetectionHasGroupID = _assDetectService
-                                            .DetectAssociationRuleSabaGB(reprocessModel.CTSCustIDList)?
+            var assDetectionHasGroupID = DetectAssociation(reprocessModel.CTSCustIDList)?
                                             .Where(c => c.GroupID != null);
 
             if (assDetectionHasGroupID.IsNotNullOrEmpty())
@@ -99,6 +99,20 @@
             }
 
             return null;
+        }
+
+        private IEnumerable<DetectAssociationMergeGroupModel> DetectAssociation(string ctsCustIDList)
+        {
+            var param = new DetectAssociationParamModel
+            {
+                CTSCustIds = ctsCustIDList,
+                IsDevice = true,
+                IsAI = true,
+                IsIP = true,
+                Is3MatchesLast7Days = true
+            };
+
+            return _assDetectService.DetectAssociation(param);
         }
 
         private MatchProcessRuleSabaGBModel ProcessRuleSabaGB(bool isLive, MatchStagingRuleSabaGBEntity matchinfo, string sequenceIDList, string groupDetection)
