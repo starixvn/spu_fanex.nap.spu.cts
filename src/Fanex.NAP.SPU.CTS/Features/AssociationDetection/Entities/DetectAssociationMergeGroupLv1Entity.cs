@@ -4,7 +4,7 @@
 
     public class DetectAssociationMergeGroupLv1Entity
     {
-        [JsonProperty("CTSCustID")]
+        [JsonProperty("CustID")]
         public int NodeID { get; set; }
 
         public int? GroupID { get; set; }
