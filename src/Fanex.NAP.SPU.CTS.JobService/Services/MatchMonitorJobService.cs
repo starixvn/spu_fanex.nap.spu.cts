@@ -41,7 +41,7 @@
         private readonly IMatchMonitorServices matchMonitorServices;
         private readonly IAssociationDetectionService associationDetectionService;
 
-        private readonly IMatchMonitorStagingService _stagingService;
+        private readonly IServiceProvider _serviceProvider;
         private readonly IMMRuleSabaGBService _ruleSabaGBService;
 
         private readonly string serviceName;
@@ -50,22 +50,23 @@
             ISentryClient sentryClient,
             IMatchMonitorServices matchMonitorServices,
             IAssociationDetectionService associationDetectionService,
-            IMMRuleSabaGBService ruleSabaGBService,
-            IMatchMonitorStagingService stagingService)
+            IServiceProvider serviceProvider,
+            IMMRuleSabaGBService ruleSabaGBService)
         {
             this.sentryClient = sentryClient;
             this.matchMonitorServices = matchMonitorServices;
             this.serviceName = "MatchMonitor Service";
             this.associationDetectionService = associationDetectionService;
+
+            _serviceProvider = serviceProvider;
             _ruleSabaGBService = ruleSabaGBService;
-            _stagingService = stagingService;
         }
 
         public Task<bool> InsertTicketDetail(int batchSize, bool isLive)
         {
             try
             {
-                _stagingService
+                _serviceProvider.GetService<IMatchMonitorStagingService>()
                     .Start(batchSize, isLive)
                     .GetLastScannedSequenceID()
                     .GetMatchTrans()

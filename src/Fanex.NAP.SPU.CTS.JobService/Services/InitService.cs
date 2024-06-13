@@ -116,7 +116,7 @@
 
             // Staging
             services.AddSingleton<IMatchMonitorStagingDataAccess, MatchMonitorStagingDataAccess>();
-            services.AddSingleton<IMatchMonitorStagingService, MatchMonitorStagingService>();
+            services.AddTransient<IMatchMonitorStagingService, MatchMonitorStagingService>();
 
             // Rule Saba GB
             services.AddSingleton<IMMRuleSabaGBDataAccess, MMRuleSabaGBDataAccess>();
