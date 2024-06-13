@@ -28,6 +28,92 @@
         }
         #endregion
 
+        #region GetAssociationCustByAgent
+        [Fact]
+        public void GetAssociationCustByAgent_WhenSuccess()
+        {
+            // Arrange
+            var getAssociationCustByPrimary = TestExtension.GetPrivateMethod(typeof(AssociationDetectionService), PrivateMethodName.GetAssociationCustByAgent);
+
+            var dataAcess = JsonConvert.DeserializeObject<IEnumerable<DetectAssociationByPrimaryEntity>>(JsonString.GetAssociationCust);
+
+            // Act
+            _dataAccess.DetectAssociationByAgent(Arg.Any<string>()).Returns(dataAcess);
+
+            var result = getAssociationCustByPrimary.Invoke(_service, new object[] { string.Empty });
+
+            // Assert
+            _dataAccess.Received(1).DetectAssociationByAgent(Arg.Any<string>());
+
+            result.Should().BeEquivalentTo(JsonString.GetAssociationCust);
+        }
+
+        [Fact]
+        public void GetAssociationCustByAgent_ThrowException()
+        {
+            // Arrange
+            var getAssociationCustByPrimary = TestExtension.GetPrivateMethod(typeof(AssociationDetectionService), PrivateMethodName.GetAssociationCustByAgent);
+
+            var dataAcess = JsonConvert.DeserializeObject<IEnumerable<DetectAssociationByPrimaryEntity>>(JsonString.GetAssociationCust);
+
+            // Act
+            _dataAccess.DetectAssociationByAgent(Arg.Any<string>()).Throws<Exception>();
+
+            Action action = () => getAssociationCustByPrimary.Invoke(_service, new object[] { string.Empty });
+
+            // Assert
+            action.Should().Throw<Exception>();
+        }
+        #endregion
+
+        #region GetAssociationCustByPrimary
+        [Theory]
+        [InlineData(AssociationDetectionType.AI)]
+        [InlineData(AssociationDetectionType.Device)]
+        [InlineData(AssociationDetectionType.IP)]
+        public void GetAssociationCustByPrimary_WhenSuccess(AssociationDetectionType associationType)
+        {
+            // Arrange
+            var getAssociationCustByPrimary = TestExtension.GetPrivateMethod(typeof(AssociationDetectionService), PrivateMethodName.GetAssociationCustByPrimary);
+
+            var dataAcess = JsonConvert.DeserializeObject<IEnumerable<DetectAssociationByPrimaryEntity>>(JsonString.GetAssociationCust);
+
+            var model = new DetectAssociationByPrimaryFilterModel(string.Empty, associationType);
+
+            // Act
+            _dataAccess.DetectAssociationByPrimary(Arg.Any<DetectAssociationByPrimaryFilterModel>()).Returns(dataAcess);
+
+            var result = getAssociationCustByPrimary.Invoke(_service, new object[] { model });
+
+            // Assert
+            _dataAccess.Received(1).DetectAssociationByPrimary(Arg.Any<DetectAssociationByPrimaryFilterModel>());
+
+            result.Should().BeEquivalentTo(JsonString.GetAssociationCust);
+        }
+
+        [Theory]
+        [InlineData(AssociationDetectionType.AI)]
+        [InlineData(AssociationDetectionType.Device)]
+        [InlineData(AssociationDetectionType.IP)]
+        public void GetAssociationCustByPrimary_WhenThrowException(AssociationDetectionType associationType)
+        {
+            // Arrange
+            var getAssociationCustByPrimary = TestExtension.GetPrivateMethod(typeof(AssociationDetectionService), PrivateMethodName.GetAssociationCustByPrimary);
+
+            var dataAcess = JsonConvert.DeserializeObject<IEnumerable<DetectAssociationByPrimaryEntity>>(JsonString.GetAssociationCust);
+
+            var model = new DetectAssociationByPrimaryFilterModel(string.Empty, associationType);
+
+            // Act
+            _dataAccess.DetectAssociationByPrimary(Arg.Any<DetectAssociationByPrimaryFilterModel>()).Throws(new Exception());
+
+            Action action = () => getAssociationCustByPrimary.Invoke(_service, new object[] { model });
+
+            // Assert
+            action.Should().Throw<Exception>();
+        }
+        #endregion
+
         #region GetAssociationCustByPrimaryLv1
         [Theory]
         [InlineData(AssociationDetectionType.AI)]
@@ -38,7 +124,7 @@
             // Arrange
             var getAssociationCustByPrimaryLv1 = TestExtension.GetPrivateMethod(typeof(AssociationDetectionService), PrivateMethodName.GetAssociationCustByPrimaryLv1);
 
-            var dataAcess = JsonConvert.DeserializeObject<IEnumerable<DetectAssociationByPrimaryEntity>>(JsonString.GetAssociationCust);
+            var dataAcess = JsonConvert.DeserializeObject<IEnumerable<DetectAssociationByPrimaryLv1Entity>>(JsonString.GetAssociationCustLv1);
 
             // Act
             _dataAccess.DetectAssociationByPrimaryLv1(Arg.Any<DetectAssociationByPrimaryFilterModel>()).Returns(dataAcess);
@@ -48,7 +134,7 @@
             // Assert
             _dataAccess.Received(1).DetectAssociationByPrimaryLv1(Arg.Any<DetectAssociationByPrimaryFilterModel>());
 
-            result.Should().BeEquivalentTo(JsonString.GetAssociationCust);
+            result.Should().BeEquivalentTo(JsonString.GetAssociationCustLv1);
         }
 
         [Theory]
@@ -60,7 +146,7 @@
             // Arrange
             var getAssociationCustByPrimaryLv1 = TestExtension.GetPrivateMethod(typeof(AssociationDetectionService), PrivateMethodName.GetAssociationCustByPrimaryLv1);
 
-            var dataAcess = JsonConvert.DeserializeObject<IEnumerable<DetectAssociationByPrimaryEntity>>(JsonString.GetAssociationCust);
+            var dataAcess = JsonConvert.DeserializeObject<IEnumerable<DetectAssociationByPrimaryLv1Entity>>(JsonString.GetAssociationCustLv1);
 
             // Act
             _dataAccess.DetectAssociationByPrimaryLv1(Arg.Any<DetectAssociationByPrimaryFilterModel>()).Throws(new Exception());
@@ -79,7 +165,7 @@
             // Arrange
             var getAssociationCustByPrimaryLv1 = TestExtension.GetPrivateMethod(typeof(AssociationDetectionService), PrivateMethodName.GetAssociationBySharedMatches);
 
-            var dataAcess = JsonConvert.DeserializeObject<IEnumerable<DetectAssBySharedIPMatchesEntity>>(JsonString.GetAssociationCust);
+            var dataAcess = JsonConvert.DeserializeObject<IEnumerable<DetectAssBySharedIPMatchesEntity>>(JsonString.GetAssociationCustLv1);
 
             // Act
             _dataAccess.DetectAssociationBySharedMatches(Arg.Any<string>()).Returns(dataAcess);
@@ -196,8 +282,8 @@
         public void DetectAssociationLv1_WhenSuccess(string ctsCustIDs, bool isDevice, bool isAI, bool isIP, bool is3MatchesLast7Days)
         {
             // Arrange
-            var assCustData = JsonConvert.DeserializeObject<IEnumerable<DetectAssociationByPrimaryEntity>>(JsonString.GetAssociationCust);
-            var assMatchData = JsonConvert.DeserializeObject<IEnumerable<DetectAssBySharedIPMatchesEntity>>(JsonString.GetAssociationCust);
+            var assCustData = JsonConvert.DeserializeObject<IEnumerable<DetectAssociationByPrimaryLv1Entity>>(JsonString.GetAssociationCustLv1);
+            var assMatchData = JsonConvert.DeserializeObject<IEnumerable<DetectAssBySharedIPMatchesEntity>>(JsonString.GetAssociationCustLv1);
             var detectAss = new List<DetectAssociationMergeGroupLv1Entity>
             {
                 new DetectAssociationMergeGroupLv1Entity

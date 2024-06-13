@@ -15,7 +15,7 @@
 
         IEnumerable<DetectAssociationByPrimaryEntity> DetectAssociationByPrimary(DetectAssociationByPrimaryFilterModel filter);
 
-        IEnumerable<DetectAssociationByPrimaryEntity> DetectAssociationByPrimaryLv1(DetectAssociationByPrimaryFilterModel filter);
+        IEnumerable<DetectAssociationByPrimaryLv1Entity> DetectAssociationByPrimaryLv1(DetectAssociationByPrimaryFilterModel filter);
 
         IEnumerable<DetectAssociationByPrimaryEntity> DetectAssociationByAgent(string ctsCustIDs);
 
@@ -88,7 +88,7 @@
             return _repository.Fetch<DetectAssociationMergeGroupEntity>(criteria);
         }
 
-        public IEnumerable<DetectAssociationByPrimaryEntity> DetectAssociationByPrimaryLv1(DetectAssociationByPrimaryFilterModel filter)
+        public IEnumerable<DetectAssociationByPrimaryLv1Entity> DetectAssociationByPrimaryLv1(DetectAssociationByPrimaryFilterModel filter)
         {
             var criteria = new DetectAssociationByPrimaryLv1Criteria
             {
@@ -98,7 +98,7 @@
                 IsIP = filter.IsIP
             };
 
-            return _repository.Fetch<DetectAssociationByPrimaryEntity>(criteria);
+            return _repository.Fetch<DetectAssociationByPrimaryLv1Entity>(criteria);
         }
 
         public IEnumerable<DetectAssociationMergeGroupLv1Entity> DetectGroupDetectAssociationLv1(MergeGroupAssociationFilterLv1Model model)

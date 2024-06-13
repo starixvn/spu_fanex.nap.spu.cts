@@ -60,9 +60,8 @@
         {
             var requestModel = new DetectAssociationByPrimaryFilterModel(ctsCustIds, associationType);
             var assByPrimary = _associationDetectionDataAccess.DetectAssociationByPrimaryLv1(requestModel);
-            var mapperAssByPrimary = MapperInputFromAssociationCust(assByPrimary);
 
-            return RenderExcessiveJsonFromIEnumerable(mapperAssByPrimary);
+            return RenderExcessiveJsonFromIEnumerable(assByPrimary);
         }
 
         private string GetAssociationBySharedMatches(string custIDList, IReadOnlyDictionary<int, int> mappingCustDictionary)
