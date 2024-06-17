@@ -11,14 +11,14 @@
 	</Function>
 	<Function Name="MatchMonitor">
 		<Setting Key="CTS_DC_SystemParameter_Get" SpName="CTS_DC_SystemParameter_Get" DbName="MySQL.CTS_DataCenter.ctsService" />
-		<Setting Key="CTS_Rpt_MatchMonitor_GetTicketInfo" SpName="CTS_Rpt_MatchMonitor_GetTicketInfo_xtest" DbName="SQL.bodb02.bodbSPUNet"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_Staging_Insert" SpName="CTS_DC_MatchMonitor_Staging_Insert_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
+		<Setting Key="CTS_Rpt_MatchMonitor_GetTicketInfo" SpName="CTS_Rpt_MatchMonitor_GetTicketInfo" DbName="SQL.bodb02.bodbSPUNet"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_Staging_Insert" SpName="CTS_DC_MatchMonitor_Staging_Insert" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 
 		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBetting_Get" SpName="CTS_DC_MatchMonitor_RuleGroupBetting_Get" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBetting_Process" SpName="CTS_DC_MatchMonitor_RuleGroupBetting_Process" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBetting_Complete" SpName="CTS_DC_MatchMonitor_RuleGroupBetting_Complete" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBetting_StagingClean" SpName="CTS_DC_MatchMonitor_RuleGroupBetting_StagingClean" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
-		
+
 		<Setting Key="CTS_DC_MatchMonitor_RuleFixedGame_Get" SpName="CTS_DC_MatchMonitor_RuleFixedGame_Get" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_RuleFixedGame_Process" SpName="CTS_DC_MatchMonitor_RuleFixedGame_Process" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_RuleFixedGame_Complete" SpName="CTS_DC_MatchMonitor_RuleFixedGame_Complete" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
@@ -97,6 +97,8 @@
 		<Setting Key="CTS_DC_Association_Primary_GetCustEdge" SpName="CTS_DC_Association_Primary_GetCustEdge" DbName="MySQL.CTS_DataCenter.ctsService" Timeout="300" />
 		<Setting Key="CTS_DC_Association_Agent_GetCustEdge" SpName="CTS_DC_Association_Agent_GetCustEdge" DbName="MySQL.CTS_DataCenter.ctsService" Timeout="300" />
 		<Setting Key="CTS_DC_Association_DetectGroup" SpName="CTS_DC_Association_DetectGroup" DbName="MySQL.CTS_DataCenter.ctsService" Timeout="300" />
+		<Setting Key="CTS_DC_Association_GetDirectCustEdge" SpName="CTS_DC_Association_GetDirectCustEdge" DbName="MySQL.CTS_DataCenter.ctsService" Timeout="300" />
+		<Setting Key="CTS_DC_Association_CustGroup" SpName="CTS_DC_Association_CustGroup" DbName="MySQL.CTS_DataCenter.ctsService" Timeout="300" />
 	</Function>
 
 	<Function Name="Common">
