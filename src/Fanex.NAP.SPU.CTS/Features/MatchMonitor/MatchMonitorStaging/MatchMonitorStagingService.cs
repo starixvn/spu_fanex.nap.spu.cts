@@ -65,7 +65,7 @@
         {
             if (BatchSize > 0)
             {
-                var betTypeInfos = JsonConvert.SerializeObject(GetBettypeSettings());
+                var betTypeInfos = GetBettypeSettings();
 
                 TicketStagings = GetTicketStaging(LastScannedSequenceID, BatchSize, IsLive, betTypeInfos);
             }
@@ -99,7 +99,7 @@
             }
         }
 
-        private IEnumerable<MatchBetTypeSettingModel> GetBettypeSettings()
+        private string GetBettypeSettings()
         {
             var paras = new BetTypeSettingParaModel
             {
@@ -111,15 +111,18 @@
                 Status = 1
             };
 
-            var bettypeList = _systemParameter.GetBetTypeSettings(paras).Select(x => new MatchBetTypeSettingModel
-            {
-                SportTypeID = x.SportTypeID,
-                BetTypeID = x.BetTypeID,
-                BetChoiceType = x.BetChoiceType,
-                BetIDPattern = x.BetIDPattern
-            });
+            var bettypeList = _systemParameter
+                                    .GetBetTypeSettings(paras)
+                                    .Select(x => new
+                                    {
+                                        SportTypeID = x.SportTypeID,
+                                        BetTypeID = x.BetTypeID,
+                                        BetChoiceType = x.BetChoiceType,
+                                        BetIDPattern = x.BetIDPattern
+                                    })
+                                    .Distinct();
 
-            return bettypeList;
+            return JsonConvert.SerializeObject(bettypeList);
         }
 
         private IEnumerable<TicketDetailEntity> GetTicketStaging(long lastScannedSequenceID, int batchSize, bool isLive, string betTypeInfos)
