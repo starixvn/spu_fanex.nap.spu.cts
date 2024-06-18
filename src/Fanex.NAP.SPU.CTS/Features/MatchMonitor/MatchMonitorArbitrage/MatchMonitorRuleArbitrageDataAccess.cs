@@ -22,9 +22,9 @@
     {
         private readonly IDynamicRepository _repository;
 
-        public MatchMonitorRuleArbitrageDataAccess(IDynamicRepository repository)
+        public MatchMonitorRuleArbitrageDataAccess()
         {
-            _repository = repository;
+            _repository = new DynamicRepository();
         }
 
         public MatchMonitorRuleArbitrageModel GetMatchRuleArbitrage(bool isLive)

@@ -35,7 +35,7 @@
 
             if (matches != null)
             {
-                result.MaxSequenceID = result.MaxSequenceID;
+                result.MaxSequenceID = matches.MaxSequenceID;
 
                 if (matches.MatchStagingList.IsNotNullOrEmpty())
                 {
