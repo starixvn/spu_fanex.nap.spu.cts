@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Criteria
+﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorArbitrage.Criteria
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
@@ -9,8 +9,8 @@
         [SpParam(SqlParamName = "ip_LiveIndicator")]
         public bool IsLive { get; set; }
 
-        [SpParam(SqlParamName = "ip_MaxSequenceID")]
-        public UInt64 MaxSequenceID { get; set; }
+        //[SpParam(SqlParamName = "ip_MaxSequenceID")]
+        //public UInt64 MaxSequenceID { get; set; }
 
         [SpParam(SqlParamName = "ip_MatchID")]
         public int MatchId { get; set; }
@@ -29,6 +29,12 @@
 
         [SpParam(SqlParamName = "ip_HDP")]
         public decimal HDP { get; set; }
+
+        [SpParam(SqlParamName = "ip_SequenceIDList")]
+        public string SequenceIDList { get; set; }
+
+        [SpParam(SqlParamName = "ip_CustGroup")]
+        public string CustGroup { get; set; }
 
         public override string GetSettingKey()
                 => "CTS_DC_MatchMonitor_RuleArbitrage_Process";

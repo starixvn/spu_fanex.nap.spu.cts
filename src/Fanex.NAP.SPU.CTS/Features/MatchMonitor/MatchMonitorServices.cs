@@ -9,6 +9,8 @@
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleGroupBetting;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleHedging;
     using Fanex.NAP.SPU.CTS.Shares;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorArbitrage.Entities;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorArbitrage.Models;
 
     public interface IMatchMonitorServices
     {
@@ -16,25 +18,17 @@
 
         MatchMonitorRuleIrrigationModel GetMatchMonitorRuleIrrigation(bool isLive);
 
-        MatchMonitorRuleArbitrageModel GetMatchRuleArbitrage(bool isLive);
-
         IEnumerable<MatchCompleteRuleFixedGameModel> ProcessRuleFixedGame(bool isLive, UInt64 maxTransId, MatchStagingRuleFixedGameModel matchinfo);
 
         IEnumerable<MatchRuleIrrigationCompletedModel> InsertMatchMonitorRuleIrrigation(bool isLive, UInt64 maxSequenceID, MatchStagingRuleIrrigationModel matchinfo);
-
-        IEnumerable<MatchCompleteRuleArbitrageModel> ProcessRuleArbitrage(bool isLive, UInt64 maxTransId, MatchStagingRuleArbitrageModel matchinfo);
 
         void CompleteTransRuleFixedGame(MatchCompleteRuleFixedGameParameterModel para);
 
         void UpdateMatchMonitorRuleIrrigationComplete(MatchMonitorRuleIrrigationCompleteParaModel para);
 
-        void CompleteTransRuleArbitrage(MatchCompleteRuleArbitrageParameterModel para);
-
         void CleanTransRuleFixedGame(bool isLive, UInt64 maxSequenceID);
 
         void CleanTransRuleIrrigation(bool isLive, UInt64 maxSequenceID);
-
-        void CleanTransRuleArbitrage(bool isLive, UInt64 maxSequenceID);
 
         #region Rule Hedging
 
@@ -81,11 +75,6 @@
             return matchDataAccess.GetMatchMonitorRuleIrrigation(isLive);
         }
 
-        public MatchMonitorRuleArbitrageModel GetMatchRuleArbitrage(bool isLive)
-        {
-            return matchDataAccess.GetMatchRuleArbitrage(isLive);
-        }
-
         public IEnumerable<MatchCompleteRuleFixedGameModel> ProcessRuleFixedGame(bool isLive, UInt64 maxSequenceID, MatchStagingRuleFixedGameModel matchinfo)
         {
             return matchDataAccess.ProcessRuleFixedGame(isLive, maxSequenceID, matchinfo);
@@ -94,11 +83,6 @@
         public IEnumerable<MatchRuleIrrigationCompletedModel> InsertMatchMonitorRuleIrrigation(bool isLive, UInt64 maxSequenceID, MatchStagingRuleIrrigationModel matchinfo)
         {
             return matchDataAccess.InsertMatchMonitorRuleIrrigation(isLive, maxSequenceID, matchinfo);
-        }
-
-        public IEnumerable<MatchCompleteRuleArbitrageModel> ProcessRuleArbitrage(bool isLive, UInt64 maxSequenceID, MatchStagingRuleArbitrageModel matchinfo)
-        {
-            return matchDataAccess.ProcessRuleArbitrage(isLive, maxSequenceID, matchinfo);
         }
 
         public void CompleteTransRuleFixedGame(MatchCompleteRuleFixedGameParameterModel para)
@@ -111,11 +95,6 @@
             matchDataAccess.UpdateMatchMonitorRuleIrrigationComplete(para);
         }
 
-        public void CompleteTransRuleArbitrage(MatchCompleteRuleArbitrageParameterModel para)
-        {
-            matchDataAccess.CompleteTransRuleArbitrage(para);
-        }
-
         public void CleanTransRuleFixedGame(bool isLive, UInt64 maxSequenceID)
         {
             matchDataAccess.CleanTransRuleFixedGame(isLive, maxSequenceID);
@@ -124,11 +103,6 @@
         public void CleanTransRuleIrrigation(bool isLive, UInt64 maxSequenceID)
         {
             matchDataAccess.CleanTransRuleIrrigation(isLive, maxSequenceID);
-        }
-
-        public void CleanTransRuleArbitrage(bool isLive, UInt64 maxSequenceID)
-        {
-            matchDataAccess.CleanTransRuleArbitrage(isLive, maxSequenceID);
         }
 
         #region Rule GroupBetting
