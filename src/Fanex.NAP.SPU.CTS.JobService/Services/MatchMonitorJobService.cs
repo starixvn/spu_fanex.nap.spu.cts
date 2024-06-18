@@ -98,7 +98,7 @@
                 if (matchMonitorRule != null && matchMonitorRule.MaxSequenceID.HasValue)
                 {
                     matchMonitorRule
-                        .MatchStagingList
+                        .MatchStagingList?
                         .AsParallel()
                         .WithDegreeOfParallelism(numberOfThread)
                         .ForAll(matchInfo =>

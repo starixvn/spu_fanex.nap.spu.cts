@@ -55,7 +55,7 @@
 
         public IMatchMonitorRuleProcessService<MatchStagingRuleGroupBettingGroupModel> GetInstanceProcessGroupBettingService()
         {
-            return (MatchMonitorRuleGroupBettingProcessService)_serviceProvider.GetService(typeof(MatchMonitorRuleGroupBettingProcessService));
+            return _serviceProvider.GetService<MatchMonitorRuleGroupBettingProcessService>();
         }
 
         public void CleanTransRuleGroupBetting(bool isLive, UInt64 maxSequenceID)
