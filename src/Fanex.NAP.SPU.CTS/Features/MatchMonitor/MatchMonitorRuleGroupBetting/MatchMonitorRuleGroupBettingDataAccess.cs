@@ -37,13 +37,12 @@
                 IsLive = isLive
             };
 
-            (var matchStagings, var ctsCustomers) = _repository.FetchMultiple<MatchStagingRuleGroupBettingEntity, MatchMonitorMappingCustEntity>(criteria);
+            var matchStagings = _repository.Fetch<MatchStagingRuleGroupBettingEntity>(criteria);
 
             return new MatchMonitorRuleGroupBettingModel
             {
                 MaxSequenceID = criteria.MaxSequenceID,
                 MatchStagingList = criteria.MaxSequenceID.HasValue ? matchStagings : Enumerable.Empty<MatchStagingRuleGroupBettingEntity>(),
-                CTSCustomerList = criteria.MaxSequenceID.HasValue ? ctsCustomers : Enumerable.Empty<MatchMonitorMappingCustEntity>()
             };
         }
 

@@ -104,7 +104,7 @@
                         .ForAll(matchInfo =>
                         {
                             _ruleGBService.GetInstanceProcessGroupBettingService()
-                                .PrepareProcess(matchInfo, isLive, matchMonitorRule.MappingCustDictionary)
+                                .PrepareProcess(matchInfo, isLive, null)
                                 .ProcessRound1()
                                 .ProcessRound2()
                                 .Complete(matchMonitorRule.MaxSequenceID.Value)

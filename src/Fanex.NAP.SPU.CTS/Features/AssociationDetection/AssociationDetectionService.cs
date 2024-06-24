@@ -64,7 +64,7 @@
             return RenderExcessiveJsonFromIEnumerable(assByPrimary);
         }
 
-        private string GetAssociationBySharedMatches(string custIDList, IReadOnlyDictionary<int, int> mappingCustDictionary)
+        private string GetAssociationBySharedMatchesWithMappingCTSCustID(string custIDList, IReadOnlyDictionary<int, int> mappingCustDictionary)
         {
             var assDetectShareMatches = _associationDetectionDataAccess.DetectAssociationBySharedMatches(custIDList);
 
@@ -134,6 +134,11 @@
         #endregion
 
         #region Detect Association
+        /// <summary>
+        /// Get and detect by CTSCustID
+        /// </summary>
+        /// <param name="model">Input CTSCustID</param>
+        /// <returns></returns>
         public IEnumerable<DetectAssociationMergeGroupEntity> DetectAssociation(DetectAssociationParamModel model)
         {
             if ((model?.CTSCustIds).IsNotNullOrEmpty())
@@ -156,7 +161,7 @@
                 {
                     if (model.Is3MatchesLast7Days && model.CustIds.IsNotNullOrEmpty() && model.MappingCustDictionary.IsNotNullOrEmpty())
                     {
-                        mergeGroupInfo.AssociationBySharedMatchesJson = GetAssociationBySharedMatches(model.CustIds, model.MappingCustDictionary);
+                        mergeGroupInfo.AssociationBySharedMatchesJson = GetAssociationBySharedMatchesWithMappingCTSCustID(model.CustIds, model.MappingCustDictionary);
                     }
                 }, () =>
                 {
@@ -172,6 +177,11 @@
             return Enumerable.Empty<DetectAssociationMergeGroupEntity>();
         }
 
+        /// <summary>
+        /// Get and detect by CustID
+        /// </summary>
+        /// <param name="model">Input CTSCustID</param>
+        /// <returns></returns>
         public IEnumerable<DetectAssociationMergeGroupLv1Entity> DetectAssociationLv1(DetectAssociationParamModel model)
         {
             if (!string.IsNullOrEmpty(model?.CTSCustIds))
@@ -192,10 +202,9 @@
                         model.IsIP ? GetAssociationCustByPrimaryLv1(model.CTSCustIds, AssociationDetectionType.IP) : "[]";
                 }, () =>
                 {
-                    if (model.Is3MatchesLast7Days && model.CustIds.IsNotNullOrEmpty() && model.MappingCustDictionary.IsNotNullOrEmpty())
-                    {
-                        mergeGroupInfo.AssociationBySharedMatchesJson = GetAssociationBySharedMatches(model.CustIds, model.MappingCustDictionary);
-                    }
+                    mergeGroupInfo.AssociationBySharedMatchesJson =
+                        model.Is3MatchesLast7Days && model.CustIds.IsNotNullOrEmpty() ?
+                            JsonConvert.SerializeObject(DetectAssociationBySharedMatches(model.CustIds)) : "[]";
                 });
 
                 var assMergeGroup = _associationDetectionDataAccess.DetectGroupDetectAssociationLv1(mergeGroupInfo);

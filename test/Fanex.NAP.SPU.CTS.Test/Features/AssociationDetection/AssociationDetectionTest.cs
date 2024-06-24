@@ -163,7 +163,7 @@
         public void GetAssociationBySharedMatches_WhenSuccess()
         {
             // Arrange
-            var getAssociationCustByPrimaryLv1 = TestExtension.GetPrivateMethod(typeof(AssociationDetectionService), PrivateMethodName.GetAssociationBySharedMatches);
+            var getAssociationCustByPrimaryLv1 = TestExtension.GetPrivateMethod(typeof(AssociationDetectionService), PrivateMethodName.GetAssociationBySharedMatchesWithMappingCTSCustID);
 
             var dataAcess = JsonConvert.DeserializeObject<IEnumerable<DetectAssBySharedIPMatchesEntity>>(JsonString.GetAssociationCustLv1);
 
@@ -182,7 +182,7 @@
         public void GetAssociationBySharedMatches_WhenThrowException()
         {
             // Arrange
-            var getAssociationCustByPrimaryLv1 = TestExtension.GetPrivateMethod(typeof(AssociationDetectionService), PrivateMethodName.GetAssociationBySharedMatches);
+            var getAssociationCustByPrimaryLv1 = TestExtension.GetPrivateMethod(typeof(AssociationDetectionService), PrivateMethodName.GetAssociationBySharedMatchesWithMappingCTSCustID);
 
             // Act
             _dataAccess.DetectAssociationBySharedMatches(Arg.Any<string>()).Throws(new Exception());

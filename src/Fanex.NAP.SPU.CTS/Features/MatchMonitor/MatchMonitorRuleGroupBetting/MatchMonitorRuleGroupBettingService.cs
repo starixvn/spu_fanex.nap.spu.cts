@@ -37,10 +37,6 @@
 
                 if (match.MatchStagingList.IsNotNullOrEmpty())
                 {
-                    result.MappingCustDictionary = match?.CTSCustomerList
-                                                    .Select(x => new { x.CustID, x.CTSCustID }).Distinct()
-                                                    .ToDictionary(x => x.CustID, x => x.CTSCustID);
-
                     result.MatchStagingList = match.MatchStagingList.GroupBy(x => new { x.MatchID, x.ScoreDiff, x.BettypeID, x.BetID, x.Betteam })
                                                         .Select(y => new MatchStagingRuleGroupBettingGroupModel()
                                                         {

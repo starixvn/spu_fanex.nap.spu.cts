@@ -20,7 +20,6 @@
 
         private MatchStagingRuleGroupBettingGroupModel MatchStaging;
         private bool IsLive;
-        private IReadOnlyDictionary<int, int> MappingCustDictionary;
 
         private readonly List<MatchProcessRuleGroupBettingModel> MatchProcesses;
 
@@ -36,7 +35,6 @@
         {
             MatchStaging = matchStaging;
             IsLive = isLive;
-            MappingCustDictionary = mappingCustDictionary;
 
             return this;
         }
@@ -113,8 +111,7 @@
                 IsDevice = true,
                 IsAI = true,
                 IsIP = IsValidSportTypeGetAssociation(sportType),
-                Is3MatchesLast7Days = IsValidSportTypeGetAssociation(sportType),
-                MappingCustDictionary = MappingCustDictionary
+                Is3MatchesLast7Days = IsValidSportTypeGetAssociation(sportType)
             };
 
             return _associationDetection.DetectAssociationLv1(param);
