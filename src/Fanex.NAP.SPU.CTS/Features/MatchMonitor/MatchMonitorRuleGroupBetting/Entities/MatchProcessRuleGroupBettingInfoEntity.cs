@@ -4,6 +4,8 @@
     {
         public string CTSCustIDList { get; set; }
 
+        public string CustIDList { get; set; }
+
         public string SequenceIDList { get; set; }
     }
 }

@@ -8,5 +8,7 @@
         public UInt64? MaxSequenceID { get; set; }
 
         public IEnumerable<MatchStagingRuleGroupBettingGroupModel> MatchStagingList { get; set; }
+
+        public IReadOnlyDictionary<int, int> MappingCustDictionary { get; set; }
     }
 }

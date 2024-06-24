@@ -27,17 +27,21 @@
 
         public MatchStagingRuleGroupBettingProcessModel GetMatchRuleGroupBetting(bool isLive)
         {
-            var matches = _dataAccess.GetMatchRuleGroupBetting(isLive);
+            var match = _dataAccess.GetMatchRuleGroupBetting(isLive);
 
             var result = new MatchStagingRuleGroupBettingProcessModel();
 
-            if (matches != null)
+            if (match != null)
             {
-                result.MaxSequenceID = matches.MaxSequenceID;
+                result.MaxSequenceID = match.MaxSequenceID;
 
-                if (matches.MatchStagingList.IsNotNullOrEmpty())
+                if (match.MatchStagingList.IsNotNullOrEmpty())
                 {
-                    result.MatchStagingList = matches.MatchStagingList.GroupBy(x => new { x.MatchID, x.ScoreDiff, x.BettypeID, x.BetID, x.Betteam })
+                    result.MappingCustDictionary = match?.CTSCustomerList
+                                                    .Select(x => new { x.CustID, x.CTSCustID }).Distinct()
+                                                    .ToDictionary(x => x.CustID, x => x.CTSCustID);
+
+                    result.MatchStagingList = match.MatchStagingList.GroupBy(x => new { x.MatchID, x.ScoreDiff, x.BettypeID, x.BetID, x.Betteam })
                                                         .Select(y => new MatchStagingRuleGroupBettingGroupModel()
                                                         {
                                                             MatchID = y.Key.MatchID,

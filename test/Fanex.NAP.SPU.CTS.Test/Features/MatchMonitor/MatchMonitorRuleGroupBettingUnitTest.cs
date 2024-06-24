@@ -12,6 +12,7 @@ using Fanex.NAP.SPU.CTS.Tests.Infrastructure.Extensions;
 using static Fanex.NAP.SPU.CTS.Tests.Infrastructure.MMConsts;
 using Fanex.NAP.SPU.CTS.Features.AssociationDetection.Models;
 using Fanex.NAP.SPU.CTS.Features.AssociationDetection.Entities;
+using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
 
 namespace Fanex.NAP.SPU.CTS.Tests.Features.MatchMonitor
 {
@@ -48,7 +49,8 @@ namespace Fanex.NAP.SPU.CTS.Tests.Features.MatchMonitor
                    new MatchStagingRuleGroupBettingEntity { MatchID = 1, ScoreDiff = 2, BettypeID = 3, BetID = 4, Betteam = "a"  },
                    new MatchStagingRuleGroupBettingEntity { MatchID = 1, ScoreDiff = 2, BettypeID = 3, BetID = 4, Betteam = "a"  },
                    new MatchStagingRuleGroupBettingEntity { MatchID = 1, ScoreDiff = 2, BettypeID = 3, BetID = 4, Betteam = "h"  }
-                }
+                },
+                CTSCustomerList = new List<MatchMonitorMappingCustEntity>()
             };
 
             // Act

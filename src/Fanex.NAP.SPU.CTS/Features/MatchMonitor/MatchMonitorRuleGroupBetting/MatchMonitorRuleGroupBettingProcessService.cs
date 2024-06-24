@@ -20,21 +20,23 @@
 
         private MatchStagingRuleGroupBettingGroupModel MatchStaging;
         private bool IsLive;
+        private IReadOnlyDictionary<int, int> MappingCustDictionary;
 
-        private List<MatchProcessRuleGroupBettingModel> MatchProcesses;
+        private readonly List<MatchProcessRuleGroupBettingModel> MatchProcesses;
 
         public MatchMonitorRuleGroupBettingProcessService(IAssociationDetectionService associationDetection, IMatchMonitorRuleGroupBettingDataAccess dataAccess)
         {
             _dataAccess = dataAccess;
             _associationDetection = associationDetection;
+
+            MatchProcesses = new List<MatchProcessRuleGroupBettingModel>();
         }
 
-        public IMatchMonitorRuleProcessService Start(MatchStagingRuleGroupBettingGroupModel matchStaging, bool isLive)
+        public IMatchMonitorRuleProcessService PrepareProcess(MatchStagingRuleGroupBettingGroupModel matchStaging, bool isLive, IReadOnlyDictionary<int, int> mappingCustDictionary)
         {
             MatchStaging = matchStaging;
             IsLive = isLive;
-
-            MatchProcesses = new List<MatchProcessRuleGroupBettingModel>();
+            MappingCustDictionary = mappingCustDictionary;
 
             return this;
         }
@@ -75,7 +77,7 @@
 
         private MatchProcessRuleGroupBettingModel ProcessWithAssociationRound1(MatchStagingRuleGroupBettingEntity matchInfo, bool isLive)
         {
-            var assDetectionHasGroupID = DetectAssociation(matchInfo.CTSCustIDList, matchInfo.SportType)?
+            var assDetectionHasGroupID = DetectAssociation(matchInfo.CTSCustIDList, matchInfo.CustIDList, matchInfo.SportType)?
                                             .Where(n => n.GroupID.HasValue);
 
             if (assDetectionHasGroupID.IsNotNullOrEmpty())
@@ -88,7 +90,7 @@
 
         private MatchProcessRuleGroupBettingModel ProcessWithAssociationRound2(MatchStagingRuleGroupBettingEntity matchInfo, MatchProcessRuleGroupBettingInfoEntity reprocessModel, bool isLive)
         {
-            var assDetectionHasGroupID = DetectAssociation(reprocessModel.CTSCustIDList, matchInfo.SportType)?
+            var assDetectionHasGroupID = DetectAssociation(reprocessModel.CTSCustIDList, reprocessModel.CustIDList, matchInfo.SportType)?
                                             .Where(n => n.GroupID.HasValue);
 
             if (assDetectionHasGroupID.IsNotNullOrEmpty())
@@ -102,15 +104,17 @@
             return null;
         }
 
-        private IEnumerable<DetectAssociationMergeGroupLv1Entity> DetectAssociation(string ctsCustIDList, int sportType)
+        private IEnumerable<DetectAssociationMergeGroupLv1Entity> DetectAssociation(string ctsCustIDList, string custIDList, int sportType)
         {
             var param = new DetectAssociationParamModel
             {
                 CTSCustIds = ctsCustIDList,
+                CustIds = custIDList,
                 IsDevice = true,
                 IsAI = true,
                 IsIP = IsValidSportTypeGetAssociation(sportType),
-                Is3MatchesLast7Days = IsValidSportTypeGetAssociation(sportType)
+                Is3MatchesLast7Days = IsValidSportTypeGetAssociation(sportType),
+                MappingCustDictionary = MappingCustDictionary
             };
 
             return _associationDetection.DetectAssociationLv1(param);

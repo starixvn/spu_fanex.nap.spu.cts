@@ -2,7 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using Fanex.Data.Repository;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleGroupBetting.Criteria;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleGroupBetting.Entities;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleGroupBetting.Models;
@@ -35,12 +37,13 @@
                 IsLive = isLive
             };
 
-            var result = _repository.Fetch<MatchStagingRuleGroupBettingEntity>(criteria);
+            (var matchStagings, var ctsCustomers) = _repository.FetchMultiple<MatchStagingRuleGroupBettingEntity, MatchMonitorMappingCustEntity>(criteria);
 
             return new MatchMonitorRuleGroupBettingModel
             {
                 MaxSequenceID = criteria.MaxSequenceID,
-                MatchStagingList = criteria.MaxSequenceID.HasValue ? result : new List<MatchStagingRuleGroupBettingEntity>()
+                MatchStagingList = criteria.MaxSequenceID.HasValue ? matchStagings : Enumerable.Empty<MatchStagingRuleGroupBettingEntity>(),
+                CTSCustomerList = criteria.MaxSequenceID.HasValue ? ctsCustomers : Enumerable.Empty<MatchMonitorMappingCustEntity>()
             };
         }
 
