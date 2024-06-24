@@ -49,7 +49,7 @@
                 var matchProcessesRound1 =
                     MatchStaging.MatchGroupStagingList
                         .Select(matchInfo => ProcessWithAssociationRound1(matchInfo, IsLive))
-                        .Where(matchInfo => matchInfo != null && matchInfo.CompleteMatches.IsNotNullOrEmpty()).ToList();
+                        .Where(matchInfo => matchInfo != null).ToList();
 
                 MatchProcesses.AddRange(matchProcessesRound1);
             }
@@ -67,7 +67,7 @@
                             matchProcessRound1.ReprocessMatches.Select(
                                 reprocessInfoRound2 => ProcessWithAssociationRound2(matchProcessRound1.MatchInfo, reprocessInfoRound2, IsLive))
                         )
-                        .Where(matchInfo => matchInfo != null && matchInfo.CompleteMatches.IsNotNullOrEmpty()).ToList();
+                        .Where(matchInfo => matchInfo != null).ToList();
 
                 MatchProcesses.AddRange(matchProcessesRound2);
             }
@@ -137,6 +137,7 @@
             if (MatchProcesses.IsNotNullOrEmpty())
             {
                 var mergeMatchComplete = MatchProcesses
+                                            .Where(x => x.CompleteMatches.IsNotNullOrEmpty())
                                             .SelectMany(x => x.CompleteMatches)
                                             .GroupBy(item => item.TransIDList)
                                             .Select((group, index) =>
