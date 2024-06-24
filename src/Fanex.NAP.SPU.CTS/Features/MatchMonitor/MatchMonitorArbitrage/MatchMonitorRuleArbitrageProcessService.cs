@@ -21,20 +21,20 @@
         private MatchStagingRuleArbitrageGroupModel MatchStaging;
         private bool IsLive;
 
-        private List<MatchProcessRuleArbitrageModel> MatchProcesses;
+        private readonly List<MatchProcessRuleArbitrageModel> MatchProcesses;
 
         public MatchMonitorRuleArbitrageProcessService(IAssociationDetectionService assDetect, IMatchMonitorRuleArbitrageDataAccess dataAccess)
         {
             _assDetect = assDetect;
             _dataAccess = dataAccess;
+
+            MatchProcesses = new List<MatchProcessRuleArbitrageModel>();
         }
 
-        public IMatchMonitorRuleProcessService Start(MatchStagingRuleArbitrageGroupModel matchStaging, bool isLive)
+        public IMatchMonitorRuleProcessService PrepareProcess(MatchStagingRuleArbitrageGroupModel matchStaging, bool isLive, IReadOnlyDictionary<int, int> mappingCustDictionary)
         {
             MatchStaging = matchStaging;
             IsLive = isLive;
-
-            MatchProcesses = new List<MatchProcessRuleArbitrageModel>();
 
             return this;
         }
@@ -46,7 +46,7 @@
                 var matchProcessesRound1 =
                     MatchStaging.MatchGroupStagingList
                         .Select(matchInfo => ProcessWithAssociationRound1(matchInfo, IsLive))
-                        .Where(matchInfo => matchInfo != null && matchInfo.CompleteMatches.IsNotNullOrEmpty())
+                        .Where(matchInfo => matchInfo != null)
                         .ToList();
 
                 MatchProcesses.AddRange(matchProcessesRound1);
@@ -65,7 +65,7 @@
                             matchProcessRound1.ReprocessMatches.Select(
                                 reprocessInfoRound2 => ProcessWithAssociationRound2(matchProcessRound1.MatchInfo, reprocessInfoRound2, IsLive))
                         )
-                        .Where(matchInfo => matchInfo != null && matchInfo.CompleteMatches.IsNotNullOrEmpty())
+                        .Where(matchInfo => matchInfo != null)
                         .ToList();
 
                 MatchProcesses.AddRange(matchProcessesRound2);
@@ -127,6 +127,7 @@
             if (MatchProcesses.IsNotNullOrEmpty())
             {
                 var mergeMatchComplete = MatchProcesses
+                                            .Where(x => x.CompleteMatches.IsNotNullOrEmpty())
                                             .SelectMany(x => x.CompleteMatches)
                                             .GroupBy(item => item.TransIDList)
                                             .Select((group, index) =>

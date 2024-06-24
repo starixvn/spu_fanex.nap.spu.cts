@@ -399,7 +399,7 @@
                         {
                             _ruleArbitrageService
                                 .GetInstanceProcessArbitrageService()
-                                .Start(matchInfo, isLive)
+                                .PrepareProcess(matchInfo, isLive, null)
                                 .ProcessRound1()
                                 .ProcessRound2()
                                 .Complete(matchMonitorRule.MaxSequenceID.Value)
