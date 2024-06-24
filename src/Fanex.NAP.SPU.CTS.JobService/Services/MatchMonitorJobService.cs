@@ -155,7 +155,7 @@
                         .ForAll(matchInfo =>
                         {
                             _ruleSabaGBService.GetInstanceProcessSabaGBService()?
-                                .Start(matchInfo, isLive)
+                                .PrepareProcess(matchInfo, isLive, matchMonitorRule.MappingCustDictionary)
                                 .ProcessRound1()
                                 .ProcessRound2()
                                 .Complete(matchMonitorRule.MaxSequenceID.Value)

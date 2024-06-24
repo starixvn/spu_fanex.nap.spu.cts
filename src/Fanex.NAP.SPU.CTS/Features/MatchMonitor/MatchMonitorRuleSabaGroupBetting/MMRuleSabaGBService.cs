@@ -27,17 +27,21 @@ namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleSabaGroupBetti
 
         public MatchStagingRuleSabaGBProcessModel GetMatchRuleSabaGB(bool isLive)
         {
-            var matches = _dataAccess.GetMatchRuleSabaGB(isLive);
+            var match = _dataAccess.GetMatchRuleSabaGB(isLive);
 
             var result = new MatchStagingRuleSabaGBProcessModel();
 
-            if (matches != null)
+            if (match != null)
             {
-                result.MaxSequenceID = matches.MaxSequenceID;
+                result.MaxSequenceID = match?.MaxSequenceID;
 
-                if (matches.MatchStagingList.IsNotNullOrEmpty())
+                if (match.MatchStagingList.IsNotNullOrEmpty())
                 {
-                    result.MatchStagingList = matches.MatchStagingList.GroupBy(x => new { x.MatchId, x.ScoreDiff, x.BetTypeID, x.BetID, x.BetTeam })
+                    result.MappingCustDictionary = match?.CTSCustomerList
+                                                    .Select(x => new { x.CustID, x.CTSCustID }).Distinct()
+                                                    .ToDictionary(x => x.CustID, x => x.CTSCustID);
+
+                    result.MatchStagingList = match.MatchStagingList.GroupBy(x => new { x.MatchId, x.ScoreDiff, x.BetTypeID, x.BetID, x.BetTeam })
                                                         .Select(y => new MatchStagingRuleSabaGBGroupModel()
                                                         {
                                                             MatchId = y.Key.MatchId,

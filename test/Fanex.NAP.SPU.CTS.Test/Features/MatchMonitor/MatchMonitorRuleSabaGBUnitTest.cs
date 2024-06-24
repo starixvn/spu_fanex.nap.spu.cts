@@ -12,6 +12,7 @@ using Fanex.NAP.SPU.CTS.Features.AssociationDetection.Entities;
 using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
 using Fanex.NAP.SPU.CTS.Features.AssociationDetection.Models;
 using static Fanex.NAP.SPU.CTS.Tests.Infrastructure.MMConsts;
+using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
 
 namespace Fanex.NAP.SPU.CTS.Tests.Features.MatchMonitor
 {
@@ -45,10 +46,11 @@ namespace Fanex.NAP.SPU.CTS.Tests.Features.MatchMonitor
                 MaxSequenceID = 123123,
                 MatchStagingList = new List<MatchStagingRuleSabaGBEntity>
                 {
-                   new MatchStagingRuleSabaGBEntity { MatchId = 1, ScoreDiff = 2, BetTypeID = 3, BetID = 4, BetTeam = "a"  },
-                   new MatchStagingRuleSabaGBEntity { MatchId = 1, ScoreDiff = 2, BetTypeID = 3, BetID = 4, BetTeam = "a"  },
-                   new MatchStagingRuleSabaGBEntity { MatchId = 1, ScoreDiff = 2, BetTypeID = 3, BetID = 4, BetTeam = "h"  }
-                }
+                    new MatchStagingRuleSabaGBEntity { MatchId = 1, ScoreDiff = 2, BetTypeID = 3, BetID = 4, BetTeam = "a" },
+                    new MatchStagingRuleSabaGBEntity { MatchId = 1, ScoreDiff = 2, BetTypeID = 3, BetID = 4, BetTeam = "a" },
+                    new MatchStagingRuleSabaGBEntity { MatchId = 1, ScoreDiff = 2, BetTypeID = 3, BetID = 4, BetTeam = "h" }
+                },
+                CTSCustomerList = new List<MatchMonitorMappingCustEntity>()
             };
 
             // Act

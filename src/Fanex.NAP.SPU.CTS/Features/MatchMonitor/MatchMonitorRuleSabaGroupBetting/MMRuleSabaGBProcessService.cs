@@ -19,22 +19,24 @@
 
         private MatchStagingRuleSabaGBGroupModel MatchStaging;
         private bool IsLive;
+        private IReadOnlyDictionary<int, int> MappingCustDictionary;
 
-        private List<MatchProcessRuleSabaGBModel> MatchProcesses;
+        private readonly List<MatchProcessRuleSabaGBModel> MatchProcesses;
 
         public MMRuleSabaGBProcessService(IAssociationDetectionService assDetectService, IMMRuleSabaGBDataAccess dataAccess)
         {
             _assDetectService = assDetectService;
             _dataAccess = dataAccess;
+
+            MatchProcesses = new List<MatchProcessRuleSabaGBModel>();
         }
 
         #region Process
-        public IMatchMonitorRuleProcessService Start(MatchStagingRuleSabaGBGroupModel matchStaging, bool isLive)
+        public IMatchMonitorRuleProcessService PrepareProcess(MatchStagingRuleSabaGBGroupModel matchStaging, bool isLive, IReadOnlyDictionary<int, int> mappingCustDictionary)
         {
             MatchStaging = matchStaging;
             IsLive = isLive;
-
-            MatchProcesses = new List<MatchProcessRuleSabaGBModel>();
+            MappingCustDictionary = mappingCustDictionary;
 
             return this;
         }
@@ -76,7 +78,7 @@
 
         private MatchProcessRuleSabaGBModel ProcessWithAssociationRound1(MatchStagingRuleSabaGBEntity matchInfo, bool isLive)
         {
-            var assDetectionHasGroupID = DetectAssociation(matchInfo.CTSCustIDList)?
+            var assDetectionHasGroupID = DetectAssociation(matchInfo.CTSCustIDList, matchInfo.CustIDList)?
                                             .Where(c => c.GroupID != null);
 
             if (assDetectionHasGroupID.IsNotNullOrEmpty())
@@ -89,7 +91,7 @@
 
         private MatchProcessRuleSabaGBModel ProcessWithAssociationRound2(MatchStagingRuleSabaGBEntity matchInfo, MatchProcessRuleSabaGBInfoEntity reprocessModel, bool isLive)
         {
-            var assDetectionHasGroupID = DetectAssociation(reprocessModel.CTSCustIDList)?
+            var assDetectionHasGroupID = DetectAssociation(reprocessModel.CTSCustIDList, reprocessModel.CustIDList)?
                                             .Where(c => c.GroupID != null);
 
             if (assDetectionHasGroupID.IsNotNullOrEmpty())
@@ -103,15 +105,17 @@
             return null;
         }
 
-        private IEnumerable<DetectAssociationMergeGroupModel> DetectAssociation(string ctsCustIDList)
+        private IEnumerable<DetectAssociationMergeGroupModel> DetectAssociation(string ctsCustIDList, string custIDList)
         {
             var param = new DetectAssociationParamModel
             {
                 CTSCustIds = ctsCustIDList,
+                CustIds = custIDList,
                 IsDevice = true,
                 IsAI = true,
                 IsIP = true,
-                Is3MatchesLast7Days = true
+                Is3MatchesLast7Days = true,
+                MappingCustDictionary = MappingCustDictionary
             };
 
             return _assDetectService.DetectAssociation(param);

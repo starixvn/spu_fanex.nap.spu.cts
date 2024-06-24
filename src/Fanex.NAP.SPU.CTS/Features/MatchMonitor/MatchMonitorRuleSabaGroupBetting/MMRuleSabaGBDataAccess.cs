@@ -3,6 +3,7 @@
     using System;
     using System.Linq;
     using Fanex.Data.Repository;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleSabaGroupBetting.Criteria;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleSabaGroupBetting.Entities;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleSabaGroupBetting.Models;
@@ -34,12 +35,13 @@
                 IsLive = isLive
             };
 
-            var result = _repository.Fetch<MatchStagingRuleSabaGBEntity>(criteria);
+            (var matchStagings, var ctsCustomers) = _repository.FetchMultiple<MatchStagingRuleSabaGBEntity, MatchMonitorMappingCustEntity>(criteria);
 
             return new MatchMonitorRuleSabaGBModel
             {
                 MaxSequenceID = criteria.MaxSequenceID,
-                MatchStagingList = criteria.MaxSequenceID != 0 ? result : Enumerable.Empty<MatchStagingRuleSabaGBEntity>()
+                MatchStagingList = criteria.MaxSequenceID.HasValue ? matchStagings : Enumerable.Empty<MatchStagingRuleSabaGBEntity>(),
+                CTSCustomerList = criteria.MaxSequenceID.HasValue ? ctsCustomers : Enumerable.Empty<MatchMonitorMappingCustEntity>()
             };
         }
 

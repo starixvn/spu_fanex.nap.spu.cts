@@ -38,11 +38,23 @@
             return _associationDetectionDataAccess.DetectAssociationBySharedMatches(custIDList);
         }
 
-        private string GetAssociationBySharedMatches(string custIDList)
+        private string GetAssociationBySharedMatches(string custIDList, IReadOnlyDictionary<int, int> mappingCustDictionary)
         {
-            var result = DetectAssociationBySharedMatches(custIDList);
+            var assDetectShareMatches = DetectAssociationBySharedMatches(custIDList);
 
-            return JsonConvert.SerializeObject(result);
+            var mappingCustIdToCTSCustId = assDetectShareMatches.Select(x =>
+            {
+                mappingCustDictionary.TryGetValue(x.CustID1, out var ctsCustID1);
+                mappingCustDictionary.TryGetValue(x.CustID2, out var ctsCustID2);
+
+                return new DetectAssBySharedIPMatchesModel
+                {
+                    CustID1 = ctsCustID1,
+                    CustID2 = ctsCustID2
+                };
+            }).Where(x => x.CustID1 != 0 && x.CustID2 != 0);
+
+            return JsonConvert.SerializeObject(mappingCustIdToCTSCustId);
         }
         #endregion
 
@@ -116,7 +128,7 @@
         #region MM GroupBetting
         public IEnumerable<DetectAssociationMergeGroupModel> DetectAssociation(DetectAssociationParamModel model)
         {
-            if (!string.IsNullOrEmpty(model?.CTSCustIds))
+            if ((model?.CTSCustIds).IsNotNullOrEmpty())
             {
                 var mergeGroupInfo = new MergeGroupAssociationFilterModel { CTSCustIDs = model.CTSCustIds, IsGetLogTransInfo = false };
 
@@ -126,7 +138,6 @@
                         model.IsDevice ? GetAssociationCustByPrimary(new DetectAssociationByPrimaryFilterModel(model.CTSCustIds, AssociationDetectionType.Device)) : "[]";
                 }, () =>
                 {
-
                     mergeGroupInfo.AssociationByAIJson =
                         model.IsAI ? GetAssociationCustByPrimary(new DetectAssociationByPrimaryFilterModel(model.CTSCustIds, AssociationDetectionType.AI)) : "[]";
                 }, () =>
@@ -135,8 +146,10 @@
                         model.IsIP ? GetAssociationCustByPrimary(new DetectAssociationByPrimaryFilterModel(model.CTSCustIds, AssociationDetectionType.IP)) : "[]";
                 }, () =>
                 {
-                    mergeGroupInfo.AssociationBySharedMatchesJson =
-                        model.Is3MatchesLast7Days ? GetAssociationBySharedMatches(model.CTSCustIds) : "[]";
+                    if (model.Is3MatchesLast7Days && model.CustIds.IsNotNullOrEmpty() && model.MappingCustDictionary.IsNotNullOrEmpty())
+                    {
+                        mergeGroupInfo.AssociationBySharedMatchesJson = GetAssociationBySharedMatches(model.CustIds, model.MappingCustDictionary);
+                    }
                 });
 
                 var assMergeGroup = _associationDetectionDataAccess.DetectGroupDetectAssociation(mergeGroupInfo);

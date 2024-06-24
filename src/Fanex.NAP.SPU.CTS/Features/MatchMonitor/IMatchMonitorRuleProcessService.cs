@@ -1,10 +1,10 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor
 {
     using Sentry;
+    using System.Collections.Generic;
 
     public interface IMatchMonitorRuleProcessService
     {
-
         IMatchMonitorRuleProcessService ProcessRound1();
 
         IMatchMonitorRuleProcessService ProcessRound2();
@@ -16,6 +16,6 @@
 
     public interface IMatchMonitorRuleProcessService<T> : IMatchMonitorRuleProcessService
     {
-        IMatchMonitorRuleProcessService Start(T matchStaging, bool isLive);
+        IMatchMonitorRuleProcessService PrepareProcess(T matchStaging, bool isLive, IReadOnlyDictionary<int, int> mappingCustDictionary);
     }
 }
