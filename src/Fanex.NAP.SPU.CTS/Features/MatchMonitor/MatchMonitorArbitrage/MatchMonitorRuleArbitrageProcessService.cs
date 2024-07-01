@@ -124,19 +124,19 @@
 
         public IMatchMonitorRuleProcessService Complete(ulong maxSequenceID)
         {
-            if (MatchProcesses.IsNotNullOrEmpty())
-            {
-                var mergeMatchComplete = MatchProcesses
-                                            .Where(x => x.CompleteMatches.IsNotNullOrEmpty())
-                                            .SelectMany(x => x.CompleteMatches)
-                                            .GroupBy(item => item.TransIDList)
-                                            .Select((group, index) =>
-                                            {
-                                                var result = group.First();
-                                                result.GroupId = index + 1;
-                                                return result;
-                                            });
+            var mergeMatchComplete = MatchProcesses
+                                           .Where(x => x.CompleteMatches.IsNotNullOrEmpty())
+                                           .SelectMany(x => x.CompleteMatches)
+                                           .GroupBy(item => item.TransIDList)
+                                           .Select((group, index) =>
+                                           {
+                                               var result = group.First();
+                                               result.GroupId = index + 1;
+                                               return result;
+                                           });
 
+            if (mergeMatchComplete.IsNotNullOrEmpty())
+            {
                 var para = new MatchCompleteRuleArbitrageParameterModel
                 {
                     IsLive = IsLive,
