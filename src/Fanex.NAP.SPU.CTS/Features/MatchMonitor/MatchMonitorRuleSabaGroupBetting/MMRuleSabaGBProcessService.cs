@@ -130,9 +130,7 @@
         #region Complete
         public IMatchMonitorRuleProcessService Complete(ulong maxSequenceID)
         {
-            if (MatchProcesses.IsNotNullOrEmpty())
-            {
-                var mergeMatchComplete = MatchProcesses
+            var mergeMatchComplete = MatchProcesses?
                                             .Where(x => x.CompleteMatches.IsNotNullOrEmpty())
                                             .SelectMany(x => x.CompleteMatches)
                                             .GroupBy(item => item.TransIDList)
@@ -143,6 +141,8 @@
                                                 return result;
                                             });
 
+            if (mergeMatchComplete.IsNotNullOrEmpty())
+            {
                 var para = new MatchCompleteRuleSabaGBParameterModel
                 {
                     IsLive = IsLive,
