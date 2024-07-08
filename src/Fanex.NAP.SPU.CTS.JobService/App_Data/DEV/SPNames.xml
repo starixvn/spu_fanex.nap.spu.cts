@@ -11,8 +11,8 @@
 	</Function>
 	<Function Name="MatchMonitor">
 		<Setting Key="CTS_DC_SystemParameter_Get" SpName="CTS_DC_SystemParameter_Get" DbName="MySQL.CTS_DataCenter.ctsService" />		
-		<Setting Key="CTS_Rpt_MatchMonitor_GetTicketInfo" SpName="CTS_Rpt_MatchMonitor_GetTicketInfo_UAT3" DbName="SQL.bodb02.bodbSPUNet"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_Staging_Insert" SpName="CTS_DC_MatchMonitor_Staging_Insert_UAT3" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
+		<Setting Key="CTS_Rpt_MatchMonitor_GetTicketInfo" SpName="CTS_Rpt_MatchMonitor_GetTicketInfo_xtest" DbName="SQL.bodb02.bodbSPUNet"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_Staging_Insert" SpName="CTS_DC_MatchMonitor_Staging_Insert_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 		
 		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBetting_Get" SpName="CTS_DC_MatchMonitor_RuleGroupBetting_Get" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBetting_Process" SpName="CTS_DC_MatchMonitor_RuleGroupBetting_Process" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
@@ -39,8 +39,8 @@
 		<Setting Key="CTS_DC_MatchMonitor_RuleArbitrage_Complete" SpName="CTS_DC_MatchMonitor_RuleArbitrage_Complete" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_RuleArbitrage_StagingClean" SpName="CTS_DC_MatchMonitor_RuleArbitrage_StagingClean" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 
-		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBettingSaba_Get" SpName="CTS_DC_MatchMonitor_RuleGroupBettingSaba_Get_UAT3" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBettingSaba_Process" SpName="CTS_DC_MatchMonitor_RuleGroupBettingSaba_Process_UAT3" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBettingSaba_Get" SpName="CTS_DC_MatchMonitor_RuleGroupBettingSaba_Get_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBettingSaba_Process" SpName="CTS_DC_MatchMonitor_RuleGroupBettingSaba_Process_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBettingSaba_Complete" SpName="CTS_DC_MatchMonitor_RuleGroupBettingSaba_Complete_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBettingSaba_StagingClean" SpName="CTS_DC_MatchMonitor_RuleGroupBettingSaba_StagingClean_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 	</Function>
