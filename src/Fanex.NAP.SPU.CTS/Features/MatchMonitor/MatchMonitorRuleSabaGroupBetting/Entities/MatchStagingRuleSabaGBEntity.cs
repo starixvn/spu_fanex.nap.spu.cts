@@ -14,10 +14,6 @@
 
         public string BetTeam { get; set; }
 
-        //public int SportType { get; set; }
-
-        //public int OldGroup { get; set; }
-
         public string CustIDList { get; set; }
 
         public string CTSCustIDList { get; set; }
