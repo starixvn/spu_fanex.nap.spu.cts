@@ -108,7 +108,7 @@ namespace Fanex.NAP.SPU.CTS.Shares
 
         public static bool IsExpireHttpRequest(Stopwatch watch)
         {
-            if(watch.ElapsedMilliseconds > Consts.ExpiredHttpRequest)
+            if (watch.ElapsedMilliseconds > Consts.ExpiredHttpRequest)
             {
                 watch.Stop();
 
@@ -137,6 +137,11 @@ namespace Fanex.NAP.SPU.CTS.Shares
             }
 
             return result.Length == 0 ? "[]" : result.ToString();
+        }
+
+        public static T GetService<T>(this IServiceProvider serviceProvider)
+        {
+            return (T)serviceProvider.GetService(typeof(T));
         }
     }
 }

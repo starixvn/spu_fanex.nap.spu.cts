@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.AssociationDetection
 {
     using Fanex.NAP.SPU.CTS.Features.AssociationDetection.Entities;
+    using Fanex.NAP.SPU.CTS.Features.AssociationDetection.Models;
     using Fanex.NAP.SPU.CTS.Shares;
     using Newtonsoft.Json;
     using System.Collections.Generic;
@@ -13,6 +14,8 @@
         public IEnumerable<DetectAssBySharedIPMatchesModel> DetectAssociationBySharedMatches(string custIDList);
 
         IEnumerable<DetectAssociationMergeGroupModel> DetectAssociationRuleHedging(string ctsCustIds, string agentCTSCustIds);
+
+        IEnumerable<DetectAssociationMergeGroupModel> DetectAssociation(DetectAssociationParamModel model);
     }
 
     public class AssociationDetectionService : IAssociationDetectionService
@@ -33,6 +36,25 @@
             }
 
             return _associationDetectionDataAccess.DetectAssociationBySharedMatches(custIDList);
+        }
+
+        private string GetAssociationBySharedMatches(string custIDList, IReadOnlyDictionary<int, int> mappingCustDictionary)
+        {
+            var assDetectShareMatches = DetectAssociationBySharedMatches(custIDList);
+
+            var mappingCustIdToCTSCustId = assDetectShareMatches.Select(x =>
+            {
+                mappingCustDictionary.TryGetValue(x.CustID1, out var ctsCustID1);
+                mappingCustDictionary.TryGetValue(x.CustID2, out var ctsCustID2);
+
+                return new DetectAssBySharedIPMatchesModel
+                {
+                    CustID1 = ctsCustID1,
+                    CustID2 = ctsCustID2
+                };
+            }).Where(x => x.CustID1 != 0 && x.CustID2 != 0);
+
+            return JsonConvert.SerializeObject(mappingCustIdToCTSCustId);
         }
         #endregion
 
@@ -85,8 +107,7 @@
                     mergeGroupInfo.AssociationByAIJson = GetAssociationCustByPrimary(new DetectAssociationByPrimaryFilterModel(ctsCustIds, AssociationDetectionType.AI));
                 }, () =>
                 {
-                    //mergeGroupInfo.AssociationByIPJson = GetAssociationCustByPrimary(new DetectAssociationByPrimaryFilterModel(ctsCustIds, AssociationDetectionType.IP));
-                    mergeGroupInfo.AssociationByIPJson = "[]";
+                    mergeGroupInfo.AssociationByIPJson = GetAssociationCustByPrimary(new DetectAssociationByPrimaryFilterModel(ctsCustIds, AssociationDetectionType.IP));
                 }, () =>
                 {
 
@@ -101,6 +122,42 @@
             return Enumerable.Empty<DetectAssociationMergeGroupModel>();
         }
 
+        #endregion
+
+        #region MM GroupBetting
+        public IEnumerable<DetectAssociationMergeGroupModel> DetectAssociation(DetectAssociationParamModel model)
+        {
+            if ((model?.CTSCustIds).IsNotNullOrEmpty())
+            {
+                var mergeGroupInfo = new MergeGroupAssociationFilterModel { CTSCustIDs = model.CTSCustIds, IsGetLogTransInfo = false };
+
+                Parallel.Invoke(() =>
+                {
+                    mergeGroupInfo.AssociationByDeviceJson =
+                        model.IsDevice ? GetAssociationCustByPrimary(new DetectAssociationByPrimaryFilterModel(model.CTSCustIds, AssociationDetectionType.Device)) : "[]";
+                }, () =>
+                {
+                    mergeGroupInfo.AssociationByAIJson =
+                        model.IsAI ? GetAssociationCustByPrimary(new DetectAssociationByPrimaryFilterModel(model.CTSCustIds, AssociationDetectionType.AI)) : "[]";
+                }, () =>
+                {
+                    mergeGroupInfo.AssociationByIPJson =
+                        model.IsIP ? GetAssociationCustByPrimary(new DetectAssociationByPrimaryFilterModel(model.CTSCustIds, AssociationDetectionType.IP)) : "[]";
+                }, () =>
+                {
+                    if (model.Is3MatchesLast7Days && model.CustIds.IsNotNullOrEmpty() && model.MappingCustDictionary.IsNotNullOrEmpty())
+                    {
+                        mergeGroupInfo.AssociationBySharedMatchesJson = GetAssociationBySharedMatches(model.CustIds, model.MappingCustDictionary);
+                    }
+                });
+
+                var assMergeGroup = _associationDetectionDataAccess.DetectGroupDetectAssociation(mergeGroupInfo);
+
+                return assMergeGroup;
+            }
+
+            return Enumerable.Empty<DetectAssociationMergeGroupModel>();
+        }
         #endregion
     }
 }

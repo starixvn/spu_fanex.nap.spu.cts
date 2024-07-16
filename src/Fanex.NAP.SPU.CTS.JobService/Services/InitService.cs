@@ -13,6 +13,9 @@
     using Fanex.NAP.SPU.CTS.Features.InitialCustomerStatus;
     using Fanex.NAP.SPU.CTS.Features.JobMonitoring.IncorrectDataMonitoring;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleSabaGroupBetting;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleSabaGroupBetting.Models;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorStaging;
     using Fanex.NAP.SPU.CTS.Features.MonitorJobs.CustomerJobMonitor;
     using Fanex.NAP.SPU.CTS.Features.ProblemCaseMonitor;
     using Fanex.NAP.SPU.CTS.Features.SystemParameter;
@@ -25,7 +28,6 @@
     using Fanex.NAP.SPU.CTS.JobService.Services.ProblemCaseMonitor;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.DependencyInjection;
-    using System;
 
     public static class InitService
     {
@@ -111,6 +113,15 @@
             services.AddSingleton<IMatchMonitorDataAccess, MatchMonitorDataAccess>();
             services.AddSingleton<IMatchMonitorServices, MatchMonitorServices>();
             services.AddSingleton<IMatchMonitorJobService, MatchMonitorJobService>();
+
+            // Staging
+            services.AddSingleton<IMatchMonitorStagingDataAccess, MatchMonitorStagingDataAccess>();
+            services.AddTransient<IMatchMonitorStagingService, MatchMonitorStagingService>();
+
+            // Rule Saba GB
+            services.AddSingleton<IMMRuleSabaGBDataAccess, MMRuleSabaGBDataAccess>();
+            services.AddSingleton<IMMRuleSabaGBService, MMRuleSabaGBService>();
+            services.AddTransient<MMRuleSabaGBProcessService>();
         }
 
         private static void RegisterUserPermission(this IServiceCollection services)

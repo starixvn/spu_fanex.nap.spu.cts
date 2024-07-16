@@ -1,22 +1,15 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor
 {
+    using System;
+    using System.Collections.Generic;
     using Fanex.Data.Repository;
-    using Fanex.NAP.SPU.CTS.Features.AssociationDetection.Entities;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Criteria;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleGroupBetting;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleHedging;
-    using Fanex.NAP.SPU.CTS.Shares;
-    using Newtonsoft.Json;
-    using System;
-    using System.Collections.Generic;
 
     public interface IMatchMonitorDataAccess
     {
-        IEnumerable<TicketDetailEntity> GetMatchTrans(long lastScannedSequenceID, int batchSize, bool isLive, string betTypeInfos);
-
-        void InsertMatchMonitorStaging(string matchTransJson, bool isLive);
-
         MatchMonitorRuleGroupBettingModel GetMatchRuleGroupBetting(bool isLive);
 
         MatchMonitorRuleFixedGameModel GetMatchRuleFixedGame(bool isLive);
@@ -66,35 +59,6 @@
         {
             repository = new DynamicRepository();
         }
-
-        #region Insert trans into staging      
-
-        public IEnumerable<TicketDetailEntity> GetMatchTrans(long lastScannedSequenceID, int batchSize, bool isLive, string betTypeInfos)
-        {
-            var criteria = new MatchTransGetCriteria
-            {
-                QueryType = (int)Consts.MatchMonitorQueryTypes.Service,
-                LastScannedSequenceID = lastScannedSequenceID,
-                BatchSize = batchSize,
-                IsLive = isLive,
-                ListSportBettype = betTypeInfos
-            };
-
-            return repository.Fetch<TicketDetailEntity>(criteria);
-        }
-
-        public void InsertMatchMonitorStaging(string matchTransJson, bool isLive)
-        {
-            var criteria = new MatchMonitorStagingInsertCriteria
-            {
-                MatchTransJson = matchTransJson,
-                IsLive = isLive
-            };
-
-            repository.Execute(criteria);
-        }
-
-        #endregion Insert trans into staging
 
         #region Process Rule
 
