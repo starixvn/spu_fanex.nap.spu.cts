@@ -150,7 +150,7 @@ namespace Fanex.NAP.SPU.CTS.Tests.Features.MatchMonitor
             var matchProcessField = TestExtension.GetPrivateFieldInfo(typeof(MatchMonitorRuleArbitrageProcessService), PrivateFieldName.MatchProcesses);
             matchProcessField.SetValue(_mmProcessService,
                 new List<MatchProcessRuleArbitrageModel> { new MatchProcessRuleArbitrageModel {
-                    CompleteMatches = new List<MatchCompleteRuleArbitrageEntity>(),
+                    CompleteMatches = new List<MatchCompleteRuleArbitrageEntity>() { new MatchCompleteRuleArbitrageEntity() },
                     ReprocessMatches = new List<MatchProcessRuleArbitrageInfoEntity>(),
                     MatchInfo = new MatchStagingRuleArbitrageEntity()
                 } });
@@ -171,7 +171,7 @@ namespace Fanex.NAP.SPU.CTS.Tests.Features.MatchMonitor
             var matchProcessField = TestExtension.GetPrivateFieldInfo(typeof(MatchMonitorRuleArbitrageProcessService), PrivateFieldName.MatchProcesses);
             matchProcessField.SetValue(_mmProcessService,
                 new List<MatchProcessRuleArbitrageModel> { new MatchProcessRuleArbitrageModel {
-                    CompleteMatches = new List<MatchCompleteRuleArbitrageEntity>(),
+                    CompleteMatches = new List<MatchCompleteRuleArbitrageEntity>() { new MatchCompleteRuleArbitrageEntity() },
                     ReprocessMatches = new List<MatchProcessRuleArbitrageInfoEntity>(),
                     MatchInfo = new MatchStagingRuleArbitrageEntity()
                 } });
