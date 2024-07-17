@@ -1,6 +1,5 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorArbitrage
 {
-    using System;
     using Sentry;
     using System.Linq;
     using System.Collections.Generic;
@@ -9,7 +8,6 @@
     using Fanex.NAP.SPU.CTS.Features.AssociationDetection;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorArbitrage.Models;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorArbitrage.Entities;
-    using Fanex.NAP.SPU.CTS.Features.AssociationDetection.Entities;
     using Fanex.NAP.SPU.CTS.Features.AssociationDetection.Models;
 
     public class MatchMonitorRuleArbitrageProcessService : IMatchMonitorRuleProcessService<MatchStagingRuleArbitrageGroupModel>
@@ -103,7 +101,7 @@
             return null;
         }
 
-        private IEnumerable<DetectAssociationMergeGroupModel> DetectAssociation(string ctsCustIDList, string agentCTSCustIds)
+        private IEnumerable<DetectAssociationMergeGroupEntity> DetectAssociation(string ctsCustIDList, string agentCTSCustIds)
         {
             var param = new DetectAssociationParamModel
             {

@@ -153,7 +153,7 @@ namespace Fanex.NAP.SPU.CTS.Tests.Features.MatchMonitor
             var matchProcessField = TestExtension.GetPrivateFieldInfo(typeof(MatchMonitorRuleGroupBettingProcessService), PrivateFieldName.MatchProcesses);
             matchProcessField.SetValue(_mmProcessService,
                 new List<MatchProcessRuleGroupBettingModel> { new MatchProcessRuleGroupBettingModel {
-                    CompleteMatches = new List<MatchCompleteRuleGroupBettingEntity>(),
+                    CompleteMatches = new List<MatchCompleteRuleGroupBettingEntity>() { new MatchCompleteRuleGroupBettingEntity() },
                     ReprocessMatches = new List<MatchProcessRuleGroupBettingInfoEntity>(),
                     MatchInfo = new MatchStagingRuleGroupBettingEntity()
                 } });
@@ -174,7 +174,7 @@ namespace Fanex.NAP.SPU.CTS.Tests.Features.MatchMonitor
             var matchProcessField = TestExtension.GetPrivateFieldInfo(typeof(MatchMonitorRuleGroupBettingProcessService), PrivateFieldName.MatchProcesses);
             matchProcessField.SetValue(_mmProcessService,
                  new List<MatchProcessRuleGroupBettingModel> { new MatchProcessRuleGroupBettingModel {
-                    CompleteMatches = new List<MatchCompleteRuleGroupBettingEntity>(),
+                    CompleteMatches = new List<MatchCompleteRuleGroupBettingEntity>() { new MatchCompleteRuleGroupBettingEntity() },
                     ReprocessMatches = new List<MatchProcessRuleGroupBettingInfoEntity>(),
                     MatchInfo = new MatchStagingRuleGroupBettingEntity()
                 } });

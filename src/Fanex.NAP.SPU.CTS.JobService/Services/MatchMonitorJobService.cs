@@ -16,6 +16,7 @@
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorStaging;
     using static Fanex.NAP.SPU.CTS.Shares.Consts;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleGroupBetting;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorArbitrage;
 
     public interface IMatchMonitorJobService
     {
@@ -51,7 +52,7 @@
             IMatchMonitorServices matchMonitorServices,
             IServiceProvider serviceProvider,
             IMMRuleSabaGBService ruleSabaGBService,
-            IMatchMonitorRuleGroupBettingService ruleGBService)
+            IMatchMonitorRuleGroupBettingService ruleGBService,
             IMatchMonitorRuleArbitrageService ruleArbitrageService)
         {
             _sentryClient = sentryClient;
@@ -391,7 +392,7 @@
                                 .ProcessRound1()
                                 .ProcessRound2()
                                 .Complete(matchMonitorRule.MaxSequenceID.Value)
-                                .WriteLogSentryIfError(nameof(ProcessRuleArbitrage), sentryClient);
+                                .WriteLogSentryIfError(nameof(ProcessRuleArbitrage), _sentryClient);
 
                             Thread.Sleep(MatchMonitor_SleepTimes);
                         });
