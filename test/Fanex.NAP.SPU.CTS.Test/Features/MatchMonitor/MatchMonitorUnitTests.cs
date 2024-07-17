@@ -3,6 +3,8 @@
     using Fanex.NAP.SPU.CTS.Features.AssociationDetection;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorArbitrage.Entities;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorArbitrage.Models;
     using Fanex.NAP.SPU.CTS.Tests.Infrastructure;
     using Fanex.NAP.SPU.CTS.Tests.Infrastructure.Extensions;
     using FluentAssertions;
@@ -25,114 +27,6 @@
             _associationDetectionService = Substitute.For<IAssociationDetectionService>();
             _service = new MatchMonitorServices(_dataAccess, _associationDetectionService);
         }
-
-        #region Rule Arbitrage
-        [Theory]
-        [InlineData(false)]
-        [InlineData(true)]
-        public void GetMatchRuleArbitrage_WhenSuccess_ReturnMatches(bool isLive)
-        {
-            var output = new MatchMonitorRuleArbitrageModel
-            {
-                MaxSequenceID = 1,
-                MatchStagingList = new List<MatchStagingRuleArbitrageModel>
-                {
-                    new MatchStagingRuleArbitrageModel
-                    {
-                        MatchId = 1,
-                        IsMajorLeague = true,
-                        BetTypeID = 1,
-                        BetID = 1,
-                        ScoreDiff = -1,
-                        HDP = 1.00m
-                    }
-                }
-            };
-
-            _dataAccess.GetMatchRuleArbitrage(isLive).Returns(output);
-
-            var result = _service.GetMatchRuleArbitrage(isLive);
-
-            result.Should().BeEquivalentTo(output);
-        }
-
-        [Theory]
-        [InlineData(true, 1)]
-        [InlineData(false, 2)]
-        public void ProcessRuleArbitrage_WhenSuccess_ReturnMatchDetectionResults(bool isLive, UInt64 maxSequenceID)
-        {
-            var input = new MatchStagingRuleArbitrageModel
-            {
-                MatchId = 1,
-                IsMajorLeague = true,
-                BetTypeID = 1,
-                BetID = 1,
-                ScoreDiff = -1,
-                HDP = 1.00m
-            };
-
-            var output = new List<MatchCompleteRuleArbitrageModel>
-            {
-                new MatchCompleteRuleArbitrageModel
-                {
-                    CustIdList = "1,2,3",
-                    TransIDList = "111,222",
-                    GroupId = 1,
-                    Reason = 1,
-                    OldGroupIdList = "1",
-                    HighStakeLicCustList = "1"
-                }
-            };
-
-            _dataAccess.ProcessRuleArbitrage(isLive, maxSequenceID, input).Returns(output);
-
-            var result = _service.ProcessRuleArbitrage(isLive, maxSequenceID, input);
-
-            result.Should().BeEquivalentTo(output);
-        }
-
-        [Theory]
-        [InlineData(true, 1)]
-        [InlineData(false, 2)]
-        public void CompleteTransRuleArbitrage_WhenSuccess_ReturnNonException(bool isLive, UInt64 maxSequenceID)
-        {
-            var matchInfo = new MatchStagingRuleArbitrageModel
-            {
-                MatchId = 1,
-                IsMajorLeague = true,
-                BetTypeID = 1,
-                BetID = 1,
-                ScoreDiff = -1,
-                HDP = 1.00m
-            };
-
-            var input = new MatchCompleteRuleArbitrageParameterModel
-            {
-                IsLive = isLive,
-                MatchInfo = matchInfo,
-                TransGroupJson = JsonConvert.SerializeObject(""),
-                MaxSequenceID = maxSequenceID
-            };
-
-            _dataAccess.CompleteTransRuleArbitrage(input);
-
-            Action action = () => _service.CompleteTransRuleArbitrage(input);
-
-            action.Should().NotThrow<Exception>();
-        }
-
-        [Theory]
-        [InlineData(true, 1)]
-        [InlineData(false, 2)]
-        public void CleanTransRuleArbitrage_WhenSuccess_ReturnNonException(bool isLive, UInt64 maxSequenceID)
-        {
-            _dataAccess.CleanTransRuleArbitrage(isLive, maxSequenceID);
-
-            Action action = () => _service.CleanTransRuleArbitrage(isLive, maxSequenceID);
-
-            action.Should().NotThrow<Exception>();
-        }
-        #endregion
 
         #region Rule Hedging
         [Theory]

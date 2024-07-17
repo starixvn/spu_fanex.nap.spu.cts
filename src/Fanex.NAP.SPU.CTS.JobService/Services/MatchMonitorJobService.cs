@@ -6,6 +6,9 @@
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleGroupBetting;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleHedging;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorArbitrage;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorArbitrage.Entities;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorArbitrage.Models;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleSabaGroupBetting;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorStaging;
     using Fanex.NAP.SPU.CTS.Shares;
@@ -43,6 +46,7 @@
 
         private readonly IServiceProvider _serviceProvider;
         private readonly IMMRuleSabaGBService _ruleSabaGBService;
+        private readonly IMatchMonitorRuleArbitrageService _ruleArbitrageService;
 
         private readonly string serviceName;
 
@@ -51,7 +55,8 @@
             IMatchMonitorServices matchMonitorServices,
             IAssociationDetectionService associationDetectionService,
             IServiceProvider serviceProvider,
-            IMMRuleSabaGBService ruleSabaGBService)
+            IMMRuleSabaGBService ruleSabaGBService,
+            IMatchMonitorRuleArbitrageService ruleArbitrageService)
         {
             this.sentryClient = sentryClient;
             this.matchMonitorServices = matchMonitorServices;
@@ -60,6 +65,7 @@
 
             _serviceProvider = serviceProvider;
             _ruleSabaGBService = ruleSabaGBService;
+            _ruleArbitrageService = ruleArbitrageService;
         }
 
         public Task<bool> InsertTicketDetail(int batchSize, bool isLive)
@@ -143,7 +149,7 @@
         /// </summary>
         public Task<bool> ProcessRuleSabaGroupBetting(bool isLive, int numberOfThread)
         {
-            try 
+            try
             {
                 var matchMonitorRule = _ruleSabaGBService.GetMatchRuleSabaGB(isLive);
 
@@ -382,34 +388,28 @@
         {
             try
             {
-                var matchMonitorRule = matchMonitorServices.GetMatchRuleArbitrage(isLive);
+                var matchMonitorRule = _ruleArbitrageService.GetMatchRuleArbitrage(isLive);
 
-                if (matchMonitorRule != null && matchMonitorRule.MaxSequenceID != 0)
+                if (matchMonitorRule != null && matchMonitorRule.MaxSequenceID.HasValue)
                 {
-                    matchMonitorRule
-                        .MatchStagingList
+                    matchMonitorRule.MatchStagingList?
                         .AsParallel()
                         .WithDegreeOfParallelism(numberOfThread)
                         .ForAll(matchInfo =>
                         {
-                            var matchRuleCompleted = matchMonitorServices.ProcessRuleArbitrage(isLive, matchMonitorRule.MaxSequenceID, matchInfo);
-
-                            if (matchRuleCompleted != null && matchRuleCompleted.Any())
-                            {
-                                matchMonitorServices.CompleteTransRuleArbitrage(new MatchCompleteRuleArbitrageParameterModel
-                                {
-                                    IsLive = isLive,
-                                    MatchInfo = matchInfo,
-                                    TransGroupJson = JsonConvert.SerializeObject(matchRuleCompleted),
-                                    MaxSequenceID = matchMonitorRule.MaxSequenceID
-                                });
-                            }
+                            _ruleArbitrageService
+                                .GetInstanceProcessArbitrageService()
+                                .PrepareProcess(matchInfo, isLive, null)
+                                .ProcessRound1()
+                                .ProcessRound2()
+                                .Complete(matchMonitorRule.MaxSequenceID.Value)
+                                .WriteLogSentryIfError(nameof(ProcessRuleArbitrage), sentryClient);
 
                             Thread.Sleep(MatchMonitor_SleepTimes);
                         });
-                }
 
-                matchMonitorServices.CleanTransRuleArbitrage(isLive, matchMonitorRule.MaxSequenceID);
+                    _ruleArbitrageService.CleanTransRuleArbitrage(isLive, matchMonitorRule.MaxSequenceID.Value);
+                }
 
                 return Task.FromResult(true);
             }

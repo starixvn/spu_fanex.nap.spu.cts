@@ -17,6 +17,8 @@
             public const string CompleteTransRuleSabaGB = "Complete";
 
             public const string ProcessRuleHedging = "ProcessRuleHedging";
+
+            public const string ProcessRuleArbitrage = "ProcessRuleArbitrage";
         }
 
         public struct PrivateFieldName

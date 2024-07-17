@@ -1,8 +1,8 @@
-﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities
+﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorArbitrage.Entities
 {
     using Newtonsoft.Json;
 
-    public class MatchCompleteRuleArbitrageModel
+    public class MatchCompleteRuleArbitrageEntity
     {
         [JsonProperty("GroupID")]
         public int GroupId { get; set; }

@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities
+﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorArbitrage.Models
 {
     using System;
 
@@ -6,7 +6,7 @@
     {
         public bool IsLive { get; set; }
 
-        public MatchStagingRuleArbitrageModel MatchInfo { get; set; }
+        public MatchStagingRuleArbitrageGroupModel MatchInfo { get; set; }
 
         public string TransGroupJson { get; set; }
 

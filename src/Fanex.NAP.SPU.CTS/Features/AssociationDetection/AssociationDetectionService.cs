@@ -149,6 +149,10 @@
                     {
                         mergeGroupInfo.AssociationBySharedMatchesJson = GetAssociationBySharedMatches(model.CustIds, model.MappingCustDictionary);
                     }
+                }, () =>
+                {
+                    mergeGroupInfo.AssociationByAgentJson =
+                        model.AgentCTSCustIds.IsNotNullOrEmpty() ? GetAssociationCustByAgent(model.AgentCTSCustIds) : "[]";
                 });
 
                 var assMergeGroup = _associationDetectionDataAccess.DetectGroupDetectAssociation(mergeGroupInfo);
