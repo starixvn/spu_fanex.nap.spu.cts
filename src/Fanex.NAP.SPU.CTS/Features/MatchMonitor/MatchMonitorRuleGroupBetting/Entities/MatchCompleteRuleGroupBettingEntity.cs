@@ -16,9 +16,6 @@
         [JsonProperty("CustIDList")]
         public string CustIdList { get; set; }
 
-        //[JsonProperty("OldGroupIDList")]
-        //public string OldGroupIdList { get; set; }
-
         [JsonProperty("HighStakeLicCustList")]
         public string HighStakeLicCustList { get; set; }
     }
