@@ -3,7 +3,7 @@
     using Fanex.Data;
     using Fanex.Data.Repository;
 
-    public class DetectAssociationByPrimaryCriteria : NonQueryCommand
+    public class DetectAssociationByPrimaryCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "ip_CTSCustIDs")]
         public string CTSCustIDs { get; set; }

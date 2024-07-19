@@ -110,7 +110,7 @@ namespace Fanex.NAP.SPU.CTS.Tests.Features.MatchMonitor
             matchProcessField.SetValue(_mmProcessService, new List<MatchProcessRuleSabaGBModel>());
 
             // Act
-            _assDetect.DetectAssociation(Arg.Any<DetectAssociationParamModel>()).Returns(new List<DetectAssociationMergeGroupModel>() { new DetectAssociationMergeGroupModel { GroupID = 1 } });
+            _assDetect.DetectAssociation(Arg.Any<DetectAssociationParamModel>()).Returns(new List<DetectAssociationMergeGroupEntity>() { new DetectAssociationMergeGroupEntity { GroupID = 1 } });
             _dataAccess.ProcessRuleSabaGB(isLive, Arg.Any<MatchStagingRuleSabaGBEntity>(), Arg.Any<string>(), Arg.Any<string>()).Returns(new MatchProcessRuleSabaGBModel());
 
             var result = _mmProcessService.ProcessRound1();
@@ -137,7 +137,7 @@ namespace Fanex.NAP.SPU.CTS.Tests.Features.MatchMonitor
                 } });
 
             // Act
-            _assDetect.DetectAssociation(Arg.Any<DetectAssociationParamModel>()).Returns(new List<DetectAssociationMergeGroupModel>() { new DetectAssociationMergeGroupModel { GroupID = 1 } });
+            _assDetect.DetectAssociation(Arg.Any<DetectAssociationParamModel>()).Returns(new List<DetectAssociationMergeGroupEntity>() { new DetectAssociationMergeGroupEntity { GroupID = 1 } });
             _dataAccess.ProcessRuleSabaGB(isLive, Arg.Any<MatchStagingRuleSabaGBEntity>(), Arg.Any<string>(), Arg.Any<string>()).Returns(new MatchProcessRuleSabaGBModel());
 
             var result = _mmProcessService.ProcessRound2();

@@ -6,7 +6,6 @@
     using Newtonsoft.Json;
     using Fanex.NAP.SPU.CTS.Features.AssociationDetection;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
-    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleGroupBetting;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleHedging;
     using Fanex.NAP.SPU.CTS.Shares;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorArbitrage.Entities;
@@ -40,16 +39,6 @@
 
         void CleanTransRuleHedging(bool isLive, UInt64 maxSequenceID);
 
-        #endregion
-
-        #region Rule GroupBetting
-        MatchMonitorRuleGroupBettingModel GetMatchRuleGroupBetting(bool isLive);
-
-        IEnumerable<MatchCompleteRuleGroupBettingModel> ProcessRuleGroupBetting(MMPrepareDataProcessRuleGBModel prepareData);
-
-        void CompleteTransRuleGroupBetting(MatchCompleteRuleGroupBettingParameterModel para);
-
-        void CleanTransRuleGroupBetting(bool isLive, UInt64 maxSequenceID);
         #endregion
     }
 
@@ -105,27 +94,6 @@
             matchDataAccess.CleanTransRuleIrrigation(isLive, maxSequenceID);
         }
 
-        #region Rule GroupBetting
-        public MatchMonitorRuleGroupBettingModel GetMatchRuleGroupBetting(bool isLive)
-        {
-            return matchDataAccess.GetMatchRuleGroupBetting(isLive);
-        }
-
-        public IEnumerable<MatchCompleteRuleGroupBettingModel> ProcessRuleGroupBetting(MMPrepareDataProcessRuleGBModel prepareData)
-        {
-            return matchDataAccess.ProcessRuleGroupBetting(prepareData);
-        }
-
-        public void CompleteTransRuleGroupBetting(MatchCompleteRuleGroupBettingParameterModel para)
-        {
-            matchDataAccess.CompleteTransRuleGroupBetting(para);
-        }
-
-        public void CleanTransRuleGroupBetting(bool isLive, UInt64 maxSequenceID)
-        {
-            matchDataAccess.CleanTransRuleGroupBetting(isLive, maxSequenceID);
-        }
-        #endregion
 
         #region Rule Hedging
 

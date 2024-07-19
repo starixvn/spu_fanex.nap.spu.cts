@@ -1,26 +1,29 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.AssociationDetection
 {
-    using Fanex.Data;
     using Fanex.Data.Repository;
     using Fanex.NAP.SPU.CTS.Features.AssociationDetection.Criteria;
     using Fanex.NAP.SPU.CTS.Features.AssociationDetection.Entities;
+    using Fanex.NAP.SPU.CTS.Features.AssociationDetection.Models;
     using System.Collections.Generic;
     using static Fanex.NAP.SPU.CTS.Shares.Consts;
 
     public interface IAssociationDetectionDataAccess
     {
-        public IEnumerable<DetectAssBySharedIPMatchesModel> DetectAssociationBySharedMatches(string custIDList);
+        IEnumerable<DetectAssBySharedIPMatchesEntity> DetectAssociationBySharedMatches(string custIDList);
 
         #region New core Associated Detection
 
-        public IEnumerable<DetectAssociationByPrimaryModel> DetectAssociationByPrimary(DetectAssociationByPrimaryFilterModel filter);
+        IEnumerable<DetectAssociationByPrimaryEntity> DetectAssociationByPrimary(DetectAssociationByPrimaryFilterModel filter);
 
-        public IEnumerable<DetectAssociationByPrimaryModel> DetectAssociationByAgent(string ctsCustIDs);
+        IEnumerable<DetectAssociationByPrimaryLv1Entity> DetectAssociationByPrimaryLv1(DetectAssociationByPrimaryFilterModel filter);
 
-        IEnumerable<DetectAssociationMergeGroupModel> DetectGroupDetectAssociation(MergeGroupAssociationFilterModel model);
+        IEnumerable<DetectAssociationByPrimaryEntity> DetectAssociationByAgent(string ctsCustIDs);
 
+        IEnumerable<DetectAssociationMergeGroupEntity> DetectGroupDetectAssociation(MergeGroupAssociationFilterModel model);
+
+        IEnumerable<DetectAssociationMergeGroupLv1Entity> DetectGroupDetectAssociationLv1(MergeGroupAssociationFilterLv1Model model);
         #endregion
-    }   
+    }
 
     public class AssociationDetectionDataAccess : IAssociationDetectionDataAccess
     {
@@ -32,7 +35,7 @@
         }
 
         #region 
-        public IEnumerable<DetectAssBySharedIPMatchesModel> DetectAssociationBySharedMatches(string custIDList)
+        public IEnumerable<DetectAssBySharedIPMatchesEntity> DetectAssociationBySharedMatches(string custIDList)
         {
             var criteria = new DetectAssociationBySharedMatchesCriteria
             {
@@ -40,12 +43,12 @@
                 QueryType = (int)DetectAssociation_QueryType.DetectAss
             };
 
-            return _repository.Fetch<DetectAssBySharedIPMatchesModel>(criteria);
+            return _repository.Fetch<DetectAssBySharedIPMatchesEntity>(criteria);
         }
         #endregion
 
         #region New core Associated Detection
-        public IEnumerable<DetectAssociationByPrimaryModel> DetectAssociationByPrimary(DetectAssociationByPrimaryFilterModel filter)
+        public IEnumerable<DetectAssociationByPrimaryEntity> DetectAssociationByPrimary(DetectAssociationByPrimaryFilterModel filter)
         {
             var criteria = new DetectAssociationByPrimaryCriteria
             {
@@ -55,26 +58,20 @@
                 IsIP = filter.IsIP
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<DetectAssociationByPrimaryModel>(criteria);
-            }
+            return _repository.Fetch<DetectAssociationByPrimaryEntity>(criteria);
         }
 
-        public IEnumerable<DetectAssociationByPrimaryModel> DetectAssociationByAgent(string ctsCustIDs)
+        public IEnumerable<DetectAssociationByPrimaryEntity> DetectAssociationByAgent(string ctsCustIDs)
         {
             var criteria = new DetectAssociationByAgentCriteria
             {
                 CTSCustIDs = ctsCustIDs
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<DetectAssociationByPrimaryModel>(criteria);
-            }
+            return _repository.Fetch<DetectAssociationByPrimaryEntity>(criteria);
         }
 
-        public IEnumerable<DetectAssociationMergeGroupModel> DetectGroupDetectAssociation(MergeGroupAssociationFilterModel model)
+        public IEnumerable<DetectAssociationMergeGroupEntity> DetectGroupDetectAssociation(MergeGroupAssociationFilterModel model)
         {
             var criteria = new DetectAssociationMergeGroupCriteria
             {
@@ -88,13 +85,34 @@
                 IsGetLogTransInfo = model.IsGetLogTransInfo
             };
 
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.Query<DetectAssociationMergeGroupModel>(criteria);
-            }
+            return _repository.Fetch<DetectAssociationMergeGroupEntity>(criteria);
         }
 
+        public IEnumerable<DetectAssociationByPrimaryLv1Entity> DetectAssociationByPrimaryLv1(DetectAssociationByPrimaryFilterModel filter)
+        {
+            var criteria = new DetectAssociationByPrimaryLv1Criteria
+            {
+                CTSCustIDs = filter.CTSCustIDs,
+                IsAI = filter.IsAI,
+                IsDevice = filter.IsDevice,
+                IsIP = filter.IsIP
+            };
 
+            return _repository.Fetch<DetectAssociationByPrimaryLv1Entity>(criteria);
+        }
+
+        public IEnumerable<DetectAssociationMergeGroupLv1Entity> DetectGroupDetectAssociationLv1(MergeGroupAssociationFilterLv1Model model)
+        {
+            var criteria = new DetectAssociationMergeGroupLv1Criteria
+            {
+                DeviceJson = model.AssociationByDeviceJson,
+                AIJson = model.AssociationByAIJson,
+                IPJson = model.AssociationByIPJson,
+                SharedMatchesJson = model.AssociationBySharedMatchesJson,
+            };
+
+            return _repository.Fetch<DetectAssociationMergeGroupLv1Entity>(criteria);
+        }
         #endregion
     }
 }

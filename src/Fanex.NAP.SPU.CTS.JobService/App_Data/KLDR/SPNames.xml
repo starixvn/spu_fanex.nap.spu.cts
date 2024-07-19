@@ -99,6 +99,8 @@
 		<Setting Key="CTS_DC_Association_Primary_GetCustEdge" SpName="CTS_DC_Association_Primary_GetCustEdge" DbName="MySQL.CTS_DataCenter.ctsService" Timeout="300" />
 		<Setting Key="CTS_DC_Association_Agent_GetCustEdge" SpName="CTS_DC_Association_Agent_GetCustEdge" DbName="MySQL.CTS_DataCenter.ctsService" Timeout="300" />
 		<Setting Key="CTS_DC_Association_DetectGroup" SpName="CTS_DC_Association_DetectGroup" DbName="MySQL.CTS_DataCenter.ctsService" Timeout="300" />
+		<Setting Key="CTS_DC_Association_GetDirectCustEdge" SpName="CTS_DC_Association_GetDirectCustEdge" DbName="MySQL.CTS_DataCenter.ctsService" Timeout="300" />
+		<Setting Key="CTS_DC_Association_CustGroup" SpName="CTS_DC_Association_CustGroup" DbName="MySQL.CTS_DataCenter.ctsService" Timeout="300" />
 	</Function>
 
 	<Function Name="Common">

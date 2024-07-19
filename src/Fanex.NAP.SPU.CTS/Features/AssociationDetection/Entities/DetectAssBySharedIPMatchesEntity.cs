@@ -2,7 +2,7 @@
 {
     using Newtonsoft.Json;
 
-    public class DetectAssBySharedIPMatchesModel
+    public class DetectAssBySharedIPMatchesEntity
     {
         [JsonProperty("O")]
         public int CustID1 { get; set; }

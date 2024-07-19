@@ -1,8 +1,8 @@
-﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities
+﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleGroupBetting.Entities
 {
     using Newtonsoft.Json;
 
-    public class MatchCompleteRuleGroupBettingModel
+    public class MatchCompleteRuleGroupBettingEntity
     {
         [JsonProperty("GroupID")]
         public int GroupId { get; set; }
@@ -15,9 +15,6 @@
 
         [JsonProperty("CustIDList")]
         public string CustIdList { get; set; }
-
-        [JsonProperty("OldGroupIDList")]
-        public string OldGroupIdList { get; set; }
 
         [JsonProperty("HighStakeLicCustList")]
         public string HighStakeLicCustList { get; set; }
