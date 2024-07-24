@@ -30,6 +30,8 @@
             public const string IsLive = "IsLive";
 
             public const string MatchStaging = "MatchStaging";
+
+            public const string NumberInternalOfThread = "NumberInternalOfThread";
         }
     }
 }

@@ -11,10 +11,6 @@
 
     public interface IAssociationDetectionService
     {
-        IEnumerable<DetectAssBySharedIPMatchesEntity> DetectAssociationBySharedMatches(string custIDList);
-
-        IEnumerable<DetectAssociationMergeGroupEntity> DetectAssociationRuleHedging(string ctsCustIds, string agentCTSCustIds);
-
         IEnumerable<DetectAssociationMergeGroupEntity> DetectAssociation(DetectAssociationParamModel model);
 
         IEnumerable<DetectAssociationMergeGroupLv1Entity> DetectAssociationLv1(DetectAssociationParamModel model);
@@ -30,7 +26,7 @@
         }
 
         #region New core Associated Detection
-        public IEnumerable<DetectAssBySharedIPMatchesEntity> DetectAssociationBySharedMatches(string custIDList)
+        private IEnumerable<DetectAssBySharedIPMatchesEntity> DetectAssociationBySharedMatches(string custIDList)
         {
             if (string.IsNullOrWhiteSpace(custIDList))
             {
@@ -97,40 +93,6 @@
         {
             return input.Any() ? Utilities.RenderExcessiveJson(input, 900000) : "[]";
         }
-        #endregion
-
-        #region MM Hedging
-
-        public IEnumerable<DetectAssociationMergeGroupEntity> DetectAssociationRuleHedging(string ctsCustIds, string agentCTSCustIds)
-        {
-            if (!string.IsNullOrEmpty(ctsCustIds))
-            {
-                var mergeGroupInfo = new MergeGroupAssociationFilterModel { CTSCustIDs = ctsCustIds, IsGetLogTransInfo = false };
-
-                Parallel.Invoke(() =>
-                {
-                    mergeGroupInfo.AssociationByDeviceJson = GetAssociationCustByPrimary(new DetectAssociationByPrimaryFilterModel(ctsCustIds, AssociationDetectionType.Device));
-                }, () =>
-                {
-
-                    mergeGroupInfo.AssociationByAIJson = GetAssociationCustByPrimary(new DetectAssociationByPrimaryFilterModel(ctsCustIds, AssociationDetectionType.AI));
-                }, () =>
-                {
-                    mergeGroupInfo.AssociationByIPJson = GetAssociationCustByPrimary(new DetectAssociationByPrimaryFilterModel(ctsCustIds, AssociationDetectionType.IP));
-                }, () =>
-                {
-
-                    mergeGroupInfo.AssociationByAgentJson = GetAssociationCustByAgent(agentCTSCustIds);
-                });
-
-                var assMergeGroup = _associationDetectionDataAccess.DetectGroupDetectAssociation(mergeGroupInfo);
-
-                return assMergeGroup;
-            }
-
-            return Enumerable.Empty<DetectAssociationMergeGroupEntity>();
-        }
-
         #endregion
 
         #region Detect Association
