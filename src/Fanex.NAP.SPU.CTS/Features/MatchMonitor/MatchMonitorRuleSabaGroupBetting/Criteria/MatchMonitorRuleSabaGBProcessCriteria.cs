@@ -24,6 +24,9 @@
         [SpParam(SqlParamName = "ip_Betteam")]
         public string Betteam { get; set; }
 
+        [SpParam(SqlParamName = "ip_Sporttype")]
+        public int SportType { get; set; }
+
         [SpParam(SqlParamName = "ip_SequenceIDList")]
         public string SequenceIDList { get; set; }
 

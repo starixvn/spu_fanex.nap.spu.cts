@@ -55,6 +55,7 @@
                 BettypeId = matchInfo.BetTypeID,
                 BetId = matchInfo.BetID,
                 Betteam = matchInfo.BetTeam,
+                SportType = matchInfo.SportType,
                 SequenceIDList = sequenceIDList,
                 CustGroup = groupDetection
             };
