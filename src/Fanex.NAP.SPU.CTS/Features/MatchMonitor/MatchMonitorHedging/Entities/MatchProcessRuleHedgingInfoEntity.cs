@@ -1,4 +1,4 @@
-﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleHedging
+﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitorHedging.Entities
 {
     public class MatchProcessRuleHedgingInfoEntity
     {

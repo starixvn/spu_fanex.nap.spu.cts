@@ -1,6 +1,7 @@
-﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleHedging
+﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitorHedging.Models
 {
     using System.Collections.Generic;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitorHedging.Entities;
 
     public class MatchProcessRuleHedgingModel
     {

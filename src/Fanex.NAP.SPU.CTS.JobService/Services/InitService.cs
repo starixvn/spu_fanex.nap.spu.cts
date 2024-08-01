@@ -14,6 +14,7 @@
     using Fanex.NAP.SPU.CTS.Features.JobMonitoring.IncorrectDataMonitoring;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorArbitrage;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorHedging;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleGroupBetting;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleSabaGroupBetting;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleSabaGroupBetting.Models;
@@ -134,6 +135,11 @@
             services.AddSingleton<IMatchMonitorRuleArbitrageDataAccess, MatchMonitorRuleArbitrageDataAccess>();
             services.AddSingleton<IMatchMonitorRuleArbitrageService, MatchMonitorRuleArbitrageService>();
             services.AddTransient<MatchMonitorRuleArbitrageProcessService>();
+
+            // Rule Hedging
+            services.AddSingleton<IMatchMonitorRuleHedgingDataAccess, MatchMonitorRuleHedgingDataAccess>();
+            services.AddSingleton<IMatchMonitorRuleHedgingService, MatchMonitorRuleHedgingService>();
+            services.AddTransient<MatchMonitorRuleHedgingProcessService>();
         }
 
         private static void RegisterUserPermission(this IServiceCollection services)

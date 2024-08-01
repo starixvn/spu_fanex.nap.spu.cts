@@ -11,12 +11,12 @@
     using Fanex.NAP.SPU.CTS.Shares;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
-    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleHedging;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleSabaGroupBetting;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorStaging;
     using static Fanex.NAP.SPU.CTS.Shares.Consts;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleGroupBetting;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorArbitrage;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorHedging;
 
     public interface IMatchMonitorJobService
     {
@@ -44,6 +44,7 @@
         private readonly IMMRuleSabaGBService _ruleSabaGBService;
         private readonly IMatchMonitorRuleGroupBettingService _ruleGBService;
         private readonly IMatchMonitorRuleArbitrageService _ruleArbitrageService;
+        private readonly IMatchMonitorRuleHedgingService _ruleHedgingService;
 
         private readonly string serviceName;
 
@@ -53,7 +54,8 @@
             IServiceProvider serviceProvider,
             IMMRuleSabaGBService ruleSabaGBService,
             IMatchMonitorRuleGroupBettingService ruleGBService,
-            IMatchMonitorRuleArbitrageService ruleArbitrageService)
+            IMatchMonitorRuleArbitrageService ruleArbitrageService,
+            IMatchMonitorRuleHedgingService ruleHedgingService)
         {
             _sentryClient = sentryClient;
             _matchMonitorServices = matchMonitorServices;
@@ -63,6 +65,7 @@
             _ruleSabaGBService = ruleSabaGBService;
             _ruleGBService = ruleGBService;
             _ruleArbitrageService = ruleArbitrageService;
+            _ruleHedgingService = ruleHedgingService;
         }
 
         public Task<bool> InsertTicketDetail(int batchSize, bool isLive)
@@ -105,7 +108,7 @@
                         .ForAll(matchInfo =>
                         {
                             _ruleGBService.GetInstanceProcessGroupBettingService()
-                                .PrepareProcess(matchInfo, isLive, null)
+                                .PrepareProcess(matchInfo, isLive)
                                 .ProcessRound1()
                                 .ProcessRound2()
                                 .Complete(matchMonitorRule.MaxSequenceID.Value)
@@ -239,38 +242,27 @@
         {
             try
             {
-                var matchMonitorRule = _matchMonitorServices.GetMatchRuleHedging(isLive);
+                var matchMonitorRule = _ruleHedgingService.GetMatchRuleHedging(isLive);
 
-                if (matchMonitorRule != null && matchMonitorRule.MaxSequenceID != null)
+                if (matchMonitorRule != null && matchMonitorRule.MaxSequenceID.HasValue)
                 {
-                    if (matchMonitorRule.MatchStagingList != null && matchMonitorRule.MatchStagingList.Any())
-                    {
-                        matchMonitorRule
-                            .MatchStagingList
-                            .AsParallel()
-                            .WithDegreeOfParallelism(numberExternalOfThread)
-                            .ForAll(matchInfo =>
-                            {
-                                var mmProcess = _matchMonitorServices.ProcessRuleHedgingWithRound(matchInfo, isLive, numberInternalOfThread).ToList();
+                    matchMonitorRule
+                        .MatchStagingList?
+                        .AsParallel()
+                        .WithDegreeOfParallelism(numberExternalOfThread)
+                        .ForAll(matchInfo =>
+                        {
+                            _ruleHedgingService.GetInstanceProcessHedgingService()
+                                .PrepareProcessWithThread(matchInfo, isLive, numberInternalOfThread)
+                                .ProcessRound1()
+                                .ProcessRound2()
+                                .Complete(matchMonitorRule.MaxSequenceID.Value)
+                                .WriteLogSentryIfError(nameof(ProcessRuleHedging), _sentryClient);
 
-                                if (mmProcess.IsNotNullOrEmpty())
-                                {
-                                    _matchMonitorServices.CompleteTransRuleHedging(new MatchCompleteRuleHedgingParameterModel
-                                    {
-                                        IsLive = isLive,
-                                        MatchInfo = matchInfo,
-                                        TransGroupJson = JsonConvert.SerializeObject(MergeMatchCompleteRuleHedging(mmProcess)),
-                                        MaxSequenceID = matchMonitorRule.MaxSequenceID.Value
-                                    });
+                            Thread.Sleep(MatchMonitor_SleepTimes);
+                        });
 
-                                    WriteLogSentryErrorCaseHedging(mmProcess);
-                                }
-
-                                Thread.Sleep(MatchMonitor_SleepTimes);
-                            });
-                    }
-
-                    _matchMonitorServices.CleanTransRuleHedging(isLive, matchMonitorRule.MaxSequenceID.Value);
+                    _ruleHedgingService.CleanTransRuleHedging(isLive, matchMonitorRule.MaxSequenceID.Value);
                 }
 
                 return Task.FromResult(true);
@@ -286,33 +278,6 @@
                 Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, _sentryClient);
 
                 return Task.FromResult(false);
-            }
-        }
-
-        private IEnumerable<MatchCompleteRuleHedgingEntity> MergeMatchCompleteRuleHedging(IEnumerable<MatchProcessRuleHedgingModel> matches)
-        {
-            return matches
-                .SelectMany(x => x.CompleteMatches)
-                .GroupBy(item => item.TransIDList)
-                .Select((group, index) =>
-                {
-                    var result = group.First();
-                    result.GroupId = index + 1;
-                    return result;
-                });
-        }
-
-        private void WriteLogSentryErrorCaseHedging(IEnumerable<MatchProcessRuleHedgingModel> matches)
-        {
-            var mmProcessR2 = matches.Where(x => x.RoundNumber == 2 && x.ReprocessMatches.IsNotNullOrEmpty());
-
-            if (mmProcessR2.IsNotNullOrEmpty())
-            {
-                var logMessage = new LogMessage("MMHedging Error")
-                    .AddMessage($"{serviceName}")
-                    .AddMessage($"Data {JsonConvert.SerializeObject(mmProcessR2)} - { DateTime.Now}").ToString();
-
-                _sentryClient.CaptureMessage(logMessage, Sentry.Protocol.SentryLevel.Error);
             }
         }
         #endregion
@@ -388,7 +353,7 @@
                         {
                             _ruleArbitrageService
                                 .GetInstanceProcessArbitrageService()
-                                .PrepareProcess(matchInfo, isLive, null)
+                                .PrepareProcess(matchInfo, isLive)
                                 .ProcessRound1()
                                 .ProcessRound2()
                                 .Complete(matchMonitorRule.MaxSequenceID.Value)

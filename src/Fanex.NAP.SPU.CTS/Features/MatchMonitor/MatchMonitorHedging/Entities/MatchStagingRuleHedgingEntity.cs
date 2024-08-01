@@ -1,9 +1,8 @@
-﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities
+﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitorHedging.Entities
 {
-    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities.MatchMonitorRuleHedging;
     using System;
 
-    public class MatchStagingRuleHedgingEntity : MatchProcessRuleHedgingInfoEntity
+    public class MatchStagingRuleHedgingEntity
     {
         public int MatchId { get; set; }
 
@@ -18,5 +17,11 @@
         public int SportType { get; set; }
 
         public int OldGroup { get; set; }
+
+        public string CTSCustIDList { get; set; }
+
+        public string AgentDetect_CTSCustIDList { get; set; }
+
+        public string SequenceIDList { get; set; }
     }
 }

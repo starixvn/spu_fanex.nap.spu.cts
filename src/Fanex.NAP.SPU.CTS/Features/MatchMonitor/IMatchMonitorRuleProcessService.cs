@@ -16,6 +16,8 @@
 
     public interface IMatchMonitorRuleProcessService<T> : IMatchMonitorRuleProcessService
     {
-        IMatchMonitorRuleProcessService PrepareProcess(T matchStaging, bool isLive, IReadOnlyDictionary<int, int> mappingCustDictionary);
+        virtual IMatchMonitorRuleProcessService PrepareProcess(T matchStaging, bool isLive, IReadOnlyDictionary<int, int> mappingCustDictionary = null) => this;
+
+        virtual IMatchMonitorRuleProcessService PrepareProcessWithThread(T matchStaging, bool isLive, int numberInternalOfThread) => this;
     }
 }
