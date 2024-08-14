@@ -10,7 +10,7 @@
 
         public long CTSCustID { get; set; }
 
-        public int SportGroupID { get; set; }
+        public int ParentID { get; set; }
 
         public int CategoryID { get; set; }
 
@@ -26,17 +26,13 @@
 
         public decimal LastXDaysMargin { get; set; }
 
-        public decimal ProbationPeriodWinloss { get; set; }
-
         public int TargetCC { get; set; }
 
         public int SourceTypeID { get; set; }
 
-        public int FromCategoryID { get; set; }
+        public int OldCategoryID { get; set; }
 
-        public int ToCategoryID { get; set; }
-
-        public bool IsAppliedCC { get; set; }
+        public int DWCategoryID { get; set; }
 
         public bool IsDataChanged { get; set; }
 
@@ -54,21 +50,17 @@
 
         public int TargetDangerLevel1 { get; set; }
 
-        public bool IsAppliedDangerLevel1 { get; set; }
-
         public decimal TWGroupBettingRate { get; set; }
 
         public decimal TWTicketRejectRate { get; set; }
 
         public long TWBetCount { get; set; }
-
-        public short? First5TWGBTicketCount { get; set; }
-
+      
         public decimal TWDesktopUsageRate { get; set; }
 
         public string Remark { get; set; }
 
-        public bool IsDirect { get; set; }
+        public bool IsMarkedDirectly { get; set; }
 
         public long? TVSRequestID { get; set; }
 
