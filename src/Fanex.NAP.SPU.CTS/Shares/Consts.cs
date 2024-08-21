@@ -53,6 +53,8 @@
             CorrectArchiveCustomer_LastArchiveDate_Deposit = 1004,
             CorrectArchiveCustomer_LastCustID_Deposit = 1005,
             CorrectArchiveCustomer_MaxArchiveDate_Deposit = 1006,
+            MatchMonitorParlayLastScannedTrans = 200, // TODO
+            MatchMonitorParlayLastScannedTransNoneLive = 290, // TODO
         };
 
         public enum UpdateCustomer
@@ -123,6 +125,24 @@
             MatchMonitorStagingArbitrageNonLive         = 2004,
             MatchMonitorStagingFixedGameNonLive         = 2005,
             MatchMonitorStagingIrrigationNonLive        = 2006
+        }
+
+        public enum MatchMonitorParlayStagingLivePoolType
+        {
+            MatchMonitorStagingGroupBettingLive = 1001,
+            MatchMonitorStagingGroupBettingSabaLive = 1002,
+            MatchMonitorStagingHedgingLive = 1003,
+            MatchMonitorStagingFixedGameLive = 1004
+        }
+
+        public enum MatchMonitorStagingParlayNonLivePoolType
+        {
+            MatchMonitorStagingGroupBettingNonLive = 2001,
+            MatchMonitorStagingGroupBettingSabaNonLive = 2002,
+            MatchMonitorStagingHedgingNonLive = 2003,
+            MatchMonitorStagingArbitrageNonLive = 2004,
+            MatchMonitorStagingFixedGameNonLive = 2005,
+            MatchMonitorStagingIrrigationNonLive = 2006
         }
     }
 }

@@ -122,5 +122,21 @@
         {
             return await this.matchMonitorJobService.ProcessRuleArbitrage(false, numberOfThread);
         }
+
+        #region Mix Parlay
+        [HttpPost("MatchMonitorParlayInsertTicketDetailLive")]
+        public async Task<bool> MatchMonitorParlayInsertTicketDetailLive([FromForm] int size)
+        {
+            return await this.matchMonitorJobService.InsertTicketDetail(size, true);
+        }
+
+        [HttpPost("MatchMonitorParlayInsertTicketDetailNonLive")]
+        public async Task<bool> MatchMonitorParlayInsertTicketDetailNonLive([FromForm] int size)
+        {
+            return await this.matchMonitorJobService.InsertTicketDetail(size, true);
+        }
+
+        #endregion
+
     }
 }
