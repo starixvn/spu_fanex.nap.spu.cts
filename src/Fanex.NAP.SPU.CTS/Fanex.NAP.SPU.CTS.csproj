@@ -6,6 +6,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Features\ArchiveAssociationCustomer\Entities\**" />
+    <Compile Remove="Features\ArchiveData\ArchivedCustomerMissing\Entities\**" />
+    <Compile Remove="Features\JobMonitoring\ScanMonitoring\LoginTransactionMonitoring\Entities\**" />
+    <EmbeddedResource Remove="Features\ArchiveAssociationCustomer\Entities\**" />
+    <EmbeddedResource Remove="Features\ArchiveData\ArchivedCustomerMissing\Entities\**" />
+    <EmbeddedResource Remove="Features\JobMonitoring\ScanMonitoring\LoginTransactionMonitoring\Entities\**" />
+    <None Remove="Features\ArchiveAssociationCustomer\Entities\**" />
+    <None Remove="Features\ArchiveData\ArchivedCustomerMissing\Entities\**" />
+    <None Remove="Features\JobMonitoring\ScanMonitoring\LoginTransactionMonitoring\Entities\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <AdditionalFiles Include="..\..\.sonarlint\fanex.nap.spu.dcs\CSharp\SonarLint.xml" Link="SonarLint.xml" />
   </ItemGroup>
 
@@ -28,9 +40,6 @@
 
   <ItemGroup>
     <Folder Include="Features\ArchiveAssociationCustomer\Criteria\" />
-    <Folder Include="Features\ArchiveAssociationCustomer\Entities\" />
-    <Folder Include="Features\ArchiveData\ArchivedCustomerMissing\Entities\" />
-    <Folder Include="Features\JobMonitoring\ScanMonitoring\LoginTransactionMonitoring\Entities\" />
   </ItemGroup>
 
 </Project>

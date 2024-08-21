@@ -55,40 +55,6 @@
             CorrectArchiveCustomer_MaxArchiveDate_Deposit = 1006,
         };
 
-        public enum DangerLevel
-        {
-            Original = 1,
-            ABI = 2,
-            Other = 3
-        }
-
-        public enum Category
-        {
-            Newmember = 201,
-            NormalMember = 202,
-            SmartPunter = 203,
-            HighRishPunter = 204,
-            VIP = 205,
-            Probation = 206,
-            VVIP = 213,
-            Robot = 61
-        };
-
-        public enum CustomerRole
-        {
-            Member = 1,
-            Agent = 2,
-            Master = 3,
-            Super = 4
-        };
-
-        public enum FlowTypeRescanCC
-        {
-            NewMember,
-            RemoveMultipleEvidence,
-            Other
-        };
-
         public enum UpdateCustomer
         {
             ForNewCustomer = 0,
