@@ -40,8 +40,6 @@
 
   <ItemGroup>
     <Folder Include="Features\ArchiveAssociationCustomer\Criteria\" />
-    <Folder Include="Features\MatchMonitor\MatchMonitorParlayStaging\Criteria\" />
-    <Folder Include="Features\MatchMonitor\MatchMonitorParlayStaging\Entities\" />
   </ItemGroup>
 
 </Project>
