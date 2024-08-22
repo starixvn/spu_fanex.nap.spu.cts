@@ -1,5 +1,4 @@
 ﻿using Fanex.NAP.SPU.CTS.JobService.Services;
-using Fanex.NAP.SPU.CTS.JobService.Services.ProblemCaseMonitor;
 using Microsoft.AspNetCore.Mvc;
 using Sentry;
 using System;
@@ -15,20 +14,14 @@ namespace Fanex.NAP.SPU.CTS.JobService.Controllers
         private readonly ISentryClient sentryClient;
 
         private readonly IExistingCustomerJobService existingCustomerJobService;
-        private readonly IProblemCaseMonitorClassificationJobService problemCaseMonitorClassificationJobService;
-        private readonly IProblemCaseMonitorAssociationJobService problemCaseMonitorAssociationJobService;
         private readonly ILoginTransactionMonitoringJobService loginTransactionMonitoringJobService;
 
         public MonitoringController(ISentryClient sentryClient
             , IExistingCustomerJobService existingCustomerJobService
-            , IProblemCaseMonitorClassificationJobService problemCaseMonitorClassificationJobService
-            , IProblemCaseMonitorAssociationJobService problemCaseMonitorAssociationJobService
             , ILoginTransactionMonitoringJobService loginTransactionMonitoringJobService)
         {
             this.sentryClient = sentryClient;
             this.existingCustomerJobService = existingCustomerJobService;
-            this.problemCaseMonitorClassificationJobService = problemCaseMonitorClassificationJobService;
-            this.problemCaseMonitorAssociationJobService = problemCaseMonitorAssociationJobService;           
             this.loginTransactionMonitoringJobService = loginTransactionMonitoringJobService;           
         }
 
@@ -59,18 +52,6 @@ namespace Fanex.NAP.SPU.CTS.JobService.Controllers
             }
 
             return await Task.FromResult(true);
-        }
-
-        [HttpPost("problemcasemonitorclassify")]
-        public async Task<bool> ProblemCaseMonitorClassification()
-        {
-            return await this.problemCaseMonitorClassificationJobService.Execute();
-        }
-
-        [HttpPost("problemcasemonitorassociation")]
-        public async Task<bool> ProblemCaseMonitorAssociation()
-        {
-            return await this.problemCaseMonitorAssociationJobService.Execute();
         }
 
         [HttpPost("LastLoginTransactionMonitoring")]
