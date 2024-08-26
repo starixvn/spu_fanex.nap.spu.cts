@@ -4,10 +4,7 @@
     using Fanex.Data.Repository;
 
     public class ParlayTicketDetailGetCriteria : NonQueryCommand
-    {
-        [SpParam(SqlParamName = "QueryType")]
-        public int QueryType { get; set; }
-
+    {       
         [SpParam(SqlParamName = "LastScannedSequenceID")]
         public long LastScannedSequenceID { get; set; }
 
@@ -18,10 +15,10 @@
         public string ListSportBettype { get; set; }
 
         [SpParam(SqlParamName = "IsLive")]
-        public bool IsLive { get; set; }
+        public bool IsLive { get; set; }   
 
         public override string GetSettingKey()
-              => "CTS_MatchMonitorParlay_GetTicket";
+              => "CTS_MatchMonitorParlay_GetNewTicket";
 
         public override bool IsValid()
             => true;

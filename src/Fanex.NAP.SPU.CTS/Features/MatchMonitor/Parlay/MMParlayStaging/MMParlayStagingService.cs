@@ -32,6 +32,7 @@
         private long LastScannedSequenceID;
         private IEnumerable<ParlayTicketDetailEntity> TicketStagings;
         private SystemParameters LastScannedSequenceID_ParameterID;
+        private long MaxSequenceID;
         private Type PoolEnumType;
 
         public MMParlayStagingService(IMMParlayStagingDataAccess dataAccess, ISystemParameterServices systemParameter)
@@ -64,7 +65,7 @@
             {
                 var betTypeInfos = GetBettypeSettings();
 
-                TicketStagings = GetParlayTickets(LastScannedSequenceID, BatchSize, IsLive, betTypeInfos);
+                (MaxSequenceID, TicketStagings) = GetParlayTickets(LastScannedSequenceID, BatchSize, IsLive, betTypeInfos);
             }
 
             return this;
@@ -72,13 +73,7 @@
 
         public void UpdateLastScannedSequenceID()
         {
-            if (TicketStagings.IsNotNullOrEmpty())
-            {
-                var maxSequenceID = TicketStagings.Max(x => x.SequenceID).ToString();
-
-                _systemParameter.UpdateValueForSystemParamById(maxSequenceID, LastScannedSequenceID_ParameterID);
-
-            }
+            _systemParameter.UpdateValueForSystemParamById(MaxSequenceID.ToString(), LastScannedSequenceID_ParameterID);
         }
 
         private string GetBettypeSettings()
@@ -89,6 +84,7 @@
                 BettypeIDList = null,
                 SportTypeIDList = null,
                 IsFilterMMDetection = true,
+                IsFilterMMParlayDetection = true,
                 IsShowDetailsX = false,
                 Status = 1
             };
@@ -100,7 +96,7 @@
                                         SportTypeID = x.SportTypeID,
                                         BetTypeID = x.BetTypeID,
                                         BetChoiceType = x.BetChoiceType,
-                                        BetIDPattern = x.BetIDPattern
+                                        BetIDPattern = x.BetIDPattern,                                        
                                     })
                                     .Distinct();
 
@@ -122,7 +118,7 @@
             return this;
         }
 
-        private IEnumerable<ParlayTicketDetailEntity> GetParlayTickets(long lastScannedSequenceID, int batchSize, bool isLive, string betTypeInfos)
+        private (long, IEnumerable<ParlayTicketDetailEntity>) GetParlayTickets(long lastScannedSequenceID, int batchSize, bool isLive, string betTypeInfos)
         {
             return _dataAccess.GetParlayTickets(lastScannedSequenceID, batchSize, isLive, betTypeInfos);
         }

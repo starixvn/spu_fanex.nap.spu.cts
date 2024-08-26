@@ -101,8 +101,12 @@
 	</Function>
 
   <Function Name="Parlay">
-    <Setting Key="CTS_MatchMonitorParlay_GetTicket" SpName="CTS_MatchMonitorParlay_GetTicket" DbName="SQL.bodb02.bodbSPUNet" />
-
+    <Setting Key="CTS_MatchMonitorParlay_GetNewTicket" SpName="CTS_MatchMonitorParlay_GetNewTicket" DbName="SQL.bodb02.bodbSPUNet" />
+    <Setting Key="CTS_DC_MatchMonitorParlay_Staging_Insert" SpName="CTS_DC_MatchMonitorParlay_Staging_Insert_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
+    <Setting Key="CTS_DC_MatchMonitorParlay_RuleGroupBetting_Get" SpName="CTS_DC_MatchMonitorParlay_RuleGroupBetting_Get_xtest" DbName="MySQL.CTS_DataCenter.ctsService" />
+    <Setting Key="CTS_DC_MatchMonitorParlay_RuleGroupBetting_Process" SpName="CTS_DC_MatchMonitorParlay_RuleGroupBetting_Process_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
+    <Setting Key="CTS_DC_MatchMonitorParlay_RuleGroupBetting_Complete" SpName="CTS_DC_MatchMonitorParlay_RuleGroupBetting_Complete_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
+    <Setting Key="CTS_DC_MatchMonitorParlay_RuleGroupBetting_StagingClean" SpName="CTS_DC_MatchMonitorParlay_RuleGroupBetting_StagingClean_xtest" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
   </Function>
 
 	<Function>

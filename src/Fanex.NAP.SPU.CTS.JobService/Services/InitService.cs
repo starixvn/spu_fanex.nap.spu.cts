@@ -80,14 +80,15 @@
             RegisterNotification(services);
         }
 
-<<<<<<< .mine
-        private static void RegisterMMParlayStaging(IServiceCollection services)
+        private static void RegisterMMParlayGroupBetting(IServiceCollection services)
         {
             services.AddSingleton<IMMParlayRuleGroupBettingDataAccess, MMParlayRuleGroupBettingDataAccess>();
             services.AddSingleton<IMMParlayRuleGroupBettingService, MMParlayRuleGroupBettingService>();
+            services.AddTransient<MMParlayRuleGroupBettingProcessService>();
+
         }
 
-        private static void RegisterMMParlayGroupBetting(IServiceCollection services)
+        private static void RegisterMMParlayStaging(IServiceCollection services)
         {
             services.AddSingleton<IMMParlayStagingDataAccess, MMParlayStagingDataAccess>();
             services.AddSingleton<IMMParlayStagingService, MMParlayStagingService>();

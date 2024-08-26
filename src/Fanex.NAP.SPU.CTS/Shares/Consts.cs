@@ -53,8 +53,8 @@
             CorrectArchiveCustomer_LastArchiveDate_Deposit = 1004,
             CorrectArchiveCustomer_LastCustID_Deposit = 1005,
             CorrectArchiveCustomer_MaxArchiveDate_Deposit = 1006,
-            MatchMonitorParlayLastScannedTrans = 200, // TODO
-            MatchMonitorParlayLastScannedTransNoneLive = 290, // TODO
+            MatchMonitorParlayLastScannedTrans = 171, // LastSequenceID
+            MatchMonitorParlayLastScannedTransNoneLive = 172, // LastSequenceID
         };
 
         public enum UpdateCustomer

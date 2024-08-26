@@ -5,10 +5,11 @@
     using Fanex.NAP.SPU.CTS.Shares;
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     public interface IMMParlayStagingDataAccess
     {
-        IEnumerable<ParlayTicketDetailEntity> GetParlayTickets(long lastScannedSequenceID, int batchSize, bool isLive, string betTypeInfos);
+        (long, IEnumerable<ParlayTicketDetailEntity>) GetParlayTickets(long lastScannedSequenceID, int batchSize, bool isLive, string betTypeInfos);
 
         void InsertParlayTickets(string matchTransJson, bool isLive, int poolType);
     }
@@ -22,18 +23,19 @@
             repository = new DynamicRepository();
         }
 
-        public IEnumerable<ParlayTicketDetailEntity> GetParlayTickets(long lastScannedSequenceID, int batchSize, bool isLive, string betTypeInfos)
+        public (long, IEnumerable<ParlayTicketDetailEntity>) GetParlayTickets(long lastScannedSequenceID, int batchSize, bool isLive, string betTypeInfos)
         {
             var criteria = new ParlayTicketDetailGetCriteria
-            {
-                QueryType = (int)Consts.MatchMonitorQueryTypes.Service,
+            {              
                 LastScannedSequenceID = lastScannedSequenceID,
                 BatchSize = batchSize,
                 IsLive = isLive,
                 ListSportBettype = betTypeInfos
             };
 
-            return repository.Fetch<ParlayTicketDetailEntity>(criteria);
+            var (maxSequenceID, data) = repository.FetchMultiple<long, ParlayTicketDetailEntity>(criteria);
+
+            return (maxSequenceID?.FirstOrDefault() ?? 0, data);
         }
 
         public void InsertParlayTickets(string matchTransJson, bool isLive, int poolType)
