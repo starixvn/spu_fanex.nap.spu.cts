@@ -10,7 +10,7 @@
 
         MMParlayProcessRuleGroupBettingModel ProcessRuleGroupBetting(bool isLive,
             MMParlayStagingRuleGroupBettingEntity matchInfo,
-            string sequenceIDList,
+            string transIDmList,
             string groupDetection);
 
         void CompleteTransRuleGroupBetting(MMParlayCompleteRuleGroupBettingParameterModel para);
@@ -45,7 +45,7 @@
 
         public MMParlayProcessRuleGroupBettingModel ProcessRuleGroupBetting(bool isLive,
             MMParlayStagingRuleGroupBettingEntity matchInfo, 
-            string sequenceIDList, 
+            string transIDmList, 
             string groupDetection)
         {
             var criteria = new MMParlayRuleGroupBettingProcessCriteria()
@@ -57,7 +57,7 @@
                 ScoreDiff = matchInfo.ScoreDiff,
                 SportType = matchInfo.SportType,
                 MatchId = matchInfo.MatchID,
-                SequenceIDList = sequenceIDList,
+                TransIDmList = transIDmList,
                 CustGroup = groupDetection
             };
 

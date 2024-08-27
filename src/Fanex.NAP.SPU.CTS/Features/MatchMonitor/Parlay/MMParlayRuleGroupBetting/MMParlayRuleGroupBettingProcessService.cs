@@ -99,12 +99,12 @@
 
         private MMParlayProcessRuleGroupBettingModel ProcessWithAssociationRound1(MMParlayStagingRuleGroupBettingEntity matchInfo, bool isLive)
         {
-            var assDetectionHasGroupID = DetectAssociation(matchInfo.CTSCustIDList, matchInfo.CustIDList, matchInfo.SportType)?
+            var assDetectionHasGroupID = DetectAssociation(matchInfo.CTSCustIDList, matchInfo.CustIDList)?
                                             .Where(n => n.GroupID.HasValue);
 
             if (assDetectionHasGroupID.IsNotNullOrEmpty())
             {
-                return ProcessRuleGroupBetting(isLive, matchInfo, matchInfo.SequenceIDList, JsonConvert.SerializeObject(assDetectionHasGroupID));
+                return ProcessRuleGroupBetting(isLive, matchInfo, matchInfo.TransIDmList, JsonConvert.SerializeObject(assDetectionHasGroupID));
             }
 
             return null;
@@ -114,12 +114,12 @@
             MMParlayProcessRuleGroupBettingInfoEntity reprocessModel, 
             bool isLive)
         {
-            var assDetectionHasGroupID = DetectAssociation(reprocessModel.CTSCustIDList, reprocessModel.CustIDList, matchInfo.SportType)?
+            var assDetectionHasGroupID = DetectAssociation(reprocessModel.CTSCustIDList, reprocessModel.CustIDList)?
                                             .Where(n => n.GroupID.HasValue);
 
             if (assDetectionHasGroupID.IsNotNullOrEmpty())
             {
-                var matchProcessRound2 = ProcessRuleGroupBetting(isLive, matchInfo, reprocessModel.SequenceIDList, JsonConvert.SerializeObject(assDetectionHasGroupID));
+                var matchProcessRound2 = ProcessRuleGroupBetting(isLive, matchInfo, reprocessModel.TransIDmList, JsonConvert.SerializeObject(assDetectionHasGroupID));
                 matchProcessRound2.RoundNumber = 2;
 
                 return matchProcessRound2;
@@ -128,7 +128,7 @@
             return null;
         }
 
-        private IEnumerable<DetectAssociationMergeGroupLv1Entity> DetectAssociation(string ctsCustIDList, string custIDList, int sportType)
+        private IEnumerable<DetectAssociationMergeGroupLv1Entity> DetectAssociation(string ctsCustIDList, string custIDList)
         {
             var param = new DetectAssociationParamModel
             {
@@ -136,30 +136,32 @@
                 CustIds = custIDList,
                 IsDevice = true,
                 IsAI = true,
-                IsIP = IsValidSportTypeGetAssociation(sportType),
-                Is3MatchesLast7Days = IsValidSportTypeGetAssociation(sportType)
+                IsIP = true,
+                Is3MatchesLast7Days = true
             };
 
             return _associationDetection.DetectAssociationLv1(param);
         }
 
-        private bool IsValidSportTypeGetAssociation(int sportType)
-        {
-            return sportType == (int)MatchMonitor_SportType.Basketball ||
-                    sportType == (int)MatchMonitor_SportType.Esport;
-        }
-
         private MMParlayProcessRuleGroupBettingModel ProcessRuleGroupBetting(bool isLive, 
             MMParlayStagingRuleGroupBettingEntity matchinfo, 
-            string sequenceIDList, 
+            string transIDmList, 
             string groupDetection)
         {
-            return _dataAccess.ProcessRuleGroupBetting(isLive, matchinfo, sequenceIDList, groupDetection);
+            return _dataAccess.ProcessRuleGroupBetting(isLive, matchinfo, transIDmList, groupDetection);
         }
 
         public void WriteLogSentryIfError(string functionName, ISentryClient sentryClient)
         {
-            throw new NotImplementedException();
+            if (MatchProcesses.IsNotNullOrEmpty())
+            {
+                var matchProcessNotValid = MatchProcesses.Where(x => x.RoundNumber == 2 && x.ReprocessMatches.IsNotNullOrEmpty());
+
+                if (matchProcessNotValid.IsNotNullOrEmpty())
+                {
+                    Utilities.LogSentryInfo(ServiceName, $"{functionName} Error", matchProcessNotValid, true, sentryClient);
+                }
+            }
         }
     }
 }

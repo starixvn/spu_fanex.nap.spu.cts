@@ -137,7 +137,7 @@
         [HttpPost("MatchMonitorParlayInsertTicketDetailNonLive")]
         public async Task<bool> MatchMonitorParlayInsertTicketDetailNonLive([FromForm] int size)
         {
-            return await this.matchMonitorParlayJobService.InsertParlayTicketDetail(size, true);
+            return await this.matchMonitorParlayJobService.InsertParlayTicketDetail(size, false);
         }
 
         [HttpPost("MatchMonitorParlayProcessRuleGroupBettingLive")]

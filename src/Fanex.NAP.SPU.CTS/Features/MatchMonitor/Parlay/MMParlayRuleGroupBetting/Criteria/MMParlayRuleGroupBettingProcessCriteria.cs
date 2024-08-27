@@ -27,8 +27,8 @@
         [SpParam(SqlParamName = "ip_SportType")]
         public int SportType { get; set; }
 
-        [SpParam(SqlParamName = "ip_SequenceIDList")]
-        public string SequenceIDList { get; set; }
+        [SpParam(SqlParamName = "ip_TransIDmList")]
+        public string TransIDmList { get; set; }
 
         [SpParam(SqlParamName = "ip_CustGroup")]
         public string CustGroup { get; set; }

@@ -20,6 +20,6 @@
 
         public string CustIDList { get; set; }
 
-        public string SequenceIDList { get; set; }
+        public string TransIDmList { get; set; }
     }
 }

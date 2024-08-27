@@ -129,20 +129,12 @@
 
         public enum MatchMonitorParlayStagingLivePoolType
         {
-            MatchMonitorStagingGroupBettingLive = 1001,
-            MatchMonitorStagingGroupBettingSabaLive = 1002,
-            MatchMonitorStagingHedgingLive = 1003,
-            MatchMonitorStagingFixedGameLive = 1004
+            MatchMonitorStagingGroupBettingLive = 1001           
         }
 
         public enum MatchMonitorStagingParlayNonLivePoolType
         {
-            MatchMonitorStagingGroupBettingNonLive = 2001,
-            MatchMonitorStagingGroupBettingSabaNonLive = 2002,
-            MatchMonitorStagingHedgingNonLive = 2003,
-            MatchMonitorStagingArbitrageNonLive = 2004,
-            MatchMonitorStagingFixedGameNonLive = 2005,
-            MatchMonitorStagingIrrigationNonLive = 2006
+            MatchMonitorStagingGroupBettingNonLive = 2001            
         }
     }
 }

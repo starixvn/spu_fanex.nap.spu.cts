@@ -22,11 +22,9 @@
 
         public int LiveAwayScore { get; set; }
 
-        public int BetType { get; set; }
+        public int BetTypeID { get; set; }
 
-        public int BetID { get; set; }
-
-        public int MyProperty { get; set; }
+        public int BetID { get; set; }  
 
         public string BetTeam { get; set; }
 

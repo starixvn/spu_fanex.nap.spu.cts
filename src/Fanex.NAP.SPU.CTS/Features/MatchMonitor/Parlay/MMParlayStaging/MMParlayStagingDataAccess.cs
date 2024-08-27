@@ -40,7 +40,7 @@
 
         public void InsertParlayTickets(string matchTransJson, bool isLive, int poolType)
         {
-            var criteria = new MatchMonitorStagingInsertCriteria
+            var criteria = new ParlayTicketDetailInsertCriteria
             {
                 MatchTransJson = matchTransJson,
                 IsLive = isLive,
