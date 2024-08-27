@@ -24,6 +24,10 @@
 
         public const int ExpiredHttpRequest = 85500000; //23h 45p
 
+        public const string Telegram_GroupId_Local = "-869606030";
+
+        public const string Telegram_Notification_DBAMonitoring = "-845108430";
+
         public enum MatchMonitorQueryTypes
         {
             Service = 1

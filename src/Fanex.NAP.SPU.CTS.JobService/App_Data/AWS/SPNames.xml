@@ -107,4 +107,7 @@
 		<Setting Key="DCS_DC_Monitoring_LoginTransactionProcess_Get" SpName="DCS_DC_Monitoring_LoginTransactionProcess_Get" DbName="MySQL.DCS_DataCenter.ctsService" />
 	</Function>
 
+	<Function>
+		<Setting Key="CTS_DC_DBAAdmin_Monitoring" SpName="CTS_DC_DBAAdmin_Monitoring" DbName="MySQL.CTS_DataCenter.ctsService" />
+	</Function>
 </Functions>

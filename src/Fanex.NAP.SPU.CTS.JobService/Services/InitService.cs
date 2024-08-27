@@ -20,6 +20,7 @@
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleSabaGroupBetting.Models;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorStaging;
     using Fanex.NAP.SPU.CTS.Features.MonitorJobs.CustomerJobMonitor;
+    using Fanex.NAP.SPU.CTS.Features.Notification;
     using Fanex.NAP.SPU.CTS.Features.ProblemCaseMonitor;
     using Fanex.NAP.SPU.CTS.Features.SystemParameter;
     using Fanex.NAP.SPU.CTS.Features.Transform.Accounts;
@@ -31,6 +32,7 @@
     using Fanex.NAP.SPU.CTS.JobService.Services.ProblemCaseMonitor;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.DependencyInjection;
+    using System;
 
     public static class InitService
     {
@@ -71,6 +73,15 @@
             RegisterAssociationDetection(services);
             
             RegisterJobMonitoring(services);
+
+            RegisterNotification(services);
+        }
+
+        private static void RegisterNotification(IServiceCollection services)
+        {
+            services.AddSingleton<INotificationJobService, NotificationJobService>();
+            services.AddSingleton<IDBAMonitoringService, DBAMonitoringService>();
+            services.AddSingleton<IDBAMonitoringDataAccess, DBAMonitoringDataAccess>();
         }
 
         private static void RegisterAssociationDetection(IServiceCollection services)

@@ -89,7 +89,7 @@
 	</Function>
 	<Function name="ArchiveAssociationCustomer">
 		<Setting Key="CTS_Arc_CustomerAssociation_Archive" SpName="CTS_Arc_CustomerAssociation_Archive" DbName="MySQL.CTS_Archive.ctsServiceAdmin" />
-		<Setting Key="CTS_Arc_CustomerAssociation_Rollback" SpName="CTS_Arc_CustomerAssociation_Rollback" DbName="MySQL.CTS_Archive.ctsServiceAdmin" />		
+		<Setting Key="CTS_Arc_CustomerAssociation_Rollback" SpName="CTS_Arc_CustomerAssociation_Rollback" DbName="MySQL.CTS_Archive.ctsServiceAdmin" />
 	</Function>
 
 	<Function Name="AssociationDetection">
@@ -110,5 +110,8 @@
 		<Setting Key="CTS_DC_Monitoring_IncorrectData_Get" SpName="CTS_DC_Monitoring_IncorrectData_Get" DbName="MySQL.CTS_DataCenter.ctsService" />
 		<Setting Key="DCS_DC_Monitoring_LoginTransactionProcess_Get" SpName="DCS_DC_Monitoring_LoginTransactionProcess_Get" DbName="MySQL.DCS_DataCenter.ctsService" />
 	</Function>
-	
+
+	<Function>
+		<Setting Key="CTS_DC_DBAAdmin_Monitoring" SpName="CTS_DC_DBAAdmin_Monitoring" DbName="MySQL.CTS_DataCenter.ctsService" />
+	</Function>
 </Functions>
