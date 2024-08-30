@@ -24,9 +24,9 @@
 
         public const int ExpiredHttpRequest = 85500000; //23h 45p
 
-        public const string Telegram_GroupId_Local = "-1002168205380";
+        public const string MicrosoftTeams_GroupId_Local = "19:00af2ff331b64d39adf13b428aa49c6e@thread.tacv2";
 
-        public const string Telegram_Notification_DBAMonitoring = "-1002154058675";
+        public const string MicrosoftTeams_Notification_DBAMonitoring = "19:8716ea65006c45f8a7061db1cc5acd86@thread.tacv2";
 
         public enum MatchMonitorQueryTypes
         {

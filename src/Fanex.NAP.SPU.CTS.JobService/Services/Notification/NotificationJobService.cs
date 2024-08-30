@@ -38,7 +38,7 @@
                 {
                     scanData.Chunk(5).ToList().ForEach(item =>
                     {
-                        Utilities.NotifyTelegramMessage(item.BuildMessage(), nameof(ScanDBAMonitoring), _appSettings.EvironmentName, _appSettings.EvironmentName == "LOCAL" ? Telegram_GroupId_Local : Telegram_Notification_DBAMonitoring);
+                        Utilities.NotifyTeamsMessage(item.BuildMessage(), nameof(ScanDBAMonitoring), _appSettings.EvironmentName, _appSettings.EvironmentName == "LOCAL" ? MicrosoftTeams_GroupId_Local : MicrosoftTeams_Notification_DBAMonitoring);
                     });
                 }
             }
