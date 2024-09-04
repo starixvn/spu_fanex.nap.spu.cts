@@ -29,6 +29,7 @@
     using Fanex.NAP.SPU.CTS.Features.UserPermission;
     using Fanex.NAP.SPU.CTS.JobService.Services.ArchiveAssociationCustomer;
     using Fanex.NAP.SPU.CTS.JobService.Services.ArchiveData;
+    using Fanex.NAP.SPU.CTS.JobService.Services.Notification;
     using Fanex.NAP.SPU.CTS.JobService.Services.ProblemCaseMonitor;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.DependencyInjection;
