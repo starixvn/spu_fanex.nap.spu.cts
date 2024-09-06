@@ -26,7 +26,7 @@
 
         public const string MicrosoftTeams_GroupId_Local = "19:00af2ff331b64d39adf13b428aa49c6e@thread.tacv2";
 
-        public const string MicrosoftTeams_Notification_DBAMonitoring = "19:8716ea65006c45f8a7061db1cc5acd86@thread.tacv2";
+        public const string MicrosoftTeams_Notification_DBAMonitoring = "19:8e150ecd35c64f4099ec8107ea1e188b@thread.tacv2";
 
         public enum MatchMonitorQueryTypes
         {
