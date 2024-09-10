@@ -17,10 +17,9 @@
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorHedging;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleGroupBetting;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleSabaGroupBetting;
-    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleSabaGroupBetting.Models;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorStaging;
     using Fanex.NAP.SPU.CTS.Features.MonitorJobs.CustomerJobMonitor;
-    using Fanex.NAP.SPU.CTS.Features.ProblemCaseMonitor;
+    using Fanex.NAP.SPU.CTS.Features.Notification;
     using Fanex.NAP.SPU.CTS.Features.SystemParameter;
     using Fanex.NAP.SPU.CTS.Features.Transform.Accounts;
     using Fanex.NAP.SPU.CTS.Features.Transform.AssociationByDevice;
@@ -28,9 +27,10 @@
     using Fanex.NAP.SPU.CTS.Features.UserPermission;
     using Fanex.NAP.SPU.CTS.JobService.Services.ArchiveAssociationCustomer;
     using Fanex.NAP.SPU.CTS.JobService.Services.ArchiveData;
-    using Fanex.NAP.SPU.CTS.JobService.Services.ProblemCaseMonitor;
+    using Fanex.NAP.SPU.CTS.JobService.Services.Notification;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.DependencyInjection;
+    using System;
 
     public static class InitService
     {
@@ -62,8 +62,6 @@
 
             RegisterArchiveHistoryClassification(services);
 
-            RegisterClassifyProblemCaseMonitor(services);
-            
             RegisterArchiveAssociationCustomer(services);      
 
             RegisterArchiveHistoryClassificationBySport(services);
@@ -71,6 +69,15 @@
             RegisterAssociationDetection(services);
             
             RegisterJobMonitoring(services);
+
+            RegisterNotification(services);
+        }
+
+        private static void RegisterNotification(IServiceCollection services)
+        {
+            services.AddSingleton<INotificationJobService, NotificationJobService>();
+            services.AddSingleton<IDBAMonitoringService, DBAMonitoringService>();
+            services.AddSingleton<IDBAMonitoringDataAccess, DBAMonitoringDataAccess>();
         }
 
         private static void RegisterAssociationDetection(IServiceCollection services)
@@ -197,14 +204,6 @@
             services.AddSingleton<IArchiveHistoryClassificationJobService, ArchiveHistoryClassificationJobService>();
         }
 
-        private static void RegisterClassifyProblemCaseMonitor(this IServiceCollection services)
-        {
-            services.AddSingleton<IProblemCaseMonitorDataAccess, ProblemCaseMonitorDataAccess>();
-            services.AddSingleton<IProblemCaseMonitorService, ProblemCaseMonitorService>();
-            services.AddSingleton<IProblemCaseMonitorClassificationJobService, ProblemCaseMonitorClassificationJobService>();
-            services.AddSingleton<IProblemCaseMonitorAssociationJobService, ProblemCaseMonitorAssociationJobService>();
-        }
-       
         private static void RegisterArchiveAssociationCustomer(this IServiceCollection services)
         {
             services.AddSingleton<IArchiveAssociationCustomerDataAccess, ArchiveAssociationCustomerDataAccess>();

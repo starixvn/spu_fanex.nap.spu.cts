@@ -33,5 +33,11 @@
         public DateTime InsertDate { get; set; }
 
         public DateTime PerformanceTime { get; set; }
+
+        public int ParentID { get; set; }
+
+        public int SourceTypeID { get; set; }
+
+        public string Remark { get; set; }
     }
 }

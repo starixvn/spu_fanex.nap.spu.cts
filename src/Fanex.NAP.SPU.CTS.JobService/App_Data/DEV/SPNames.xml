@@ -82,13 +82,6 @@
 	  <Setting Key="CTS_DC_ArchiveCustomer_CorrectData" SpName="CTS_DC_ArchiveCustomer_CorrectData" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
   </Function>
 
-	<Function name="ProblemCaseMonitor">
-		<Setting Key="CTS_DC_ProblemCaseMonitor_Classification_Get" SpName="CTS_DC_ProblemCaseMonitor_Classification_Get" DbName="MySQL.SLAVE.CTS_DataCenter.ctsService" />
-		<Setting Key="CTS_DC_ProblemCaseMonitor_Classification_Insert" SpName="CTS_DC_ProblemCaseMonitor_Classification_Insert" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
-		<Setting Key="CTS_DC_ProblemCaseMonitor_Association_Get" SpName="CTS_DC_ProblemCaseMonitor_Association_Get" DbName="MySQL.SLAVE.CTS_DataCenter.ctsService"  TimeOut="600" />
-		<Setting Key="CTS_DC_ProblemCaseMonitor_Association_Insert" SpName="CTS_DC_ProblemCaseMonitor_Association_Insert" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
-	</Function>
-	
 	<Function name="ArchiveAssociationCustomer">
 		<Setting Key="CTS_Arc_CustomerAssociation_Archive" SpName="CTS_Arc_CustomerAssociation_Archive" DbName="MySQL.CTS_Archive.ctsServiceAdmin" />
 		<Setting Key="CTS_Arc_CustomerAssociation_Rollback" SpName="CTS_Arc_CustomerAssociation_Rollback" DbName="MySQL.CTS_Archive.ctsServiceAdmin" />		
@@ -98,9 +91,9 @@
 		<Setting Key="CTS_Association_GetBySharedMatches" SpName="CTS_Association_GetBySharedMatches" DbName="SQL.bodb02.bodbSPUNet" />
 		<Setting Key="CTS_DC_Association_Primary_GetCustEdge" SpName="CTS_DC_Association_Primary_GetCustEdge" DbName="MySQL.CTS_DataCenter.ctsService" Timeout="300" />
 		<Setting Key="CTS_DC_Association_Agent_GetCustEdge" SpName="CTS_DC_Association_Agent_GetCustEdge" DbName="MySQL.CTS_DataCenter.ctsService" Timeout="300" />
-		<Setting Key="CTS_DC_Association_DetectGroup" SpName="CTS_DC_Association_DetectGroup" DbName="MySQL.CTS_DataCenter.ctsService" Timeout="300" />
 		<Setting Key="CTS_DC_Association_GetDirectCustEdge" SpName="CTS_DC_Association_GetDirectCustEdge" DbName="MySQL.CTS_DataCenter.ctsService" Timeout="300" />
 		<Setting Key="CTS_DC_Association_CustGroup" SpName="CTS_DC_Association_CustGroup" DbName="MySQL.CTS_DataCenter.ctsService" Timeout="300" />
+		<Setting Key="CTS_DC_Association_DetectGroup" SpName="CTS_DC_Association_DetectGroup" DbName="MySQL.CTS_DataCenter.ctsService" Timeout="300" />
 	</Function>
 
 	<Function Name="Common">
@@ -113,4 +106,7 @@
 		<Setting Key="DCS_DC_Monitoring_LoginTransactionProcess_Get" SpName="DCS_DC_Monitoring_LoginTransactionProcess_Get" DbName="MySQL.DCS_DataCenter.ctsService" />
 	</Function>
 
+	<Function>
+		<Setting Key="CTS_DC_DBAAdmin_Monitoring" SpName="CTS_DC_DBAAdmin_Monitoring" DbName="MySQL.CTS_DataCenter.ctsService" />
+	</Function>
 </Functions>

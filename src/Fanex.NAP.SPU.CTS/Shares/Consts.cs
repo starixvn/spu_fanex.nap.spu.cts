@@ -24,6 +24,10 @@
 
         public const int ExpiredHttpRequest = 85500000; //23h 45p
 
+        public const string MicrosoftTeams_GroupId_Local = "19:00af2ff331b64d39adf13b428aa49c6e@thread.tacv2";
+
+        public const string MicrosoftTeams_Notification_DBAMonitoring = "19:8e150ecd35c64f4099ec8107ea1e188b@thread.tacv2";
+
         public enum MatchMonitorQueryTypes
         {
             Service = 1
@@ -49,40 +53,6 @@
             CorrectArchiveCustomer_LastArchiveDate_Deposit = 1004,
             CorrectArchiveCustomer_LastCustID_Deposit = 1005,
             CorrectArchiveCustomer_MaxArchiveDate_Deposit = 1006,
-        };
-
-        public enum DangerLevel
-        {
-            Original = 1,
-            ABI = 2,
-            Other = 3
-        }
-
-        public enum Category
-        {
-            Newmember = 201,
-            NormalMember = 202,
-            SmartPunter = 203,
-            HighRishPunter = 204,
-            VIP = 205,
-            Probation = 206,
-            VVIP = 213,
-            Robot = 61
-        };
-
-        public enum CustomerRole
-        {
-            Member = 1,
-            Agent = 2,
-            Master = 3,
-            Super = 4
-        };
-
-        public enum FlowTypeRescanCC
-        {
-            NewMember,
-            RemoveMultipleEvidence,
-            Other
         };
 
         public enum UpdateCustomer

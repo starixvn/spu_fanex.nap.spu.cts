@@ -1,5 +1,6 @@
 ﻿using Fanex.Logging.Extensions;
 using Fanex.Logging.Extensions.Database;
+using Fanex.NAP.SPU.Notification.Services;
 using Newtonsoft.Json;
 using Sentry;
 using System;
@@ -142,6 +143,37 @@ namespace Fanex.NAP.SPU.CTS.Shares
         public static T GetService<T>(this IServiceProvider serviceProvider)
         {
             return (T)serviceProvider.GetService(typeof(T));
+        }
+
+        public static void NotifyTeamsMessage(string message, string systemName, string environment, string groupId)
+        {
+            var notificationService = new NotificationService();
+            string proxy = environment == "PROD" ? "lisasqd.nebula.prod:8801" : null;
+            notificationService
+               .Config("0A40aOc7CtpzjbBSJu8KNWQRoXyjRvf9", groupId, "https://bot.nexdev.net/skynex/api/messages/forwardwithtoken", proxy)
+               .Message(new MessageModel(systemName, DateTime.Now, environment, message))
+               .SendWithoutDelay();
+        }
+
+        public static string BuildMessage<T>(this IEnumerable<T> list, int padRightNumber = 30) where T : class
+        {
+            var messageArr = list.Select((x, pos) =>
+            {
+                var text = "\r\n";
+                text += $"\n 🆘 ID: {pos + 1} \n";
+
+                typeof(T).GetProperties().ToList().ForEach(y =>
+                {
+                    var name = y.Name;
+                    var value = y.GetValue(x);
+
+                    text += $"\n\t {name.PadRight(padRightNumber - name.Length)} : {value} \n";
+                });
+
+                return text;
+            });
+
+            return string.Join("\r\n", messageArr);
         }
     }
 }

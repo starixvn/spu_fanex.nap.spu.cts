@@ -50,7 +50,6 @@
 		<Setting Key="CTS_DC_Association_InsertAssociationByDevice" SpName="CTS_DC_Association_InsertAssociationByDevice" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
 	</Function>
 	<Function name="AffectedEvidence">
-		<Setting Key="NAP_BLControl_EvidenceFlagged" SpName="NAP_BLControl_EvidenceFlagged" DbName="SQL.CustDB.bodbAdminNet" />
 		<Setting Key="CTS_DC_CustEvidence_InsertFromAssociation" SpName="CTS_DC_CustEvidence_InsertFromAssociation" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" TimeOut="3600" />
 		<Setting Key="CTS_DC_CustEvidenceQueue_Affected_Insert" SpName="CTS_DC_CustEvidenceQueue_Affected_Insert" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" TimeOut="600" />
 		<Setting Key="CTS_DC_CustEvidenceQueue_Affected_Remove" SpName="CTS_DC_CustEvidenceQueue_Affected_Remove" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" TimeOut="600" />
@@ -76,12 +75,6 @@
     <Setting Key="CTS_ArchiveCustomer_Get" SpName="CTS_ArchiveCustomer_Get" DbName="DBARCCUST.bodb_Customer.bodbSPUNet" />
   </Function>
 
-	<Function name="ProblemCaseMonitor">
-		<Setting Key="CTS_DC_ProblemCaseMonitor_Classification_Get" SpName="CTS_DC_ProblemCaseMonitor_Classification_Get" DbName="MySQL.SLAVE.CTS_DataCenter.ctsService" />
-		<Setting Key="CTS_DC_ProblemCaseMonitor_Classification_Insert" SpName="CTS_DC_ProblemCaseMonitor_Classification_Insert" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
-		<Setting Key="CTS_DC_ProblemCaseMonitor_Association_Get" SpName="CTS_DC_ProblemCaseMonitor_Association_Get" DbName="MySQL.SLAVE.CTS_DataCenter.ctsService"  TimeOut="600" />
-		<Setting Key="CTS_DC_ProblemCaseMonitor_Association_Insert" SpName="CTS_DC_ProblemCaseMonitor_Association_Insert" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
-	</Function>
 	<Function name="ArchiveAssociationCustomer">
 		<Setting Key="CTS_Arc_CustomerAssociation_Archive" SpName="CTS_Arc_CustomerAssociation_Archive" DbName="MySQL.MASTER.CTS_Archive.ctsServiceAdmin" TimeOut="300" />
 		<Setting Key="CTS_Arc_CustomerAssociation_Rollback" SpName="CTS_Arc_CustomerAssociation_Rollback" DbName="MySQL.MASTER.CTS_Archive.ctsServiceAdmin" />
@@ -107,4 +100,7 @@
 		<Setting Key="DCS_DC_Monitoring_LoginTransactionProcess_Get" SpName="DCS_DC_Monitoring_LoginTransactionProcess_Get" DbName="MySQL.DCS_DataCenter.ctsService" />
 	</Function>
 
+	<Function>
+		<Setting Key="CTS_DC_DBAAdmin_Monitoring" SpName="CTS_DC_DBAAdmin_Monitoring" DbName="MySQL.CTS_DataCenter.ctsService" />
+	</Function>
 </Functions>
