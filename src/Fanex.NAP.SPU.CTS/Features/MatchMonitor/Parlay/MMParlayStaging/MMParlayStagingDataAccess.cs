@@ -32,8 +32,8 @@
                 IsLive = isLive,
                 ListSportBettype = betTypeInfos
             };
-
-            var (maxSequenceID, data) = repository.FetchMultiple<long, ParlayTicketDetailEntity>(criteria);
+           
+            var (maxSequenceID, data) = repository.FetchMultiple<long?, ParlayTicketDetailEntity>(criteria);
 
             return (maxSequenceID?.FirstOrDefault() ?? 0, data);
         }
