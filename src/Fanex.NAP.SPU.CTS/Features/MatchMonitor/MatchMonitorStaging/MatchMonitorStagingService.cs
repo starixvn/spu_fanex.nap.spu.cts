@@ -107,6 +107,7 @@
                 BettypeIDList = null,
                 SportTypeIDList = null,
                 IsFilterMMDetection = true,
+                IsFilterMMParlayDetection = false,
                 IsShowDetailsX = false,
                 Status = 1
             };

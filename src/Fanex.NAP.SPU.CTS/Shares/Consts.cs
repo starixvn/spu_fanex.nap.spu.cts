@@ -53,6 +53,8 @@
             CorrectArchiveCustomer_LastArchiveDate_Deposit = 1004,
             CorrectArchiveCustomer_LastCustID_Deposit = 1005,
             CorrectArchiveCustomer_MaxArchiveDate_Deposit = 1006,
+            MatchMonitorParlayLastScannedTrans = 171, // LastSequenceID
+            MatchMonitorParlayLastScannedTransNoneLive = 172, // LastSequenceID
         };
 
         public enum UpdateCustomer
@@ -123,6 +125,16 @@
             MatchMonitorStagingArbitrageNonLive         = 2004,
             MatchMonitorStagingFixedGameNonLive         = 2005,
             MatchMonitorStagingIrrigationNonLive        = 2006
+        }
+
+        public enum MatchMonitorParlayStagingLivePoolType
+        {
+            MatchMonitorStagingGroupBettingLive = 1001           
+        }
+
+        public enum MatchMonitorStagingParlayNonLivePoolType
+        {
+            MatchMonitorStagingGroupBettingNonLive = 2001            
         }
     }
 }

@@ -55,6 +55,7 @@
                 BettypeIDList = infos.BettypeIDList,
                 SportTypeIDList = infos.SportTypeIDList,
                 IsFilterMMDetection = infos.IsFilterMMDetection,
+                IsFilterMMParlayDetection = infos.IsFilterMMParlayDetection,
                 IsShowDetailsX = infos.IsShowDetailsX,
                 Status = infos.Status
             };

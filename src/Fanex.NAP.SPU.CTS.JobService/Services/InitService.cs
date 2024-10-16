@@ -18,6 +18,8 @@
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleGroupBetting;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleSabaGroupBetting;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorStaging;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Parlay.MMParlayRuleGroupBetting;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Parlay.MMParlayStaging;
     using Fanex.NAP.SPU.CTS.Features.MonitorJobs.CustomerJobMonitor;
     using Fanex.NAP.SPU.CTS.Features.Notification;
     using Fanex.NAP.SPU.CTS.Features.SystemParameter;
@@ -28,6 +30,7 @@
     using Fanex.NAP.SPU.CTS.JobService.Services.ArchiveAssociationCustomer;
     using Fanex.NAP.SPU.CTS.JobService.Services.ArchiveData;
     using Fanex.NAP.SPU.CTS.JobService.Services.Notification;
+    using Fanex.NAP.SPU.CTS.JobService.Services.Parlay;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.DependencyInjection;
     using System;
@@ -70,8 +73,28 @@
             
             RegisterJobMonitoring(services);
 
+            RegisterMMParlayStaging(services);
+
+            RegisterMMParlayGroupBetting(services);
+
             RegisterNotification(services);
         }
+
+        private static void RegisterMMParlayGroupBetting(IServiceCollection services)
+        {
+            services.AddSingleton<IMMParlayRuleGroupBettingDataAccess, MMParlayRuleGroupBettingDataAccess>();
+            services.AddSingleton<IMMParlayRuleGroupBettingService, MMParlayRuleGroupBettingService>();
+            services.AddTransient<MMParlayRuleGroupBettingProcessService>();
+
+        }
+
+        private static void RegisterMMParlayStaging(IServiceCollection services)
+        {
+            services.AddSingleton<IMMParlayStagingDataAccess, MMParlayStagingDataAccess>();
+            services.AddSingleton<IMMParlayStagingService, MMParlayStagingService>();
+            services.AddSingleton<IMatchMonitorParlayJobService, MatchMonitorParlayJobService>();
+        }
+
 
         private static void RegisterNotification(IServiceCollection services)
         {

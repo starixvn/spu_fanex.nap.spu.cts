@@ -45,7 +45,7 @@
             if (MatchStaging != null && MatchStaging.MatchGroupStagingList.IsNotNullOrEmpty())
             {
                 var matchProcessesRound1 =
-                    MatchStaging.MatchGroupStagingList
+                    MatchStaging.MatchGroupStagingList  
                         .Select(matchInfo => ProcessWithAssociationRound1(matchInfo, IsLive))
                         .Where(matchInfo => matchInfo != null).ToList();
 

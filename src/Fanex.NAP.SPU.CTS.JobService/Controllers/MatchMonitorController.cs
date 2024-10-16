@@ -1,6 +1,7 @@
 ﻿namespace Fanex.NAP.SPU.CTS.JobService.Controllers
 {
     using Fanex.NAP.SPU.CTS.JobService.Services;
+    using Fanex.NAP.SPU.CTS.JobService.Services.Parlay;
     using Microsoft.AspNetCore.Mvc;
     using Sentry;
     using System.Threading.Tasks;
@@ -11,12 +12,15 @@
     {
         private readonly ISentryClient sentryClient;
         private readonly IMatchMonitorJobService matchMonitorJobService;
+        private readonly IMatchMonitorParlayJobService matchMonitorParlayJobService;
 
         public MatchMonitorController(ISentryClient sentryClient,
-            IMatchMonitorJobService matchMonitorJobService)
+            IMatchMonitorJobService matchMonitorJobService, 
+            IMatchMonitorParlayJobService matchMonitorParlayJobService)
         {
             this.sentryClient = sentryClient;
             this.matchMonitorJobService = matchMonitorJobService;
+            this.matchMonitorParlayJobService = matchMonitorParlayJobService;
         }
 
         [HttpPost("MatchMonitorInsertTicketDetailLive")]
@@ -122,5 +126,32 @@
         {
             return await this.matchMonitorJobService.ProcessRuleArbitrage(false, numberOfThread);
         }
+
+        #region Mix Parlay
+        [HttpPost("MatchMonitorParlayInsertTicketDetailLive")]
+        public async Task<bool> MatchMonitorParlayInsertTicketDetailLive([FromForm] int size)
+        {
+            return await this.matchMonitorParlayJobService.InsertParlayTicketDetail(size, true);
+        }
+
+        [HttpPost("MatchMonitorParlayInsertTicketDetailNonLive")]
+        public async Task<bool> MatchMonitorParlayInsertTicketDetailNonLive([FromForm] int size)
+        {
+            return await this.matchMonitorParlayJobService.InsertParlayTicketDetail(size, false);
+        }
+
+        [HttpPost("MatchMonitorParlayProcessRuleGroupBettingLive")]
+        public async Task<bool> MatchMonitorParlayProcessRuleGroupBettingLive([FromForm] int numberOfThread)
+        {
+            return await this.matchMonitorParlayJobService.ProcessParlayRuleGroupBetting(true, numberOfThread);
+        }
+
+        [HttpPost("MatchMonitorParlayProcessRuleGroupBettingNonLive")]
+        public async Task<bool> MatchMonitorParlayProcessRuleGroupBettingNonLive([FromForm] int numberOfThread)
+        {
+            return await this.matchMonitorParlayJobService.ProcessParlayRuleGroupBetting(false, numberOfThread);
+        }
+        #endregion
+
     }
 }
