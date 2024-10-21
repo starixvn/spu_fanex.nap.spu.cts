@@ -15,7 +15,7 @@
     {
         private readonly IAffectedEvidenceDataAccess dataAccess;
 
-        public AffectedEvidenceService(IAffectedEvidenceDataAccess dataAccess, ISentryClient sentryClient)
+        public AffectedEvidenceService(IAffectedEvidenceDataAccess dataAccess)
         {
             this.dataAccess = dataAccess;
         }
