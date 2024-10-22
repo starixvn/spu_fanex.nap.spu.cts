@@ -32,7 +32,7 @@
 
         public DateTime InsertDate { get; set; }
 
-        public DateTime PerformanceTime { get; set; }
+        public DateTime? PerformanceTime { get; set; }
 
         public int ParentID { get; set; }
 

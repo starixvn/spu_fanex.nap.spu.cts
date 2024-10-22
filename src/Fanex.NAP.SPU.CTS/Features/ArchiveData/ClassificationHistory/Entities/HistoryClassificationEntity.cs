@@ -80,6 +80,6 @@
 
         public int IssueTypeID { get; set; }
 
-        public DateTime PerformanceTime { get; set; }
+        public DateTime? PerformanceTime { get; set; }
     }
 }
