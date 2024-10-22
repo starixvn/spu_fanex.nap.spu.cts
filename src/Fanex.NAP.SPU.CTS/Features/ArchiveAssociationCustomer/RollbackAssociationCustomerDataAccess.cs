@@ -2,12 +2,6 @@
 {
     using Fanex.Data.Repository;
     using Fanex.NAP.SPU.CTS.Features.ArchiveAssociationCustomer.Criteria;
-    using Fanex.NAP.SPU.CTS.Shares.Models;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
     public interface IRollbackAssociationCustomerDataAccess
     {

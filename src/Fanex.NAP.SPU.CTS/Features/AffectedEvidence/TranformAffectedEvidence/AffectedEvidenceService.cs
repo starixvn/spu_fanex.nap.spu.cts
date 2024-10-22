@@ -1,6 +1,5 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.AffectedEvidence
 {
-    using Sentry;
     using System.Collections.Generic;
     using System.Linq;
 

@@ -1,13 +1,9 @@
-﻿using Fanex.Data;
-using Fanex.Data.Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Fanex.NAP.SPU.CTS.Features.ExistingCustomer.Criteria
+﻿namespace Fanex.NAP.SPU.CTS.Features.ExistingCustomer.Criteria
 {
+    using Fanex.Data;
+    using Fanex.Data.Repository;
+    using System;
+
     public class CheckCustNotExistedByCustIdsCriteria : CriteriaBase
     {
         [SpParam(SqlParamName = "ip_CustIDList")]

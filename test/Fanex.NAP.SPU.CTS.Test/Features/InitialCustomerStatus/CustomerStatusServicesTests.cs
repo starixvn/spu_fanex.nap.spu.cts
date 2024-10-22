@@ -9,6 +9,7 @@ using static Fanex.NAP.SPU.CTS.Tests.Infrastructure.Consts.CustomerStatusConsts;
 
 namespace Fanex.NAP.SPU.CTS.Tests.Features.InitialCustomerStatus
 {
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S3415:Assertion arguments should be passed in the correct order", Justification = "<Pending>")]
     public class CustomerStatusServicesTests
     {
         private readonly ICustomerStatusDataAccess _dataAccess;
@@ -39,7 +40,7 @@ namespace Fanex.NAP.SPU.CTS.Tests.Features.InitialCustomerStatus
             _dataAccess.Received(1).GetCustIds(Arg.Any<int>());
 
             Assert.Equal((long)lastCustId, 1);
-            Assert.Equal(custIdsToString, "1,2,3,4");
+            Assert.Equal("1,2,3,4", custIdsToString);
         }
 
         [Fact]

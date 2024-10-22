@@ -4,7 +4,6 @@
     using Fanex.NAP.Client.Services;
     using Fanex.NAP.SPU.CTS.Features.UserPermission.Entities;
     using Newtonsoft.Json;
-    using Sentry;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -20,13 +19,11 @@
     public class UserPermissionService : IUserPermissionService
     {
         private readonly IUserPermissionDataAccess dataAccess;
-        private readonly ISentryClient sentryClient;
         private readonly UserService userService;
 
-        public UserPermissionService(IUserPermissionDataAccess dataAccess, ISentryClient sentryClient)
+        public UserPermissionService(IUserPermissionDataAccess dataAccess)
         {
             this.dataAccess = dataAccess;
-            this.sentryClient = sentryClient;
             userService = new UserService();
         }
 

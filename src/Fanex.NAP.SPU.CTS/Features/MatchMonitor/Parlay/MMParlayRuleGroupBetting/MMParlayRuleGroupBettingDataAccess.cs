@@ -48,7 +48,7 @@
             string transIDmList, 
             string groupDetection)
         {
-            var criteria = new MMParlayRuleGroupBettingProcessCriteria()
+            var criteria = new MMParlayRuleGroupBettingProcessCriteria
             {
                 IsLive = isLive,
                 BetId = matchInfo.BetID,
@@ -90,7 +90,7 @@
 
         public void CleanTransRuleGroupBetting(bool isLive, UInt64 maxSequenceID)
         {
-            var criteria = new MMRuleGroupBettingTransCleanCriteria()
+            var criteria = new MMRuleGroupBettingTransCleanCriteria
             {
                 IsLive = isLive,
                 MaxSequenceID = maxSequenceID

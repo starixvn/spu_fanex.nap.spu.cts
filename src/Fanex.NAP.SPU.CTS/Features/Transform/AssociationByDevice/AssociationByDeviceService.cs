@@ -1,14 +1,9 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.Transform.AssociationByDevice
 {
     using Fanex.NAP.SPU.CTS.Features.Transform.AssociationByDevice.Entities;
-    using Fanex.NAP.SPU.CTS.Shares;
     using Newtonsoft.Json;
-    using Sentry;
-    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
     public interface IAssociationByDeviceService
     {
@@ -21,12 +16,10 @@
     {
         private readonly IAssociationByDeviceDataAccess dataAccess;
 
-        private readonly ISentryClient sentryClient;
         
-        public AssociationByDeviceService(IAssociationByDeviceDataAccess dataAccess, ISentryClient sentryClient)
+        public AssociationByDeviceService(IAssociationByDeviceDataAccess dataAccess)
         {
             this.dataAccess = dataAccess;
-            this.sentryClient = sentryClient;
         }
 
         public IEnumerable<RawAssociationEntity> GetRawAssociation(int quantityPerBatch, int numOfBatch)

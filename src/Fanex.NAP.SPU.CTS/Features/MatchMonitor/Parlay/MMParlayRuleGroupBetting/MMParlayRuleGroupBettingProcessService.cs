@@ -6,10 +6,8 @@
     using Fanex.NAP.SPU.CTS.Shares;
     using Newtonsoft.Json;
     using Sentry;
-    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using static Fanex.NAP.SPU.CTS.Shares.Consts;
 
     public class MMParlayRuleGroupBettingProcessService : IMMParlayRuleProcessService<MMParlayStagingRuleGroupBettingGroupModel>
     {
@@ -29,6 +27,7 @@
             MatchProcesses = new List<MMParlayProcessRuleGroupBettingModel>();
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S1006:Method overrides should not change parameter defaults", Justification = "<Pending>")]
         public IMMParlayRuleProcessService PrepareProcess(MMParlayStagingRuleGroupBettingGroupModel matchStaging, 
             bool isLive,
             IReadOnlyDictionary<int, int> mappingCustDictionary)

@@ -1,5 +1,7 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Shares
 {
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Minor Code Smell", "S2148:Underscores should be used to make large numbers readable", Justification = "<Pending>")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Minor Code Smell", "S2342:Enumeration types should comply with a naming convention", Justification = "<Pending>")]
     public static class Consts
     {
         public const int RetryPushCCToExternal = 3;
@@ -111,30 +113,30 @@
 
         public enum MatchMonitorStagingLivePoolType
         {
-            MatchMonitorStagingGroupBettingLive         = 1001,
-            MatchMonitorStagingGroupBettingSabaLive     = 1002,
-            MatchMonitorStagingHedgingLive              = 1003,
-            MatchMonitorStagingFixedGameLive            = 1004
+            MatchMonitorStagingGroupBettingLive = 1001,
+            MatchMonitorStagingGroupBettingSabaLive = 1002,
+            MatchMonitorStagingHedgingLive = 1003,
+            MatchMonitorStagingFixedGameLive = 1004
         }
 
         public enum MatchMonitorStagingNonLivePoolType
         {
-            MatchMonitorStagingGroupBettingNonLive      = 2001,
-            MatchMonitorStagingGroupBettingSabaNonLive  = 2002,
-            MatchMonitorStagingHedgingNonLive           = 2003,
-            MatchMonitorStagingArbitrageNonLive         = 2004,
-            MatchMonitorStagingFixedGameNonLive         = 2005,
-            MatchMonitorStagingIrrigationNonLive        = 2006
+            MatchMonitorStagingGroupBettingNonLive = 2001,
+            MatchMonitorStagingGroupBettingSabaNonLive = 2002,
+            MatchMonitorStagingHedgingNonLive = 2003,
+            MatchMonitorStagingArbitrageNonLive = 2004,
+            MatchMonitorStagingFixedGameNonLive = 2005,
+            MatchMonitorStagingIrrigationNonLive = 2006
         }
 
         public enum MatchMonitorParlayStagingLivePoolType
         {
-            MatchMonitorStagingGroupBettingLive = 1001           
+            MatchMonitorStagingGroupBettingLive = 1001
         }
 
         public enum MatchMonitorStagingParlayNonLivePoolType
         {
-            MatchMonitorStagingGroupBettingNonLive = 2001            
+            MatchMonitorStagingGroupBettingNonLive = 2001
         }
     }
 }

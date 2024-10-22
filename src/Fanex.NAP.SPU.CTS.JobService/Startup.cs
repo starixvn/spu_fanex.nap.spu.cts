@@ -7,10 +7,8 @@ namespace Fanex.NAP.SPU.CTS.JobService
     using Fanex.Logging.Sentry;
     using Fanex.NAP.Client;
     using Fanex.NAP.Client.AspNetCore.Configuration;
-    using Fanex.NAP.Client.AspNetCore.Session;
     using Fanex.NAP.Client.Configuration;
     using Fanex.NAP.Client.Helpers.Web;
-    using Fanex.NAP.Client.Services;
     using Fanex.NAP.SPU.CTS.JobService.Services;
     using HealthChecks.UI.Client;
     using Microsoft.AspNetCore.Builder;
@@ -56,6 +54,8 @@ namespace Fanex.NAP.SPU.CTS.JobService
             RegisterLogging(appSettings);
 
             FanexDataConfig(appSettings);
+
+            Shares.ApiHelper.Setup(appSettings.APIHelperConfig);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -98,14 +98,14 @@ namespace Fanex.NAP.SPU.CTS.JobService
                                            x => x.GetValue<string>("Name"),
                                            y => new ConnectionConfiguration(y.GetValue<string>("Name"), y.GetValue<string>("ConnectionString"), y.GetValue<string>("ProviderName"))
                                    );
-                        
+
             DbSettingProviderManager
               .StartNewSession()
               .Use(connections)
               .WithSqlServer()
               .WithMySql()
               .UseDefaultDbSettingProvider(resourcePath: appSettings.SPName)
-              .Run();                       
+              .Run();
         }
 
         private void RegisterLogging(IAppSettings appSettings)

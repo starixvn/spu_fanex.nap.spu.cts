@@ -1,7 +1,5 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.AssociationDetection.Models
 {
-    using Newtonsoft.Json;
-
     public class MergeGroupAssociationFilterModel
     {
         public string CTSCustIDs { get; set; }

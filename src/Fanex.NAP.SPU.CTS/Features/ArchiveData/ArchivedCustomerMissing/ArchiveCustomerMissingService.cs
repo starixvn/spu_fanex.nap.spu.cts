@@ -31,7 +31,8 @@
             var lastCustIdArchive_Credit = sysParamService.GetSystemParamById<int>(SystemParameters.CorrectArchiveCustomer_LastCustID_Credit);
             var maxCustIdArchive_Credit = sysParamService.GetSystemParamById<DateTime>(SystemParameters.CorrectArchiveCustomer_MaxArchiveDate_Credit);
 
-            var archivedCusts_Credit = archiveCustMissingDataAccess.GetArchivedCustomerMissing(lastCustIdArchive_Credit, lastTimeArchive_Credit, maxCustIdArchive_Credit, batchSize, SubscriberType.Credit);
+            var archivedCusts_Credit = archiveCustMissingDataAccess
+                .GetArchivedCustomerMissing(lastCustIdArchive_Credit, lastTimeArchive_Credit, maxCustIdArchive_Credit, batchSize, SubscriberType.Credit);
 
             if (archivedCusts_Credit != null && archivedCusts_Credit.Any())
             {
@@ -45,7 +46,8 @@
             var lastCustIdArchive_Deposit = sysParamService.GetSystemParamById<int>(SystemParameters.CorrectArchiveCustomer_LastCustID_Deposit);
             var maxCustIdArchive_Deposit = sysParamService.GetSystemParamById<DateTime>(SystemParameters.CorrectArchiveCustomer_MaxArchiveDate_Deposit);
 
-            var archivedCusts_Deposit = archiveCustMissingDataAccess.GetArchivedCustomerMissing(lastCustIdArchive_Deposit, lastTimeArchive_Deposit, maxCustIdArchive_Deposit, batchSize, SubscriberType.Deposit);
+            var archivedCusts_Deposit = archiveCustMissingDataAccess
+                .GetArchivedCustomerMissing(lastCustIdArchive_Deposit, lastTimeArchive_Deposit, maxCustIdArchive_Deposit, batchSize, SubscriberType.Deposit);
 
             if (archivedCusts_Deposit != null && archivedCusts_Deposit.Any())
             {

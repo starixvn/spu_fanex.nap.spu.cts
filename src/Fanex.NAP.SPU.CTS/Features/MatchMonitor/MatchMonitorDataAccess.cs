@@ -67,7 +67,7 @@
 
         public IEnumerable<MatchCompleteRuleFixedGameModel> ProcessRuleFixedGame(bool isLive, UInt64 maxSequenceID, MatchStagingRuleFixedGameModel matchinfo)
         {
-            var criteria = new MatchMonitorRuleFixedGameProcessCriteria()
+            var criteria = new MatchMonitorRuleFixedGameProcessCriteria
             {
                 IsLive = isLive,
                 BettypeId = matchinfo.BetTypeID,

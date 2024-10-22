@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.SPU.CTS.JobService
 {
+    using Fanex.NAP.SPU.CTS.Shares.Models;
     using Microsoft.Extensions.Configuration;
     using System;
     using System.ComponentModel;
@@ -31,6 +32,8 @@
         int CustomerStatusBatchSize { get; }
 
         string SentryDsn { get; }
+
+        APIHelperConfig APIHelperConfig { get; }
     }
 
     public class AppSettings : IAppSettings
@@ -41,6 +44,7 @@
         private readonly string evironmentName;
         private readonly string spName;
         private readonly string sentryDsn;
+        private readonly APIHelperConfig apiHelperConfig;
 
         public AppSettings(IConfiguration configuration)
         {
@@ -50,6 +54,10 @@
             evironmentName = GetValue<string>(nameof(Environment));
             spName = GetValue<string>(nameof(SPName));
             sentryDsn = GetValue<string>("Sentry:Dsn");
+            apiHelperConfig = new APIHelperConfig
+            {
+                Proxy = GetValue<string>("APIHelperConfig:Proxy")
+            };
         }
 
         #region Variables
@@ -94,6 +102,7 @@
 
         public string SentryDsn => sentryDsn;
 
+        public APIHelperConfig APIHelperConfig => apiHelperConfig;
         #endregion Variables
 
         #region Methods

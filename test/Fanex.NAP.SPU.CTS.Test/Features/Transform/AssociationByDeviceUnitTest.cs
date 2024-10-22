@@ -13,13 +13,11 @@
     {
         private readonly IAssociationByDeviceService associationByDeviceService;
         private readonly IAssociationByDeviceDataAccess dataAccess;
-        private readonly ISentryClient sentryClient;
 
         public AssociationByDeviceUnitTest()
         {
             dataAccess = Substitute.For<IAssociationByDeviceDataAccess>();
-            sentryClient = Substitute.For<ISentryClient>();
-            associationByDeviceService = new AssociationByDeviceService(dataAccess, sentryClient);
+            associationByDeviceService = new AssociationByDeviceService(dataAccess);
         }
 
         [Fact]

@@ -15,6 +15,9 @@ using System.Threading.Tasks;
 
 namespace Fanex.NAP.SPU.CTS.Shares
 {
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Info Code Smell", "S6566:Prefer using DateTimeOffset instead of DateTime", Justification = "<Pending>")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Info Code Smell", "S2955:Use a comparison to 'default(T)' instead or add a constraint to 'T' so that it can't be a value type.", Justification = "<Pending>")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S103:Lines should not be too long", Justification = "<Pending>")]
     public static class Utilities
     {
         public static IEnumerable<IEnumerable<TValue>> Chunk2<TValue>(

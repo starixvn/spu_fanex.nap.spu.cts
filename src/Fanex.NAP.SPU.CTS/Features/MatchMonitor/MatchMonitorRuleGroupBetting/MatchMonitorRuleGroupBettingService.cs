@@ -38,7 +38,7 @@
                 if (match.MatchStagingList.IsNotNullOrEmpty())
                 {
                     result.MatchStagingList = match.MatchStagingList.GroupBy(x => new { x.MatchID, x.ScoreDiff, x.BettypeID, x.BetID, x.Betteam })
-                                                        .Select(y => new MatchStagingRuleGroupBettingGroupModel()
+                                                        .Select(y => new MatchStagingRuleGroupBettingGroupModel
                                                         {
                                                             MatchID = y.Key.MatchID,
                                                             ScoreDiff = y.Key.ScoreDiff,

@@ -8,7 +8,6 @@
     using Fanex.NAP.SPU.CTS.Features.SystemParameter;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorStaging.Entities;
     using static Fanex.NAP.SPU.CTS.Shares.Consts;
-    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorStaging.Models;
 
     public interface IMatchMonitorStagingService
     {

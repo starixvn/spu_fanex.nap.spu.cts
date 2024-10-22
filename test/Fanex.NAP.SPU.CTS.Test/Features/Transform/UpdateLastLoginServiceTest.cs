@@ -14,7 +14,7 @@
         public UpdateLastLoginServiceTest()
         {
             _dataAccess = Substitute.For<IUpdateLastLoginDataAccess>();
-            _service = new UpdateLastLoginService(_dataAccess, null);
+            _service = new UpdateLastLoginService(_dataAccess);
         }
 
         [Fact]

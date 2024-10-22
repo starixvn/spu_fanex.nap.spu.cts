@@ -1,9 +1,7 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorArbitrage
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
-    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorArbitrage.Entities;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorArbitrage.Models;
     using Fanex.NAP.SPU.CTS.Shares;
 

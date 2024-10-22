@@ -2,7 +2,6 @@
 {
     using Fanex.NAP.SPU.CTS.Features.SystemParameter;
     using Newtonsoft.Json;
-    using Sentry;
     using System;
     using System.Linq;
     using static Fanex.NAP.SPU.CTS.Shares.Consts;
@@ -16,13 +15,11 @@
     {
         private readonly ISystemParameterServices sysParamService;
         private readonly IArchiveCustomerDataAccess archiveCustomerDataAccess;
-        private readonly ISentryClient sentryClient;
 
-        public ArchiveCustomerService(ISystemParameterServices sysParamService, IArchiveCustomerDataAccess archiveCustomerDataAccess, ISentryClient sentryClient)
+        public ArchiveCustomerService(ISystemParameterServices sysParamService, IArchiveCustomerDataAccess archiveCustomerDataAccess)
         {
             this.sysParamService = sysParamService;
             this.archiveCustomerDataAccess = archiveCustomerDataAccess;
-            this.sentryClient = sentryClient;
 
         }
 

@@ -20,14 +20,12 @@
     {
         private readonly UserPermissionService permissionService;
         private readonly IUserPermissionDataAccess dataAccess;
-        private readonly ISentryClient sentryClient;
         //private readonly UserService userService;
         
         public UserPermissionUnitTest()
         {
             dataAccess = Substitute.For<IUserPermissionDataAccess>();
-            sentryClient = Substitute.For<ISentryClient>();
-            permissionService = new UserPermissionService(dataAccess, sentryClient);
+            permissionService = new UserPermissionService(dataAccess);
             //userService = Substitute.For<UserService>();            
         }
 

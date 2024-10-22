@@ -17,12 +17,12 @@
             repository = new DynamicRepository();
         }
 
-        public void InsertIncorrectDataMonitoring(string incorrectDataJson, JobMonitor_IssueType issueType)
+        public void InsertIncorrectDataMonitoring(string incorrectDataJson, JobMonitor_IssueType type)
         {
             var criteria = new JobMonitoringInsertCriteria
             {
                 IncorrectData = incorrectDataJson,
-                IssueTypeID = (int)issueType
+                IssueTypeID = (int)type
             };
 
             repository.Execute(criteria);
