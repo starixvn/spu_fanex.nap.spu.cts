@@ -1,16 +1,19 @@
 ﻿namespace Fanex.NAP.SPU.CTS.JobService.Services.Notification
 {
     using Fanex.NAP.SPU.CTS.Features.Notification;
+    using Fanex.NAP.SPU.CTS.Features.Notification.Entities;
     using Fanex.NAP.SPU.CTS.Shares;
     using Sentry;
     using System;
+    using System.Collections.Generic;
     using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
     using static Fanex.NAP.SPU.CTS.Shares.Consts;
 
     public interface INotificationJobService
     {
-        Task<bool> ScanDBAMonitoring();
+        Task<bool> ScanDataConsistencyMonitoring();
     }
 
     public class NotificationJobService : INotificationJobService
@@ -25,31 +28,69 @@
             _dbaMonitoringService = dbaMonitoringService;
             _sentryClient = sentryClient;
             _appSettings = appSettings;
-            _serviceName = "Notification Job Service";
+            _serviceName = "DataConsistencyMonitoring";
         }
 
-        public async Task<bool> ScanDBAMonitoring()
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Minor Code Smell", "S1449:Culture should be specified for \"string\" operations", Justification = "<Pending>")]
+        public Task<bool> ScanDataConsistencyMonitoring()
         {
             try
             {
-                var scanData = _dbaMonitoringService.ScanDataMonitoring();
+                var timeSleepArr = new[] { 2, 4, 6, 8, 10 };
+                const int retryTime = 5;
+                var retryCount = 0;
 
-                if (scanData.IsNotNullOrEmpty())
+                do
                 {
-                    scanData.Chunk(5).ToList().ForEach(item =>
+                    if (retryCount > 0)
                     {
-                        Utilities.NotifyTeamsMessage(item.BuildMessage(), nameof(ScanDBAMonitoring), _appSettings.EvironmentName, _appSettings.EvironmentName == "LOCAL" ? MicrosoftTeams_GroupId_Local : MicrosoftTeams_Notification_DBAMonitoring);
-                    });
-                }
+                        Thread.Sleep(timeSleepArr[retryCount - 1] * 1000 * 60);
+                    }
+
+                    var scanData = _dbaMonitoringService.ScanDataMonitoring();
+
+                    if ((scanData.Status.IsNotNullOrEmpty() && scanData.Status.ToUpper().Equals(Consts.STOP)) ||
+                        retryCount == retryTime)
+                    {
+                        var message = $"CTS_DC_DataConsistency_CustomerCategory_Get, Status = {scanData.Status ?? "NULL"}";
+                        message += BuildMessage(scanData.Data);
+
+                        Utilities.NotifyTeamsMessage(
+                            message,
+                            _serviceName,
+                            _appSettings.EvironmentName,
+                            _appSettings.EvironmentName == "LOCAL" ? MicrosoftTeams_GroupId_Local : MicrosoftTeams_Notification_DBAMonitoring,
+                            isInfo: scanData.Data.IsNullOrEmpty());
+
+                        return Task.FromResult(true);
+                    }
+
+                    retryCount++;
+                } while (retryCount <= retryTime);
             }
             catch (Exception ex)
             {
                 Utilities.LogSentryError(_serviceName, ex.Message, string.Empty, ex, _sentryClient);
 
-                return false;
+                return Task.FromResult(false);
             }
 
-            return true;
+            return Task.FromResult(true);
+        }
+
+        private string BuildMessage(IEnumerable<DBAMonitoringEntity> list)
+        {
+            var messageArr = list?.Select(x =>
+            {
+                var text = "\r\n";
+                text += $"\n 🆘 {x.RuleMessage} \n";
+                text += $"\n {nameof(DBAMonitoringEntity.LogInfo)} {x.LogInfo} \n";
+                return text;
+            });
+
+            return messageArr.IsNotNullOrEmpty() ?
+                    string.Join("\r\n", messageArr) :
+                    "\r\n✅ DATA IS PERFECT!";
         }
     }
 }

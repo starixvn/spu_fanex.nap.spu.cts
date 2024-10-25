@@ -28,6 +28,8 @@
 
         public const string MicrosoftTeams_Notification_DBAMonitoring = "19:8e150ecd35c64f4099ec8107ea1e188b@thread.tacv2";
 
+        public const string STOP = "STOP";
+
         public enum MatchMonitorQueryTypes
         {
             Service = 1
@@ -111,30 +113,30 @@
 
         public enum MatchMonitorStagingLivePoolType
         {
-            MatchMonitorStagingGroupBettingLive         = 1001,
-            MatchMonitorStagingGroupBettingSabaLive     = 1002,
-            MatchMonitorStagingHedgingLive              = 1003,
-            MatchMonitorStagingFixedGameLive            = 1004
+            MatchMonitorStagingGroupBettingLive = 1001,
+            MatchMonitorStagingGroupBettingSabaLive = 1002,
+            MatchMonitorStagingHedgingLive = 1003,
+            MatchMonitorStagingFixedGameLive = 1004
         }
 
         public enum MatchMonitorStagingNonLivePoolType
         {
-            MatchMonitorStagingGroupBettingNonLive      = 2001,
-            MatchMonitorStagingGroupBettingSabaNonLive  = 2002,
-            MatchMonitorStagingHedgingNonLive           = 2003,
-            MatchMonitorStagingArbitrageNonLive         = 2004,
-            MatchMonitorStagingFixedGameNonLive         = 2005,
-            MatchMonitorStagingIrrigationNonLive        = 2006
+            MatchMonitorStagingGroupBettingNonLive = 2001,
+            MatchMonitorStagingGroupBettingSabaNonLive = 2002,
+            MatchMonitorStagingHedgingNonLive = 2003,
+            MatchMonitorStagingArbitrageNonLive = 2004,
+            MatchMonitorStagingFixedGameNonLive = 2005,
+            MatchMonitorStagingIrrigationNonLive = 2006
         }
 
         public enum MatchMonitorParlayStagingLivePoolType
         {
-            MatchMonitorStagingGroupBettingLive = 1001           
+            MatchMonitorStagingGroupBettingLive = 1001
         }
 
         public enum MatchMonitorStagingParlayNonLivePoolType
         {
-            MatchMonitorStagingGroupBettingNonLive = 2001            
+            MatchMonitorStagingGroupBettingNonLive = 2001
         }
     }
 }
