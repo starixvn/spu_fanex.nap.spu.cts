@@ -39,7 +39,7 @@ namespace Fanex.NAP.SPU.CTS.Shares
                 .ToList();
         }
 
-        public static IEnumerable<IEnumerable<T>> Chunk<T>(this IEnumerable<T> source, int chunksize)
+        public static IEnumerable<IEnumerable<T>> Chunk3<T>(this IEnumerable<T> source, int chunksize)
         {
             var q = new Queue<T>();
 
