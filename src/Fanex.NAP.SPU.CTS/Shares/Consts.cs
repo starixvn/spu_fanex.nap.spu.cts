@@ -30,6 +30,8 @@
 
         public const string MicrosoftTeams_Notification_DBAMonitoring = "19:8e150ecd35c64f4099ec8107ea1e188b@thread.tacv2";
 
+        public const string STOP = "STOP";
+
         public enum MatchMonitorQueryTypes
         {
             Service = 1

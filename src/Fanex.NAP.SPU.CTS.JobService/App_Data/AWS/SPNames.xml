@@ -110,6 +110,6 @@
   </Function>
 
 	<Function>
-		<Setting Key="CTS_DC_DBAAdmin_Monitoring" SpName="CTS_DC_DBAAdmin_Monitoring" DbName="MySQL.CTS_DataCenter.ctsService" />
+		<Setting Key="CTS_DC_DataConsistency_CustomerCategory_Get" SpName="CTS_DC_DataConsistency_CustomerCategory_Get" DbName="MySQL.CTS_DataCenter.ctsService" />
 	</Function>
 </Functions>
