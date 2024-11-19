@@ -46,5 +46,8 @@
 		<SonarQubeSetting Include="sonar.coverage.exclusions">
 			<Value>**/Shares/**/**/*, **/Features/**/Entities/*, **/Features/**/Criteria/*, **/Features/**/Model/*, **/*DataAccess.cs, **/*Model.cs, **/*Criteria.cs</Value>
 		</SonarQubeSetting>
+		<SonarQubeSetting Include="sonar.cpd.exclusions">
+			<Value>**/Features/**/Criteria/*, **/Features/**/Model/*, **/*Model.cs, **/*Criteria.cs</Value>
+		</SonarQubeSetting>
 	</ItemGroup>
 </Project>
