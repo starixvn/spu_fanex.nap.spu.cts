@@ -29,6 +29,7 @@
             MatchProcesses = new List<MatchProcessRuleArbitrageModel>();
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S1006:Method overrides should not change parameter defaults", Justification = "<Pending>")]
         public IMatchMonitorRuleProcessService PrepareProcess(MatchStagingRuleArbitrageGroupModel matchStaging, bool isLive, IReadOnlyDictionary<int, int> mappingCustDictionary)
         {
             MatchStaging = matchStaging;

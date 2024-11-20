@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using Fanex.NAP.SPU.CTS.Features.AssociationDetection;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
 
     public interface IMatchMonitorServices
@@ -27,13 +26,10 @@
     public class MatchMonitorServices : IMatchMonitorServices
     {
         private readonly IMatchMonitorDataAccess matchDataAccess;
-        private readonly IAssociationDetectionService associationDetectionService;
 
-        public MatchMonitorServices(IMatchMonitorDataAccess matchDataAccess,
-                                    IAssociationDetectionService associationDetectionService)
+        public MatchMonitorServices(IMatchMonitorDataAccess matchDataAccess)
         {
             this.matchDataAccess = matchDataAccess;
-            this.associationDetectionService = associationDetectionService;
         }
 
         public MatchMonitorRuleFixedGameModel GetMatchRuleFixedGame(bool isLive)
@@ -46,9 +42,9 @@
             return matchDataAccess.GetMatchMonitorRuleIrrigation(isLive);
         }
 
-        public IEnumerable<MatchCompleteRuleFixedGameModel> ProcessRuleFixedGame(bool isLive, UInt64 maxSequenceID, MatchStagingRuleFixedGameModel matchinfo)
+        public IEnumerable<MatchCompleteRuleFixedGameModel> ProcessRuleFixedGame(bool isLive, UInt64 maxTransId, MatchStagingRuleFixedGameModel matchinfo)
         {
-            return matchDataAccess.ProcessRuleFixedGame(isLive, maxSequenceID, matchinfo);
+            return matchDataAccess.ProcessRuleFixedGame(isLive, maxTransId, matchinfo);
         }
 
         public IEnumerable<MatchRuleIrrigationCompletedModel> InsertMatchMonitorRuleIrrigation(bool isLive, UInt64 maxSequenceID, MatchStagingRuleIrrigationModel matchinfo)

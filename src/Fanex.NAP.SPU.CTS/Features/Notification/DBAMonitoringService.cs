@@ -1,11 +1,10 @@
-﻿using Fanex.NAP.SPU.CTS.Features.Notification.Entities;
-using System.Collections.Generic;
-
-namespace Fanex.NAP.SPU.CTS.Features.Notification
+﻿namespace Fanex.NAP.SPU.CTS.Features.Notification
 {
+    using Fanex.NAP.SPU.CTS.Features.Notification.Model;
+
     public interface IDBAMonitoringService
     {
-        IEnumerable<DBAMonitoringEntity> ScanDataMonitoring();
+        DBAMonitoringModel ScanDataMonitoring();
     }
 
     public class DBAMonitoringService : IDBAMonitoringService
@@ -17,7 +16,7 @@ namespace Fanex.NAP.SPU.CTS.Features.Notification
             _dataAccess = dataAccess;
         }
 
-        public IEnumerable<DBAMonitoringEntity> ScanDataMonitoring()
+        public DBAMonitoringModel ScanDataMonitoring()
         {
             return _dataAccess.ScanDataMonitoring();
         }

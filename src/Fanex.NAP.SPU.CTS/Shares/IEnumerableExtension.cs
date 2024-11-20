@@ -1,12 +1,9 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Shares
 {
-    using Sentry;
-    using System;
     using System.Linq;
-    using Newtonsoft.Json;
     using System.Collections.Generic;
-    using Fanex.Logging.Extensions;
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Info Code Smell", "S4136:All 'All 'IsNullOrEmpty' method overloads should be adjacent.", Justification = "<Pending>")]
     public static class IEnumerableExtension
     {
         public static bool IsNullOrEmpty<T>(this IEnumerable<T> arr)

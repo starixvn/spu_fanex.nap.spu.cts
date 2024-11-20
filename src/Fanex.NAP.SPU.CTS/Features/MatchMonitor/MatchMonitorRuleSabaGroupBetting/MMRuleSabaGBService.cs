@@ -42,7 +42,7 @@ namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleSabaGroupBetti
                                                     .ToDictionary(x => x.CustID, x => x.CTSCustID);
 
                     result.MatchStagingList = match.MatchStagingList.GroupBy(x => new { x.MatchId, x.ScoreDiff, x.BetTypeID, x.BetID, x.BetTeam })
-                                                        .Select(y => new MatchStagingRuleSabaGBGroupModel()
+                                                        .Select(y => new MatchStagingRuleSabaGBGroupModel
                                                         {
                                                             MatchId = y.Key.MatchId,
                                                             ScoreDiff = y.Key.ScoreDiff,

@@ -45,7 +45,7 @@
 
         public MatchProcessRuleHedgingModel ProcessRuleHedging(bool isLive, MatchStagingRuleHedgingEntity matchinfo, string sequenceIDList, string groupDetection)
         {
-            var criteria = new MatchMonitorRuleHedgingProcessCriteria()
+            var criteria = new MatchMonitorRuleHedgingProcessCriteria
             {
                 IsLive = isLive,
                 MatchId = matchinfo.MatchId,

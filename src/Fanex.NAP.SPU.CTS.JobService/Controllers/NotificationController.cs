@@ -19,10 +19,10 @@
         /// Scan & notification via telegram
         /// </summary>
         /// <returns>This function is unused</returns>
-        [HttpPost("ScanDBAMonitoringData")]
-        public async Task<bool> ScanDBAMonitoringData()
+        [HttpPost("ScanDataConsistencyMonitoring")]
+        public async Task<bool> ScanDataConsistencyMonitoring()
         {
-            return await _jobService.ScanDBAMonitoring();
+            return await _jobService.ScanDataConsistencyMonitoring();
         }
     }
 }

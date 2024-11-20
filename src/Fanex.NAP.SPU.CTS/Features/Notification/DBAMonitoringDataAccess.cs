@@ -3,11 +3,11 @@
     using Fanex.Data.Repository;
     using Fanex.NAP.SPU.CTS.Features.Notification.Criteria;
     using Fanex.NAP.SPU.CTS.Features.Notification.Entities;
-    using System.Collections.Generic;
+    using Fanex.NAP.SPU.CTS.Features.Notification.Model;
 
     public interface IDBAMonitoringDataAccess
     {
-        IEnumerable<DBAMonitoringEntity> ScanDataMonitoring();
+        DBAMonitoringModel ScanDataMonitoring();
     }
 
     public class DBAMonitoringDataAccess : IDBAMonitoringDataAccess
@@ -19,13 +19,17 @@
             _repository = new DynamicRepository();
         }
 
-        public IEnumerable<DBAMonitoringEntity> ScanDataMonitoring()
+        public DBAMonitoringModel ScanDataMonitoring()
         {
             var criteria = new DBAMonitoringCriteria();
 
             var result = _repository.Fetch<DBAMonitoringEntity>(criteria);
 
-            return result;
+            return new DBAMonitoringModel
+            {
+                Data = result,
+                Status = criteria.Status
+            };
         }
     }
 }

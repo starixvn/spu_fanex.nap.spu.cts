@@ -1,12 +1,9 @@
-﻿using Fanex.NAP.SPU.CTS.Features.ExistingCustomer.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Fanex.NAP.SPU.CTS.Features.ExistingCustomer
+﻿namespace Fanex.NAP.SPU.CTS.Features.ExistingCustomer
 {
+    using Fanex.NAP.SPU.CTS.Features.ExistingCustomer.Entities;
+    using System;
+    using System.Collections.Generic;
+
     public interface IExistingCustomerServices
     {
         IEnumerable<CustomerEntity> GetPlaceBetCustomer(DateTime fromDate, DateTime toDate);

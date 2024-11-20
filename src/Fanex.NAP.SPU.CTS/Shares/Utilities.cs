@@ -15,6 +15,9 @@ using System.Threading.Tasks;
 
 namespace Fanex.NAP.SPU.CTS.Shares
 {
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Info Code Smell", "S6566:Prefer using DateTimeOffset instead of DateTime", Justification = "<Pending>")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Info Code Smell", "S2955:Use a comparison to 'default(T)' instead or add a constraint to 'T' so that it can't be a value type.", Justification = "<Pending>")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S103:Lines should not be too long", Justification = "<Pending>")]
     public static class Utilities
     {
         public static IEnumerable<IEnumerable<TValue>> Chunk2<TValue>(
@@ -145,35 +148,14 @@ namespace Fanex.NAP.SPU.CTS.Shares
             return (T)serviceProvider.GetService(typeof(T));
         }
 
-        public static void NotifyTeamsMessage(string message, string systemName, string environment, string groupId)
+        public static void NotifyTeamsMessage(string message, string systemName, string environment, string groupId, bool isInfo = false)
         {
             var notificationService = new NotificationService();
             string proxy = environment == "PROD" ? "lisasqd.nebula.prod:8801" : null;
             notificationService
                .Config("0A40aOc7CtpzjbBSJu8KNWQRoXyjRvf9", groupId, "https://bot.nexdev.net/skynex/api/messages/forwardwithtoken", proxy)
                .Message(new MessageModel(systemName, DateTime.Now, environment, message))
-               .SendWithoutDelay();
-        }
-
-        public static string BuildMessage<T>(this IEnumerable<T> list, int padRightNumber = 30) where T : class
-        {
-            var messageArr = list.Select((x, pos) =>
-            {
-                var text = "\r\n";
-                text += $"\n 🆘 ID: {pos + 1} \n";
-
-                typeof(T).GetProperties().ToList().ForEach(y =>
-                {
-                    var name = y.Name;
-                    var value = y.GetValue(x);
-
-                    text += $"\n\t {name.PadRight(padRightNumber - name.Length)} : {value} \n";
-                });
-
-                return text;
-            });
-
-            return string.Join("\r\n", messageArr);
+               .SendWithoutDelay(isInfo);
         }
     }
 }

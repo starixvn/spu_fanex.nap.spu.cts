@@ -46,7 +46,7 @@
 
         public MatchProcessRuleGroupBettingModel ProcessRuleGroupBetting(bool isLive, MatchStagingRuleGroupBettingEntity matchInfo, string sequenceIDList, string groupDetection)
         {
-            var criteria = new MatchMonitorRuleGroupBettingProcessCriteria()
+            var criteria = new MatchMonitorRuleGroupBettingProcessCriteria
             {
                 IsLive = isLive,
                 BetId = matchInfo.BetID,

@@ -1,6 +1,5 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.ArchiveAssociationCustomer.Criteria
 {
-    using Fanex.Data;
     using Fanex.Data.Repository;
 
     public class RollbackAssociationCustomerCriteria : NonQueryCommand

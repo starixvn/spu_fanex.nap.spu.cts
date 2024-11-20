@@ -39,7 +39,7 @@
             }
         }
 
-        public void UpdateBetLimitOfFlaggedCustomer(IEnumerable<long> custIds)
+        private void UpdateBetLimitOfFlaggedCustomer(IEnumerable<long> custIds)
         {
             if(custIds != null && custIds.Any())
             {
@@ -47,7 +47,7 @@
             }
         }
 
-        public void UpdateBetLimitOfUnflaggedCustomer(IEnumerable<long> custIds)
+        private void UpdateBetLimitOfUnflaggedCustomer(IEnumerable<long> custIds)
         {
             if (custIds != null && custIds.Any())
             {

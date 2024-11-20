@@ -22,6 +22,10 @@
                 case AssociationDetectionType.IP:
                     this.IsIP = true;
                     break;
+                default:
+                    {
+                        break;
+                    }
             }
         }
 

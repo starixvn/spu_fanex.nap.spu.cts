@@ -33,6 +33,7 @@
             return lastScannedTransID != null ? Int64.Parse(lastScannedTransID?.ParameterValue) : 0;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S6580:Use a format provider when parsing date and time", Justification = "<Pending>")]
         public DateTime? GetLastScannedDateTime(SystemParameters paraID)
         {
             var lastScannedTransID = systemParameterDataAccess.GetSystemParameterByID(paraID);

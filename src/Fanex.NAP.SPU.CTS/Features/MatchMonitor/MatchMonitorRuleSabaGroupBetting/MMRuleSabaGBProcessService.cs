@@ -8,7 +8,6 @@
     using Fanex.NAP.SPU.CTS.Features.AssociationDetection;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleSabaGroupBetting.Models;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleSabaGroupBetting.Entities;
-    using Fanex.NAP.SPU.CTS.Features.AssociationDetection.Entities;
     using Fanex.NAP.SPU.CTS.Features.AssociationDetection.Models;
 
     public class MMRuleSabaGBProcessService : IMatchMonitorRuleProcessService<MatchStagingRuleSabaGBGroupModel>
@@ -32,6 +31,7 @@
         }
 
         #region Process
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S1006:Method overrides should not change parameter defaults", Justification = "<Pending>")]
         public IMatchMonitorRuleProcessService PrepareProcess(MatchStagingRuleSabaGBGroupModel matchStaging, bool isLive, IReadOnlyDictionary<int, int> mappingCustDictionary)
         {
             MatchStaging = matchStaging;

@@ -101,6 +101,7 @@
         /// </summary>
         /// <param name="model">Input CTSCustID</param>
         /// <returns></returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S3776:Cognitive Complexity of methods should not be too high", Justification = "<Pending>")]
         public IEnumerable<DetectAssociationMergeGroupEntity> DetectAssociation(DetectAssociationParamModel model)
         {
             if ((model?.CTSCustIds).IsNotNullOrEmpty())

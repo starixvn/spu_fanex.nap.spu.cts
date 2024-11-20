@@ -1,6 +1,5 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.AffectedEvidence
 {
-    using Sentry;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -15,7 +14,7 @@
     {
         private readonly IAffectedEvidenceDataAccess dataAccess;
 
-        public AffectedEvidenceService(IAffectedEvidenceDataAccess dataAccess, ISentryClient sentryClient)
+        public AffectedEvidenceService(IAffectedEvidenceDataAccess dataAccess)
         {
             this.dataAccess = dataAccess;
         }

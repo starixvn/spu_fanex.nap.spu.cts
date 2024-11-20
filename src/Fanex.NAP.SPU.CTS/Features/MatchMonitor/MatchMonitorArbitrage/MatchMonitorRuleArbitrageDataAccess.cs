@@ -45,7 +45,7 @@
 
         public MatchProcessRuleArbitrageModel ProcessRuleArbitrage(bool isLive, MatchStagingRuleArbitrageEntity matchInfo, string sequenceIDList, string groupDetection)
         {
-            var criteria = new MatchMonitorRuleArbitrageProcessCriteria()
+            var criteria = new MatchMonitorRuleArbitrageProcessCriteria
             {
                 IsLive = isLive,
                 MatchId = matchInfo.MatchId,

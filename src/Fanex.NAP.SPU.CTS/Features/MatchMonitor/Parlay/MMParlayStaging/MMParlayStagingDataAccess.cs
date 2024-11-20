@@ -1,9 +1,6 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Parlay.MMParlayStaging
 {
     using Fanex.Data.Repository;
-    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorStaging.Criteria;
-    using Fanex.NAP.SPU.CTS.Shares;
-    using System;
     using System.Collections.Generic;
     using System.Linq;
 

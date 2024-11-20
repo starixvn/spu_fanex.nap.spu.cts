@@ -1,11 +1,6 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.Transform.AssociationByDevice.Entities
 {
-    using Newtonsoft.Json;
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
 
     public class RawAssociationEntity
     {        
