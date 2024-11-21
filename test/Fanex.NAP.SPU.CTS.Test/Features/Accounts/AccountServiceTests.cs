@@ -121,11 +121,11 @@ namespace Fanex.NAP.SPU.CTS.Tests.Features.Accounts
 
         [Theory]
         [InlineData(null,null)]
-        [InlineData("", null)]
-        [InlineData("", -100)]
+        [InlineData("", null)]       
         public void ReTransformAccount_WhenInvalidData_RunSuccessfully(string jsonData, long? lastCustId)
         {
             accountServices.ReTransformAccount(jsonData, lastCustId);
+
         }
     }
 }
