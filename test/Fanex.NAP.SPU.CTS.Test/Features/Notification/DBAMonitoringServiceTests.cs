@@ -1,5 +1,6 @@
 ﻿using Fanex.NAP.SPU.CTS.Features.Notification;
 using Fanex.NAP.SPU.CTS.Features.Notification.Entities;
+using Fanex.NAP.SPU.CTS.Features.Notification.Model;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using System;
@@ -23,7 +24,7 @@ namespace Fanex.NAP.SPU.CTS.Tests.Features.Notification
         public void ScanDataMonitoring_WhenSuccess()
         {
             // Arrange
-            var data = new List<DBAMonitoringEntity>();
+            var data = new DBAMonitoringModel { Data = new List<DBAMonitoringEntity>() };
 
             // Act
             _dataAccess.ScanDataMonitoring().Returns(data);
