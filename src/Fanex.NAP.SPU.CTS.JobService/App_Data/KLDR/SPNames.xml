@@ -64,7 +64,7 @@
 	<Function name="CustomerStatus">
 		<Setting Key="CTS_DC_CustInfo_Healing_GetCustIDs" SpName="CTS_DC_CustInfo_Healing_GetCustIDs" DbName="MySQL.CTS_DataCenter.ctsService" />
 		<Setting Key="CTS_DC_CustInfo_Healing_Update" SpName="CTS_DC_CustInfo_Healing_Update" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
-		<Setting Key="CTS_Customer_GetInfoByCustIdList" SpName="CTS_Customer_GetInfoByCustIdList" DbName="SQL.bodb02.bodbSPUNet" TimeOut="600" />
+		<Setting Key="CTS_Customer_GetInfoByCustIdList" SpName="CTS_Customer_GetInfoByCustIdList" DbName="SQL.WASAVerse.bodbSPUNet" TimeOut="600" />
 	</Function>
 	<Function name="ArchiveCustClassificationHistory">
 		<Setting Key="CTS_DC_CustClassification_History_Archive" SpName="CTS_DC_CustClassification_History_Archive" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" TimeOut="600"/>

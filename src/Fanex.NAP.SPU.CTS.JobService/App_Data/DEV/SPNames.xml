@@ -64,7 +64,7 @@
 	<Function name="CustomerStatus">
 		<Setting Key="CTS_DC_CustInfo_Healing_GetCustIDs" SpName="CTS_DC_CustInfo_Healing_GetCustIDs" DbName="MySQL.CTS_DataCenter.ctsService" />
 		<Setting Key="CTS_DC_CustInfo_Healing_Update" SpName="CTS_DC_CustInfo_Healing_Update" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
-		<Setting Key="CTS_Customer_GetInfoByCustIdList" SpName="CTS_Customer_GetInfoByCustIdList" DbName="SQL.bodb02.bodbSPUNet" />
+		<Setting Key="CTS_Customer_GetInfoByCustIdList" SpName="CTS_Customer_GetInfoByCustIdList_xtest" DbName="SQL.WASAVerse.bodbSPUNet" />
 	</Function>
 	<Function name="ArchiveCustClassificationHistory">
 		<Setting Key="CTS_DC_CustClassification_History_Archive" SpName="CTS_DC_CustClassification_History_Archive" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
@@ -91,10 +91,10 @@
 		<Setting Key="CTS_Association_GetBySharedMatches" SpName="CTS_Association_GetBySharedMatches" DbName="SQL.bodb02.bodbSPUNet" />
 		<Setting Key="CTS_Association_IpSharedLast3Days" SpName="CTS_Association_IpSharedLast3Days" DbName="SQL.bodb02.bodbSPUNet" TimeOut="300" />
 		<Setting Key="CTS_DC_Association_Primary_GetCustEdge" SpName="CTS_DC_Association_Primary_GetCustEdge" DbName="MySQL.CTS_DataCenter.ctsService" Timeout="300" />
-		<Setting Key="CTS_DC_Association_Agent_GetCustEdge" SpName="CTS_DC_Association_Agent_GetCustEdge" DbName="MySQL.CTS_DataCenter.ctsService" Timeout="300" />
+		<Setting Key="CTS_DC_Association_Agent_GetCustEdge" SpName="CTS_DC_Association_Agent_GetCustEdge_xtest" DbName="MySQL.CTS_DataCenter.ctsService" Timeout="300" />
 		<Setting Key="CTS_DC_Association_GetDirectCustEdge" SpName="CTS_DC_Association_GetDirectCustEdge" DbName="MySQL.CTS_DataCenter.ctsService" Timeout="300" />
 		<Setting Key="CTS_DC_Association_CustGroup" SpName="CTS_DC_Association_CustGroup" DbName="MySQL.CTS_DataCenter.ctsService" Timeout="300" />
-		<Setting Key="CTS_DC_Association_DetectGroup" SpName="CTS_DC_Association_DetectGroup" DbName="MySQL.CTS_DataCenter.ctsService" Timeout="300" />
+		<Setting Key="CTS_DC_Association_DetectGroup" SpName="CTS_DC_Association_DetectGroup_xtest" DbName="MySQL.CTS_DataCenter.ctsService" Timeout="300" />
 	</Function>
 
 	<Function Name="Common">
