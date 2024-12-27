@@ -11,7 +11,7 @@
 	</Function>
 	<Function Name="MatchMonitor">
 		<Setting Key="CTS_DC_SystemParameter_Get" SpName="CTS_DC_SystemParameter_Get" DbName="MySQL.CTS_DataCenter.ctsService" />
-		<Setting Key="CTS_Rpt_MatchMonitor_GetTicketInfo" SpName="CTS_Rpt_MatchMonitor_GetTicketInfo" DbName="SQL.WASAVerse.bodbSPUNet"></Setting>
+		<Setting Key="CTS_Rpt_MatchMonitor_GetTicketInfo" SpName="CTS_Rpt_MatchMonitor_GetTicketInfo_xtest" DbName="SQL.WASAVerse.bodbSPUNet"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_Staging_Insert" SpName="CTS_DC_MatchMonitor_Staging_Insert" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 
 		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBetting_Get" SpName="CTS_DC_MatchMonitor_RuleGroupBetting_Get" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
@@ -108,7 +108,7 @@
 	</Function>
 
   <Function Name="Parlay">
-    <Setting Key="CTS_MatchMonitorParlay_GetNewTicket" SpName="CTS_MatchMonitorParlay_GetNewTicket" DbName="SQL.WASAVerse.bodbSPUNet" />
+    <Setting Key="CTS_MatchMonitorParlay_GetNewTicket" SpName="CTS_MatchMonitorParlay_GetNewTicket_xtest" DbName="SQL.WASAVerse.bodbSPUNet" />
     <Setting Key="CTS_DC_MatchMonitorParlay_Staging_Insert" SpName="CTS_DC_MatchMonitorParlay_Staging_Insert" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
     <Setting Key="CTS_DC_MatchMonitorParlay_RuleGroupBetting_Get" SpName="CTS_DC_MatchMonitorParlay_RuleGroupBetting_Get" DbName="MySQL.CTS_DataCenter.ctsService" />
     <Setting Key="CTS_DC_MatchMonitorParlay_RuleGroupBetting_Process" SpName="CTS_DC_MatchMonitorParlay_RuleGroupBetting_Process" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
