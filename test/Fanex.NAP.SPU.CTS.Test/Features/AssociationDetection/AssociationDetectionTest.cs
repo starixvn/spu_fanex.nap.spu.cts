@@ -194,6 +194,42 @@
         }
         #endregion
 
+        #region DetectAssociationBySharedIPs
+        [Fact]
+        public void DetectAssociationBySharedIPs_WhenSuccess()
+        {
+            // Arrange
+            var getAssociationCustByPrimaryLv1 = TestExtension.GetPrivateMethod(typeof(AssociationDetectionService), PrivateMethodName.DetectAssociationBySharedIPs);
+
+            var dataAcess = JsonConvert.DeserializeObject<IEnumerable<DetectAssBySharedIPEntity>>(JsonString.GetAssociationCustLv1);
+
+            // Act
+            _dataAccess.DetectAssociationBySharedIPs(Arg.Any<string>()).Returns(dataAcess);
+
+            var result = getAssociationCustByPrimaryLv1.Invoke(_service, new object[] { "TEST" });
+
+            // Assert
+            _dataAccess.Received(1).DetectAssociationBySharedIPs(Arg.Any<string>());
+
+            result.Should().NotBeNull();
+        }
+
+        [Fact]
+        public void DetectAssociationBySharedIPs_WhenThrowException()
+        {
+            // Arrange
+            var getAssociationCustByPrimaryLv1 = TestExtension.GetPrivateMethod(typeof(AssociationDetectionService), PrivateMethodName.DetectAssociationBySharedIPs);
+
+            // Act
+            _dataAccess.DetectAssociationBySharedIPs(Arg.Any<string>()).Throws<Exception>();
+
+            Action action = () => getAssociationCustByPrimaryLv1.Invoke(_service, new object[] { "TEST" });
+
+            // Assert
+            action.Should().Throw<Exception>();
+        }
+        #endregion
+
         #region DetectAssociation
         [Theory]
         [InlineData("", true, true, true, true)]

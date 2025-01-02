@@ -11,6 +11,9 @@
     {
         IEnumerable<DetectAssBySharedIPMatchesEntity> DetectAssociationBySharedMatches(string custIDList);
 
+        IEnumerable<DetectAssBySharedIPEntity> DetectAssociationBySharedIPs(string custIDList);
+
+
         #region New core Associated Detection
 
         IEnumerable<DetectAssociationByPrimaryEntity> DetectAssociationByPrimary(DetectAssociationByPrimaryFilterModel filter);
@@ -44,6 +47,16 @@
             };
 
             return _repository.Fetch<DetectAssBySharedIPMatchesEntity>(criteria);
+        }
+
+        public IEnumerable<DetectAssBySharedIPEntity> DetectAssociationBySharedIPs(string custIDList)
+        {
+            var criteria = new DetectAssociationByIPCriteria
+            {
+                ListCustId = custIDList,
+            };
+
+            return _repository.Fetch<DetectAssBySharedIPEntity>(criteria);
         }
         #endregion
 
@@ -109,6 +122,7 @@
                 AIJson = model.AssociationByAIJson,
                 IPJson = model.AssociationByIPJson,
                 SharedMatchesJson = model.AssociationBySharedMatchesJson,
+                SharedIPJson = model.AssociationBySharedIPJson,
             };
 
             return _repository.Fetch<DetectAssociationMergeGroupLv1Entity>(criteria);

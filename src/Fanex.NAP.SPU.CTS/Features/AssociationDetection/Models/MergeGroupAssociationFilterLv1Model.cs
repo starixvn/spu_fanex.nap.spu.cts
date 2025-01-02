@@ -9,5 +9,7 @@
         public string AssociationByIPJson { get; set; } = "[]";
 
         public string AssociationBySharedMatchesJson { get; set; } = "[]";
+
+        public string AssociationBySharedIPJson { get;set; } = "[]";
     }
 }

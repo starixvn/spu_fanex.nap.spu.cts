@@ -17,6 +17,9 @@
         [SpParam(SqlParamName = "ip_SharedMatches")]
         public string SharedMatchesJson { get; set; }
 
+        [SpParam(SqlParamName = "ip_SharedIP")]
+        public string SharedIPJson { get; set; }
+
         public override string GetSettingKey()
         {
             return "CTS_DC_Association_CustGroup";

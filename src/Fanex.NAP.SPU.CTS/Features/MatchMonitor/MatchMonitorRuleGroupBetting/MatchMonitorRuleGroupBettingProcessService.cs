@@ -46,7 +46,7 @@
             if (MatchStaging != null && MatchStaging.MatchGroupStagingList.IsNotNullOrEmpty())
             {
                 var matchProcessesRound1 =
-                    MatchStaging.MatchGroupStagingList  
+                    MatchStaging.MatchGroupStagingList
                         .Select(matchInfo => ProcessWithAssociationRound1(matchInfo, IsLive))
                         .Where(matchInfo => matchInfo != null).ToList();
 
@@ -76,7 +76,7 @@
 
         private MatchProcessRuleGroupBettingModel ProcessWithAssociationRound1(MatchStagingRuleGroupBettingEntity matchInfo, bool isLive)
         {
-            var assDetectionHasGroupID = DetectAssociation(matchInfo.CTSCustIDList, matchInfo.CustIDList, matchInfo.SportType)?
+            var assDetectionHasGroupID = DetectAssociation(matchInfo.CTSCustIDList, matchInfo.CustIDList, matchInfo.LicCustList, matchInfo.SportType)?
                                             .Where(n => n.GroupID.HasValue);
 
             if (assDetectionHasGroupID.IsNotNullOrEmpty())
@@ -89,7 +89,7 @@
 
         private MatchProcessRuleGroupBettingModel ProcessWithAssociationRound2(MatchStagingRuleGroupBettingEntity matchInfo, MatchProcessRuleGroupBettingInfoEntity reprocessModel, bool isLive)
         {
-            var assDetectionHasGroupID = DetectAssociation(reprocessModel.CTSCustIDList, reprocessModel.CustIDList, matchInfo.SportType)?
+            var assDetectionHasGroupID = DetectAssociation(reprocessModel.CTSCustIDList, reprocessModel.CustIDList, reprocessModel.LicCustList, matchInfo.SportType)?
                                             .Where(n => n.GroupID.HasValue);
 
             if (assDetectionHasGroupID.IsNotNullOrEmpty())
@@ -103,16 +103,20 @@
             return null;
         }
 
-        private IEnumerable<DetectAssociationMergeGroupLv1Entity> DetectAssociation(string ctsCustIDList, string custIDList, int sportType)
+        private IEnumerable<DetectAssociationMergeGroupLv1Entity> DetectAssociation(string ctsCustIDList, string custIDList, string licCustIDList, int sportType)
         {
+            var isValidSportTypeGetAssociation = IsValidSportTypeGetAssociation(sportType);
+
             var param = new DetectAssociationParamModel
             {
                 CTSCustIds = ctsCustIDList,
                 CustIds = custIDList,
                 IsDevice = true,
                 IsAI = true,
-                IsIP = IsValidSportTypeGetAssociation(sportType),
-                Is3MatchesLast7Days = IsValidSportTypeGetAssociation(sportType)
+                IsIP = isValidSportTypeGetAssociation,
+                Is3MatchesLast7Days = isValidSportTypeGetAssociation,
+                IsIPLast3Days = isValidSportTypeGetAssociation,
+                CustIdsIPLast3Days = licCustIDList
             };
 
             return _associationDetection.DetectAssociationLv1(param);

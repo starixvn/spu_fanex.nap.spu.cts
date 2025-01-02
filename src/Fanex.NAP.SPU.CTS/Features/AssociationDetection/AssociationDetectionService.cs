@@ -36,6 +36,23 @@
             return _associationDetectionDataAccess.DetectAssociationBySharedMatches(custIDList);
         }
 
+        private IEnumerable<DetectAssBySharedIPEntity> DetectAssociationBySharedIPs(string custIDList)
+        {
+            if (string.IsNullOrWhiteSpace(custIDList))
+            {
+                return new List<DetectAssBySharedIPEntity>();
+            }
+
+            var detectAssByIP = _associationDetectionDataAccess.DetectAssociationBySharedIPs(custIDList);
+
+            return detectAssByIP.GroupBy(x => new { x.CustID1, x.CustID2 })
+                .Select(g => new DetectAssBySharedIPEntity
+                {
+                    CustID1 = g.Key.CustID1,
+                    CustID2 = g.Key.CustID2,
+                });
+        }
+
         private string GetAssociationCustByAgent(string ctsCustIDs)
         {
             var assByAgent = _associationDetectionDataAccess.DetectAssociationByAgent(ctsCustIDs);
@@ -168,6 +185,11 @@
                     mergeGroupInfo.AssociationBySharedMatchesJson =
                         model.Is3MatchesLast7Days && model.CustIds.IsNotNullOrEmpty() ?
                             JsonConvert.SerializeObject(DetectAssociationBySharedMatches(model.CustIds)) : "[]";
+                }, () =>
+                {
+                    mergeGroupInfo.AssociationBySharedIPJson =
+                        model.IsIPLast3Days && model.CustIdsIPLast3Days.IsNotNullOrEmpty() ?
+                            JsonConvert.SerializeObject(DetectAssociationBySharedIPs(model.CustIdsIPLast3Days)) : "[]";
                 });
 
                 var assMergeGroup = _associationDetectionDataAccess.DetectGroupDetectAssociationLv1(mergeGroupInfo);
