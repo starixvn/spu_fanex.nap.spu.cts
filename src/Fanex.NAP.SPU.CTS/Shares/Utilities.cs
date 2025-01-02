@@ -97,7 +97,7 @@ namespace Fanex.NAP.SPU.CTS.Shares
                 .AddMessage($"{serviceName}")
                 .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
                 .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex))
-                .AddMessage($"{message} - Data {JsonConvert.SerializeObject(data)} - { DateTime.Now}").ToString();
+                .AddMessage($"{message} - Data {JsonConvert.SerializeObject(data)} - {DateTime.Now}").ToString();
 
             sentryClient.CaptureMessage(logMessage, Sentry.Protocol.SentryLevel.Error);
         }
@@ -157,5 +157,7 @@ namespace Fanex.NAP.SPU.CTS.Shares
                .Message(new MessageModel(systemName, DateTime.Now, environment, message))
                .SendWithoutDelay(isInfo);
         }
+
+        public static string GetJsonData(bool condition, Func<string> dataProvider) => condition ? dataProvider() : "[]";
     }
 }
