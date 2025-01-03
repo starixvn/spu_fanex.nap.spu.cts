@@ -27,7 +27,7 @@
         [HttpGet("health")]
         public string CheckHealth()
         {
-            sentryClient.CaptureMessage($"Check health CTS service {DateTime.Now}", Sentry.Protocol.SentryLevel.Info);
+            sentryClient.CaptureMessage($"Check health CTS service {DateTime.Now}", Sentry.Protocol.SentryLevel.Error);
             return JsonConvert.SerializeObject(DateTime.Now.ToString());
         }
 
