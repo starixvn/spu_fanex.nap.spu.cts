@@ -8,6 +8,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using static Fanex.NAP.SPU.CTS.Shares.Consts;
+    using static Fanex.NAP.SPU.CTS.Shares.Utilities;
 
     public interface IAssociationDetectionService
     {
@@ -34,6 +35,23 @@
             }
 
             return _associationDetectionDataAccess.DetectAssociationBySharedMatches(custIDList);
+        }
+
+        private IEnumerable<DetectAssBySharedIPEntity> DetectAssociationBySharedIPs(string custIDList)
+        {
+            if (string.IsNullOrWhiteSpace(custIDList))
+            {
+                return new List<DetectAssBySharedIPEntity>();
+            }
+
+            var detectAssByIP = _associationDetectionDataAccess.DetectAssociationBySharedIPs(custIDList);
+
+            return detectAssByIP.GroupBy(x => new { x.CustID1, x.CustID2 })
+                .Select(g => new DetectAssBySharedIPEntity
+                {
+                    CustID1 = g.Key.CustID1,
+                    CustID2 = g.Key.CustID2,
+                });
         }
 
         private string GetAssociationCustByAgent(string ctsCustIDs)
@@ -151,24 +169,18 @@
             {
                 var mergeGroupInfo = new MergeGroupAssociationFilterLv1Model();
 
-                Parallel.Invoke(() =>
-                {
-                    mergeGroupInfo.AssociationByDeviceJson =
-                        model.IsDevice ? GetAssociationCustByPrimaryLv1(model.CTSCustIds, AssociationDetectionType.Device) : "[]";
-                }, () =>
-                {
-                    mergeGroupInfo.AssociationByAIJson =
-                        model.IsAI ? GetAssociationCustByPrimaryLv1(model.CTSCustIds, AssociationDetectionType.AI) : "[]";
-                }, () =>
-                {
-                    mergeGroupInfo.AssociationByIPJson =
-                        model.IsIP ? GetAssociationCustByPrimaryLv1(model.CTSCustIds, AssociationDetectionType.IP) : "[]";
-                }, () =>
-                {
-                    mergeGroupInfo.AssociationBySharedMatchesJson =
-                        model.Is3MatchesLast7Days && model.CustIds.IsNotNullOrEmpty() ?
-                            JsonConvert.SerializeObject(DetectAssociationBySharedMatches(model.CustIds)) : "[]";
-                });
+                Parallel.Invoke(
+                    () => mergeGroupInfo.AssociationByDeviceJson =
+                            GetJsonData(model.IsDevice, () => GetAssociationCustByPrimaryLv1(model.CTSCustIds, AssociationDetectionType.Device)),
+                    () => mergeGroupInfo.AssociationByAIJson =
+                            GetJsonData(model.IsAI, () => GetAssociationCustByPrimaryLv1(model.CTSCustIds, AssociationDetectionType.AI)),
+                    () => mergeGroupInfo.AssociationByIPJson =
+                            GetJsonData(model.IsIP, () => GetAssociationCustByPrimaryLv1(model.CTSCustIds, AssociationDetectionType.IP)),
+                    () => mergeGroupInfo.AssociationBySharedMatchesJson =
+                            GetJsonData(model.Is3MatchesLast7Days, () => JsonConvert.SerializeObject(DetectAssociationBySharedMatches(model.CustIds))),
+                    () => mergeGroupInfo.AssociationBySharedIPJson =
+                            GetJsonData(model.IsIPLast3Days, () => JsonConvert.SerializeObject(DetectAssociationBySharedIPs(model.CustIdsIPLast3Days)))
+                );
 
                 var assMergeGroup = _associationDetectionDataAccess.DetectGroupDetectAssociationLv1(mergeGroupInfo);
 

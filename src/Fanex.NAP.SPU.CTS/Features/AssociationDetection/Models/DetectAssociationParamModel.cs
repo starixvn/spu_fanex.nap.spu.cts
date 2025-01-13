@@ -10,6 +10,8 @@
 
         public string AgentCTSCustIds { get; set; }
 
+        public string CustIdsIPLast3Days { get; set; }
+
         public bool IsDevice { get; set; }
 
         public bool IsAI { get; set; }

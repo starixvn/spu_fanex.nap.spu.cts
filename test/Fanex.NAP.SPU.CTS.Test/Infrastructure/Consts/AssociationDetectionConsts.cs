@@ -18,6 +18,8 @@
             public const string GetAssociationCustByPrimaryLv1 = "GetAssociationCustByPrimaryLv1";
 
             public const string GetAssociationBySharedMatchesWithMappingCTSCustID = "GetAssociationBySharedMatchesWithMappingCTSCustID";
+
+            public const string DetectAssociationBySharedIPs = "DetectAssociationBySharedIPs";
         }
     }
 }

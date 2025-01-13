@@ -7,5 +7,7 @@
         public string CustIDList { get; set; }
 
         public string SequenceIDList { get; set; }
+
+        public string LicCustList { get; set; }
     }
 }
