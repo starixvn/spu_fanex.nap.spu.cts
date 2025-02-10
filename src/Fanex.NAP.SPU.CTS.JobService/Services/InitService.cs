@@ -91,7 +91,7 @@
         private static void RegisterMMParlayStaging(IServiceCollection services)
         {
             services.AddSingleton<IMMParlayStagingDataAccess, MMParlayStagingDataAccess>();
-            services.AddSingleton<IMMParlayStagingService, MMParlayStagingService>();
+            services.AddTransient<IMMParlayStagingService, MMParlayStagingService>();
             services.AddSingleton<IMatchMonitorParlayJobService, MatchMonitorParlayJobService>();
         }
 
