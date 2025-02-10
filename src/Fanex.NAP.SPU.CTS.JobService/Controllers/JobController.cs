@@ -24,6 +24,14 @@
             this.affectedEvidenceFromQueueJobService = affectedEvidenceFromQueueJobService;
         }
 
+        [HttpPost("Test")]
+        public bool Test()
+        {
+            sentryClient.CaptureMessage($"Test CTS service {DateTime.Now}", Sentry.Protocol.SentryLevel.Info);
+
+            return true;
+        }
+
         [HttpGet("health")]
         public string CheckHealth()
         {
