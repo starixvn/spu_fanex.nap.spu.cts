@@ -11,7 +11,7 @@
 	</Function>
 	<Function Name="MatchMonitor">
 		<Setting Key="CTS_DC_SystemParameter_Get" SpName="CTS_DC_SystemParameter_Get" DbName="MySQL.CTS_DataCenter.ctsService" />
-		<Setting Key="CTS_Rpt_MatchMonitor_GetTicketInfo" SpName="CTS_Rpt_MatchMonitor_GetTicketInfo" DbName="SQL.bodb02.bodbSPUNet"></Setting>
+		<Setting Key="CTS_Rpt_MatchMonitor_GetTicketInfo" SpName="CTS_Rpt_MatchMonitor_GetTicketInfo" DbName="SQL.WASAVerse.bodbSPUNet"></Setting>
 		<Setting Key="CTS_DC_MatchMonitor_Staging_Insert" SpName="CTS_DC_MatchMonitor_Staging_Insert" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin"></Setting>
 
 		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBetting_Get" SpName="CTS_DC_MatchMonitor_RuleGroupBetting_Get" DbName="MySQL.CTS_DataCenter.ctsService"></Setting>
@@ -59,7 +59,7 @@
 	<Function name="CustomerStatus">
 		<Setting Key="CTS_DC_CustInfo_Healing_GetCustIDs" SpName="CTS_DC_CustInfo_Healing_GetCustIDs" DbName="MySQL.CTS_DataCenter.ctsService" />
 		<Setting Key="CTS_DC_CustInfo_Healing_Update" SpName="CTS_DC_CustInfo_Healing_Update" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
-		<Setting Key="CTS_Customer_GetInfoByCustIdList" SpName="CTS_Customer_GetInfoByCustIdList" DbName="SQL.bodb02.bodbSPUNet" TimeOut="600" />
+		<Setting Key="CTS_Customer_GetInfoByCustIdList" SpName="CTS_Customer_GetInfoByCustIdList" DbName="SQL.WASAVerse.bodbSPUNet" TimeOut="600" />
 	</Function>
 	<Function name="ArchiveCustClassificationHistory">
 		<Setting Key="CTS_DC_CustClassification_History_Archive" SpName="CTS_DC_CustClassification_History_Archive" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" TimeOut="600"/>
@@ -102,7 +102,7 @@
 	</Function>
 
   <Function Name="Parlay">
-    <Setting Key="CTS_MatchMonitorParlay_GetNewTicket" SpName="CTS_MatchMonitorParlay_GetNewTicket" DbName="SQL.bodb02.bodbSPUNet" />
+    <Setting Key="CTS_MatchMonitorParlay_GetNewTicket" SpName="CTS_MatchMonitorParlay_GetNewTicket" DbName="SQL.WASAVerse.bodbSPUNet" />
     <Setting Key="CTS_DC_MatchMonitorParlay_Staging_Insert" SpName="CTS_DC_MatchMonitorParlay_Staging_Insert" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
     <Setting Key="CTS_DC_MatchMonitorParlay_RuleGroupBetting_Get" SpName="CTS_DC_MatchMonitorParlay_RuleGroupBetting_Get" DbName="MySQL.CTS_DataCenter.ctsService" />
     <Setting Key="CTS_DC_MatchMonitorParlay_RuleGroupBetting_Process" SpName="CTS_DC_MatchMonitorParlay_RuleGroupBetting_Process" DbName="MySQL.CTS_DataCenter.ctsServiceAdmin" />
