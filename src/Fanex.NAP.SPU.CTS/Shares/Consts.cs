@@ -87,7 +87,8 @@
         {
             Soccer = 1,
             Basketball = 2,
-            Esport = 43
+            Esport = 43,
+            Cricket = 50
         }
 
         public enum BetTypeSettingsFunctionID
@@ -110,7 +111,9 @@
         {
             Device = 1,
             AI = 2,
-            IP = 4
+            IP = 4,
+            MatchesLast7Days = 5,
+            IPLast3Days = 6
         }
 
         public enum MatchMonitorStagingLivePoolType
