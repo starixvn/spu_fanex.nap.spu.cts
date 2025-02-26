@@ -105,27 +105,37 @@
 
         private IEnumerable<DetectAssociationMergeGroupLv1Entity> DetectAssociation(string ctsCustIDList, string custIDList, string licCustIDList, int sportType)
         {
-            var isValidSportTypeGetAssociation = IsValidSportTypeGetAssociation(sportType);
-
             var param = new DetectAssociationParamModel
             {
                 CTSCustIds = ctsCustIDList,
                 CustIds = custIDList,
                 IsDevice = true,
                 IsAI = true,
-                IsIP = isValidSportTypeGetAssociation,
-                Is3MatchesLast7Days = isValidSportTypeGetAssociation,
-                IsIPLast3Days = isValidSportTypeGetAssociation,
+                IsIP = IsValidSportTypeGetAssociation(sportType, AssociationDetectionType.IP),
+                Is3MatchesLast7Days = IsValidSportTypeGetAssociation(sportType, AssociationDetectionType.MatchesLast7Days),
+                IsIPLast3Days = IsValidSportTypeGetAssociation(sportType, AssociationDetectionType.IPLast3Days),
                 CustIdsIPLast3Days = licCustIDList
             };
 
             return _associationDetection.DetectAssociationLv1(param);
         }
 
-        private bool IsValidSportTypeGetAssociation(int sportType)
+        private bool IsValidSportTypeGetAssociation(int sportType, AssociationDetectionType assType)
         {
-            return sportType == (int)MatchMonitor_SportType.Basketball ||
-                    sportType == (int)MatchMonitor_SportType.Esport;
+            switch (assType)
+            {
+                case AssociationDetectionType.IP:
+                case AssociationDetectionType.MatchesLast7Days:
+                    return sportType == (int)MatchMonitor_SportType.Basketball
+                          || sportType == (int)MatchMonitor_SportType.Esport
+                          || sportType == (int)MatchMonitor_SportType.Cricket;
+
+                case AssociationDetectionType.IPLast3Days:
+                    return sportType == (int)MatchMonitor_SportType.Basketball
+                          || sportType == (int)MatchMonitor_SportType.Esport;
+                default:
+                    return false;
+            }
         }
 
         private MatchProcessRuleGroupBettingModel ProcessRuleGroupBetting(bool isLive, MatchStagingRuleGroupBettingEntity matchinfo, string sequenceIDList, string groupDetection)
