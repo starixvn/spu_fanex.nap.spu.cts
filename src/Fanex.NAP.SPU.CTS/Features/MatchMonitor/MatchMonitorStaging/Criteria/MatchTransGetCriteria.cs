@@ -20,7 +20,7 @@
         public bool IsLive { get; set; }
 
         public override string GetSettingKey()
-                => "CTS_Rpt_MatchMonitor_GetTicketInfo";
+                => "CTS_MatchMonitor_GetNewTicket";
 
         public override bool IsValid()
             => true;

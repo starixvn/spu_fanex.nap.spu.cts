@@ -14,9 +14,24 @@
 
     public class MatchMonitorRuleGroupBettingProcessService : IMatchMonitorRuleProcessService<MatchStagingRuleGroupBettingGroupModel>
     {
+        private static readonly HashSet<int> ValidSportForIPAnd3MatchesLast7Days = new()
+        {
+            (int)MatchMonitor_SportType.Basketball,
+            (int)MatchMonitor_SportType.Esport,
+            (int)MatchMonitor_SportType.Cricket,
+            (int)MatchMonitor_SportType.Badminton
+        };
+
+        private static readonly HashSet<int> ValidSportForIPLast3Days = new()
+        {
+            (int)MatchMonitor_SportType.Basketball,
+            (int)MatchMonitor_SportType.Esport
+        };
+
+        private const string ServiceName = "Match Monitor Process Rule GroupBetting Service";
+
         private readonly IMatchMonitorRuleGroupBettingDataAccess _dataAccess;
         private readonly IAssociationDetectionService _associationDetection;
-        private const string ServiceName = "Match Monitor Process Rule GroupBetting Service";
 
         private MatchStagingRuleGroupBettingGroupModel MatchStaging;
         private bool IsLive;
@@ -111,31 +126,13 @@
                 CustIds = custIDList,
                 IsDevice = true,
                 IsAI = true,
-                IsIP = IsValidSportTypeGetAssociation(sportType, AssociationDetectionType.IP),
-                Is3MatchesLast7Days = IsValidSportTypeGetAssociation(sportType, AssociationDetectionType.MatchesLast7Days),
-                IsIPLast3Days = IsValidSportTypeGetAssociation(sportType, AssociationDetectionType.IPLast3Days),
+                IsIP = ValidSportForIPAnd3MatchesLast7Days.Contains(sportType),
+                Is3MatchesLast7Days = ValidSportForIPAnd3MatchesLast7Days.Contains(sportType),
+                IsIPLast3Days = ValidSportForIPLast3Days.Contains(sportType),
                 CustIdsIPLast3Days = licCustIDList
             };
 
             return _associationDetection.DetectAssociationLv1(param);
-        }
-
-        private bool IsValidSportTypeGetAssociation(int sportType, AssociationDetectionType assType)
-        {
-            switch (assType)
-            {
-                case AssociationDetectionType.IP:
-                case AssociationDetectionType.MatchesLast7Days:
-                    return sportType == (int)MatchMonitor_SportType.Basketball
-                          || sportType == (int)MatchMonitor_SportType.Esport
-                          || sportType == (int)MatchMonitor_SportType.Cricket;
-
-                case AssociationDetectionType.IPLast3Days:
-                    return sportType == (int)MatchMonitor_SportType.Basketball
-                          || sportType == (int)MatchMonitor_SportType.Esport;
-                default:
-                    return false;
-            }
         }
 
         private MatchProcessRuleGroupBettingModel ProcessRuleGroupBetting(bool isLive, MatchStagingRuleGroupBettingEntity matchinfo, string sequenceIDList, string groupDetection)
