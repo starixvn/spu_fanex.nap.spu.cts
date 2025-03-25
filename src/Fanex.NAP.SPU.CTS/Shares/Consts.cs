@@ -87,6 +87,7 @@
         {
             Soccer = 1,
             Basketball = 2,
+            Badminton = 9,
             Esport = 43,
             Cricket = 50
         }
