@@ -148,7 +148,7 @@ namespace Fanex.NAP.SPU.CTS.Shares
             return (T)serviceProvider.GetService(typeof(T));
         }
 
-        public static void NotifyTeamsMessage(string message, string systemName, string environment, string groupId, bool isInfo = false)
+        public static void NotifyChannelMessage(string message, string systemName, string environment, string groupId, bool isInfo = false)
         {
             var notificationService = new NotificationService();
             string proxy = environment == "PROD" ? "lisasqd.nebula.prod:8801" : null;

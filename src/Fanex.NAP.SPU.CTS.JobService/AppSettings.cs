@@ -34,6 +34,8 @@
         string SentryDsn { get; }
 
         APIHelperConfig APIHelperConfig { get; }
+
+        NotificationChannelsConfig NotificationChannelConfig { get; }
     }
 
     public class AppSettings : IAppSettings
@@ -45,6 +47,7 @@
         private readonly string spName;
         private readonly string sentryDsn;
         private readonly APIHelperConfig apiHelperConfig;
+        private readonly NotificationChannelsConfig notificationChannelsConfig;
 
         public AppSettings(IConfiguration configuration)
         {
@@ -57,6 +60,10 @@
             apiHelperConfig = new APIHelperConfig
             {
                 Proxy = GetValue<string>("APIHelperConfig:Proxy")
+            };
+            notificationChannelsConfig = new NotificationChannelsConfig
+            {
+                DBAMonitoringGroupChannelId = GetValue<string>("NotificationChannel:DBAMonitoringGroupChannelId")
             };
         }
 
@@ -103,6 +110,8 @@
         public string SentryDsn => sentryDsn;
 
         public APIHelperConfig APIHelperConfig => apiHelperConfig;
+
+        public NotificationChannelsConfig NotificationChannelConfig => notificationChannelsConfig;
         #endregion Variables
 
         #region Methods
