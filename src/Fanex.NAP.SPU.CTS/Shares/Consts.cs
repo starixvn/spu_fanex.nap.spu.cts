@@ -26,9 +26,6 @@
 
         public const int ExpiredHttpRequest = 85500000; //23h 45p
 
-        public const string MicrosoftTeams_GroupId_Local = "19:00af2ff331b64d39adf13b428aa49c6e@thread.tacv2";
-
-        public const string MicrosoftTeams_Notification_DBAMonitoring = "19:8e150ecd35c64f4099ec8107ea1e188b@thread.tacv2";
 
         public const string STOP = "STOP";
 

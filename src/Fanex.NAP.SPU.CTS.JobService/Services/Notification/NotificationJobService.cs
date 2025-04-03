@@ -55,11 +55,11 @@
                         var message = $"CTS_DC_DataConsistency_CustomerCategory_Get, Status = {scanData.Status ?? "NULL"}";
                         message += BuildMessage(scanData.Data);
 
-                        Utilities.NotifyTeamsMessage(
+                        Utilities.NotifyChannelMessage(
                             message,
                             _serviceName,
                             _appSettings.EvironmentName,
-                            _appSettings.EvironmentName == "LOCAL" ? MicrosoftTeams_GroupId_Local : MicrosoftTeams_Notification_DBAMonitoring,
+                            _appSettings.NotificationChannelConfig.DBAMonitoringGroupChannelId,
                             isInfo: scanData.Data.IsNullOrEmpty());
 
                         return Task.FromResult(true);
