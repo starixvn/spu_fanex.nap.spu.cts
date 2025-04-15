@@ -19,7 +19,8 @@
             (int)MatchMonitor_SportType.Basketball,
             (int)MatchMonitor_SportType.Esport,
             (int)MatchMonitor_SportType.Cricket,
-            (int)MatchMonitor_SportType.Badminton
+            (int)MatchMonitor_SportType.Badminton,
+            (int)MatchMonitor_SportType.TableTennis
         };
 
         private static readonly HashSet<int> ValidSportForIPLast3Days = new()
