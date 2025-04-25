@@ -85,8 +85,9 @@
             Soccer = 1,
             Basketball = 2,
             Badminton = 9,
+            TableTennis = 18,
             Esport = 43,
-            Cricket = 50
+            Cricket = 50            
         }
 
         public enum BetTypeSettingsFunctionID
