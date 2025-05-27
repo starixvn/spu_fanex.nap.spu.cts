@@ -1,5 +1,6 @@
 ﻿namespace Fanex.NAP.SPU.CTS.JobService.Controllers
 {
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Models;
     using Fanex.NAP.SPU.CTS.JobService.Services;
     using Fanex.NAP.SPU.CTS.JobService.Services.Parlay;
     using Microsoft.AspNetCore.Mvc;
@@ -15,7 +16,7 @@
         private readonly IMatchMonitorParlayJobService matchMonitorParlayJobService;
 
         public MatchMonitorController(ISentryClient sentryClient,
-            IMatchMonitorJobService matchMonitorJobService, 
+            IMatchMonitorJobService matchMonitorJobService,
             IMatchMonitorParlayJobService matchMonitorParlayJobService)
         {
             this.sentryClient = sentryClient;
@@ -39,18 +40,32 @@
         /// Process Rule GroupBetting
         /// </summary>
         [HttpPost("MatchMonitorProcessRuleGroupBettingLive")]
-        public async Task<bool> MatchMonitorRuleGroupBettingLive([FromForm] int numberOfThread)
+        public async Task<bool> MatchMonitorRuleGroupBettingLive(
+            [FromForm] int numberOfThread,
+            [FromForm] string sportsDevice,
+            [FromForm] string sportsAI,
+            [FromForm] string sportsIP,
+            [FromForm] string sports3MatchesLast7Days,
+            [FromForm] string sportsIPLast3Days)
         {
-            return await this.matchMonitorJobService.ProcessRuleGroupBetting(true, numberOfThread);
+            var associationSetting = new MatchDetectAssociationSettingModel(sportsDevice, sportsAI, sportsIP, sports3MatchesLast7Days, sportsIPLast3Days);
+            return await this.matchMonitorJobService.ProcessRuleGroupBetting(true, numberOfThread, associationSetting);
         }
 
         /// <summary>
         /// Process Rule GroupBetting
         /// </summary>
         [HttpPost("MatchMonitorProcessRuleGroupBettingNonLive")]
-        public async Task<bool> MatchMonitorRuleGroupBettingNonLive([FromForm] int numberOfThread)
+        public async Task<bool> MatchMonitorRuleGroupBettingNonLive(
+            [FromForm] int numberOfThread,
+            [FromForm] string sportsDevice,
+            [FromForm] string sportsAI,
+            [FromForm] string sportsIP,
+            [FromForm] string sports3MatchesLast7Days,
+            [FromForm] string sportsIPLast3Days)
         {
-            return await this.matchMonitorJobService.ProcessRuleGroupBetting(false, numberOfThread);
+            var associationSetting = new MatchDetectAssociationSettingModel(sportsDevice, sportsAI, sportsIP, sports3MatchesLast7Days, sportsIPLast3Days);
+            return await this.matchMonitorJobService.ProcessRuleGroupBetting(false, numberOfThread, associationSetting);
         }
 
         /// <summary>
