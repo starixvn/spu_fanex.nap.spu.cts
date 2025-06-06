@@ -9,20 +9,40 @@ using System.Collections.Generic;
 using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleGroupBetting.Entities;
 using NSubstitute.ExceptionExtensions;
 using Fanex.NAP.SPU.CTS.Tests.Infrastructure.Extensions;
-using static Fanex.NAP.SPU.CTS.Tests.Infrastructure.MMConsts;
 using Fanex.NAP.SPU.CTS.Features.AssociationDetection.Models;
 using Fanex.NAP.SPU.CTS.Features.AssociationDetection.Entities;
 using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
+using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Models;
+using System.Linq;
+using static Fanex.NAP.SPU.CTS.Shares.Consts;
+using static Fanex.NAP.SPU.CTS.Tests.Infrastructure.MMConsts;
 
 namespace Fanex.NAP.SPU.CTS.Tests.Features.MatchMonitor
 {
     public class MatchMonitorRuleGroupBettingUnitTest
     {
+        private static readonly HashSet<int> ValidSportForIPAnd3MatchesLast7Days = new()
+        {
+            (int)MatchMonitor_SportType.Basketball,
+            (int)MatchMonitor_SportType.Esport,
+            (int)MatchMonitor_SportType.Cricket,
+            (int)MatchMonitor_SportType.Badminton,
+            (int)MatchMonitor_SportType.TableTennis
+        };
+
+        private static readonly HashSet<int> ValidSportForIPLast3Days = new()
+        {
+            (int)MatchMonitor_SportType.Basketball,
+            (int)MatchMonitor_SportType.Esport
+        };
+
         private readonly IAssociationDetectionService _assDetect;
         private readonly IMatchMonitorRuleGroupBettingDataAccess _dataAccess;
         private readonly IServiceProvider _serviceProvider;
         private readonly IMatchMonitorRuleProcessService<MatchStagingRuleGroupBettingGroupModel> _mmProcessService;
         private readonly IMatchMonitorRuleGroupBettingService _mmRuleService;
+
+        private readonly MatchDetectAssociationSettingModel _assDetectSettingModel;
 
         public MatchMonitorRuleGroupBettingUnitTest()
         {
@@ -32,6 +52,15 @@ namespace Fanex.NAP.SPU.CTS.Tests.Features.MatchMonitor
 
             _mmProcessService = new MatchMonitorRuleGroupBettingProcessService(_assDetect, _dataAccess);
             _mmRuleService = new MatchMonitorRuleGroupBettingService(_dataAccess, _serviceProvider);
+
+            _assDetectSettingModel = new MatchDetectAssociationSettingModel
+            {
+                DeviceSports = ValidSportForIPAnd3MatchesLast7Days.ToHashSet(),
+                AISports = ValidSportForIPAnd3MatchesLast7Days.ToHashSet(),
+                IPSports = ValidSportForIPAnd3MatchesLast7Days.ToHashSet(),
+                _3MatchesLast7DaysSports = ValidSportForIPAnd3MatchesLast7Days.ToHashSet(),
+                IPLast3DaysSports = ValidSportForIPLast3Days.ToHashSet()
+            };
         }
 
         #region Rule GroupBetting
@@ -106,6 +135,9 @@ namespace Fanex.NAP.SPU.CTS.Tests.Features.MatchMonitor
             var isLiveField = TestExtension.GetPrivateFieldInfo(typeof(MatchMonitorRuleGroupBettingProcessService), PrivateFieldName.IsLive);
             isLiveField.SetValue(_mmProcessService, isLive);
 
+            var assDetectSettingField = TestExtension.GetPrivateFieldInfo(typeof(MatchMonitorRuleGroupBettingProcessService), PrivateFieldName.AssDetectSetting);
+            assDetectSettingField.SetValue(_mmProcessService, _assDetectSettingModel);
+
             var matchProcessField = TestExtension.GetPrivateFieldInfo(typeof(MatchMonitorRuleGroupBettingProcessService), PrivateFieldName.MatchProcesses);
             matchProcessField.SetValue(_mmProcessService, new List<MatchProcessRuleGroupBettingModel>());
 
@@ -127,6 +159,9 @@ namespace Fanex.NAP.SPU.CTS.Tests.Features.MatchMonitor
             // Arrange
             var isLiveField = TestExtension.GetPrivateFieldInfo(typeof(MatchMonitorRuleGroupBettingProcessService), PrivateFieldName.IsLive);
             isLiveField.SetValue(_mmProcessService, isLive);
+
+            var assDetectSettingField = TestExtension.GetPrivateFieldInfo(typeof(MatchMonitorRuleGroupBettingProcessService), PrivateFieldName.AssDetectSetting);
+            assDetectSettingField.SetValue(_mmProcessService, _assDetectSettingModel);
 
             var matchProcessField = TestExtension.GetPrivateFieldInfo(typeof(MatchMonitorRuleGroupBettingProcessService), PrivateFieldName.MatchProcesses);
             matchProcessField.SetValue(_mmProcessService,

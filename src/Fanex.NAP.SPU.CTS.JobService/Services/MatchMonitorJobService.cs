@@ -17,12 +17,13 @@
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleGroupBetting;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorArbitrage;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorHedging;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Models;
 
     public interface IMatchMonitorJobService
     {
         Task<bool> InsertTicketDetail(int batchSize, bool isLive);
 
-        Task<bool> ProcessRuleGroupBetting(bool isLive, int numberOfThread);
+        Task<bool> ProcessRuleGroupBetting(bool isLive, int numberOfThread, MatchDetectAssociationSettingModel assDetectSetting);
 
         Task<bool> ProcessRuleSabaGroupBetting(bool isLive, int numberOfThread);
 
@@ -93,7 +94,7 @@
         /// <summary>
         /// Process Rule for GroupBeting
         /// </summary>
-        public Task<bool> ProcessRuleGroupBetting(bool isLive, int numberOfThread)
+        public Task<bool> ProcessRuleGroupBetting(bool isLive, int numberOfThread, MatchDetectAssociationSettingModel assDetectSetting)
         {
             try
             {
@@ -108,7 +109,7 @@
                         .ForAll(matchInfo =>
                         {
                             _ruleGBService.GetInstanceProcessGroupBettingService()
-                                .PrepareProcess(matchInfo, isLive)
+                                .PrepareProcess(matchInfo, isLive, assDetectSetting)
                                 .ProcessRound1()
                                 .ProcessRound2()
                                 .Complete(matchMonitorRule.MaxSequenceID.Value)

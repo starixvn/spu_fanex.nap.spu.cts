@@ -5,30 +5,15 @@
     using Fanex.NAP.SPU.CTS.Features.AssociationDetection.Models;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleGroupBetting.Entities;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleGroupBetting.Models;
+    using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Models;
     using Fanex.NAP.SPU.CTS.Shares;
     using Newtonsoft.Json;
     using Sentry;
     using System.Collections.Generic;
     using System.Linq;
-    using static Fanex.NAP.SPU.CTS.Shares.Consts;
 
     public class MatchMonitorRuleGroupBettingProcessService : IMatchMonitorRuleProcessService<MatchStagingRuleGroupBettingGroupModel>
     {
-        private static readonly HashSet<int> ValidSportForIPAnd3MatchesLast7Days = new()
-        {
-            (int)MatchMonitor_SportType.Basketball,
-            (int)MatchMonitor_SportType.Esport,
-            (int)MatchMonitor_SportType.Cricket,
-            (int)MatchMonitor_SportType.Badminton,
-            (int)MatchMonitor_SportType.TableTennis
-        };
-
-        private static readonly HashSet<int> ValidSportForIPLast3Days = new()
-        {
-            (int)MatchMonitor_SportType.Basketball,
-            (int)MatchMonitor_SportType.Esport
-        };
-
         private const string ServiceName = "Match Monitor Process Rule GroupBetting Service";
 
         private readonly IMatchMonitorRuleGroupBettingDataAccess _dataAccess;
@@ -36,6 +21,7 @@
 
         private MatchStagingRuleGroupBettingGroupModel MatchStaging;
         private bool IsLive;
+        private MatchDetectAssociationSettingModel AssDetectSetting;
 
         private readonly List<MatchProcessRuleGroupBettingModel> MatchProcesses;
 
@@ -48,10 +34,11 @@
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S1006:Method overrides should not change parameter defaults", Justification = "<Pending>")]
-        public IMatchMonitorRuleProcessService PrepareProcess(MatchStagingRuleGroupBettingGroupModel matchStaging, bool isLive, IReadOnlyDictionary<int, int> mappingCustDictionary)
+        public IMatchMonitorRuleProcessService PrepareProcess(MatchStagingRuleGroupBettingGroupModel matchStaging, bool isLive, MatchDetectAssociationSettingModel assDetectSetting)
         {
             MatchStaging = matchStaging;
             IsLive = isLive;
+            AssDetectSetting = assDetectSetting;
 
             return this;
         }
@@ -125,11 +112,11 @@
             {
                 CTSCustIds = ctsCustIDList,
                 CustIds = custIDList,
-                IsDevice = true,
-                IsAI = true,
-                IsIP = ValidSportForIPAnd3MatchesLast7Days.Contains(sportType),
-                Is3MatchesLast7Days = ValidSportForIPAnd3MatchesLast7Days.Contains(sportType),
-                IsIPLast3Days = ValidSportForIPLast3Days.Contains(sportType),
+                IsDevice = AssDetectSetting.DeviceSports.Contains(sportType),
+                IsAI = AssDetectSetting.AISports.Contains(sportType),
+                IsIP = AssDetectSetting.IPSports.Contains(sportType),
+                Is3MatchesLast7Days = AssDetectSetting._3MatchesLast7DaysSports.Contains(sportType),
+                IsIPLast3Days = AssDetectSetting.IPLast3DaysSports.Contains(sportType),
                 CustIdsIPLast3Days = licCustIDList
             };
 
