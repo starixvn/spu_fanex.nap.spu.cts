@@ -63,8 +63,8 @@
             return new MatchProcessRuleHedgingModel
             {
                 MatchInfo = matchinfo,
-                CompleteMatches = result.firstResultSet,
-                ReprocessMatches = result.secondResultSet
+                CompleteMatches = result.FirstResultSet,
+                ReprocessMatches = result.SecondResultSet
             };
         }
 

@@ -65,8 +65,8 @@
             return new MatchProcessRuleSabaGBModel
             {
                 MatchInfo = matchInfo,
-                CompleteMatches = result.firstResultSet,
-                ReprocessMatches = result.secondResultSet
+                CompleteMatches = result.FirstResultSet,
+                ReprocessMatches = result.SecondResultSet
             };
         }
 
