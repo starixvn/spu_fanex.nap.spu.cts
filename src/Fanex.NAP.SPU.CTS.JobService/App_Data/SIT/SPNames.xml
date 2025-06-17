@@ -58,8 +58,8 @@
 		<Setting Key="CTS_DC_CustEvidence_InsertFromAssociation" SpName="CTS_DC_CustEvidence_InsertFromAssociation" DbName="CTSMain.CTS_DataCenter.ctsServiceAdmin" />
 		<Setting Key="CTS_DC_CustEvidenceQueue_Affected_Insert" SpName="CTS_DC_CustEvidenceQueue_Affected_Insert" DbName="CTSMain.CTS_DataCenter.ctsServiceAdmin" />
 		<Setting Key="CTS_DC_CustEvidenceQueue_Affected_Remove" SpName="CTS_DC_CustEvidenceQueue_Affected_Remove" DbName="CTSMain.CTS_DataCenter.ctsServiceAdmin" />
-		<Setting Key="NAP_BLControl_EvidenceFlagged" SpName="NAP_BLControl_EvidenceFlagged" DbName="DBCust.CustDB.wsv_nap" TimeOut="600" />
-		<Setting Key="NAP_BLControl_EvidenceUnflagged" SpName="NAP_BLControl_EvidenceUnflagged" DbName="DBCust.CustDB.wsv_nap" TimeOut="600" />
+		<Setting Key="NAP_BLControl_EvidenceFlagged" SpName="NAP_BLControl_EvidenceFlagged" DbName="DBCUST.CustDB.wsv_nap" TimeOut="600" />
+		<Setting Key="NAP_BLControl_EvidenceUnflagged" SpName="NAP_BLControl_EvidenceUnflagged" DbName="DBCUST.CustDB.wsv_nap" TimeOut="600" />
 	</Function>
 	<Function name="CustomerStatus">
 		<Setting Key="CTS_DC_CustInfo_Healing_GetCustIDs" SpName="CTS_DC_CustInfo_Healing_GetCustIDs" DbName="CTSMain.CTS_DataCenter.ctsService" />
