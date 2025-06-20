@@ -1,20 +1,20 @@
-﻿using Fanex.Logging.Extensions;
-using Fanex.Logging.Extensions.Database;
-using Fanex.NAP.SPU.Notification.Services;
-using Newtonsoft.Json;
-using Sentry;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Fanex.NAP.SPU.CTS.Shares
+﻿namespace Fanex.NAP.SPU.CTS.Shares
 {
+    using Fanex.Logging.Extensions;
+    using Fanex.Logging.Extensions.Database;
+    using Fanex.NAP.SPU.Notification.Services;
+    using Newtonsoft.Json;
+    using Sentry;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Linq;
+    using System.Net.Http;
+    using System.Net.Http.Json;
+    using System.Text;
+    using System.Threading.Tasks;
+
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Info Code Smell", "S6566:Prefer using DateTimeOffset instead of DateTime", Justification = "<Pending>")]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Info Code Smell", "S2955:Use a comparison to 'default(T)' instead or add a constraint to 'T' so that it can't be a value type.", Justification = "<Pending>")]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Major Code Smell", "S103:Lines should not be too long", Justification = "<Pending>")]
@@ -29,37 +29,6 @@ namespace Fanex.NAP.SPU.CTS.Shares
                 .GroupBy(x => x.groupIndex)
                 .Select(g => g.Select(x => x.v));
         }
-
-        //public static IEnumerable<IEnumerable<T>> ChunkBy<T>(this IEnumerable<T> source, int chunkSize)
-        //{
-        //    return source
-        //        .Select((x, i) => new { Index = i, Value = x })
-        //        .GroupBy(x => x.Index / chunkSize)
-        //        .Select(x => x.Select(v => v.Value).ToList())
-        //        .ToList();
-        //}
-
-        //public static IEnumerable<IEnumerable<T>> Chunk<T>(this IEnumerable<T> source, int chunksize)
-        //{
-        //    var q = new Queue<T>();
-
-        //    foreach (var item in source)
-        //    {
-        //        // check if q is full
-        //        if (q.Count == chunksize)
-        //        {
-        //            var ret = q;
-        //            q = new Queue<T>();
-
-        //            yield return ret;
-        //        }
-
-        //        // enqueue item
-        //        q.Enqueue(item);
-        //    }
-
-        //    yield return q;
-        //}
 
         public static async Task<TResult> Post<TParam, TResult>(string url, TParam param)
         {
