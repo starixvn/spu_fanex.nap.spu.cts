@@ -33,6 +33,8 @@
 
         string SentryDsn { get; }
 
+        string SentryCategory { get; }
+
         APIHelperConfig APIHelperConfig { get; }
 
         NotificationChannelsConfig NotificationChannelConfig { get; }
@@ -46,6 +48,7 @@
         private readonly string evironmentName;
         private readonly string spName;
         private readonly string sentryDsn;
+        private readonly string sentryCategory;
         private readonly APIHelperConfig apiHelperConfig;
         private readonly NotificationChannelsConfig notificationChannelsConfig;
 
@@ -57,6 +60,7 @@
             evironmentName = GetValue<string>(nameof(Environment));
             spName = GetValue<string>(nameof(SPName));
             sentryDsn = GetValue<string>("Sentry:Dsn");
+            sentryCategory = GetValue<string>("Sentry:Category");
             apiHelperConfig = new APIHelperConfig
             {
                 Proxy = GetValue<string>("APIHelperConfig:Proxy")
@@ -108,6 +112,8 @@
         public int CustomerStatusBatchSize => GetValue<int>("CustomerStatus:BatchSize");
 
         public string SentryDsn => sentryDsn;
+
+        public string SentryCategory => sentryCategory;
 
         public APIHelperConfig APIHelperConfig => apiHelperConfig;
 
