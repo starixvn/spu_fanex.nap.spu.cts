@@ -2,7 +2,6 @@
 {
     using Fanex.NAP.SPU.CTS.Features.ArchiveAssociationCustomer;
     using Fanex.NAP.SPU.CTS.Shares;
-    using Sentry;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -16,12 +15,10 @@
     public class ArchiveAssociationCustomerJobService : IArchiveAssociationCustomerJobService
     {
         private readonly IArchiveAssociationCustomerService archiveAssociationCustomerService;
-        private readonly ISentryClient sentryClient;
         private const string serviceName = "ArchiveAssociationCustomer";
 
-        public ArchiveAssociationCustomerJobService(ISentryClient sentryClient, IArchiveAssociationCustomerService archiveAssociationCustomerService)
+        public ArchiveAssociationCustomerJobService(IArchiveAssociationCustomerService archiveAssociationCustomerService)
         {
-            this.sentryClient = sentryClient;
             this.archiveAssociationCustomerService = archiveAssociationCustomerService;
         }
 
@@ -33,7 +30,7 @@
             }
             catch (Exception ex)
             {
-                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex);
 
                 return Task.FromResult(false);
             }

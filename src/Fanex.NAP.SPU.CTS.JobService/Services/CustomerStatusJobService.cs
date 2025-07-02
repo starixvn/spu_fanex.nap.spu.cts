@@ -1,6 +1,5 @@
 ﻿using Fanex.NAP.SPU.CTS.Features.InitialCustomerStatus;
 using Fanex.NAP.SPU.CTS.Shares;
-using Sentry;
 using System;
 using System.Threading.Tasks;
 using static Fanex.NAP.SPU.CTS.Shares.Consts;
@@ -15,13 +14,11 @@ namespace Fanex.NAP.SPU.CTS.JobService.Services
     public class CustomerStatusJobService : ICustomerStatusJobService
     {
         private readonly ICustomerStatusServices customerStatusServices;
-        private readonly ISentryClient sentryClient;
         private readonly IAppSettings appSettings;
         private readonly string serviceName;
 
-        public CustomerStatusJobService(ISentryClient sentryClient, ICustomerStatusServices customerStatusServices, IAppSettings appSettings)
+        public CustomerStatusJobService(ICustomerStatusServices customerStatusServices, IAppSettings appSettings)
         {
-            this.sentryClient = sentryClient;
             this.customerStatusServices = customerStatusServices;
             this.appSettings = appSettings;
             this.serviceName = "CustomerStatus";
@@ -38,12 +35,12 @@ namespace Fanex.NAP.SPU.CTS.JobService.Services
                 }
                 else
                 {
-                    Utilities.LogSentryError(serviceName, "Invalid BatchSize", appSettings.CustomerStatusBatchSize, new NullReferenceException(), sentryClient);
+                    Utilities.LogSentryError(serviceName, "Invalid BatchSize", appSettings.CustomerStatusBatchSize, new NullReferenceException());
                 }
             }
             catch (Exception ex)
             {
-                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex);
 
                 return Task.FromResult(false);
             }

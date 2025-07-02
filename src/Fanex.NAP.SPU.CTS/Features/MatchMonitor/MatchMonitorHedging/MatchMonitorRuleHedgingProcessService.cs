@@ -6,7 +6,6 @@
     using Fanex.NAP.SPU.CTS.Features.MatchMonitorHedging.Models;
     using Fanex.NAP.SPU.CTS.Shares;
     using Newtonsoft.Json;
-    using Sentry;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -151,7 +150,7 @@
             return this;
         }
 
-        public void WriteLogSentryIfError(string functionName, ISentryClient sentryClient)
+        public void WriteLogSentryIfError(string functionName)
         {
             if (MatchProcesses.IsNotNullOrEmpty())
             {
@@ -159,7 +158,7 @@
 
                 if (matchProcessNotValid.IsNotNullOrEmpty())
                 {
-                    Utilities.LogSentryInfo(ServiceName, $"{functionName} Error", matchProcessNotValid, true, sentryClient);
+                    Utilities.LogSentryInfo(ServiceName, $"{functionName} Error", matchProcessNotValid, true);
                 }
             }
         }

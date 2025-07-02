@@ -5,6 +5,7 @@ namespace Fanex.NAP.SPU.CTS.JobService
     using Fanex.Data.SqlServer;
     using Fanex.Logging;
     using Fanex.Logging.Sentry;
+    using Fanex.Logging.Sentry.RavenClient;
     using Fanex.NAP.Client;
     using Fanex.NAP.Client.AspNetCore.Configuration;
     using Fanex.NAP.Client.Configuration;
@@ -18,9 +19,6 @@ namespace Fanex.NAP.SPU.CTS.JobService
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using Microsoft.OpenApi.Models;
-    using Sentry;
-    using System.Collections.Generic;
-    using System.Linq;
 
     public class Startup
     {
@@ -36,6 +34,7 @@ namespace Fanex.NAP.SPU.CTS.JobService
         {
             var appSettings = new AppSettings(Configuration);
 
+            services.AddFanexLogSentry(Configuration);
             services.AddSingleton<IAppSettings>(appSettings);
             services.AddSingleton<INapSettings>(new NapSettings(Configuration));
 
@@ -50,8 +49,6 @@ namespace Fanex.NAP.SPU.CTS.JobService
             });
 
             services.RegisterService();
-
-            RegisterLogging(appSettings);
 
             FanexDataConfig(appSettings);
 
@@ -96,19 +93,6 @@ namespace Fanex.NAP.SPU.CTS.JobService
               .WithMySql(Configuration)
               .UseDefaultDbSettingProvider(resourcePath: appSettings.SPName)
               .Run();
-        }
-
-        private void RegisterLogging(IAppSettings appSettings)
-        {
-            LogManager
-                .SetDefaultLogCategory(appSettings.SentryCategory)
-                .Use(new List<ILogEngine>
-                {
-                     new SentryLogging(new SentryEngineOptions {
-                        Dsn = new Dsn(appSettings.SentryDsn),
-                        Environment = "DEV"
-                     })
-                });
         }
     }
 }

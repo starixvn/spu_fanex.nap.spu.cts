@@ -1,13 +1,10 @@
 ﻿namespace Fanex.NAP.SPU.CTS.JobService.Services
 {
-    using Sentry;
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using Newtonsoft.Json;
-    using Fanex.Logging.Extensions;
     using Fanex.NAP.SPU.CTS.Shares;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Entities;
@@ -38,7 +35,6 @@
 
     public class MatchMonitorJobService : IMatchMonitorJobService
     {
-        private readonly ISentryClient _sentryClient;
         private readonly IMatchMonitorServices _matchMonitorServices;
 
         private readonly IServiceProvider _serviceProvider;
@@ -50,7 +46,6 @@
         private readonly string serviceName;
 
         public MatchMonitorJobService(
-            ISentryClient sentryClient,
             IMatchMonitorServices matchMonitorServices,
             IServiceProvider serviceProvider,
             IMMRuleSabaGBService ruleSabaGBService,
@@ -58,7 +53,6 @@
             IMatchMonitorRuleArbitrageService ruleArbitrageService,
             IMatchMonitorRuleHedgingService ruleHedgingService)
         {
-            _sentryClient = sentryClient;
             _matchMonitorServices = matchMonitorServices;
             serviceName = "MatchMonitor Service";
 
@@ -82,7 +76,7 @@
             }
             catch (Exception ex)
             {
-                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, _sentryClient);
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex);
 
                 return Task.FromResult(false);
             }
@@ -113,7 +107,7 @@
                                 .ProcessRound1()
                                 .ProcessRound2()
                                 .Complete(matchMonitorRule.MaxSequenceID.Value)
-                                .WriteLogSentryIfError(nameof(ProcessRuleGroupBetting), _sentryClient);
+                                .WriteLogSentryIfError(nameof(ProcessRuleGroupBetting));
 
                             Thread.Sleep(MatchMonitor_SleepTimes);
                         });
@@ -125,13 +119,13 @@
             }
             catch (AggregateException ex)
             {
-                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, _sentryClient);
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex);
 
                 return Task.FromResult(false);
             }
             catch (Exception ex)
             {
-                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, _sentryClient);
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex);
 
                 return Task.FromResult(false);
             }
@@ -158,7 +152,7 @@
                                 .ProcessRound1()
                                 .ProcessRound2()
                                 .Complete(matchMonitorRule.MaxSequenceID.Value)
-                                .WriteLogSentryIfError(nameof(ProcessRuleSabaGroupBetting), _sentryClient);
+                                .WriteLogSentryIfError(nameof(ProcessRuleSabaGroupBetting));
 
                             Thread.Sleep(MatchMonitor_SleepTimes);
                         });
@@ -170,13 +164,13 @@
             }
             catch (AggregateException ex)
             {
-                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, _sentryClient);
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex);
 
                 return Task.FromResult(false);
             }
             catch (Exception ex)
             {
-                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, _sentryClient);
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex);
 
                 return Task.FromResult(false);
             }
@@ -223,13 +217,13 @@
             }
             catch (AggregateException ex)
             {
-                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, _sentryClient);
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex);
 
                 return Task.FromResult(false);
             }
             catch (Exception ex)
             {
-                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, _sentryClient);
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex);
 
                 return Task.FromResult(false);
             }
@@ -258,7 +252,7 @@
                                 .ProcessRound1()
                                 .ProcessRound2()
                                 .Complete(matchMonitorRule.MaxSequenceID.Value)
-                                .WriteLogSentryIfError(nameof(ProcessRuleHedging), _sentryClient);
+                                .WriteLogSentryIfError(nameof(ProcessRuleHedging));
 
                             Thread.Sleep(MatchMonitor_SleepTimes);
                         });
@@ -270,13 +264,13 @@
             }
             catch (AggregateException ex)
             {
-                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, _sentryClient);
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex);
 
                 return Task.FromResult(false);
             }
             catch (Exception ex)
             {
-                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, _sentryClient);
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex);
 
                 return Task.FromResult(false);
             }
@@ -324,13 +318,13 @@
             }
             catch (AggregateException ex)
             {
-                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, _sentryClient);
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex);
 
                 return Task.FromResult(false);
             }
             catch (Exception ex)
             {
-                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, _sentryClient);
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex);
 
                 return Task.FromResult(false);
             }
@@ -358,7 +352,7 @@
                                 .ProcessRound1()
                                 .ProcessRound2()
                                 .Complete(matchMonitorRule.MaxSequenceID.Value)
-                                .WriteLogSentryIfError(nameof(ProcessRuleArbitrage), _sentryClient);
+                                .WriteLogSentryIfError(nameof(ProcessRuleArbitrage));
 
                             Thread.Sleep(MatchMonitor_SleepTimes);
                         });
@@ -370,13 +364,13 @@
             }
             catch (AggregateException ex)
             {
-                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, _sentryClient);
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex);
 
                 return Task.FromResult(false);
             }
             catch (Exception ex)
             {
-                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, _sentryClient);
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex);
 
                 return Task.FromResult(false);
             }

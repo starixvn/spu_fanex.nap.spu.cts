@@ -3,7 +3,7 @@
     using Fanex.Logging.Extensions;
     using Fanex.Logging.Extensions.Database;
     using Fanex.NAP.SPU.CTS.Features.ArchiveData.Customer;
-    using Sentry;
+    using Fanex.NAP.SPU.CTS.Shares;
     using System;
     using System.Threading.Tasks;
 
@@ -17,12 +17,10 @@
     public class ArchiveCustomerMissingJobService : IArchiveCustomerMissingJobService
     {
         private readonly IArchiveCustomerMissingService archiveCustomerMissingService;
-        private readonly ISentryClient sentryClient;
 
-        public ArchiveCustomerMissingJobService(IArchiveCustomerMissingService archiveCustomerMissingService, ISentryClient sentryClient)
+        public ArchiveCustomerMissingJobService(IArchiveCustomerMissingService archiveCustomerMissingService)
         {
             this.archiveCustomerMissingService = archiveCustomerMissingService;
-            this.sentryClient = sentryClient;
         }
 
         public Task<bool> ArchiveCreditCustomer(int batchSize)
@@ -40,7 +38,7 @@
                       .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex))
                       .ToString();
 
-                sentryClient.CaptureMessage(logMessage, Sentry.Protocol.SentryLevel.Error);
+                logMessage.LogError();
                 return Task.FromResult(false);
             }
         }
@@ -60,7 +58,7 @@
                       .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex))
                       .ToString();
 
-                sentryClient.CaptureMessage(logMessage, Sentry.Protocol.SentryLevel.Error);
+                logMessage.LogError();
                 return Task.FromResult(false);
             }
         }

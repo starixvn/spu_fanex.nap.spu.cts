@@ -3,13 +3,11 @@
     using Fanex.NAP.SPU.CTS.Features.Notification;
     using Fanex.NAP.SPU.CTS.Features.Notification.Entities;
     using Fanex.NAP.SPU.CTS.Shares;
-    using Sentry;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
-    using static Fanex.NAP.SPU.CTS.Shares.Consts;
 
     public interface INotificationJobService
     {
@@ -18,15 +16,13 @@
 
     public class NotificationJobService : INotificationJobService
     {
-        private readonly ISentryClient _sentryClient;
         private readonly IDBAMonitoringService _dbaMonitoringService;
         private readonly IAppSettings _appSettings;
         private readonly string _serviceName;
 
-        public NotificationJobService(IDBAMonitoringService dbaMonitoringService, ISentryClient sentryClient, IAppSettings appSettings)
+        public NotificationJobService(IDBAMonitoringService dbaMonitoringService, IAppSettings appSettings)
         {
             _dbaMonitoringService = dbaMonitoringService;
-            _sentryClient = sentryClient;
             _appSettings = appSettings;
             _serviceName = "DataConsistencyMonitoring";
         }
@@ -70,7 +66,7 @@
             }
             catch (Exception ex)
             {
-                Utilities.LogSentryError(_serviceName, ex.Message, string.Empty, ex, _sentryClient);
+                Utilities.LogSentryError(_serviceName, ex.Message, string.Empty, ex);
 
                 return Task.FromResult(false);
             }

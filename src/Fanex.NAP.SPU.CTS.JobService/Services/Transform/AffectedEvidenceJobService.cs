@@ -3,7 +3,7 @@
     using Fanex.Logging.Extensions;
     using Fanex.Logging.Extensions.Database;
     using Fanex.NAP.SPU.CTS.Features.AffectedEvidence;
-    using Sentry;
+    using Fanex.NAP.SPU.CTS.Shares;
     using System;
     using System.Linq;
     using System.Threading.Tasks;
@@ -16,11 +16,9 @@
     public class AffectedEvidenceJobService : IAffectedEvidenceJobService
     {
         private readonly IAffectedEvidenceService affectedEvidenceService;
-        private readonly ISentryClient sentryClient;
 
-        public AffectedEvidenceJobService(ISentryClient sentryClient, IAffectedEvidenceService affectedEvidenceService)
+        public AffectedEvidenceJobService(IAffectedEvidenceService affectedEvidenceService)
         {
-            this.sentryClient = sentryClient;
             this.affectedEvidenceService = affectedEvidenceService;
         }
 
@@ -42,7 +40,7 @@
                       .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex))
                       .ToString();
 
-                sentryClient.CaptureMessage(logMessage, Sentry.Protocol.SentryLevel.Error);
+                logMessage.LogError();
                 return Task.FromResult(false);
             }
 

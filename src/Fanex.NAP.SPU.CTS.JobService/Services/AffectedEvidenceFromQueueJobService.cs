@@ -2,7 +2,6 @@
 {
     using Fanex.NAP.SPU.CTS.Features.AffectedEvidence;
     using Fanex.NAP.SPU.CTS.Shares;
-    using Sentry;
     using System;
     using System.Threading.Tasks;
 
@@ -16,16 +15,13 @@
     public class AffectedEvidenceFromQueueJobService : IAffectedEvidenceFromQueueJobService
     {
         private readonly string serviceName;
-        private readonly ISentryClient sentryClient;
         private readonly IAffectedEvidenceFromQueueService affectedEvidenceFromQueueService;
         private readonly IAppSettings appSettings;
 
         public AffectedEvidenceFromQueueJobService(
-            ISentryClient sentryClient,
             IAffectedEvidenceFromQueueService affectedEvidenceFromQueueService,
             IAppSettings appSettings)
         {
-            this.sentryClient = sentryClient;
             this.affectedEvidenceFromQueueService = affectedEvidenceFromQueueService;
             this.appSettings = appSettings;
             this.serviceName = "AffectedEvidenceFromQueue";
@@ -39,7 +35,7 @@
             }
             catch (Exception ex)
             {
-                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex);
 
                 return Task.FromResult(false);
             }
@@ -55,7 +51,7 @@
             }
             catch (Exception ex)
             {
-                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex);
 
                 return Task.FromResult(false);
             }

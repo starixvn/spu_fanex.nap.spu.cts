@@ -1,8 +1,7 @@
 ﻿using Fanex.Logging.Extensions;
 using Fanex.Logging.Extensions.Database;
 using Fanex.NAP.SPU.CTS.Features.Transform.Accounts;
-using Sentry;
-using Sentry.Protocol;
+using Fanex.NAP.SPU.CTS.Shares;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -15,12 +14,10 @@ namespace Fanex.NAP.SPU.CTS.JobService.Services
     }
     public class AccountJobService : IAccountJobService
     {
-        private readonly ISentryClient sentryClient;
         private readonly IAccountServices accountServices;
 
-        public AccountJobService(ISentryClient sentryClient, IAccountServices accountServices)
+        public AccountJobService(IAccountServices accountServices)
         {
-            this.sentryClient = sentryClient;
             this.accountServices = accountServices;
         }
 
@@ -40,7 +37,7 @@ namespace Fanex.NAP.SPU.CTS.JobService.Services
                       .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex))
                       .ToString();
 
-                sentryClient.CaptureMessage(logMessage, SentryLevel.Error);
+                logMessage.LogError();
 
                 return Task.FromResult(false);
             }
@@ -61,7 +58,7 @@ namespace Fanex.NAP.SPU.CTS.JobService.Services
 
                     if (result.ErrorCode != 0)
                     {
-                        sentryClient.CaptureMessage(result.ErrorMessage, SentryLevel.Error);
+                        result.ErrorMessage.LogError();
                     }
                 });
             }

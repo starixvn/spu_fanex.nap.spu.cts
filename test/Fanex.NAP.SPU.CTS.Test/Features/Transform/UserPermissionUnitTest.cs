@@ -1,17 +1,10 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Tests.Features.Transform
 {
-    using Fanex.NAP.Client;
-    using Fanex.NAP.Client.AspNetCore.Configuration;
-    using Fanex.NAP.Client.AspNetCore.Session;
-    using Fanex.NAP.Client.Configuration;
-    using Fanex.NAP.Client.Helpers.Web;
     using Fanex.NAP.Client.Models.ValueObject;
-    using Fanex.NAP.Client.Services;
     using Fanex.NAP.SPU.CTS.Features.UserPermission;
     using Fanex.NAP.SPU.CTS.Shares;
     using FluentAssertions;
     using NSubstitute;
-    using Sentry;
     using System;
     using System.Collections.Generic;
     using Xunit;

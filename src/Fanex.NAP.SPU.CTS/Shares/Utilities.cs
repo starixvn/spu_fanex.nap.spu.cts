@@ -4,7 +4,6 @@
     using Fanex.Logging.Extensions.Database;
     using Fanex.NAP.SPU.Notification.Services;
     using Newtonsoft.Json;
-    using Sentry;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
@@ -50,17 +49,17 @@
             }
         }
 
-        public static void LogSentryInfo<T>(string serviceName, string message, T data, bool isWriteLog, ISentryClient sentryClient)
+        public static void LogSentryInfo<T>(string serviceName, string message, T data, bool isWriteLog)
         {
             if (isWriteLog)
             {
                 var logMessage = $"{serviceName} - {message} {(data != null ? " - Data:" + JsonConvert.SerializeObject(data) : "")} - {DateTime.Now}";
 
-                sentryClient.CaptureMessage(logMessage);
+                logMessage.LogInfo();
             }
         }
 
-        public static void LogSentryError<T>(string serviceName, string message, T data, Exception ex, ISentryClient sentryClient)
+        public static void LogSentryError<T>(string serviceName, string message, T data, Exception ex)
         {
             var logMessage = new LogMessage(ex.Message)
                 .AddMessage($"{serviceName}")
@@ -68,7 +67,7 @@
                 .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex))
                 .AddMessage($"{message} - Data {JsonConvert.SerializeObject(data)} - {DateTime.Now}").ToString();
 
-            sentryClient.CaptureMessage(logMessage, Sentry.Protocol.SentryLevel.Error);
+            logMessage.LogError();
         }
 
         public static string ReadTextFile(string filePath)
