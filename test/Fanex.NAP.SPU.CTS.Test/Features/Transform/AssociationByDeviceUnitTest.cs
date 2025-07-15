@@ -4,7 +4,6 @@
     using Fanex.NAP.SPU.CTS.Features.Transform.AssociationByDevice.Entities;
     using FluentAssertions;
     using NSubstitute;
-    using Sentry;
     using System;
     using System.Collections.Generic;
     using Xunit;

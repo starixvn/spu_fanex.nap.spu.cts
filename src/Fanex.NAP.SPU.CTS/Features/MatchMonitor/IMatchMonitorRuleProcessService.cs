@@ -1,7 +1,6 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor
 {
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Models;
-    using Sentry;
     using System.Collections.Generic;
 
     public interface IMatchMonitorRuleProcessService
@@ -12,7 +11,7 @@
 
         IMatchMonitorRuleProcessService Complete(ulong maxSequenceID);
 
-        void WriteLogSentryIfError(string functionName, ISentryClient sentryClient);
+        void WriteLogSentryIfError(string functionName);
     }
 
     public interface IMatchMonitorRuleProcessService<T> : IMatchMonitorRuleProcessService

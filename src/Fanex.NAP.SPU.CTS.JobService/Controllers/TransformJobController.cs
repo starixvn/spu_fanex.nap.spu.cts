@@ -2,28 +2,25 @@
 {
     using Fanex.NAP.SPU.CTS.JobService.Services;
     using Microsoft.AspNetCore.Mvc;
-    using Sentry;
     using System.Threading.Tasks;
 
     [ApiController]
     [Route("api/TransformJob")]
     public class TransformJobController : ControllerBase
     {
-        private readonly ISentryClient sentryClient;
         private readonly IAssociationByDeviceJobService associationByDeviceJobService;
         private readonly IAffectedEvidenceJobService affectedEvidenceJobService;
         private readonly IAccountJobService accountJobService;
         private readonly IUserPermissionJobService userPermissionJobService;
         private readonly IUpdateLastLoginJobService updateLastLoginJobService;
 
-        public TransformJobController(ISentryClient sentryClient,
+        public TransformJobController(
             IAssociationByDeviceJobService associationByDeviceJobService,
             IAccountJobService accountJobService,
             IAffectedEvidenceJobService affectedEvidenceJobService, 
             IUserPermissionJobService userPermissionJobService,
             IUpdateLastLoginJobService updateLastLoginJobService)
         {
-            this.sentryClient = sentryClient;
             this.associationByDeviceJobService = associationByDeviceJobService;
             this.affectedEvidenceJobService = affectedEvidenceJobService;
             this.accountJobService = accountJobService;

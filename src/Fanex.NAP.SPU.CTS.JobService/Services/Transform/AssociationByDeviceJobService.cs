@@ -3,7 +3,7 @@
     using Fanex.Logging.Extensions;
     using Fanex.Logging.Extensions.Database;
     using Fanex.NAP.SPU.CTS.Features.Transform.AssociationByDevice;
-    using Sentry;
+    using Fanex.NAP.SPU.CTS.Shares;
     using System;
     using System.Linq;
     using System.Threading.Tasks;
@@ -16,12 +16,10 @@
     public class AssociationByDeviceJobService : IAssociationByDeviceJobService
     {
         private readonly IAssociationByDeviceService associationByDeviceService;
-        private readonly ISentryClient sentryClient;
         private readonly IAppSettings appSettings;
 
-        public AssociationByDeviceJobService(ISentryClient sentryClient, IAssociationByDeviceService associationByDeviceService, IAppSettings appSettings)
+        public AssociationByDeviceJobService(IAssociationByDeviceService associationByDeviceService, IAppSettings appSettings)
         {
-            this.sentryClient = sentryClient;
             this.associationByDeviceService = associationByDeviceService;
             this.appSettings = appSettings;
         }
@@ -49,7 +47,7 @@
                       .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex))
                       .ToString();
 
-                sentryClient.CaptureMessage(logMessage, Sentry.Protocol.SentryLevel.Error);
+                logMessage.LogError();
             }
 
             return Task.FromResult(true);

@@ -1,12 +1,10 @@
-﻿using Fanex.NAP.SPU.CTS.Features.UpdateLastLogin;
-using Sentry;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Fanex.NAP.SPU.CTS.JobService.Services
+﻿namespace Fanex.NAP.SPU.CTS.JobService.Services
 {
+    using Fanex.NAP.SPU.CTS.Features.UpdateLastLogin;
+    using Fanex.NAP.SPU.CTS.Shares;
+    using System;
+    using System.Threading.Tasks;
+
     public interface IUpdateLastLoginJobService
     {
         Task<bool> UpdateLastLoginTime();
@@ -15,12 +13,10 @@ namespace Fanex.NAP.SPU.CTS.JobService.Services
     public class UpdateLastLoginJobService : IUpdateLastLoginJobService
     {
         private readonly IUpdateLastLoginService uptLastLoginService;
-        private readonly ISentryClient sentryClient;
         private readonly IAppSettings appSettings;
 
-        public UpdateLastLoginJobService(ISentryClient sentryClient, IUpdateLastLoginService uptLastLoginService, IAppSettings appSettings)
+        public UpdateLastLoginJobService(IUpdateLastLoginService uptLastLoginService, IAppSettings appSettings)
         {
-            this.sentryClient = sentryClient;
             this.uptLastLoginService = uptLastLoginService;
             this.appSettings = appSettings;
         }
@@ -36,7 +32,7 @@ namespace Fanex.NAP.SPU.CTS.JobService.Services
             }
             catch (Exception ex)
             {
-                sentryClient.CaptureException(ex);
+                ex.LogError();
                 return Task.FromResult(false);
             }
         }

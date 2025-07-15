@@ -1,6 +1,6 @@
 ﻿using Fanex.NAP.SPU.CTS.JobService.Services;
+using Fanex.NAP.SPU.CTS.Shares;
 using Microsoft.AspNetCore.Mvc;
-using Sentry;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,16 +11,13 @@ namespace Fanex.NAP.SPU.CTS.JobService.Controllers
     [Route("api/monitoring")]
     public class MonitoringController : ControllerBase
     {
-        private readonly ISentryClient sentryClient;
-
         private readonly IExistingCustomerJobService existingCustomerJobService;
         private readonly ILoginTransactionMonitoringJobService loginTransactionMonitoringJobService;
 
-        public MonitoringController(ISentryClient sentryClient
-            , IExistingCustomerJobService existingCustomerJobService
-            , ILoginTransactionMonitoringJobService loginTransactionMonitoringJobService)
+        public MonitoringController(
+            IExistingCustomerJobService existingCustomerJobService,
+            ILoginTransactionMonitoringJobService loginTransactionMonitoringJobService)
         {
-            this.sentryClient = sentryClient;
             this.existingCustomerJobService = existingCustomerJobService;
             this.loginTransactionMonitoringJobService = loginTransactionMonitoringJobService;           
         }
@@ -28,7 +25,7 @@ namespace Fanex.NAP.SPU.CTS.JobService.Controllers
         [HttpPost("existingcustomer")]
         public async Task<bool> ExistingCustomer(string jobName)
         {
-            sentryClient.CaptureMessage($"{jobName} is running at {DateTime.Now}");
+            LogExtension.LogInfo($"{jobName} is running at {DateTime.Now}");
 
             var currentDate = DateTime.Now;
 
@@ -46,7 +43,7 @@ namespace Fanex.NAP.SPU.CTS.JobService.Controllers
 
                     groupBySubscriber.ForEach(x =>
                     {
-                        sentryClient.CaptureMessage($"{x.Key}: {string.Join(", ", x.Select(a => a.CustId + ":" + a.UserName))}");
+                        LogExtension.LogInfo($"{x.Key}: {string.Join(", ", x.Select(a => a.CustId + ":" + a.UserName))}");
                     });
                 }
             }

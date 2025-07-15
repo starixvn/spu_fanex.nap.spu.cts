@@ -1,7 +1,6 @@
 ﻿using Fanex.NAP.SPU.CTS.Features.ExistingCustomer;
 using Fanex.NAP.SPU.CTS.Features.ExistingCustomer.Entities;
 using Fanex.NAP.SPU.CTS.Shares;
-using Sentry;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,13 +17,10 @@ namespace Fanex.NAP.SPU.CTS.JobService.Services
     public class ExistingCustomerJobService : IExistingCustomerJobService
     {
         private readonly IExistingCustomerServices existingCustomerServices;
-        private readonly ISentryClient sentryClient;        
 
-        public ExistingCustomerJobService(IExistingCustomerServices existingCustomerServices,
-            ISentryClient sentryClient)
+        public ExistingCustomerJobService(IExistingCustomerServices existingCustomerServices)
         {
             this.existingCustomerServices = existingCustomerServices;
-            this.sentryClient = sentryClient;            
         }
 
         public IEnumerable<CustomerEntity> GetPlaceBetCustomer(DateTime fromDate, DateTime toDate)
@@ -35,7 +31,7 @@ namespace Fanex.NAP.SPU.CTS.JobService.Services
             }
             catch (Exception ex)
             {
-                sentryClient.CaptureException(ex);
+                ex.LogError();
             }
 
             return new List<CustomerEntity>();
@@ -61,7 +57,7 @@ namespace Fanex.NAP.SPU.CTS.JobService.Services
             }
             catch (Exception ex)
             {
-                sentryClient.CaptureException(ex);
+                ex.LogError();
             }
 
             return foundCustomerNotTrans;

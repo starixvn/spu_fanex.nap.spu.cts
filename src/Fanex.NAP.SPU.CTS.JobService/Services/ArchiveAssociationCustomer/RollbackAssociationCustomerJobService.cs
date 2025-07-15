@@ -2,10 +2,7 @@
 {
     using Fanex.NAP.SPU.CTS.Features.ArchiveAssociationCustomer;
     using Fanex.NAP.SPU.CTS.Shares;
-    using Sentry;
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
 
     public interface IRollbackAssociationCustomerJobService
@@ -16,12 +13,10 @@
     public class RollbackAssociationCustomerJobService : IRollbackAssociationCustomerJobService
     {
         private readonly IRollbackAssociationCustomerService rollbackAssociationCustomerService;
-        private readonly ISentryClient sentryClient;
         private const string serviceName = "RollbackAssociationCustomer";
 
-        public RollbackAssociationCustomerJobService(ISentryClient sentryClient, IRollbackAssociationCustomerService rollbackAssociationCustomerService)
+        public RollbackAssociationCustomerJobService(IRollbackAssociationCustomerService rollbackAssociationCustomerService)
         {
-            this.sentryClient = sentryClient;
             this.rollbackAssociationCustomerService = rollbackAssociationCustomerService;
         }
 
@@ -33,7 +28,7 @@
             }
             catch (Exception ex)
             {
-                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex);
 
                 return Task.FromResult(false);
             }

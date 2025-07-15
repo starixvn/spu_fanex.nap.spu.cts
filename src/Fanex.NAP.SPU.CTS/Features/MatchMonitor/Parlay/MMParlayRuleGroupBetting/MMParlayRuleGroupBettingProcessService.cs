@@ -5,7 +5,6 @@
     using Fanex.NAP.SPU.CTS.Features.AssociationDetection.Models;
     using Fanex.NAP.SPU.CTS.Shares;
     using Newtonsoft.Json;
-    using Sentry;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -150,7 +149,7 @@
             return _dataAccess.ProcessRuleGroupBetting(isLive, matchinfo, transIDmList, groupDetection);
         }
 
-        public void WriteLogSentryIfError(string functionName, ISentryClient sentryClient)
+        public void WriteLogSentryIfError(string functionName)
         {
             if (MatchProcesses.IsNotNullOrEmpty())
             {
@@ -158,7 +157,7 @@
 
                 if (matchProcessNotValid.IsNotNullOrEmpty())
                 {
-                    Utilities.LogSentryInfo(ServiceName, $"{functionName} Error", matchProcessNotValid, true, sentryClient);
+                    Utilities.LogSentryInfo(ServiceName, $"{functionName} Error", matchProcessNotValid, true);
                 }
             }
         }

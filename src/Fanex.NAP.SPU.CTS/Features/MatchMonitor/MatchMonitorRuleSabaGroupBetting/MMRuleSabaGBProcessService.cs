@@ -1,6 +1,5 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.MatchMonitorRuleSabaGroupBetting
 {
-    using Sentry;
     using System.Linq;
     using Newtonsoft.Json;
     using System.Collections.Generic;
@@ -162,7 +161,7 @@
         /// <summary>
         /// Write log the case Process Round 2 not correct
         /// </summary>
-        public void WriteLogSentryIfError(string functionName, ISentryClient sentryClient)
+        public void WriteLogSentryIfError(string functionName)
         {
             if (MatchProcesses.IsNotNullOrEmpty())
             {
@@ -170,7 +169,7 @@
 
                 if (matchProcessNotValid.IsNotNullOrEmpty())
                 {
-                    Utilities.LogSentryInfo(ServiceName, $"{functionName} Error", matchProcessNotValid, true, sentryClient);
+                    Utilities.LogSentryInfo(ServiceName, $"{functionName} Error", matchProcessNotValid, true);
                 }
             }
         }

@@ -1,9 +1,9 @@
 ﻿namespace Fanex.NAP.SPU.CTS.JobService.Controllers
 {
     using Fanex.NAP.SPU.CTS.JobService.Services;
+    using Fanex.NAP.SPU.CTS.Shares;
     using Microsoft.AspNetCore.Mvc;
     using Newtonsoft.Json;
-    using Sentry;
     using System;
     using System.Threading.Tasks;
 
@@ -11,15 +11,13 @@
     [Route("api/job")]
     public class JobController : ControllerBase
     {
-        private readonly ISentryClient sentryClient;
         private readonly ICustomerStatusJobService customerStatusJobService;
         private readonly IAffectedEvidenceFromQueueJobService affectedEvidenceFromQueueJobService;
        
-        public JobController(ISentryClient sentryClient,
+        public JobController(
             ICustomerStatusJobService customerStatusJobService,
             IAffectedEvidenceFromQueueJobService affectedEvidenceFromQueueJobService)
         {
-            this.sentryClient = sentryClient;
             this.customerStatusJobService = customerStatusJobService;
             this.affectedEvidenceFromQueueJobService = affectedEvidenceFromQueueJobService;
         }
@@ -27,7 +25,7 @@
         [HttpPost("Test")]
         public bool Test()
         {
-            sentryClient.CaptureMessage($"Test CTS service {DateTime.Now}", Sentry.Protocol.SentryLevel.Info);
+            LogExtension.LogInfo($"Test CTS service {DateTime.Now}");
 
             return true;
         }
@@ -35,7 +33,7 @@
         [HttpGet("health")]
         public string CheckHealth()
         {
-            sentryClient.CaptureMessage($"Check health CTS service {DateTime.Now}", Sentry.Protocol.SentryLevel.Error);
+            LogExtension.LogError($"Check health CTS service {DateTime.Now}");
             return JsonConvert.SerializeObject(DateTime.Now.ToString());
         }
 

@@ -3,7 +3,6 @@
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Parlay.MMParlayRuleGroupBetting;
     using Fanex.NAP.SPU.CTS.Features.MatchMonitor.Parlay.MMParlayStaging;
     using Fanex.NAP.SPU.CTS.Shares;
-    using Sentry;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -19,17 +18,15 @@
 
     public class MatchMonitorParlayJobService : IMatchMonitorParlayJobService
     {
-        private readonly ISentryClient _sentryClient;
         private readonly string _serviceName;
         private readonly IServiceProvider _serviceProvider;
         private readonly IMMParlayRuleGroupBettingService _mmParlayRuleGBService;
 
-        public MatchMonitorParlayJobService(ISentryClient sentryClient, 
+        public MatchMonitorParlayJobService(
             IServiceProvider serviceProvider,
             IMMParlayRuleGroupBettingService mmParlayRuleGBService)
         {
             _serviceName = "Match Monitor Parlay Staging Service";
-            _sentryClient = sentryClient;
             _serviceProvider = serviceProvider;
             _mmParlayRuleGBService = mmParlayRuleGBService;
         }
@@ -47,7 +44,7 @@
             }
             catch (Exception ex)
             {
-                Utilities.LogSentryError(_serviceName, ex.Message, string.Empty, ex, _sentryClient);
+                Utilities.LogSentryError(_serviceName, ex.Message, string.Empty, ex);
 
                 return Task.FromResult(false);
             }
@@ -73,7 +70,7 @@
                                 .ProcessRound1()
                                 .ProcessRound2()
                                 .Complete(mmParlayRuleGB.MaxSequenceID.Value)
-                                .WriteLogSentryIfError(nameof(ProcessParlayRuleGroupBetting), _sentryClient);
+                                .WriteLogSentryIfError(nameof(ProcessParlayRuleGroupBetting));
 
                             Thread.Sleep(Consts.MatchMonitor_SleepTimes);
                         });
@@ -84,7 +81,7 @@
             }
             catch (Exception ex)
             {
-                Utilities.LogSentryError(_serviceName, ex.Message, string.Empty, ex, _sentryClient);
+                Utilities.LogSentryError(_serviceName, ex.Message, string.Empty, ex);
 
                 return Task.FromResult(false);
             }

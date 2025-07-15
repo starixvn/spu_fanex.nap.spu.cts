@@ -1,6 +1,5 @@
 ﻿namespace Fanex.NAP.SPU.CTS.Features.MatchMonitor.Parlay
 {
-    using Sentry;
     using System.Collections.Generic;
 
     public interface IMMParlayRuleProcessService
@@ -11,7 +10,7 @@
 
         IMMParlayRuleProcessService Complete(ulong maxSequenceID);
 
-        void WriteLogSentryIfError(string functionName, ISentryClient sentryClient);
+        void WriteLogSentryIfError(string functionName);
     }
 
     public interface IMMParlayRuleProcessService<T> : IMMParlayRuleProcessService

@@ -2,7 +2,6 @@
 {
     using Fanex.NAP.SPU.CTS.Features.ArchiveData.ClassificationHistoryBySport;
     using Fanex.NAP.SPU.CTS.Shares;
-    using Sentry;
     using System;
     using System.Threading.Tasks;
 
@@ -14,12 +13,10 @@
     public class ArchiveHistoryClassificationBySportJobService : IArchiveHistoryClassificationBySportJobService
     {
         private readonly IArchiveHistoryClassificationBySportServices archiveCCHistoryBySportServices;
-        private readonly ISentryClient sentryClient;
         private readonly string serviceName;
 
-        public ArchiveHistoryClassificationBySportJobService(ISentryClient sentryClient, IArchiveHistoryClassificationBySportServices archiveHistoryClassificationBySportServices)
+        public ArchiveHistoryClassificationBySportJobService(IArchiveHistoryClassificationBySportServices archiveHistoryClassificationBySportServices)
         {
-            this.sentryClient = sentryClient;
             this.archiveCCHistoryBySportServices = archiveHistoryClassificationBySportServices;
             this.serviceName = "ArchiveHistoryClassificationBySportJobService";
         }
@@ -32,7 +29,7 @@
             }
             catch (Exception ex)
             {
-                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex, sentryClient);
+                Utilities.LogSentryError(serviceName, ex.Message, string.Empty, ex);
 
                 return Task.FromResult(false);
             }

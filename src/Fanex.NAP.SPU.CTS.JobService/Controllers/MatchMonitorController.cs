@@ -4,22 +4,19 @@
     using Fanex.NAP.SPU.CTS.JobService.Services;
     using Fanex.NAP.SPU.CTS.JobService.Services.Parlay;
     using Microsoft.AspNetCore.Mvc;
-    using Sentry;
     using System.Threading.Tasks;
 
     [ApiController]
     [Route("api/matchmonitor")]
     public class MatchMonitorController : ControllerBase
     {
-        private readonly ISentryClient sentryClient;
         private readonly IMatchMonitorJobService matchMonitorJobService;
         private readonly IMatchMonitorParlayJobService matchMonitorParlayJobService;
 
-        public MatchMonitorController(ISentryClient sentryClient,
+        public MatchMonitorController(
             IMatchMonitorJobService matchMonitorJobService,
             IMatchMonitorParlayJobService matchMonitorParlayJobService)
         {
-            this.sentryClient = sentryClient;
             this.matchMonitorJobService = matchMonitorJobService;
             this.matchMonitorParlayJobService = matchMonitorParlayJobService;
         }

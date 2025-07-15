@@ -3,7 +3,7 @@
     using Fanex.Logging.Extensions;
     using Fanex.Logging.Extensions.Database;
     using Fanex.NAP.SPU.CTS.Features.ArchiveData.Customer;
-    using Sentry;
+    using Fanex.NAP.SPU.CTS.Shares;
     using System;
     using System.Threading.Tasks;
 
@@ -15,12 +15,10 @@
     public class ArchiveCustomerJobService : IArchiveCustomerJobService
     {
         private readonly IArchiveCustomerService archiveCustomerService;
-        private readonly ISentryClient sentryClient;
 
-        public ArchiveCustomerJobService(IArchiveCustomerService archiveCustomerService, ISentryClient sentryClient)
+        public ArchiveCustomerJobService(IArchiveCustomerService archiveCustomerService)
         {
             this.archiveCustomerService = archiveCustomerService;
-            this.sentryClient = sentryClient;
         }
 
         public Task<bool> ArchiveCTSCustomer(int batchSize)
@@ -37,7 +35,7 @@
                       .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex))
                       .ToString();
 
-                sentryClient.CaptureMessage(logMessage, Sentry.Protocol.SentryLevel.Error);
+                logMessage.LogError();
                 return Task.FromResult(false);
             }
         }
