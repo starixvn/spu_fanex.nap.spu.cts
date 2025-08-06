@@ -2,121 +2,121 @@
 
 <Functions>
 	<Function Name="JobSerice">
-		<Setting Key="DCS_DC_Transform_Account_GetPackage" SpName="DCS_DC_Transform_Account_GetPackage" DbName="CTSMain.DCS_DataCenter.ctsService" />
-		<Setting Key="CTS_DC_Transform_DCSAccountToCTSCustomer" SpName="CTS_DC_Transform_DCSAccountToCTSCustomer" DbName="CTSMain.CTS_DataCenter.ctsServiceAdmin" />
+		<Setting Key="DCS_DC_Transform_Account_GetPackage" SpName="DCS_DC_Transform_Account_GetPackage" DbName="CTSMain_DEV.DCS_DataCenter.ctsService" />
+		<Setting Key="CTS_DC_Transform_DCSAccountToCTSCustomer" SpName="CTS_DC_Transform_DCSAccountToCTSCustomer" DbName="CTSMain_DEV.CTS_DataCenter.ctsServiceAdmin" />
 	</Function>
 	<Function Name="Customer">
-		<Setting Key="CTS_DC_CustInfo_CheckCustNotExistedByCustIds" SpName="CTS_DC_CustInfo_CheckCustNotExistedByCustIds" DbName="CTSMain.CTS_DataCenter.ctsService" />
+		<Setting Key="CTS_DC_CustInfo_CheckCustNotExistedByCustIds" SpName="CTS_DC_CustInfo_CheckCustNotExistedByCustIds" DbName="CTSMain_DEV.CTS_DataCenter.ctsService" />
 		<Setting Key="CTS_GetPlacedBetCustomers" SpName="CTS_GetPlacedBetCustomers" DbName="DBCTS.bodb02.wsv_nap"></Setting>
 	</Function>
 	<Function Name="MatchMonitor">
-		<Setting Key="CTS_DC_SystemParameter_Get" SpName="CTS_DC_SystemParameter_Get" DbName="CTSMain.CTS_DataCenter.ctsService" />		
+		<Setting Key="CTS_DC_SystemParameter_Get" SpName="CTS_DC_SystemParameter_Get" DbName="CTSMain_DEV.CTS_DataCenter.ctsService" />		
 		<Setting Key="CTS_MatchMonitor_GetNewTicket" SpName="CTS_MatchMonitor_GetNewTicket" DbName="DBCTS.WASAVerse.wsv_cts"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_Staging_Insert" SpName="CTS_DC_MatchMonitor_Staging_Insert" DbName="CTSMain.CTS_DataCenter.ctsServiceAdmin"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_Staging_Insert" SpName="CTS_DC_MatchMonitor_Staging_Insert" DbName="CTSMain_DEV.CTS_DataCenter.ctsServiceAdmin"></Setting>
 		
-		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBetting_Get" SpName="CTS_DC_MatchMonitor_RuleGroupBetting_Get" DbName="CTSMain.CTS_DataCenter.ctsService"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBetting_Process" SpName="CTS_DC_MatchMonitor_RuleGroupBetting_Process" DbName="CTSMain.CTS_DataCenter.ctsServiceAdmin"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBetting_Complete" SpName="CTS_DC_MatchMonitor_RuleGroupBetting_Complete" DbName="CTSMain.CTS_DataCenter.ctsServiceAdmin"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBetting_StagingClean" SpName="CTS_DC_MatchMonitor_RuleGroupBetting_StagingClean" DbName="CTSMain.CTS_DataCenter.ctsServiceAdmin"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBetting_Get" SpName="CTS_DC_MatchMonitor_RuleGroupBetting_Get" DbName="CTSMain_DEV.CTS_DataCenter.ctsService"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBetting_Process" SpName="CTS_DC_MatchMonitor_RuleGroupBetting_Process" DbName="CTSMain_DEV.CTS_DataCenter.ctsServiceAdmin"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBetting_Complete" SpName="CTS_DC_MatchMonitor_RuleGroupBetting_Complete" DbName="CTSMain_DEV.CTS_DataCenter.ctsServiceAdmin"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBetting_StagingClean" SpName="CTS_DC_MatchMonitor_RuleGroupBetting_StagingClean" DbName="CTSMain_DEV.CTS_DataCenter.ctsServiceAdmin"></Setting>
 
-		<Setting Key="CTS_DC_MatchMonitor_RuleFixedGame_Get" SpName="CTS_DC_MatchMonitor_RuleFixedGame_Get" DbName="CTSMain.CTS_DataCenter.ctsService"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_RuleFixedGame_Process" SpName="CTS_DC_MatchMonitor_RuleFixedGame_Process" DbName="CTSMain.CTS_DataCenter.ctsService"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_RuleFixedGame_Complete" SpName="CTS_DC_MatchMonitor_RuleFixedGame_Complete" DbName="CTSMain.CTS_DataCenter.ctsServiceAdmin"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_RuleFixedGame_StagingClean" SpName="CTS_DC_MatchMonitor_RuleFixedGame_StagingClean" DbName="CTSMain.CTS_DataCenter.ctsServiceAdmin"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleFixedGame_Get" SpName="CTS_DC_MatchMonitor_RuleFixedGame_Get" DbName="CTSMain_DEV.CTS_DataCenter.ctsService"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleFixedGame_Process" SpName="CTS_DC_MatchMonitor_RuleFixedGame_Process" DbName="CTSMain_DEV.CTS_DataCenter.ctsService"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleFixedGame_Complete" SpName="CTS_DC_MatchMonitor_RuleFixedGame_Complete" DbName="CTSMain_DEV.CTS_DataCenter.ctsServiceAdmin"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleFixedGame_StagingClean" SpName="CTS_DC_MatchMonitor_RuleFixedGame_StagingClean" DbName="CTSMain_DEV.CTS_DataCenter.ctsServiceAdmin"></Setting>
 
-		<Setting Key="CTS_DC_MatchMonitor_RuleHedging_Get" SpName="CTS_DC_MatchMonitor_RuleHedging_Get" DbName="CTSMain.CTS_DataCenter.ctsService"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_RuleHedging_Process" SpName="CTS_DC_MatchMonitor_RuleHedging_Process" DbName="CTSMain.CTS_DataCenter.ctsServiceAdmin"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_RuleHedging_Complete" SpName="CTS_DC_MatchMonitor_RuleHedging_Complete" DbName="CTSMain.CTS_DataCenter.ctsServiceAdmin"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_RuleHedging_StagingClean" SpName="CTS_DC_MatchMonitor_RuleHedging_StagingClean" DbName="CTSMain.CTS_DataCenter.ctsServiceAdmin"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleHedging_Get" SpName="CTS_DC_MatchMonitor_RuleHedging_Get" DbName="CTSMain_DEV.CTS_DataCenter.ctsService"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleHedging_Process" SpName="CTS_DC_MatchMonitor_RuleHedging_Process" DbName="CTSMain_DEV.CTS_DataCenter.ctsServiceAdmin"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleHedging_Complete" SpName="CTS_DC_MatchMonitor_RuleHedging_Complete" DbName="CTSMain_DEV.CTS_DataCenter.ctsServiceAdmin"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleHedging_StagingClean" SpName="CTS_DC_MatchMonitor_RuleHedging_StagingClean" DbName="CTSMain_DEV.CTS_DataCenter.ctsServiceAdmin"></Setting>
 
-		<Setting Key="CTS_DC_MatchMonitor_RuleIrrigation_Get" SpName="CTS_DC_MatchMonitor_RuleIrrigation_Get" DbName="CTSMain.CTS_DataCenter.ctsService"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_RuleIrrigation_Process" SpName="CTS_DC_MatchMonitor_RuleIrrigation_Process" DbName="CTSMain.CTS_DataCenter.ctsServiceAdmin"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_RuleIrrigation_Complete" SpName="CTS_DC_MatchMonitor_RuleIrrigation_Complete" DbName="CTSMain.CTS_DataCenter.ctsServiceAdmin"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_RuleIrrigation_StagingClean" SpName="CTS_DC_MatchMonitor_RuleIrrigation_StagingClean" DbName="CTSMain.CTS_DataCenter.ctsServiceAdmin"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleIrrigation_Get" SpName="CTS_DC_MatchMonitor_RuleIrrigation_Get" DbName="CTSMain_DEV.CTS_DataCenter.ctsService"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleIrrigation_Process" SpName="CTS_DC_MatchMonitor_RuleIrrigation_Process" DbName="CTSMain_DEV.CTS_DataCenter.ctsServiceAdmin"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleIrrigation_Complete" SpName="CTS_DC_MatchMonitor_RuleIrrigation_Complete" DbName="CTSMain_DEV.CTS_DataCenter.ctsServiceAdmin"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleIrrigation_StagingClean" SpName="CTS_DC_MatchMonitor_RuleIrrigation_StagingClean" DbName="CTSMain_DEV.CTS_DataCenter.ctsServiceAdmin"></Setting>
 
-		<Setting Key="CTS_DC_MatchMonitor_RuleArbitrage_Get" SpName="CTS_DC_MatchMonitor_RuleArbitrage_Get" DbName="CTSMain.CTS_DataCenter.ctsService"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_RuleArbitrage_Process" SpName="CTS_DC_MatchMonitor_RuleArbitrage_Process" DbName="CTSMain.CTS_DataCenter.ctsServiceAdmin"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_RuleArbitrage_Complete" SpName="CTS_DC_MatchMonitor_RuleArbitrage_Complete" DbName="CTSMain.CTS_DataCenter.ctsServiceAdmin"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_RuleArbitrage_StagingClean" SpName="CTS_DC_MatchMonitor_RuleArbitrage_StagingClean" DbName="CTSMain.CTS_DataCenter.ctsServiceAdmin"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleArbitrage_Get" SpName="CTS_DC_MatchMonitor_RuleArbitrage_Get" DbName="CTSMain_DEV.CTS_DataCenter.ctsService"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleArbitrage_Process" SpName="CTS_DC_MatchMonitor_RuleArbitrage_Process" DbName="CTSMain_DEV.CTS_DataCenter.ctsServiceAdmin"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleArbitrage_Complete" SpName="CTS_DC_MatchMonitor_RuleArbitrage_Complete" DbName="CTSMain_DEV.CTS_DataCenter.ctsServiceAdmin"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleArbitrage_StagingClean" SpName="CTS_DC_MatchMonitor_RuleArbitrage_StagingClean" DbName="CTSMain_DEV.CTS_DataCenter.ctsServiceAdmin"></Setting>
 
-		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBettingSaba_Get" SpName="CTS_DC_MatchMonitor_RuleGroupBettingSaba_Get" DbName="CTSMain.CTS_DataCenter.ctsServiceAdmin"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBettingSaba_Process" SpName="CTS_DC_MatchMonitor_RuleGroupBettingSaba_Process" DbName="CTSMain.CTS_DataCenter.ctsServiceAdmin"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBettingSaba_Complete" SpName="CTS_DC_MatchMonitor_RuleGroupBettingSaba_Complete" DbName="CTSMain.CTS_DataCenter.ctsServiceAdmin"></Setting>
-		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBettingSaba_StagingClean" SpName="CTS_DC_MatchMonitor_RuleGroupBettingSaba_StagingClean" DbName="CTSMain.CTS_DataCenter.ctsServiceAdmin"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBettingSaba_Get" SpName="CTS_DC_MatchMonitor_RuleGroupBettingSaba_Get" DbName="CTSMain_DEV.CTS_DataCenter.ctsServiceAdmin"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBettingSaba_Process" SpName="CTS_DC_MatchMonitor_RuleGroupBettingSaba_Process" DbName="CTSMain_DEV.CTS_DataCenter.ctsServiceAdmin"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBettingSaba_Complete" SpName="CTS_DC_MatchMonitor_RuleGroupBettingSaba_Complete" DbName="CTSMain_DEV.CTS_DataCenter.ctsServiceAdmin"></Setting>
+		<Setting Key="CTS_DC_MatchMonitor_RuleGroupBettingSaba_StagingClean" SpName="CTS_DC_MatchMonitor_RuleGroupBettingSaba_StagingClean" DbName="CTSMain_DEV.CTS_DataCenter.ctsServiceAdmin"></Setting>
 	</Function>
 	<Function Name="SyncUserPermisison">
-		<Setting Key="CTS_DC_Common_InsertUserPermission" SpName="CTS_DC_Common_InsertUserPermission" DbName="CTSMain.CTS_DataCenter.ctsServiceAdmin" />
+		<Setting Key="CTS_DC_Common_InsertUserPermission" SpName="CTS_DC_Common_InsertUserPermission" DbName="CTSMain_DEV.CTS_DataCenter.ctsServiceAdmin" />
 	</Function>
 	<Function Name="UpdateLastLogin">
-		<Setting Key="CTS_DC_CustInfo_UpdateLastLoginTime" SpName="CTS_DC_CustInfo_UpdateLastLoginTime" DbName="CTSMain.CTS_DataCenter.ctsServiceAdmin" />
+		<Setting Key="CTS_DC_CustInfo_UpdateLastLoginTime" SpName="CTS_DC_CustInfo_UpdateLastLoginTime" DbName="CTSMain_DEV.CTS_DataCenter.ctsServiceAdmin" />
 	</Function>
 	<Function Name="AssociationByDevice">
-		<Setting Key="DCS_DC_Transform_Association_GetPackage" SpName="DCS_DC_Transform_Association_GetPackage" DbName="CTSMain.DCS_DataCenter.ctsService" />
-		<Setting Key="CTS_DC_Association_InsertAssociationByDevice" SpName="CTS_DC_Association_InsertAssociationByDevice" DbName="CTSMain.CTS_DataCenter.ctsServiceAdmin" />
+		<Setting Key="DCS_DC_Transform_Association_GetPackage" SpName="DCS_DC_Transform_Association_GetPackage" DbName="CTSMain_DEV.DCS_DataCenter.ctsService" />
+		<Setting Key="CTS_DC_Association_InsertAssociationByDevice" SpName="CTS_DC_Association_InsertAssociationByDevice" DbName="CTSMain_DEV.CTS_DataCenter.ctsServiceAdmin" />
 	</Function>
 	<Function name="AffectedEvidence">
-		<Setting Key="CTS_DC_CustEvidence_InsertFromAssociation" SpName="CTS_DC_CustEvidence_InsertFromAssociation" DbName="CTSMain.CTS_DataCenter.ctsServiceAdmin" />
-		<Setting Key="CTS_DC_CustEvidenceQueue_Affected_Insert" SpName="CTS_DC_CustEvidenceQueue_Affected_Insert" DbName="CTSMain.CTS_DataCenter.ctsServiceAdmin" />
-		<Setting Key="CTS_DC_CustEvidenceQueue_Affected_Remove" SpName="CTS_DC_CustEvidenceQueue_Affected_Remove" DbName="CTSMain.CTS_DataCenter.ctsServiceAdmin" />
+		<Setting Key="CTS_DC_CustEvidence_InsertFromAssociation" SpName="CTS_DC_CustEvidence_InsertFromAssociation" DbName="CTSMain_DEV.CTS_DataCenter.ctsServiceAdmin" />
+		<Setting Key="CTS_DC_CustEvidenceQueue_Affected_Insert" SpName="CTS_DC_CustEvidenceQueue_Affected_Insert" DbName="CTSMain_DEV.CTS_DataCenter.ctsServiceAdmin" />
+		<Setting Key="CTS_DC_CustEvidenceQueue_Affected_Remove" SpName="CTS_DC_CustEvidenceQueue_Affected_Remove" DbName="CTSMain_DEV.CTS_DataCenter.ctsServiceAdmin" />
 		<Setting Key="NAP_BLControl_EvidenceFlagged" SpName="NAP_BLControl_EvidenceFlagged" DbName="DBCUST.CustDB.wsv_nap" />
 		<Setting Key="NAP_BLControl_EvidenceUnflagged" SpName="NAP_BLControl_EvidenceUnflagged" DbName="DBCUST.CustDB.wsv_nap" />
 	</Function>
 	<Function name="CustomerStatus">
-		<Setting Key="CTS_DC_CustInfo_Healing_GetCustIDs" SpName="CTS_DC_CustInfo_Healing_GetCustIDs" DbName="CTSMain.CTS_DataCenter.ctsService" />
-		<Setting Key="CTS_DC_CustInfo_Healing_Update" SpName="CTS_DC_CustInfo_Healing_Update" DbName="CTSMain.CTS_DataCenter.ctsServiceAdmin" />
+		<Setting Key="CTS_DC_CustInfo_Healing_GetCustIDs" SpName="CTS_DC_CustInfo_Healing_GetCustIDs" DbName="CTSMain_DEV.CTS_DataCenter.ctsService" />
+		<Setting Key="CTS_DC_CustInfo_Healing_Update" SpName="CTS_DC_CustInfo_Healing_Update" DbName="CTSMain_DEV.CTS_DataCenter.ctsServiceAdmin" />
 		<Setting Key="CTS_Customer_GetInfoByCustIdList" SpName="CTS_Customer_GetInfoByCustIdList" DbName="DBCTS.WASAVerse.wsv_cts" />
 	</Function>
 	<Function name="ArchiveCustClassificationHistory">
-		<Setting Key="CTS_DC_CustClassification_History_Archive" SpName="CTS_DC_CustClassification_History_Archive" DbName="CTSMain.CTS_DataCenter.ctsServiceAdmin" />
-		<Setting Key="CTS_Archive_CustClassification_History_Insert" SpName="CTS_Archive_CustClassification_History_Insert" DbName="CTSARC.CTS_Archive.ctsServiceAdmin" />
+		<Setting Key="CTS_DC_CustClassification_History_Archive" SpName="CTS_DC_CustClassification_History_Archive" DbName="CTSMain_DEV.CTS_DataCenter.ctsServiceAdmin" />
+		<Setting Key="CTS_Archive_CustClassification_History_Insert" SpName="CTS_Archive_CustClassification_History_Insert" DbName="CTSARC_DEV.CTS_Archive.ctsServiceAdmin" />
 	</Function>
 	<Function name="ArchiveHistoryCCBySport">
-		<Setting Key="CTS_DC_CustClassification_BySport_History_Archive" SpName="CTS_DC_CustClassification_BySport_History_Archive" DbName="CTSMain.CTS_DataCenter.ctsServiceAdmin" />
-		<Setting Key="CTS_Archive_CustClassification_BySport_History_Insert" SpName="CTS_Archive_CustClassification_BySport_History_Insert" DbName="CTSARC.CTS_Archive.ctsServiceAdmin" />
+		<Setting Key="CTS_DC_CustClassification_BySport_History_Archive" SpName="CTS_DC_CustClassification_BySport_History_Archive" DbName="CTSMain_DEV.CTS_DataCenter.ctsServiceAdmin" />
+		<Setting Key="CTS_Archive_CustClassification_BySport_History_Insert" SpName="CTS_Archive_CustClassification_BySport_History_Insert" DbName="CTSARC_DEV.CTS_Archive.ctsServiceAdmin" />
 	</Function>
   <Function name="ArchiveCTSCustomer">
-	  <Setting Key="CTS_DC_ArchiveCustomer" SpName="CTS_DC_ArchiveCustomer" DbName="CTSMain.CTS_DataCenter.ctsServiceAdmin" />
-	  <Setting Key="CTS_DC_SystemParameter_Update" SpName="CTS_DC_SystemParameter_Update" DbName="CTSMain.CTS_DataCenter.ctsServiceAdmin" />
+	  <Setting Key="CTS_DC_ArchiveCustomer" SpName="CTS_DC_ArchiveCustomer" DbName="CTSMain_DEV.CTS_DataCenter.ctsServiceAdmin" />
+	  <Setting Key="CTS_DC_SystemParameter_Update" SpName="CTS_DC_SystemParameter_Update" DbName="CTSMain_DEV.CTS_DataCenter.ctsServiceAdmin" />
 	  <Setting Key="CTS_ArchiveCustomer_Get" SpName="CTS_ArchiveCustomer_Get" DbName="DBARCCUST.bodb_Customer.wsv_cts" />
 	  <Setting Key="CTS_ArchivedCustomerMissing_Get" SpName="CTS_ArchivedCustomerMissing_Get" DbName="DBARCCUST.bodb_Customer.wsv_cts" />
-	  <Setting Key="CTS_DC_ArchiveCustomer_CorrectData" SpName="CTS_DC_ArchiveCustomer_CorrectData" DbName="CTSMain.CTS_DataCenter.ctsServiceAdmin" />
+	  <Setting Key="CTS_DC_ArchiveCustomer_CorrectData" SpName="CTS_DC_ArchiveCustomer_CorrectData" DbName="CTSMain_DEV.CTS_DataCenter.ctsServiceAdmin" />
   </Function>
 
 	<Function name="ArchiveAssociationCustomer">
-		<Setting Key="CTS_Arc_CustomerAssociation_Archive" SpName="CTS_Arc_CustomerAssociation_Archive" DbName="CTSARC.CTS_Archive.ctsServiceAdmin" />
-		<Setting Key="CTS_Arc_CustomerAssociation_Rollback" SpName="CTS_Arc_CustomerAssociation_Rollback" DbName="CTSARC.CTS_Archive.ctsServiceAdmin" />		
+		<Setting Key="CTS_Arc_CustomerAssociation_Archive" SpName="CTS_Arc_CustomerAssociation_Archive" DbName="CTSARC_DEV.CTS_Archive.ctsServiceAdmin" />
+		<Setting Key="CTS_Arc_CustomerAssociation_Rollback" SpName="CTS_Arc_CustomerAssociation_Rollback" DbName="CTSARC_DEV.CTS_Archive.ctsServiceAdmin" />		
 	</Function>
 
 	<Function Name="AssociationDetection">
 		<Setting Key="CTS_Association_GetBySharedMatches" SpName="CTS_Association_GetBySharedMatches" DbName="DBCTS.bodb02.wsv_cts" />
 		<Setting Key="CTS_Association_IpSharedLast3Days" SpName="CTS_Association_IpSharedLast3Days" DbName="DBCTS.bodb02.wsv_cts" TimeOut="300" />
-		<Setting Key="CTS_DC_Association_Primary_GetCustEdge" SpName="CTS_DC_Association_Primary_GetCustEdge" DbName="CTSMain.CTS_DataCenter.ctsService" Timeout="300" />
-		<Setting Key="CTS_DC_Association_Agent_GetCustEdge" SpName="CTS_DC_Association_Agent_GetCustEdge" DbName="CTSMain.CTS_DataCenter.ctsService" Timeout="300" />
-		<Setting Key="CTS_DC_Association_GetDirectCustEdge" SpName="CTS_DC_Association_GetDirectCustEdge" DbName="CTSMain.CTS_DataCenter.ctsService" Timeout="300" />
-		<Setting Key="CTS_DC_Association_CustGroup" SpName="CTS_DC_Association_CustGroup" DbName="CTSMain.CTS_DataCenter.ctsService" Timeout="300" />
-		<Setting Key="CTS_DC_Association_DetectGroup" SpName="CTS_DC_Association_DetectGroup" DbName="CTSMain.CTS_DataCenter.ctsService" Timeout="300" />
+		<Setting Key="CTS_DC_Association_Primary_GetCustEdge" SpName="CTS_DC_Association_Primary_GetCustEdge" DbName="CTSMain_DEV.CTS_DataCenter.ctsService" Timeout="300" />
+		<Setting Key="CTS_DC_Association_Agent_GetCustEdge" SpName="CTS_DC_Association_Agent_GetCustEdge" DbName="CTSMain_DEV.CTS_DataCenter.ctsService" Timeout="300" />
+		<Setting Key="CTS_DC_Association_GetDirectCustEdge" SpName="CTS_DC_Association_GetDirectCustEdge" DbName="CTSMain_DEV.CTS_DataCenter.ctsService" Timeout="300" />
+		<Setting Key="CTS_DC_Association_CustGroup" SpName="CTS_DC_Association_CustGroup" DbName="CTSMain_DEV.CTS_DataCenter.ctsService" Timeout="300" />
+		<Setting Key="CTS_DC_Association_DetectGroup" SpName="CTS_DC_Association_DetectGroup" DbName="CTSMain_DEV.CTS_DataCenter.ctsService" Timeout="300" />
 	</Function>
 
 	<Function Name="Common">
-		<Setting Key="CTS_DC_Common_BettypeSetting_Get" SpName="CTS_DC_Common_BettypeSetting_Get" DbName="CTSMain.CTS_DataCenter.ctsService" />
+		<Setting Key="CTS_DC_Common_BettypeSetting_Get" SpName="CTS_DC_Common_BettypeSetting_Get" DbName="CTSMain_DEV.CTS_DataCenter.ctsService" />
 	</Function>
 
 	<Function Name="JobMonitoring">
-		<Setting Key="CTS_DC_Monitoring_IncorrectData_Insert" SpName="CTS_DC_Monitoring_IncorrectData_Insert" DbName="CTSMain.CTS_DataCenter.ctsServiceAdmin" />
-		<Setting Key="CTS_DC_Monitoring_IncorrectData_Get" SpName="CTS_DC_Monitoring_IncorrectData_Get" DbName="CTSMain.CTS_DataCenter.ctsService" />
-		<Setting Key="DCS_DC_Monitoring_LoginTransactionProcess_Get" SpName="DCS_DC_Monitoring_LoginTransactionProcess_Get" DbName="CTSMain.DCS_DataCenter.ctsService" />
+		<Setting Key="CTS_DC_Monitoring_IncorrectData_Insert" SpName="CTS_DC_Monitoring_IncorrectData_Insert" DbName="CTSMain_DEV.CTS_DataCenter.ctsServiceAdmin" />
+		<Setting Key="CTS_DC_Monitoring_IncorrectData_Get" SpName="CTS_DC_Monitoring_IncorrectData_Get" DbName="CTSMain_DEV.CTS_DataCenter.ctsService" />
+		<Setting Key="DCS_DC_Monitoring_LoginTransactionProcess_Get" SpName="DCS_DC_Monitoring_LoginTransactionProcess_Get" DbName="CTSMain_DEV.DCS_DataCenter.ctsService" />
 	</Function>
 
   <Function Name="Parlay">
     <Setting Key="CTS_MatchMonitorParlay_GetNewTicket" SpName="CTS_MatchMonitorParlay_GetNewTicket" DbName="DBCTS.WASAVerse.wsv_cts" />
-    <Setting Key="CTS_DC_MatchMonitorParlay_Staging_Insert" SpName="CTS_DC_MatchMonitorParlay_Staging_Insert" DbName="CTSMain.CTS_DataCenter.ctsServiceAdmin" />
-    <Setting Key="CTS_DC_MatchMonitorParlay_RuleGroupBetting_Get" SpName="CTS_DC_MatchMonitorParlay_RuleGroupBetting_Get" DbName="CTSMain.CTS_DataCenter.ctsService" />
-    <Setting Key="CTS_DC_MatchMonitorParlay_RuleGroupBetting_Process" SpName="CTS_DC_MatchMonitorParlay_RuleGroupBetting_Process" DbName="CTSMain.CTS_DataCenter.ctsServiceAdmin" />
-    <Setting Key="CTS_DC_MatchMonitorParlay_RuleGroupBetting_Complete" SpName="CTS_DC_MatchMonitorParlay_RuleGroupBetting_Complete" DbName="CTSMain.CTS_DataCenter.ctsServiceAdmin" />
-    <Setting Key="CTS_DC_MatchMonitorParlay_RuleGroupBetting_StagingClean" SpName="CTS_DC_MatchMonitorParlay_RuleGroupBetting_StagingClean" DbName="CTSMain.CTS_DataCenter.ctsServiceAdmin" />
+    <Setting Key="CTS_DC_MatchMonitorParlay_Staging_Insert" SpName="CTS_DC_MatchMonitorParlay_Staging_Insert" DbName="CTSMain_DEV.CTS_DataCenter.ctsServiceAdmin" />
+    <Setting Key="CTS_DC_MatchMonitorParlay_RuleGroupBetting_Get" SpName="CTS_DC_MatchMonitorParlay_RuleGroupBetting_Get" DbName="CTSMain_DEV.CTS_DataCenter.ctsService" />
+    <Setting Key="CTS_DC_MatchMonitorParlay_RuleGroupBetting_Process" SpName="CTS_DC_MatchMonitorParlay_RuleGroupBetting_Process" DbName="CTSMain_DEV.CTS_DataCenter.ctsServiceAdmin" />
+    <Setting Key="CTS_DC_MatchMonitorParlay_RuleGroupBetting_Complete" SpName="CTS_DC_MatchMonitorParlay_RuleGroupBetting_Complete" DbName="CTSMain_DEV.CTS_DataCenter.ctsServiceAdmin" />
+    <Setting Key="CTS_DC_MatchMonitorParlay_RuleGroupBetting_StagingClean" SpName="CTS_DC_MatchMonitorParlay_RuleGroupBetting_StagingClean" DbName="CTSMain_DEV.CTS_DataCenter.ctsServiceAdmin" />
   </Function>
 
 	<Function>
-		<Setting Key="CTS_DC_DataConsistency_CustomerCategory_Get" SpName="CTS_DC_DataConsistency_CustomerCategory_Get" DbName="CTSMain.CTS_DataCenter.ctsService" />
+		<Setting Key="CTS_DC_DataConsistency_CustomerCategory_Get" SpName="CTS_DC_DataConsistency_CustomerCategory_Get" DbName="CTSMain_DEV.CTS_DataCenter.ctsService" />
 	</Function>
 </Functions>
