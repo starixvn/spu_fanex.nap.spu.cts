@@ -1,12 +1,11 @@
-﻿using Fanex.Logging.Extensions;
-using Fanex.Logging.Extensions.Database;
-using Fanex.NAP.SPU.CTS.Features.Transform.Accounts;
-using Fanex.NAP.SPU.CTS.Shares;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Fanex.NAP.SPU.CTS.JobService.Services
+﻿namespace Fanex.NAP.SPU.CTS.JobService.Services
 {
+    using Fanex.NAP.SPU.CTS.Features.Transform.Accounts;
+    using Fanex.NAP.SPU.CTS.Shares;
+    using System;
+    using System.Linq;
+    using System.Threading.Tasks;
+
     public interface IAccountJobService
     {
         Task<bool> Execute(int size, int numberOfBatch);
@@ -30,14 +29,15 @@ namespace Fanex.NAP.SPU.CTS.JobService.Services
                     JobRun(size, numberOfBatch);
                 }                                
             }
-            catch (System.Exception ex)
+            catch (AggregateException ex)
             {
-                var logMessage = new LogMessage(ex.Message)
-                      .AddSection("Data Info", DatabaseInfoGetters.GetDbExceptionInfo(ex))
-                      .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(ex))
-                      .ToString();
+                ex.LogError();
 
-                logMessage.LogError();
+                return Task.FromResult(false);
+            }
+            catch (Exception ex)
+            {
+                ex.LogError();
 
                 return Task.FromResult(false);
             }
@@ -54,12 +54,7 @@ namespace Fanex.NAP.SPU.CTS.JobService.Services
 
                 Parallel.ForEach(groupAccounts, accounts =>
                 {
-                    var result = accountServices.TransformAccount(accounts);
-
-                    if (result.ErrorCode != 0)
-                    {
-                        result.ErrorMessage.LogError();
-                    }
+                    accountServices.TransformAccount(accounts);
                 });
             }
         }
