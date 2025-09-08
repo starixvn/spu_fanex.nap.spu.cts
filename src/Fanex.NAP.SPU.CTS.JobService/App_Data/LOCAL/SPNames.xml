@@ -75,7 +75,7 @@
 		<Setting Key="CTS_Archive_CustClassification_BySport_History_Insert" SpName="CTS_Archive_CustClassification_BySport_History_Insert" DbName="CTSARC.CTS_Archive.ctsServiceAdmin" />
 	</Function>
   <Function name="ArchiveCTSCustomer">
-      <Setting Key="CTS_DC_ArchiveCustomer" SpName="CTS_DC_ArchiveCustomer" DbName="CTSMain.CTS_DataCenter.ctsServiceAdmin" />
+      <Setting Key="CTS_DC_ArchiveCustomer" SpName="CTS_DC_ArchiveCustomer_xpre" DbName="CTSMain.CTS_DataCenter.ctsServiceAdmin" />
       <Setting Key="CTS_DC_SystemParameter_Update" SpName="CTS_DC_SystemParameter_Update" DbName="CTSMain.CTS_DataCenter.ctsServiceAdmin" />
 	  <Setting Key="CTS_ArchiveCustomer_Get" SpName="CTS_ArchiveCustomer_Get" DbName="DBARCCUST.bodb_Customer.wsv_cts" />
 	  <Setting Key="CTS_ArchivedCustomerMissing_Get" SpName="CTS_ArchivedCustomerMissing_Get" DbName="DBARCCUST.bodb_Customer.wsv_cts" />
