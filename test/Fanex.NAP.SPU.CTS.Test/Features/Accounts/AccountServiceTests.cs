@@ -31,7 +31,7 @@ namespace Fanex.NAP.SPU.CTS.Tests.Features.Accounts
                    AccountId = 1,
                    BatchId = 1,
                    LastLoginTime = DateTime.Now,
-                   LoginName = "abc",
+                   LoginName = "abcxyz",
                    SubscriberId = 1
                 },
                  new AccountEntity
