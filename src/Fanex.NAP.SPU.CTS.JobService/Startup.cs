@@ -64,7 +64,7 @@ namespace Fanex.NAP.SPU.CTS.JobService
             }
 
             app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Fanex.NAP.SPU.CTS.JobService v1"));
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("v1/swagger.json", "Fanex.NAP.SPU.CTS.JobService v1"));
             app.UseRouting();
 
             app.UseHealthChecks("/healthz", new HealthCheckOptions

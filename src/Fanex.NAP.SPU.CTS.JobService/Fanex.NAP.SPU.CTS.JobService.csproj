@@ -34,9 +34,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="appsettings.KLSIMPLE.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Update="appsettings.KLPROD.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -49,19 +46,10 @@
     <None Update="App_Data\LOCAL\SPNames.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="App_Data\AWS\SPNames.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="App_Data\KLDR\SPNames.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="App_Data\PROD\SPNames.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="App_Data\SIT\SPNames.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="App_Data\UAT\SPNames.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
